@@ -142,6 +142,9 @@
         border-bottom: 1px solid rgba(255,255,255,0.1);
         position: relative !important;
     }
+    .mobile-nav__container .main-menu__list > li > a i {
+        color: #fff !important; /* Force icon white in mobile */
+    }
     /* Fix for the blue dropdown arrows */
     .mobile-nav__container .main-menu__list .dropdown > a button {
         background: transparent !important;
@@ -523,8 +526,8 @@ document.addEventListener('DOMContentLoaded', function() {
                                         } 
                                         ?>
 
-                                    <li class="">
-                                        <a href="javascript:void(0)" onclick="openWizard()"><i class="fa fa-map-marker-alt" style="margin-right: 5px; color: #c00415;"></i> By Location</a>
+                                    <li>
+                                        <a href="javascript:void(0)" onclick="openWizard()"><i class="fa fa-map-marker-alt" style="margin-right: 5px;"></i> By Location</a>
                                     </li>
 
 
