@@ -148,46 +148,50 @@
 <style>
     .carousel-inner {
         height: auto;
-        min-height: 400px;
+        min-height: 200px;
         background: #fff;
     }
 
     .carousel-item {
         position: relative;
-        overflow: hidden;
+        overflow: visible;
     }
 
     .carousel-item img {
         width: 100%;
         height: auto !important;
-        max-height: 600px;
-        object-fit: contain; /* Changed to contain so banners are not cut off */
+        max-height: 650px;
+        object-fit: contain;
         object-position: center;
-        animation: none; /* Removed zoom to keep text stable */
+        display: block;
     }
 
-    @keyframes zoom {
-        0% {
-            transform: scale(1); /* Initial scale */
-        }
-        50% {
-            transform: scale(1.05); /* Zoom in to 105% */
-        }
-        100% {
-            transform: scale(1); /* Zoom back to original scale */
-        }
-    }
-
-    @media (max-width: 767px) {
+    /* Desktop */
+    @media (min-width: 768px) {
         .carousel-inner {
-            height: 350px !important; /* Adjusted for better mobile view */
-        }
-        .carousel-item {
-            height: 100% !important;
+            min-height: 400px;
         }
         .carousel-item img {
-            height: 100% !important;
-            object-fit: cover !important;
+            max-height: 650px;
+        }
+    }
+
+    /* Mobile - show full banner without cropping */
+    @media (max-width: 767px) {
+        .carousel-inner {
+            height: auto !important;
+            min-height: auto !important;
+        }
+        .carousel-item {
+            height: auto !important;
+            overflow: visible !important;
+        }
+        .carousel-item img {
+            width: 100% !important;
+            height: auto !important;
+            max-height: none !important;
+            object-fit: contain !important;
+            object-position: center !important;
         }
         /* Fix for breadcrumb/page-header images on common internal pages */
         .page-header {

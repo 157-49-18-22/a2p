@@ -340,6 +340,43 @@
         padding: 10px;
     }
 
+    /* Mobile: Make working process icons & cards smaller */
+    @media (max-width: 767px) {
+        .working-process__icon {
+            text-align: center !important;
+            margin-bottom: 10px !important;
+        }
+        .working-process__icon img {
+            max-width: 80px !important;
+            height: 80px !important;
+            padding: 5px !important;
+        }
+        .working-process__icon span {
+            font-size: 40px !important;
+        }
+        .working-process__single {
+            padding: 25px 20px 35px !important;
+            margin-left: 30px !important;
+            margin-bottom: 45px !important;
+        }
+        .working-process__count {
+            width: 55px !important;
+            height: 55px !important;
+            top: -35px !important;
+            left: -30px !important;
+        }
+        .working-process__count:before {
+            width: 55px !important;
+            height: 55px !important;
+            line-height: 55px !important;
+            font-size: 16px !important;
+        }
+        .working-process__title {
+            font-size: 18px !important;
+            margin-bottom: 12px !important;
+        }
+    }
+
     /* Fix: .welcom (h3.ddd text) - never overlap the image on mobile */
     .welcom {
         position: relative !important;
@@ -565,7 +602,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                         ?>
 
                                     <li>
-                                        <a href="javascript:void(0)" onclick="openWizard()"><i class="fa fa-map-marker-alt" style="margin-right: 5px;"></i> By Location</a>
+                                        <a href="javascript:void(0)" onclick="openWizard()"><span style="display:inline-flex;align-items:center;gap:6px;"><i class="fa fa-map-marker-alt"></i> By Location</span></a>
                                     </li>
 
 
