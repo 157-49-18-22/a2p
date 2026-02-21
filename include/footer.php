@@ -272,7 +272,7 @@
 /* Chat Bot Styling */
 #a2p-chatbot {
     position: fixed;
-    bottom: 80px;
+    bottom: 105px; /* scroll-to-top is at bottom:40px, height:45px so = 85px + 20px gap = 105px */
     right: 20px;
     z-index: 1001;
     font-family: 'Poppins', sans-serif;
@@ -451,11 +451,15 @@
     bottom: 150px !important;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 768px) {
     #chat-window {
         width: 280px;
         height: 400px;
         right: 0;
+    }
+    #a2p-chatbot {
+        bottom: 110px; /* Ensure clear gap above scroll-to-top on mobile */
+        right: 15px;
     }
 }
 </style>

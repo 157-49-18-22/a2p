@@ -295,8 +295,6 @@
     /* Global Image Fix for Uploaded Content */
     .project-card-v2__img, 
     .blog-card-v2__img, 
-    .welcome-one__img-box, 
-    .welcome-one__img-s2,
     .about-one__img-box,
     .service-details__img,
     .project-details__img,
@@ -306,29 +304,69 @@
         background: #f8f9fa !important;
     }
 
+    /* welcome-one__img-box should NOT clip the .welcom text */
+    .welcome-one__img-box {
+        overflow: visible !important;
+        position: relative !important;
+    }
+
     /* Standardize card image ratios */
     .project-card-v2__img { height: 260px !important; }
     .blog-card-v2__img { height: 240px !important; }
     
     .project-card-v2__img img, 
     .blog-card-v2__img img, 
-    .welcome-one__img-box img, 
-    .welcome-one__img-s2 img,
     .about-one__img-box img,
     .service-details__img img,
     .project-details__img img,
     .working-process__icon img {
         width: 100% !important;
         height: 100% !important;
-        object-fit: cover !important; /* Prevents stretching and exploding */
+        object-fit: cover !important;
         object-position: center !important;
         transition: transform 0.3s ease !important;
+    }
+
+    .welcome-one__img-s2 img {
+        width: 100% !important;
+        height: auto !important;
+        object-fit: cover !important;
+        object-position: center !important;
     }
 
     /* Small process icons should fit contain */
     .working-process__icon img {
         object-fit: contain !important;
         padding: 10px;
+    }
+
+    /* Fix: .welcom (h3.ddd text) - never overlap the image on mobile */
+    .welcom {
+        position: relative !important;
+        z-index: 1;
+        margin-bottom: 15px !important;
+    }
+
+    @media (max-width: 991px) {
+        .welcom {
+            display: block !important;
+            width: 100% !important;
+            margin-bottom: 15px !important;
+        }
+        .welcome-one__img-s2 {
+            display: block !important;
+            width: 100% !important;
+            margin-top: 10px !important;
+        }
+        .welcome-one__img-s2 img {
+            width: 100% !important;
+            height: auto !important;
+            border-radius: 15px !important;
+        }
+        h3.ddd {
+            font-size: 18px !important;
+            padding: 10px 14px !important;
+        }
     }
 
 @keyframes slideUp {
