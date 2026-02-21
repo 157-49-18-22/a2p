@@ -1,0 +1,480 @@
+<?php include "function/function.php"; ?>
+<?php
+$sql_add = sqlfetch("select * from address where id=1");
+if (count($sql_add))
+    foreach ($sql_add as $pr_add) {
+    }
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><?php echo $pr_add['test_date']; ?></title>
+    <meta name="description" content="<?php echo $pr_add['class9']; ?>">
+    <meta name="keywords" content="<?php echo $pr_add['class8']; ?>">
+    <link rel="shortcut icon" href="upload/<?php echo $pr_add['photo']; ?>">
+    <link rel="manifest" href="<?= SITE_URL; ?>assets/images/favicons/site.webmanifest" />
+    <link rel="preconnect" href="https://fonts.googleapis.com/">
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="<?= SITE_URL; ?>assets/vendors/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="<?= SITE_URL; ?>assets/vendors/animate/animate.min.css" />
+    <link rel="stylesheet" href="<?= SITE_URL; ?>assets/vendors/animate/custom-animate.css" />
+    <link rel="stylesheet" href="<?= SITE_URL; ?>assets/vendors/fontawesome/css/all.min.css" />
+    <link rel="stylesheet" href="<?= SITE_URL; ?>assets/vendors/jarallax/jarallax.css" />
+    <link rel="stylesheet" href="<?= SITE_URL; ?>assets/vendors/jquery-magnific-popup/jquery.magnific-popup.css" />
+    <link rel="stylesheet" href="<?= SITE_URL; ?>assets/vendors/nouislider/nouislider.min.css" />
+    <link rel="stylesheet" href="<?= SITE_URL; ?>assets/vendors/nouislider/nouislider.pips.css" />
+    <link rel="stylesheet" href="<?= SITE_URL; ?>assets/vendors/odometer/odometer.min.css" />
+    <link rel="stylesheet" href="<?= SITE_URL; ?>assets/vendors/swiper/swiper.min.css" />
+    <link rel="stylesheet" href="<?= SITE_URL; ?>assets/vendors/ambed-icons/style.css">
+    <link rel="stylesheet" href="<?= SITE_URL; ?>assets/vendors/tiny-slider/tiny-slider.min.css" />
+    <link rel="stylesheet" href="<?= SITE_URL; ?>assets/vendors/reey-font/stylesheet.css" />
+    <link rel="stylesheet" href="<?= SITE_URL; ?>assets/vendors/owl-carousel/owl.carousel.min.css" />
+    <link rel="stylesheet" href="<?= SITE_URL; ?>assets/vendors/owl-carousel/owl.theme.default.min.css" />
+    <link rel="stylesheet" href="<?= SITE_URL; ?>assets/vendors/bxslider/jquery.bxslider.css" />
+    <link rel="stylesheet" href="<?= SITE_URL; ?>assets/vendors/bootstrap-select/css/bootstrap-select.min.css" />
+    <link rel="stylesheet" href="<?= SITE_URL; ?>assets/vendors/vegas/vegas.min.css" />
+    <link rel="stylesheet" href="<?= SITE_URL; ?>assets/vendors/jquery-ui/jquery-ui.css" />
+    <link rel="stylesheet" href="<?= SITE_URL; ?>assets/vendors/timepicker/timePicker.css" />
+    <link rel="stylesheet" href="<?= SITE_URL; ?>assets/css/ambed.css" />
+    <link rel="stylesheet" href="<?= SITE_URL; ?>assets/css/ambed-responsive.css" />
+    <link rel="stylesheet" id="jssMode" href="<?= SITE_URL; ?>assets/css/ambed-light.css">
+    <link rel="stylesheet" href="<?= SITE_URL; ?>assets/vendors/toolbar/css/toolbar.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-11490897190"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'AW-11490897190');
+</script>
+
+<!-- Event snippet for A2P REALTECH conversion page -->
+<script>
+  gtag('event', 'conversion', {
+      'send_to': 'AW-11490897190/O-YqCL-F0JwaEKbapOcq',
+      'value': 1.0,
+      'currency': 'INR'
+  });
+</script>
+
+
+</head>
+
+
+
+
+<?php include 'include/header.php' ?>
+
+
+<section class="page-header">
+    <div class="page-header-bg" style="background-image: url(assets/images/backgrounds/page-header-bg.jpg)">
+    </div>
+    <div class="container">
+        <div class="page-header__inner">
+            <ul class="thm-breadcrumb list-unstyled">
+                <li><a href="<?= SITE_URL; ?>">Home</a></li>
+                <li><span>/</span></li>
+                <li>Contact Us</li>
+            </ul>
+            <h2>Contact Us</h2>
+        </div>
+    </div>
+</section>
+<!--Page Header End-->
+
+
+<!--Contact Page Start-->
+<section class="contact-page">
+    <div class="contact-page-shape-1 float-bob-x">
+        <img src="assets/images/shapes/contact-page-shape-1.png" alt="">
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-8 col-lg-7">
+                <div class="contact-page__left">
+                    <div class="section-title text-left">
+                        
+                        
+                        
+<style>
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    font-family: "Poppins", Arial, sans-serif;
+    background: #f2f6fa;
+  }
+
+  .form-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 1000px;
+    margin: 50px auto;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.15);
+  }
+
+  /* LEFT SIDE IMAGE */
+  .form-image {
+    flex: 1;
+    background: url('enquirymodel.jpg') center/cover no-repeat;
+    min-height: 400px;
+    position: relative;
+  }
+
+  .overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 10px;
+    background: rgba(0,0,0,0.4);
+    color: #fff;
+  }
+  .overlay h3 {
+    margin: 0;
+    font-size: 23px;
+    color: yellow;
+    text-align: center;
+  }
+  .overlay p {
+    margin-top: 4px;
+    font-size: 16px;
+    color: white;
+    text-align: center;
+  }
+
+  /* RIGHT SIDE FORM */
+  .form-content {
+    flex: 1;
+    padding: 20px;
+  }
+
+  h2 {
+    color: #eb092f;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+
+  p.subtitle {
+    text-align: center;
+    color: #555;
+    margin-bottom: 25px;
+  }
+
+  label {
+    display: block;
+    margin-top: 10px;
+    color: #333;
+    font-weight: 600;
+  }
+
+  input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 6px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 15px;
+    background-color: #fff;
+  box-sizing: border-box;
+  }
+  input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: #0078d7;
+  box-shadow: 0 0 5px rgba(0,120,215,0.3);
+}
+
+  
+  
+  button {
+    
+    background: black;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 22px;
+    transition: background 0.3s;
+  }
+
+  button:hover {
+    background: red;
+  }
+
+  /* POPUP */
+  .popup {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6);
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+  }
+
+  .popup-content {
+    background: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  .popup-content h3 {
+    color: #0078d7;
+    margin-bottom: 10px;
+  }
+
+  .popup-content p {
+    color: #333;
+  }
+
+  .close-btn {
+    margin-top: 15px;
+    background: #0078d7;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .close-btn:hover {
+    background: #005fa3;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  @media(max-width: 768px) {
+    .form-wrapper {
+      flex-direction: column;
+    }
+    .form-image {
+      min-height: 250px;
+    }
+    .overlay h3 {
+      font-size: 18px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="form-wrapper">
+  <div class="form-image">
+    <!-- You can replace the image below with one that shows a girl on a call with a laptop -->
+    <div class="overlay">
+      <h3>Talk to Our Real Estate Expert</h3>
+      <p>Explore premium properties & investment opportunities with A2P Realtech.</p>
+    </div>
+  </div>
+
+  <div class="form-content">
+    <strong> <h2>Contact A2P Realtech</h2></strong>
+   <strong> <p class="subtitle">Get personalized assistance for your property needs.</p></strong>
+
+   <form id="leadForm" action="https://formspree.io/f/xdkpqpdq" method="POST">
+
+
+      <label for="name">Full Name *</label>
+      <input type="text" id="name" name="name" placeholder="Enter your name" required>
+
+      <label for="email">Email *</label>
+      <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
+      <label for="phone">Phone *</label>
+      <input type="tel" id="phone" name="phone" placeholder="10-digit number" pattern="[0-9]{10}" required>
+
+      <label for="interest">Interested In</label>
+      <select id="interest" name="interest">
+        <option value="Residential">Residential Property</option>
+        <option value="Commercial">Commercial Property</option>
+        <option value="Plot">Sco Plot</option>
+        <option value="New">New Launch</option>
+        <option value="Construction">Under Construction</option>
+        <option value="Ready">Ready to Move</option>
+        <option value="Investment">Investment Options</option>
+        <option value="Shop">Shop</option>
+        <option value="Office">Office Space</option>
+      </select>
+       <!-- ✅ Add Budget box here -->
+  <label for="budget">Budget</label>
+  <select id="budget" name="budget" required>
+    <option value="">-- Select Your Budget --</option>
+    <option value="2-3 CR">2–3 CR</option>
+    <option value="3-4 CR">3–4 CR</option>
+    <option value="4-5 CR">4–5 CR</option>
+    <option value="5-6 CR">5–6 CR</option>
+    <option value="More Than 6 CR">More Than 6 CR</option>
+         
+      </select>
+
+      <label for="message">Message</label>
+      <textarea id="message" name="message" rows="4" placeholder="Tell us about your requirements..."></textarea>
+
+      <button type="submit">Submit Inquiry</button>
+    </form>
+  </div>
+</div>
+
+<!-- Popup -->
+<div class="popup" id="popup">
+  <div class="popup-content">
+    <h3>Thank You!</h3>
+    <p>Your inquiry has been sent successfully.<br>Our team will contact you soon.</p>
+    <button class="close-btn" onclick="closePopup()">Close</button>
+  </div>
+</div>
+
+<script>
+  const form = document.getElementById('leadForm');
+const popup = document.getElementById('popup');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const formData = new FormData(form);
+  const response = await fetch(form.action, {
+    method: 'POST',
+    body: formData,
+    headers: { 'Accept': 'application/json' }
+  });
+
+    // Optional: send form data to backend
+    /*
+    fetch('lead-submit.php', {
+      method: 'POST',
+      body: new FormData(form)
+    })
+    .then(res => res.text())
+    .then(data => console.log(data));
+    */
+
+    popup.style.display = 'flex';
+    form.reset();
+  });
+
+  function closePopup() {
+    popup.style.display = 'none';
+  }
+</script>
+
+</body>
+</html>
+
+
+  </body>
+</html>
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-4 col-lg-5">
+                <div class="contact-page__right">
+                    <div class="contact-page__details">
+                        <ul class="list-unstyled contact-page__details-list">
+                            <li>
+                                <strong><span>Call anytime</span></strong>
+                                 <p><a href="tel:+91-8130525001">+91-8130525001</a></p>
+                                    <p><a href="tel:+91-8130510678">+91-8130510678</a></p>
+                            </li>
+                            <li>
+                                <b><span>Send email</span></b>
+                                <p><a href="mailto:<?php echo $pr_add['email']; ?>"><?php echo $pr_add['email']; ?></a></p>
+                            </li>
+                            <li>
+                                <b><span>Address</span></b>
+                                <p><?php echo $pr_add['addr']; ?></p>
+                            </li>
+                        </ul>
+                        <div class="contact-page__social">
+                            <a href="<?php echo $pr_add['twitter']; ?>"><i class="fab fa-twitter"></i></a>
+                            <a href="<?php echo $pr_add['facebook']; ?>"><i class="fab fa-facebook"></i></a>
+                            <a href="<?php echo $pr_add['youtube']; ?>"><i class="fab fa-instagram"></i></a>
+                               <a href="<?php echo $pr_add['linkedin']; ?>"><i class="fab fa-youtube"></i></a>
+                                 <a href="<?php echo $pr_add['linkedin2']; ?>"><i class="fab fa-linkedin"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--Contact Page End-->
+
+<!--Google Map Start-->
+<section class="google-map-two">
+
+   <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3503.0808414848975!2d77.0498477!3d28.597351500000002!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d1b8d7ee000e5%3A0x5a6f1f8f031ff9fb!2sA2P%20Realtech%20Private%20Limited!5e0!3m2!1sen!2sin!4v1745565088950!5m2!1sen!2sin" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+
+
+</section>
+<!--Google Map End-->
+
+<script>
+  document.querySelector('.comment-one__form').addEventListener('submit', function(e) {
+    e.preventDefault(); // Prevents the form from actually submitting
+    alert('Query submitted successfully');
+    this.reset(); // Optional: Clears the form fields after submission
+  });
+  
+
+
+  const form = document.getElementById('leadForm');
+const popup = document.getElementById('popup');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const formData = new FormData(form);
+  const response = await fetch(form.action, {
+    method: 'POST',
+    body: formData,
+    headers: { 'Accept': 'application/json' }
+  });
+
+    // Optional: send form data to backend
+    /*
+    fetch('lead-submit.php', {
+      method: 'POST',
+      body: new FormData(form)
+    })
+    .then(res => res.text())
+    .then(data => console.log(data));
+    */
+
+    popup.style.display = 'flex';
+    form.reset();
+  });
+
+  function closePopup() {
+    popup.style.display = 'none';
+  }
+
+
+</script>
+
+
+
+<?php include 'include/footer.php' ?>

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A2P Realtech | Property Inquiry</title>
+<style>
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    font-family: "Poppins", Arial, sans-serif;
+    background: #f2f6fa;
+  }
+
+  .form-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 1000px;
+    margin: 50px auto;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.15);
+  }
+
+  /* LEFT SIDE IMAGE */
+  .form-image {
+    flex: 1;
+    background: url('enquirymodel.jpg') center/cover no-repeat;
+    min-height: 400px;
+    position: relative;
+  }
+
+  .overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 30px;
+    background: rgba(0,0,0,0.4);
+    color: #fff;
+  }
+  .overlay h3 {
+    margin: 0;
+    font-size: 22px;
+  }
+  .overlay p {
+    margin-top: 6px;
+    font-size: 14px;
+  }
+
+  /* RIGHT SIDE FORM */
+  .form-content {
+    flex: 1;
+    padding: 40px;
+  }
+
+  h2 {
+    color: #eb092f;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+
+  p.subtitle {
+    text-align: center;
+    color: #555;
+    margin-bottom: 25px;
+  }
+
+  label {
+    display: block;
+    margin-top: 10px;
+    color: #333;
+    font-weight: 600;
+  }
+
+  input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 6px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 15px;
+    background-color: #fff;
+  box-sizing: border-box;
+  }
+  input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: #0078d7;
+  box-shadow: 0 0 5px rgba(0,120,215,0.3);
+}
+
+  button {
+    margin-top: 20px;
+    background: linear-gradient(135deg, #0078d7, #00b4d8);
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+    transition: background 0.3s;
+  }
+
+  button:hover {
+    background: linear-gradient(135deg, #005fa3, #0099b3);
+  }
+
+  /* POPUP */
+  .popup {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6);
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+  }
+
+  .popup-content {
+    background: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  .popup-content h3 {
+    color: #0078d7;
+    margin-bottom: 10px;
+  }
+
+  .popup-content p {
+    color: #333;
+  }
+
+  .close-btn {
+    margin-top: 15px;
+    background: #0078d7;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .close-btn:hover {
+    background: #005fa3;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  @media(max-width: 768px) {
+    .form-wrapper {
+      flex-direction: column;
+    }
+    .form-image {
+      min-height: 250px;
+    }
+    .overlay h3 {
+      font-size: 18px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="form-wrapper">
+  <div class="form-image">
+    <!-- You can replace the image below with one that shows a girl on a call with a laptop -->
+    <div class="overlay">
+      <h3>Talk to Our Real Estate Expert</h3>
+      <p>Explore premium properties & investment opportunities with A2P Realtech.</p>
+    </div>
+  </div>
+
+  <div class="form-content">
+    <h2>Contact A2P Realtech</h2>
+    <p class="subtitle">Get personalized assistance for your property needs.</p>
+
+   <form id="leadForm" action="https://formspree.io/f/xdkpqpdq" method="POST">
+
+
+      <label for="name">Full Name *</label>
+      <input type="text" id="name" name="name" placeholder="Enter your name" required>
+
+      <label for="email">Email *</label>
+      <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
+      <label for="phone">Phone *</label>
+      <input type="tel" id="phone" name="phone" placeholder="10-digit number" pattern="[0-9]{10}" required>
+
+      <label for="interest">Interested In</label>
+      <select id="interest" name="interest">
+        <option value="Residential">Residential Property</option>
+        <option value="Commercial">Commercial Property</option>
+        <option value="Plot">Sco Plot</option>
+        <option value="Other">New Launch</option>
+        <option value="Other">Under Construction</option>
+        <option value="Other">Ready to Move</option>
+        <option value="Investment">Investment Options</option>
+      </select>
+       <!-- ✅ Add Budget box here -->
+  <label for="budget">Budget</label>
+  <select id="budget" name="budget" required>
+    <option value="">-- Select Your Budget --</option>
+    <option value="2-3 CR">2–3 CR</option>
+    <option value="3-4 CR">3–4 CR</option>
+    <option value="4-5 CR">4–5 CR</option>
+    <option value="5-6 CR">5–6 CR</option>
+    <option value="More Than 6 CR">More Than 6 CR</option>
+         
+      </select>
+
+      <label for="message">Message</label>
+      <textarea id="message" name="message" rows="4" placeholder="Tell us about your requirements..."></textarea>
+
+      <button type="submit">Submit Inquiry</button>
+    </form>
+  </div>
+</div>
+
+<!-- Popup -->
+<div class="popup" id="popup">
+  <div class="popup-content">
+    <h3>Thank You!</h3>
+    <p>Your inquiry has been sent successfully.<br>Our team will contact you soon.</p>
+    <button class="close-btn" onclick="closePopup()">Close</button>
+  </div>
+</div>
+
+<script>
+  const form = document.getElementById('leadForm');
+const popup = document.getElementById('popup');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const formData = new FormData(form);
+  const response = await fetch(form.action, {
+    method: 'POST',
+    body: formData,
+    headers: { 'Accept': 'application/json' }
+  });
+
+    // Optional: send form data to backend
+    /*
+    fetch('lead-submit.php', {
+      method: 'POST',
+      body: new FormData(form)
+    })
+    .then(res => res.text())
+    .then(data => console.log(data));
+    */
+
+    popup.style.display = 'flex';
+    form.reset();
+  });
+
+  function closePopup() {
+    popup.style.display = 'none';
+  }
+</script>
+
+</body>
+</html>
+
+</body>
+</html>

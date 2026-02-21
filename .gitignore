@@ -1,0 +1,11 @@
+backup.zip
+admin/admin.zip
+temp_backup/
+upload/*.pdf
+*.zip
+*.rar
+*.7z
+node_modules/
+vendor/
+.DS_Store
+Thumbs.db
