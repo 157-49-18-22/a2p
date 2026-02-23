@@ -202,6 +202,31 @@ h3.ddd {
     padding: 14px 16px;
     border-radius: 10px;
 }
+
+/* Custom styles for Working Process icons */
+.working-process__icon {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    text-align: center !important; /* Center icon */
+    margin-bottom: 20px !important;
+}
+
+.working-process__icon img {
+    max-width: 70px; /* Desktop size */
+    height: auto;
+    background: transparent !important;
+    padding: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    mix-blend-mode: multiply; /* Helps remove white background from images */
+}
+
+@media (max-width: 767px) {
+    .working-process__icon img {
+        max-width: 50px; /* Mobile size */
+    }
+}
 </style>
 
 
