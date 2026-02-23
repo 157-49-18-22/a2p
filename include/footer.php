@@ -88,22 +88,26 @@
     .footer-widget__contact-list li .icon {
         width: 45px;
         height: 45px;
-        background: #f8f8f8;
+        background: #c00415;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        color: #c00415;
+        color: #fff !important;
         font-size: 18px;
         flex-shrink: 0;
         transition: all 0.3s ease;
-        border: 1px solid #eee;
+        box-shadow: 0 4px 10px rgba(192, 4, 21, 0.2);
+    }
+
+    .footer-widget__contact-list li .icon span,
+    .footer-widget__contact-list li .icon i {
+        color: #fff !important;
     }
 
     .footer-widget__contact-list li:hover .icon {
-        background: #c00415;
-        color: #fff;
-        transform: translateY(-3px);
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 6px 15px rgba(192, 4, 21, 0.3);
     }
 
     .footer-widget__contact {
