@@ -3,42 +3,118 @@
 <style>
     .footer-widget__title {
         color: black;
+        position: relative;
+        padding-bottom: 15px;
+        margin-bottom: 25px;
+    }
 
+    .footer-widget__title:before {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 35px;
+        height: 3px;
+        background: #c00415;
     }
 
     .footer-widget__explore-list li a {
         color: black;
+        transition: all 0.3s ease;
+    }
+    
+    .footer-widget__explore-list li a:hover {
+        color: #c00415;
+        padding-left: 5px;
     }
 
     .footer-widget__services-list li a {
-
         color: #000000;
+        transition: all 0.3s ease;
+    }
+    
+    .footer-widget__services-list li a:hover {
+        color: #c00415;
+        padding-left: 5px;
     }
 
     .footer-widget__contact-list li .text h5 {
         font-size: 14px;
-        color: #000000;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #666;
+        margin-bottom: 4px;
     }
 
     .footer-widget__contact-list li .text p {
-
         color: #000000;
+        font-weight: 600;
+        line-height: 1.5;
     }
 
     .footer-widget__contact-list li .text p a {
         color: #000000;
+        transition: color 0.3s;
+    }
+    
+    .footer-widget__contact-list li .text p a:hover {
+        color: #c00415;
     }
 
     .footer-widget__about-text {
-        color: #000000;
+        color: #444;
+        line-height: 1.8;
+        margin-bottom: 25px;
     }
 
     .site-footer-two .site-footer__top {
-        box-shadow: rgb(0 0 0) 0px 2px 5px -1px, rgb(0 0 0) 0px 1px 3px -1px;
-        padding: 62px 0 30px;
+        box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
+        padding: 80px 0 50px;
     }
-    
-  
+
+    .footer-widget__logo img {
+        max-height: 80px;
+        width: auto !important;
+        object-fit: contain;
+    }
+
+    .footer-widget__contact-list li {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 20px;
+        gap: 15px;
+    }
+
+    .footer-widget__contact-list li .icon {
+        width: 45px;
+        height: 45px;
+        background: #f8f8f8;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #c00415;
+        font-size: 18px;
+        flex-shrink: 0;
+        transition: all 0.3s ease;
+        border: 1px solid #eee;
+    }
+
+    .footer-widget__contact-list li:hover .icon {
+        background: #c00415;
+        color: #fff;
+        transform: translateY(-3px);
+    }
+
+    .footer-widget__contact {
+        margin-left: 0 !important;
+    }
+
+    .logo-box img {
+        width: 155px !important;
+        height: auto !important;
+        object-fit: contain !important;
+    }
 </style>
 
 <footer class="site-footer site-footer-two">
@@ -50,7 +126,7 @@
                 <div class="col-xl-4 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay="100ms">
                     <div class="footer-widget__column footer-widget__about">
                         <div class="footer-widget__logo">
-                            <a href="#"><img src="<?= SITE_URL; ?>upload/<?php echo $pr_add['photo']; ?>" alt="" class="w-100"></a>
+                            <a href="<?= SITE_URL; ?>"><img src="<?= SITE_URL; ?>upload/<?php echo $pr_add['photo']; ?>" alt="Logo"></a>
                         </div>
                         <div class="footer-widget__about-text-box">
                             <p class="footer-widget__about-text">A2P Realtech is setting new standards for excellence and transforming the way real estate services are delivered.</p>
