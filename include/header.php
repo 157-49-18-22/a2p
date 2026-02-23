@@ -217,7 +217,8 @@
     .welcome-one__img-box img,
     .about-one__img-box img,
     .service-details__img img,
-    .project-details__img img {
+    .project-details__img img,
+    .blog-details__img img {
         width: 100% !important;
         height: auto !important;
         object-fit: contain !important;
