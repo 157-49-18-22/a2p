@@ -51,7 +51,7 @@
 
 .main-menu__list {
     display: flex !important;
-    gap: 0px !important; /* Reduced gap between items to zero */
+    gap: 8px !important; /* Increased gap between items */
     align-items: center !important;
     height: 100% !important;
     margin: 0 !important;
@@ -69,7 +69,7 @@
 
 .main-menu__list > li > a {
     white-space: nowrap !important;
-    padding: 8px 8px !important; /* Reduced horizontal padding for tighter menu */
+    padding: 8px 12px !important; /* Increased horizontal padding */
     font-size: 13px !important; 
     font-weight: 700 !important;
     text-transform: uppercase !important;
