@@ -160,18 +160,19 @@ if (count($sql_ser)) {
             /* Alignment for Product Images */
             .blog-details__img img {
                 width: 100%;
-                height: 450px;
-                object-fit: cover;
+                height: auto;
                 border-radius: 12px;
                 box-shadow: 0 5px 15px rgba(0,0,0,0.1);
             }
 
-            @media (max-width: 767px) {
+            @media (max-width: 991px) {
                 .blog-details__img img {
                     height: auto !important;
-                    min-height: 200px;
-                    object-fit: contain !important;
-                    background: #f8f8f8;
+                    object-fit: initial !important;
+                    max-height: none !important;
+                }
+                .blog-details {
+                    padding: 60px 0 60px !important;
                 }
             }
 
