@@ -32,7 +32,7 @@
 }
 
 .main-menu-two__logo {
-    margin-right: 15px !important; /* Tighter gap after logo */
+    margin-right: 40px !important; /* Increased gap after logo */
     flex-shrink: 0 !important;
 }
 
@@ -45,23 +45,52 @@
     flex: 1 !important;
     display: flex !important;
     justify-content: center !important;
+    align-items: center !important;
+    height: 100% !important;
 }
 
 .main-menu__list {
     display: flex !important;
-    gap: 4px !important; /* Highly reduced gap between items */
+    gap: 0px !important; /* Reduced gap between items to zero */
     align-items: center !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    list-style: none !important;
+}
+
+.main-menu-two .main-menu__list > li {
+    padding: 0 !important;
+    margin: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    height: 70px !important; /* Match wrapper height */
 }
 
 .main-menu__list > li > a {
     white-space: nowrap !important;
-    padding: 6px 8px !important; /* Smaller link padding */
-    font-size: 12px !important; /* Smaller font to fit all links */
+    padding: 8px 8px !important; /* Reduced horizontal padding for tighter menu */
+    font-size: 13px !important; 
     font-weight: 700 !important;
     text-transform: uppercase !important;
     color: #333 !important;
     border-radius: 5px !important;
     transition: all 0.2s ease !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.main-menu-two .main-menu__list > li.current > a,
+.main-menu-two .main-menu__list > li:hover > a {
+    background-color: #c00415 !important;
+    color: #fff !important;
+}
+
+.main-menu-two__main-menu-two-inner {
+    display: flex !important;
+    align-items: center !important;
+    height: 100% !important;
 }
 
 .main-menu-two__right {
@@ -69,7 +98,7 @@
     align-items: center !important;
     justify-content: flex-end !important;
     flex-shrink: 0 !important;
-    margin-left: 10px !important;
+    margin-left: 30px !important; /* Increased gap before search bar */
     z-index: 101 !important;
 }
 

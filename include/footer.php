@@ -468,7 +468,7 @@
 
 .user-msg {
     background: #000;
-    color: #fff;
+    color: #fff !important;
     padding: 10px 15px;
     border-radius: 12px 12px 2px 12px;
     margin-bottom: 15px;
@@ -476,6 +476,10 @@
     align-self: flex-end;
     text-align: right;
     margin-left: 20%;
+}
+
+.user-msg p {
+    color: #fff !important;
 }
 
 .bot-options {
