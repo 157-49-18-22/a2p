@@ -166,6 +166,15 @@ if (count($sql_ser)) {
                 box-shadow: 0 5px 15px rgba(0,0,0,0.1);
             }
 
+            @media (max-width: 767px) {
+                .blog-details__img img {
+                    height: auto !important;
+                    min-height: 200px;
+                    object-fit: contain !important;
+                    background: #f8f8f8;
+                }
+            }
+
             .project-three__imgs img {
                 width: 100%;
                 height: 250px;
