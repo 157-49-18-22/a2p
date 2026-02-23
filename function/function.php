@@ -1,6 +1,6 @@
 <?php
-// error_reporting(E_ALL);
-// ini_set('display_errors', 1);
+error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE);
+ini_set('display_errors', 0);
 
 $siteTitle = 'Full_ecom';
 session_start();
@@ -326,6 +326,7 @@ function get_first_prod_by_cat($id)
 
 function custom_echo($x, $length)
 {
+    $x = (string)$x;
 	if (strlen($x) <= $length) {
 		echo $x;
 	} else {

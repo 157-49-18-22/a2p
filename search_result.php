@@ -1,6 +1,6 @@
 <?php
 
-error_reporting(E_ALL);
+error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE);
 ini_set('display_errors', 1);
 
 include "function/function.php"; ?>
@@ -66,8 +66,8 @@ include 'include/header.php';
 
 // Function to highlight search terms
 function highlightTerms($text, $term) {
-    if (!$term) return $text;
-    return preg_replace('/(' . preg_quote($term, '/') . ')/i', '<strong>$1</strong>', $text);
+    if (!$term || $text === null) return (string)$text;
+    return preg_replace('/(' . preg_quote((string)$term, '/') . ')/i', '<strong>$1</strong>', (string)$text);
 }
 ?>
 
