@@ -577,7 +577,7 @@ $currentPageUrl = urlencode("http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_UR
                                         <button class="nav-link" id="video-tab" data-bs-toggle="tab" data-bs-target="#video" type="button" role="tab" aria-controls="video" aria-selected="false">Video</button>
                                     </li>
                                     <li class="nav-item" role="presentation">
-                                        <button class="nav-link" id="download-link" >Download Brochure</button>
+                                        <button class="nav-link" id="download-link" >Request Brochure</button>
                                     </li>
                                 </ul>
 
@@ -763,7 +763,7 @@ $currentPageUrl = urlencode("http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_UR
                                                       
                                                     <h3>Coming Soon</h3>
                                                       <?php else: ?>
-                                                          <p><a href="#" id="download-link">Download the brochure here.</a></p>
+                                                          <p><a href="#" id="download-link">Request the brochure here.</a></p>
                                                       <?php endif; ?>
   
                                     </div>
@@ -966,13 +966,13 @@ $currentPageUrl = urlencode("http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_UR
         <div class="brochure-form-wrapper">
           <div class="brochure-image">
             <div class="brochure-image-overlay">
-              <h4>Get Exclusive Access</h4>
-              <p>Download the detailed brochure with floor plans, pricing, and amenities.</p>
+              <h4>Enquire Now</h4>
+              <p>Fill in the form below to receive more details about this project.</p>
             </div>
           </div>
           <div class="brochure-form-content">
-            <h3>Download Brochure</h3>
-            <p>Please fill in your details to proceed with the download.</p>
+            <h3>Request Brochure</h3>
+            <p>Please fill in your details to get more information.</p>
             
             <form id="enquiryForm" method="post" action="<?= SITE_URL; ?>mail2.php" onsubmit="handleSubmit(event)">
               <div class="form-group-custom">
@@ -992,8 +992,8 @@ $currentPageUrl = urlencode("http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_UR
                 <textarea class="form-control-custom" name="message" rows="3" placeholder="Any specific requirements?"></textarea>
               </div>
               <input type="hidden" name="page" value="<?php echo $subproductss['name']; ?>">
-              <input type="hidden" name="destination" value="Brochure Download">
-              <button type="submit" class="btn-submit-custom">Submit & Download</button>
+              <input type="hidden" name="destination" value="Brochure Enquiry">
+              <button type="submit" class="btn-submit-custom">Submit Enquiry</button>
             </form>
           </div>
         </div>
@@ -1019,40 +1019,18 @@ $currentPageUrl = urlencode("http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_UR
 
 <script>
   function handleSubmit(event) {
-    event.preventDefault(); // Prevent default form submission
-
-    let fileUrl = "<?= SITE_URL; ?>upload/<?php echo !empty($subproductss['photo4']) ? $subproductss['photo4'] : ''; ?>";
-
-    if (!fileUrl || fileUrl.endsWith('/')) { 
-      // Show "Coming Soon" modal if the file is not available
-      var comingSoonModal = new bootstrap.Modal(document.getElementById('comingSoonModal'));
-      comingSoonModal.show();
-
-      // After the modal is closed, submit the form
-      document.getElementById('comingSoonModal').addEventListener('hidden.bs.modal', function () {
-        event.target.submit();
-      }, { once: true }); // Ensure it runs only once
-    } else {
-      // If file exists, show download confirmation
-      let downloadPopup = confirm("Thank you for submitting! Do you want to download the brochure?");
-      if (downloadPopup) {
-        const downloadLink = document.createElement('a');
-        downloadLink.href = fileUrl;
-        downloadLink.download = 'Brochure.pdf';
-        document.body.appendChild(downloadLink);
-        downloadLink.click();
-        document.body.removeChild(downloadLink);
-      }
-
-      event.target.submit(); // Submit the form after the download
-    }
+    // Let the form submit normally to mail2.php
+    // The PHP script handles database insertion and redirection to thank-you.php
+    return true; 
   }
 
-  // Open the enquiry modal when the link is clicked
-  document.getElementById('download-link').addEventListener('click', function (event) {
-    event.preventDefault(); // Prevent default link behavior
-    var myModal = new bootstrap.Modal(document.getElementById('enquiryModal'));
-    myModal.show();
+  // Open the enquiry modal when any link with id 'download-link' is clicked
+  document.querySelectorAll('[id="download-link"]').forEach(element => {
+    element.addEventListener('click', function (event) {
+        event.preventDefault(); // Prevent default link behavior
+        var myModal = new bootstrap.Modal(document.getElementById('enquiryModal'));
+        myModal.show();
+    });
   });
 </script>
 
