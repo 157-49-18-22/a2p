@@ -473,25 +473,25 @@
         }
     }
 
-/* Header Top Social Icons - Footer Style */
+/* Header Top Social Icons - Footer Style - Compact */
 .main-header-three__top-right-social {
     display: flex !important;
     align-items: center !important;
-    gap: 10px !important;
+    gap: 6px !important;
 }
 
 .main-header-three__top-right-social a {
     position: relative !important;
-    height: 30px !important;
-    width: 30px !important;
+    height: 24px !important;
+    width: 24px !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
     color: #fff !important;
-    font-size: 13px !important;
+    font-size: 11px !important;
     border-radius: 50% !important;
     transition: all 400ms ease !important;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1) !important;
 }
 
 .main-header-three__top-right-social a:hover {

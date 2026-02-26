@@ -70,204 +70,238 @@ if (count($sql_add))
     </div>
 </section>
 <style>
-/* Futuristic Premium Search Layout */
-.search-container-wrap {
-    position: relative;
-    padding: 80px 0;
-    background: radial-gradient(circle at top right, rgba(192, 4, 21, 0.05) 0%, transparent 40%),
-                radial-gradient(circle at bottom left, rgba(16, 42, 131, 0.05) 0%, transparent 40%);
-    overflow: hidden;
+/* NEXT LEVEL SEARCH - ULTRA PREMIUM DESIGN */
+@keyframes meshGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 
-.search-container-wrap::before {
-    content: '';
-    position: absolute;
-    top: -50px;
-    right: -50px;
-    width: 200px;
-    height: 200px;
-    background: rgba(192, 4, 21, 0.03);
-    border-radius: 50%;
-    filter: blur(50px);
+@keyframes pulseNeon {
+    0% { box-shadow: 0 0 10px rgba(192, 4, 21, 0.2); }
+    50% { box-shadow: 0 0 25px rgba(192, 4, 21, 0.6); }
+    100% { box-shadow: 0 0 10px rgba(192, 4, 21, 0.2); }
 }
 
-.search-glass-card {
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    border-radius: 30px;
-    padding: 50px;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
-    max-width: 900px;
-    margin: 0 auto;
-    position: relative;
-    z-index: 2;
+@keyframes floatWrap {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+    100% { transform: translateY(0px); }
 }
 
-.welcome-one {
-    padding: 0;
-    background: transparent;
-}
-
-.search-bar-premium {
-    position: relative;
+.next-level-search-wrap {
+    min-height: 85vh;
     display: flex;
     align-items: center;
-    background: #fff;
-    border-radius: 60px;
-    padding: 8px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-    border: 2px solid transparent;
+    justify-content: center;
+    background: linear-gradient(-45deg, #0a0a0a, #1a1a1a, #4a0108, #00104a);
+    background-size: 400% 400%;
+    animation: meshGradient 15s ease infinite;
+    position: relative;
+    overflow: hidden;
+    padding: 60px 20px;
 }
 
-.search-bar-premium:focus-within {
-    transform: translateY(-5px);
-    box-shadow: 0 20px 40px rgba(192, 4, 21, 0.12);
-    border-color: rgba(192, 4, 21, 0.3);
+.next-level-search-wrap::before {
+    content: '';
+    position: absolute;
+    width: 150%;
+    height: 150%;
+    background: url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
+    opacity: 0.1;
+    pointer-events: none;
 }
 
-.search-input-premium {
-    flex: 1;
-    border: none;
-    background: transparent;
-    padding: 15px 30px;
-    font-size: 18px;
-    color: #333;
-    font-weight: 500;
+/* Glass Orb Backgrounds */
+.orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    z-index: 1;
+    opacity: 0.4;
+}
+.orb-1 { width: 400px; height: 400px; background: #c00415; top: -100px; left: -100px; animation: floatWrap 8s ease infinite; }
+.orb-2 { width: 350px; height: 350px; background: #102a83; bottom: -50px; right: -50px; animation: floatWrap 10s ease infinite reverse; }
+
+.ultra-glass-card {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 1000px;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 40px;
+    padding: 80px 40px;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+    text-align: center;
 }
 
-.search-input-premium:focus {
-    outline: none;
+.search-main-heading {
+    margin-bottom: 50px;
 }
 
-.search-input-premium::placeholder {
-    color: #aaa;
-    font-weight: 400;
-}
-
-.btn-search-glow {
-    background: #c00415;
+.search-main-heading h1 {
+    font-size: 64px;
+    font-weight: 900;
     color: #fff;
+    margin-bottom: 15px;
+    letter-spacing: -2px;
+    background: linear-gradient(to bottom, #fff 0%, #aaa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.search-main-heading p {
+    color: #c00415;
+    font-size: 14px;
+    text-transform: uppercase;
+    font-weight: 800;
+    letter-spacing: 5px;
+    margin-bottom: 5px;
+}
+
+/* The Futuristic Bar */
+.neo-search-bar {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 100px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    max-width: 850px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.neo-search-bar:focus-within {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: #c00415;
+    box-shadow: 0 0 30px rgba(192, 4, 21, 0.3);
+    transform: scale(1.02);
+}
+
+.neo-search-input {
+    flex: 1;
+    background: transparent;
     border: none;
-    padding: 15px 40px;
-    border-radius: 50px;
-    font-size: 18px;
-    font-weight: 700;
+    padding: 20px 30px;
+    font-size: 20px;
+    color: #fff;
+    font-weight: 500;
+    width: 100%;
+}
+
+.neo-search-input:focus { outline: none; }
+.neo-search-input::placeholder { color: rgba(255,255,255,0.4); }
+
+.neo-search-btn {
+    width: 70px;
+    height: 70px;
+    background: #c00415;
+    border: none;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 24px;
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 12px;
-    position: relative;
-    overflow: hidden;
+    justify-content: center;
     transition: all 0.4s ease;
-    box-shadow: 0 8px 20px rgba(192, 4, 21, 0.3);
+    animation: pulseNeon 3s infinite;
+    flex-shrink: 0;
 }
 
-.btn-search-glow::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-    transition: 0.5s;
+.neo-search-btn:hover {
+    background: #fff;
+    color: #c00415;
+    transform: rotate(90deg) scale(1.1);
 }
 
-.btn-search-glow:hover {
-    background: #900010;
-    transform: scale(1.02);
-    box-shadow: 0 12px 25px rgba(192, 4, 21, 0.4);
+/* Quick Tags */
+.quick-search-tags {
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
 }
 
-.btn-search-glow:hover::before {
-    left: 100%;
-}
-
-.btn-search-glow i {
-    font-size: 20px;
-    transition: all 0.3s ease;
-}
-
-.btn-search-glow:hover i {
-    transform: rotate(20deg) scale(1.2);
-}
-
-.search-tagline {
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-.search-tagline h2 {
-    font-size: 42px;
-    font-weight: 900;
-    color: #222;
-    margin-bottom: 10px;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.05);
-}
-
-.search-tagline p {
-    color: #666;
-    font-size: 16px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
+.tag-pill {
+    padding: 10px 22px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50px;
+    color: rgba(255,255,255,0.7);
+    font-size: 13px;
     font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
 }
 
-.accent-line {
-    width: 60px;
-    height: 4px;
+.tag-pill:hover {
     background: #c00415;
-    margin: 15px auto;
-    border-radius: 2px;
+    color: #fff;
+    border-color: #c00415;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(192, 4, 21, 0.4);
 }
 
-@media (max-width: 767px) {
-    .search-glass-card {
-        padding: 30px 20px;
-        margin: 0 15px;
+@media (max-width: 768px) {
+    .ultra-glass-card {
+        padding: 50px 20px;
     }
-    .search-bar-premium {
+    .search-main-heading h1 {
+        font-size: 36px;
+    }
+    .neo-search-bar {
+        border-radius: 30px;
         flex-direction: column;
-        border-radius: 20px;
-        padding: 10px;
-    }
-    .search-input-premium {
-        width: 100%;
-        text-align: center;
         padding: 15px;
     }
-    .btn-search-glow {
+    .neo-search-btn {
         width: 100%;
-        justify-content: center;
         border-radius: 15px;
+        margin-top: 15px;
+        height: 55px;
     }
-    .search-tagline h2 {
-        font-size: 28px;
-    }
+    .search-main-heading h1 { font-size: 32px; letter-spacing: -1px; }
 }
 </style>
 
-<section class="search-container-wrap">
+<section class="next-level-search-wrap">
+    <!-- Animated Orbs -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
     <div class="container">
-        <div class="search-glass-card wow fadeInUp" data-wow-duration="1500ms">
-            <div class="search-tagline">
-                <p>Find Your Perfect Space</p>
-                <h2>Start Your Journey Here</h2>
-                <div class="accent-line"></div>
+        <div class="ultra-glass-card wow zoomIn" data-wow-duration="1200ms">
+            <div class="search-main-heading">
+                <p>Premium Real Estate Experience</p>
+                <h1>Search Your Future</h1>
             </div>
             
-            <div class="search-bar-premium">
+            <div class="neo-search-bar">
                 <form action="<?= SITE_URL; ?>search_result.php" method="GET" class="d-flex w-100 align-items-center" onsubmit="return checkSearchRedirect(this)">
-                    <i class="fa-solid fa-magnifying-glass ms-4 text-muted"></i>
-                    <input type="text" class="search-input-premium" placeholder="Enter Location, Property Name, or Developer..." name="query" autocomplete="off">
-                    <button type="submit" class="btn-search-glow">
-                        <span>Search</span>
-                        <i class="fa-solid fa-arrow-right-long"></i>
+                    <i class="fa-solid fa-sparkles ms-4" style="color: #c00415; font-size: 20px;"></i>
+                    <input type="text" class="neo-search-input" placeholder="Where do you want to live?" name="query" autocomplete="off">
+                    <button type="submit" class="neo-search-btn">
+                        <i class="fa-solid fa-magnifying-glass"></i>
                     </button>
                 </form>
+            </div>
+
+            <!-- Quick Search Tags -->
+            <div class="quick-search-tags">
+                <a href="<?= SITE_URL; ?>search_result.php?query=Gurgaon" class="tag-pill">#Gurgaon</a>
+                <a href="<?= SITE_URL; ?>search_result.php?query=Delhi" class="tag-pill">#Delhi</a>
+                <a href="<?= SITE_URL; ?>search_result.php?query=Noida" class="tag-pill">#Noida</a>
+                <a href="<?= SITE_URL; ?>search_result.php?query=Residential" class="tag-pill">#Residential</a>
+                <a href="<?= SITE_URL; ?>search_result.php?query=Commercial" class="tag-pill">#Commercial</a>
+                <a href="<?= SITE_URL; ?>search_result.php?query=New Launch" class="tag-pill">#NewLaunch</a>
             </div>
         </div>
     </div>
