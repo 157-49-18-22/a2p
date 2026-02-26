@@ -318,12 +318,11 @@ if (count($sql_ser)) {
                         <div class="blog-three__right">
                             <div class="blgo-three__carousel owl-carousel owl-theme thm-owl__carousel residential-carousel" data-owl-options='{
                                 "loop": true,
-                                "autoplay": true,
+                                "autoplay": false,
                                 "margin": 30,
                                 "nav": true,
-                                "dots": true,
+                                "dots": false,
                                 "smartSpeed": 700,
-                                "autoplayTimeout": 5000,
                                 "navText": ["<span class=\"fa fa-angle-left\"></span>","<span class=\"fa fa-angle-right\"></span>"],
                                 "responsive": {
                                     "0": { "items": 1 },
@@ -358,12 +357,15 @@ if (count($sql_ser)) {
                                                 <a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php">
                                                     <img src="<?php echo $displayImg; ?>" alt="<?php echo $subproductwww['name']; ?>">
                                                 </a>
+                                                <div class="card-location-ribbon">
+                                                    <i class="fa fa-map-marker-alt"></i> <?php echo $subproductwww['pro_lable']; ?>
+                                                </div>
                                             </div>
                                             <div class="project-card-v2__content">
                                                 <h3 class="project-card-v2__title">
                                                     <a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php"><?php echo $subproductwww['name']; ?></a>
                                                 </h3>
-                                                <p class="project-card-v2__location-text"><i class="fa-solid fa-location-dot"></i> <?php echo $subproductwww['pro_lable']; ?></p>
+                                                <p class="project-card-v2__location-text"><i class="fa-solid fa-location-dot"></i> Gurgaon, Haryana</p>
                                             </div>
                                         </div>
                                 <?php }
@@ -482,12 +484,11 @@ if (count($sql_ser)) {
                         <div class="blog-three__right">
                             <div class="blgo-three__carousel owl-carousel owl-theme thm-owl__carousel commercial-carousel" data-owl-options='{
                                 "loop": true,
-                                "autoplay": true,
+                                "autoplay": false,
                                 "margin": 30,
                                 "nav": true,
-                                "dots": true,
+                                "dots": false,
                                 "smartSpeed": 700,
-                                "autoplayTimeout": 6000,
                                 "navText": ["<span class=\"fa fa-angle-left\"></span>","<span class=\"fa fa-angle-right\"></span>"],
                                 "responsive": {
                                     "0": { "items": 1 },
@@ -522,12 +523,15 @@ if (count($sql_ser)) {
                                                 <a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php">
                                                     <img src="<?php echo $displayImg; ?>" alt="<?php echo $subproductwww['name']; ?>">
                                                 </a>
+                                                <div class="card-location-ribbon">
+                                                    <i class="fa fa-map-marker-alt"></i> <?php echo $subproductwww['pro_lable']; ?>
+                                                </div>
                                             </div>
                                             <div class="project-card-v2__content">
                                                 <h3 class="project-card-v2__title">
                                                     <a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php"><?php echo $subproductwww['name']; ?></a>
                                                 </h3>
-                                                <p class="project-card-v2__location-text"><i class="fa-solid fa-location-dot"></i> <?php echo $subproductwww['pro_lable']; ?></p>
+                                                <p class="project-card-v2__location-text"><i class="fa-solid fa-location-dot"></i> Gurgaon, Haryana</p>
                                             </div>
                                         </div>
                                 <?php }
