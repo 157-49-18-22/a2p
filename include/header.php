@@ -499,29 +499,29 @@
     }
 
     /* Standardize card image ratios */
-    /* Premium Property Card Redesign - 3 Cards per Row */
+    /* Balanced Property Card - No Image Cut */
     .project-card-v2 {
         background: #fff !important;
         border-radius: 20px !important;
         overflow: hidden !important;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.08) !important;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.1) !important;
         transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
-        margin: 10px 5px 30px !important;
+        margin: 10px 10px 40px !important;
         border: 1px solid rgba(0,0,0,0.05) !important;
         width: 100% !important;
-        max-width: 370px !important; /* Adjusted for 3 cards */
+        max-width: 420px !important; /* Balanced width */
     }
 
     .project-card-v2:hover {
-        transform: translateY(-8px) !important;
-        box-shadow: 0 20px 40px rgba(0,0,0,0.12) !important;
+        transform: translateY(-12px) !important;
+        box-shadow: 0 25px 60px rgba(0,0,0,0.18) !important;
     }
 
     .project-card-v2__img {
         position: relative !important;
-        height: 250px !important; /* Clean height for 3 in a row */
+        height: 280px !important; /* Reduced height for better proportion */
         overflow: hidden !important;
-        background: #fdfdfd !important;
+        background: #f8f9fa !important; /* Subtle gray for empty areas if contain is used */
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
@@ -530,9 +530,8 @@
     .project-card-v2__img img {
         width: 100% !important;
         height: 100% !important;
-        object-fit: contain !important; /* Shows full image without cutting */
-        background: #fff !important;
-        display: block !important;
+        object-fit: contain !important; /* SHOW FULL IMAGE WITHOUT CUTTING */
+        padding: 5px !important;
     }
 
     /* The Solid Blue Section Ribbon - Exactly как в image1 */
