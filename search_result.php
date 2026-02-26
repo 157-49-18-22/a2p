@@ -181,6 +181,19 @@ function highlightTerms($text, $term) {
             $searchSafe = "%$search%";
             $locSafe = "%$location%";
 
+            // ─── CONTACT REDIRECT: Phone or Email detected ───────────────────
+            // Phone: contains 5+ consecutive digits (handles +91-813..., 8130525001, etc.)
+            $isPhone = preg_match('/\d{5,}/', preg_replace('/[\s\-\(\)\+]/', '', $search));
+            // Email: standard email pattern
+            $isEmail = filter_var($search, FILTER_VALIDATE_EMAIL) ||
+                       preg_match('/[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/', $search);
+
+            if ($isPhone || $isEmail) {
+                header('Location: ' . SITE_URL . 'contact.php');
+                exit();
+            }
+            // ─────────────────────────────────────────────────────────────────
+
             // --- Fetch Subproducts (Searching in Name, Meta Title, Keywords, Location, City, and Developer) ---
             $query = "SELECT DISTINCT * FROM subproduct 
                       WHERE (name LIKE ? 

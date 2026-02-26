@@ -280,10 +280,10 @@
 <div class="search-popup">
     <div class="search-popup__overlay search-toggler"></div>
     <!-- /.search-popup__overlay -->
-    <div class="search-popup__content">
-        <form action="#">
+<div class="search-popup__content">
+        <form action="<?= SITE_URL; ?>search_result.php" method="GET" onsubmit="return checkSearchRedirect(this)">
             <label for="search" class="sr-only">search here</label><!-- /.sr-only -->
-            <input type="text" id="search" placeholder="Search Here..." />
+            <input type="text" id="search" name="query" placeholder="Search Here..." />
             <button type="submit" aria-label="search submit" class="thm-btn">
                 <i class="icon-magnifying-glass"></i>
             </button>
@@ -291,6 +291,26 @@
     </div>
     <!-- /.search-popup__content -->
 </div>
+<script>
+function checkSearchRedirect(form) {
+    var query = form.querySelector('[name="query"]') ? form.querySelector('[name="query"]').value.trim()
+                : (form.querySelector('#search') ? form.querySelector('#search').value.trim() : '');
+    if (!query) return true;
+
+    // Phone: 5+ consecutive digits (handles +91..., 8130525001, etc.)
+    var digitsOnly = query.replace(/[\s\-\(\)\+]/g, '');
+    var isPhone = /\d{5,}/.test(digitsOnly);
+
+    // Email pattern
+    var isEmail = /[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/.test(query);
+
+    if (isPhone || isEmail) {
+        window.location.href = '<?= SITE_URL; ?>contact.php';
+        return false;
+    }
+    return true;
+}
+</script>
 <script>
     document.getElementById('search-button').addEventListener('click', function() {
         var searchBar = document.getElementById('search-bar');

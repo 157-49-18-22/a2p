@@ -161,14 +161,28 @@ if (count($sql_add))
             </div>
         </div>
  <div class="search-bar">
-                                <form action="<?= SITE_URL; ?>search_result.php"  method="GET" class="d-flex">
-                                    <input type="text" class="form-control search-input" placeholder="Search here..." name="query">
+                                <form action="<?= SITE_URL; ?>search_result.php" method="GET" class="d-flex" onsubmit="return checkSearchRedirect(this)">
+                                    <input type="text" class="form-control search-input" placeholder="Search properties, locations, phone, email..." name="query">
                                     <button type="submit" class="search-btn">
                                         <i class="fa-solid fa-search"></i> Search
                                     </button>
                                 </form>
 
                             </div>
+<script>
+function checkSearchRedirect(form) {
+    var query = form.querySelector('[name="query"]').value.trim();
+    if (!query) return true;
+    var digitsOnly = query.replace(/[\s\-\(\)\+]/g, '');
+    var isPhone = /\d{5,}/.test(digitsOnly);
+    var isEmail = /[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/.test(query);
+    if (isPhone || isEmail) {
+        window.location.href = '<?= SITE_URL; ?>contact.php';
+        return false;
+    }
+    return true;
+}
+</script>
         
     </div>
 </div>
