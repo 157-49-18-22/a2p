@@ -502,27 +502,37 @@ form.addEventListener('submit', async (e) => {
 <style>
   .git-contact-item {
     display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 18px;
+    align-items: flex-start;
+    gap: 15px;
+    margin-bottom: 20px;
   }
-  .git-contact-item .git-icon {
-    font-size: 20px;
-    color: #1e90ff;
-    width: 28px;
+  .git-icon-box {
+    width: 46px;
+    height: 46px;
+    min-width: 46px;
+    background: #c00415;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
     flex-shrink: 0;
-    line-height: 1;
+    box-shadow: 0 4px 10px rgba(192,4,21,0.25);
   }
   .git-contact-item .git-text {
     display: flex;
     flex-direction: column;
+    justify-content: center;
   }
   .git-contact-item .git-text span {
     font-weight: 700;
-    color: #1e90ff;
+    color: #c00415;
     font-size: 14px;
     display: block;
-    margin-bottom: 2px;
+    margin-bottom: 3px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
   }
   .git-contact-item .git-text a,
   .git-contact-item .git-text p {
@@ -530,19 +540,53 @@ form.addEventListener('submit', async (e) => {
     text-decoration: none;
     font-size: 14px;
     margin: 0;
+    line-height: 1.6;
   }
   .git-contact-item .git-text a:hover {
+    color: #c00415;
     text-decoration: underline;
   }
-  .git-contact-section { padding: 20px 10px; }
-  .git-contact-section h2 { color: #2a2a2a; margin-bottom: 18px; font-size: 26px; }
+  .git-contact-section { padding: 10px 5px; }
+  .git-contact-section h2 { color: #2a2a2a; margin-bottom: 20px; font-size: 24px; font-weight: 700; }
+
+  /* Social icons - footer style */
+  .contact-social-icons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+  .contact-social-icons a {
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 16px;
+    border-radius: 50%;
+    transition: all 400ms ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    text-decoration: none;
+  }
+  .contact-social-icons a:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+  }
+  .contact-social-icons a.facebook  { background: #1877F2; }
+  .contact-social-icons a.twitter   { background: #000000; }
+  .contact-social-icons a.instagram { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%); }
+  .contact-social-icons a.youtube   { background: #FF0000; }
+  .contact-social-icons a.linkedin  { background: #0077B5; }
+  .contact-social-icons a.whatsapp  { background: #25D366; }
 </style>
 
 <div class="git-contact-section">
   <h2>Get in Touch</h2>
 
   <div class="git-contact-item">
-    <div class="git-icon"><i class="fa fa-phone-alt"></i></div>
+    <div class="git-icon-box"><i class="fa fa-phone-alt"></i></div>
     <div class="git-text">
       <span>Call - Team A2P</span>
       <a href="tel:+918130525001">+91-8130525001</a>
@@ -551,7 +595,7 @@ form.addEventListener('submit', async (e) => {
   </div>
 
   <div class="git-contact-item">
-    <div class="git-icon"><i class="fa fa-envelope"></i></div>
+    <div class="git-icon-box"><i class="fa fa-envelope"></i></div>
     <div class="git-text">
       <span>Send Email</span>
       <a href="mailto:team@a2prealtech.com">team@a2prealtech.com</a>
@@ -559,26 +603,29 @@ form.addEventListener('submit', async (e) => {
   </div>
 
   <div class="git-contact-item">
-    <div class="git-icon"><i class="fa fa-building"></i></div>
+    <div class="git-icon-box"><i class="fa fa-building"></i></div>
     <div class="git-text">
       <span>A2P REALTECH PVT LTD</span>
       <p>S-3 2nd Floor Malik Plaza Plot No -5 Sector 4 Dwarka New Delhi 110078</p>
     </div>
   </div>
+
+  <!-- Social Media Icons - Footer Style -->
+  <div class="contact-social-icons">
+    <a href="<?php echo $pr_add['facebook']; ?>" class="facebook" target="_blank"><i class="fab fa-facebook-f"></i></a>
+    <a href="<?php echo $pr_add['twitter']; ?>" class="twitter" target="_blank"><i class="fab fa-x-twitter"></i></a>
+    <a href="<?php echo $pr_add['youtube']; ?>" class="instagram" target="_blank"><i class="fab fa-instagram"></i></a>
+    <a href="<?php echo $pr_add['linkedin']; ?>" class="youtube" target="_blank"><i class="fab fa-youtube"></i></a>
+    <a href="<?php echo $pr_add['linkedin2']; ?>" class="linkedin" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+    <a href="https://api.whatsapp.com/send?phone=91<?php echo $pr_add['phone']; ?>" class="whatsapp" target="_blank"><i class="fab fa-whatsapp"></i></a>
+  </div>
+
 </div>
 
 </body>
 </html>
 
                         </ul>
-                        <div class="site-footer__social contact-page__social">
-                            <a href="<?php echo $pr_add['facebook']; ?>" class="facebook"><i class="fab fa-facebook-f"></i></a>
-                            <a href="<?php echo $pr_add['twitter']; ?>" class="twitter"><i class="fab fa-x-twitter"></i></a>
-                            <a href="<?php echo $pr_add['youtube']; ?>" class="instagram"><i class="fab fa-instagram"></i></a>
-                            <a href="<?php echo $pr_add['linkedin']; ?>" class="youtube"><i class="fab fa-youtube"></i></a>
-                            <a href="<?php echo $pr_add['linkedin2']; ?>" class="linkedin"><i class="fab fa-linkedin-in"></i></a>
-                            <a href="https://api.whatsapp.com/send?phone=91<?php echo $pr_add['phone']; ?>" class="whatsapp"><i class="fab fa-whatsapp"></i></a>
-                        </div>
                     </div>
                 </div>
             </div>
