@@ -7887,57 +7887,52 @@ ul {
   margin-right: 4px;
 }
 
-/* Carousel Nav - Bottom Center (image2/3 style) */
+/* Carousel Nav - Bottom Center (FORCE OVERRIDE) */
 .residential-carousel.owl-carousel .owl-nav,
-.commercial-carousel.owl-carousel .owl-nav {
-  position: relative;
-  top: auto;
-  right: auto;
-  text-align: center;
-  margin-top: 25px;
-  display: flex;
-  justify-content: center;
-  gap: 12px;
+.commercial-carousel.owl-carousel .owl-nav,
+.blgo-three__carousel.owl-carousel .owl-nav {
+  position: relative !important;
+  top: auto !important;
+  right: auto !important;
+  left: auto !important;
+  display: flex !important;
+  justify-content: center !important;
+  margin-top: 30px !important;
+  gap: 15px !important;
+  visibility: visible !important;
+  opacity: 1 !important;
 }
 
-/* Mobile: same bottom center style */
-@media (max-width: 767px) {
-
-  .residential-carousel.owl-carousel .owl-nav,
-  .commercial-carousel.owl-carousel .owl-nav {
-    margin-top: 20px;
-  }
+/* Hide theme's default dots */
+.residential-carousel.owl-carousel .owl-dots,
+.commercial-carousel.owl-carousel .owl-dots {
+  display: none !important;
 }
 
+/* Specific Nav Button Style */
 .residential-carousel.owl-carousel .owl-nav button.owl-prev,
 .residential-carousel.owl-carousel .owl-nav button.owl-next,
 .commercial-carousel.owl-carousel .owl-nav button.owl-prev,
 .commercial-carousel.owl-carousel .owl-nav button.owl-next {
-  width: 45px;
-  height: 45px;
+  width: 50px !important;
+  height: 50px !important;
   background-color: #c00415 !important;
   color: #fff !important;
   border-radius: 50% !important;
-  box-shadow: 0 5px 15px rgba(192, 4, 21, 0.3);
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 18px !important;
   margin: 0 !important;
-  transition: all 400ms ease;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  border: none !important;
+  box-shadow: 0 5px 15px rgba(192, 4, 21, 0.3) !important;
+  cursor: pointer !important;
 }
 
 .residential-carousel.owl-carousel .owl-nav button:hover,
 .commercial-carousel.owl-carousel .owl-nav button:hover {
   background-color: #900010 !important;
-  color: #fff !important;
-  transform: scale(1.08);
-  box-shadow: 0 8px 20px rgba(192, 4, 21, 0.4);
-}
-
-/* Hide dots since nav buttons are visible at bottom */
-.residential-carousel.owl-carousel .owl-dots,
-.commercial-carousel.owl-carousel .owl-dots {
-  display: none;
+  transform: scale(1.05) !important;
 }
 
 /* Bottom location badge on card image (image3 style) */
