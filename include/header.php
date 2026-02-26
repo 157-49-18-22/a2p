@@ -517,7 +517,7 @@
 
     .project-card-v2__img {
         position: relative !important;
-        height: 320px !important; /* Increased height for larger impact */
+        height: 280px !important; /* Reduced height as requested */
         overflow: hidden !important;
         background: #eee !important;
     }
@@ -526,7 +526,7 @@
         width: 100% !important;
         height: 100% !important;
         object-fit: cover !important;
-        object-position: center top !important; /* Prevents cutting faces/top logos */
+        object-position: center center !important; /* Balanced view */
         display: block !important;
         transition: transform 0.6s ease !important;
     }
@@ -554,8 +554,8 @@
     }
 
     .project-card-v2__content {
-        padding: 35px 30px !important;
-        text-align: left !important; /* Align left like reference */
+        padding: 25px 20px !important; /* Thinner padding to reduce overall height */
+        text-align: left !important;
     }
 
     .project-card-v2__title a {
@@ -584,8 +584,8 @@
         position: static !important;
         display: flex !important;
         justify-content: center !important;
-        gap: 30px !important;
-        margin: 50px auto 0 !important;
+        gap: 25px !important;
+        margin: 20px auto 0 !important; /* Moved buttons up */
         width: 100% !important;
     }
 
@@ -615,6 +615,55 @@
 
     .blgo-three__carousel.owl-carousel .owl-dots {
         display: none !important;
+    }
+
+    /* Mobile Optimization for Property Cards */
+    @media (max-width: 767px) {
+        .project-card-v2 {
+            margin: 5px 5px 30px !important;
+            border-radius: 15px !important;
+        }
+        
+        .project-card-v2__img {
+            height: 220px !important; /* Smaller height on mobile */
+        }
+        
+        .card-location-ribbon {
+            padding: 10px 15px !important;
+            font-size: 12px !important;
+            gap: 8px !important;
+        }
+        
+        .project-card-v2__content {
+            padding: 20px 15px !important;
+        }
+        
+        .project-card-v2__title a {
+            font-size: 18px !important;
+            margin-bottom: 12px !important;
+        }
+
+        .project-card-v2__location-text {
+            font-size: 12px !important;
+            justify-content: flex-start !important;
+        }
+
+        .blgo-three__carousel.owl-carousel .owl-nav {
+            margin-top: 25px !important;
+            gap: 15px !important;
+        }
+
+        .blgo-three__carousel.owl-carousel .owl-nav button.owl-prev,
+        .blgo-three__carousel.owl-carousel .owl-nav button.owl-next {
+            width: 45px !important;
+            height: 45px !important;
+            font-size: 18px !important;
+        }
+        
+        /* Ensure section title doesn't overflow */
+        .section-title__title {
+            font-size: 28px !important;
+        }
     }
 
 
