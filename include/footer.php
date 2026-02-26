@@ -119,6 +119,34 @@
         height: auto !important;
         object-fit: contain !important;
     }
+
+    /* Colorful Footer Social Icons */
+    .site-footer__social a {
+        background: #333 !important; /* Default */
+        color: #fff !important;
+        transition: all 0.3s ease !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 40px !important;
+        height: 40px !important;
+        border-radius: 50% !important;
+        margin-right: 8px !important;
+        font-size: 16px !important;
+    }
+
+    .site-footer__social a.facebook { background: #1877F2 !important; }
+    .site-footer__social a.twitter { background: #000 !important; }
+    .site-footer__social a.instagram { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%) !important; }
+    .site-footer__social a.linkedin { background: #0077B5 !important; }
+    .site-footer__social a.youtube { background: #FF0000 !important; }
+    .site-footer__social a.whatsapp { background: #25D366 !important; }
+
+    .site-footer__social a:hover {
+        transform: translateY(-3px) !important;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2) !important;
+        opacity: 0.9 !important;
+    }
 </style>
 
 <footer class="site-footer site-footer-two">
