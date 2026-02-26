@@ -117,11 +117,11 @@ if (count($sql_add))
       Our representative will contact you soon.</p>
 
     <div class="contact-info mt-4">
-      <p><strong>📞 Call Anytime:</strong>
+      <p><strong><i class="fa fa-phone-alt" style="color: #c00415;"></i> Call Anytime:</strong>
         <a href="tel:+918130525001">+91-8130525001</a>
         <a href="tel:+918130510678">+91-8130510678</a></p>
 
-      <p><strong>✉️ Send Email:</strong>
+      <p><strong><i class="fa fa-envelope" style="color: #c00415;"></i> Send Email:</strong>
         <a href="mailto:team@a2prealtech.com">team@a2prealtech.com</a></p>
     </div>
   </div>

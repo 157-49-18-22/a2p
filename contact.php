@@ -505,21 +505,35 @@ form.addEventListener('submit', async (e) => {
     <div class="contact-details">
       <h2>Get in Touch</h2>
       <ul>
-        <li>
-          <span>📞 Call - Team A2P</span>
-          <a href="tel:+918130525001">+91-8130525001</a><br>
-          <a href="tel:+918130510678">+91-8130510678</a>
+        <li style="display: flex; align-items: center; gap: 15px; text-align: left; margin-bottom: 20px;">
+          <div style="width: 45px; height: 45px; background: #c00415; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; flex-shrink: 0;">
+            <span class="icon-phone-call"></span>
+          </div>
+          <div class="text">
+            <span>Call - Team A2P</span>
+            <a href="tel:+918130525001">+91-8130525001</a><br>
+            <a href="tel:+918130510678">+91-8130510678</a>
+          </div>
         </li>
 
-        <li>
-          <span>📧 Send Email</span>
-          <a href="mailto:info@a2prealtech.com">team@a2prealtech.com</a>
+        <li style="display: flex; align-items: center; gap: 15px; text-align: left; margin-bottom: 20px;">
+          <div style="width: 45px; height: 45px; background: #c00415; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; flex-shrink: 0;">
+            <span class="icon-message"></span>
+          </div>
+          <div class="text">
+            <span>Send Email</span>
+            <a href="mailto:team@a2prealtech.com">team@a2prealtech.com</a>
+          </div>
         </li>
 
-        <li>
-          <span>🏢 A2P REALTECH PVT LTD</span>
-          S-3 2nd Floor Malik Plaza Plot No -5 Sector 4 Dwarka New Delhi 110078<br>
-          
+        <li style="display: flex; align-items: center; gap: 15px; text-align: left; margin-bottom: 20px;">
+          <div style="width: 45px; height: 45px; background: #c00415; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; flex-shrink: 0;">
+            <span class="icon-location"></span>
+          </div>
+          <div class="text">
+            <span>A2P REALTECH PVT LTD</span>
+            <p style="margin:0; font-size: 14px; color: #333;">S-3 2nd Floor Malik Plaza Plot No -5 Sector 4 Dwarka New Delhi 110078</p>
+          </div>
         </li>
       </ul>
     </div>
@@ -530,11 +544,12 @@ form.addEventListener('submit', async (e) => {
 
                         </ul>
                         <div class="contact-page__social">
-                            <a href="<?php echo $pr_add['twitter']; ?>"><i class="fab fa-twitter"></i></a>
-                            <a href="<?php echo $pr_add['facebook']; ?>"><i class="fab fa-facebook"></i></a>
-                            <a href="<?php echo $pr_add['youtube']; ?>"><i class="fab fa-instagram"></i></a>
-                               <a href="<?php echo $pr_add['linkedin']; ?>"><i class="fab fa-youtube"></i></a>
-                                 <a href="<?php echo $pr_add['linkedin2']; ?>"><i class="fab fa-linkedin"></i></a>
+                            <a href="<?php echo $pr_add['facebook']; ?>"><i class="fab fa-facebook-f"></i></a>
+                            <a href="<?php echo $pr_add['twitter']; ?>"><i class="fab fa-x-twitter"></i></a>
+                            <a href="<?php echo $pr_add['instagram']; ?>"><i class="fab fa-instagram"></i></a>
+                            <a href="<?php echo $pr_add['youtube']; ?>"><i class="fab fa-youtube"></i></a>
+                            <a href="<?php echo $pr_add['linkedin']; ?>"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="https://api.whatsapp.com/send?phone=91<?php echo $pr_add['phone']; ?>"><i class="fab fa-whatsapp"></i></a>
                         </div>
                     </div>
                 </div>

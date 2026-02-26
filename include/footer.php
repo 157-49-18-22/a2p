@@ -138,9 +138,9 @@
                         <div class="site-footer__social">
                             <a href="<?php echo $pr_add['facebook']; ?>" class="facebook"><i class="fab fa-facebook-f"></i></a>
                             <a href="<?php echo $pr_add['twitter']; ?>" class="twitter"><i class="fab fa-x-twitter"></i></a>
-                            <a href="<?php echo $pr_add['youtube']; ?>" class="instagram"><i class="fab fa-instagram"></i></a>
-                            <a href="<?php echo $pr_add['linkedin']; ?>" class="youtube"><i class="fab fa-youtube"></i></a>
-                            <a href="<?php echo $pr_add['linkedin2']; ?>" class="linkedin"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="<?php echo $pr_add['instagram']; ?>" class="instagram"><i class="fab fa-instagram"></i></a>
+                            <a href="<?php echo $pr_add['youtube']; ?>" class="youtube"><i class="fab fa-youtube"></i></a>
+                            <a href="<?php echo $pr_add['linkedin']; ?>" class="linkedin"><i class="fab fa-linkedin-in"></i></a>
                             <a href="https://api.whatsapp.com/send?phone=91<?php echo $pr_add['phone']; ?>" class="whatsapp"><i class="fab fa-whatsapp"></i></a>
                         </div>
                     </div>
@@ -334,10 +334,10 @@
                 <p>Hello! Welcome to <strong>A2P Realtech</strong>. How can I help you find your dream property today?</p>
             </div>
             <div class="bot-options">
-                <button onclick="handleBotOption('buy')">🏢 Buy Property</button>
-                <button onclick="handleBotOption('offers')">🔥 Latest Offers</button>
-                <button onclick="handleBotOption('location')">📍 Search by Location</button>
-                <button onclick="handleBotOption('contact')">📞 Talk to Expert</button>
+                <button onclick="handleBotOption('buy')"><i class="fas fa-building"></i> Buy Property</button>
+                <button onclick="handleBotOption('offers')"><i class="fas fa-fire"></i> Latest Offers</button>
+                <button onclick="handleBotOption('location')"><i class="fas fa-map-marker-alt"></i> Search by Location</button>
+                <button onclick="handleBotOption('contact')"><i class="fas fa-headset"></i> Talk to Expert</button>
             </div>
         </div>
 

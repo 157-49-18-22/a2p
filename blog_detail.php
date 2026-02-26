@@ -86,63 +86,42 @@ if (count($sql_ser)) {
 
 .social-share-buttons a {
     display: inline-block;
-    width: 50px;
-    height: 50px;
-    background-color: #fff;
+    width: 45px;
+    height: 45px;
+    background-color: #f1f1f1;
     border-radius: 50%;
-    border: 2px solid transparent;
     text-align: center;
-    line-height: 50px;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    line-height: 45px;
+    transition: all 0.4s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     cursor: pointer;
+    position: relative;
+    overflow: hidden;
 }
 
 .social-share-buttons a i {
-    font-size: 24px;
-    color: #555;
-    transition: color 0.3s ease;
+    font-size: 18px;
+    color: #fff;
+    transition: all 0.3s ease;
 }
+
+/* Branded Backgrounds */
+.social-share-buttons a.facebook { background: #1877F2; }
+.social-share-buttons a.twitter { background: #000000; }
+.social-share-buttons a.linkedin { background: #0077B5; }
+.social-share-buttons a.whatsapp { background: #25D366; }
+.social-share-buttons a.share { background: #6c757d; }
 
 /* Hover effects */
 .social-share-buttons a:hover {
-    transform: scale(1.1);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-    border-color: #555;
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
-.social-share-buttons a.facebook:hover {
-    background-color: #3b5998;
-    color: #fff;
-    border-color: #3b5998;
-}
-
-.social-share-buttons a.twitter:hover {
-    background-color: #1da1f2;
-    color: #fff;
-    border-color: #1da1f2;
-}
-
-.social-share-buttons a.linkedin:hover {
-    background-color: #0077b5;
-    color: #fff;
-    border-color: #0077b5;
-}
-
-.social-share-buttons a.whatsapp:hover {
-    background-color: #25D366;
-    color: #fff;
-    border-color: #25D366;
-}
-
-.social-share-buttons a i {
-    transition: transform 0.3s ease;
-}
-
-/* Animation for icons */
 .social-share-buttons a:hover i {
-    transform: rotate(15deg);
+    transform: scale(1.1);
 }
+
 .mob{
     display: none !important;
 }
@@ -217,33 +196,33 @@ $currentPageUrl = urlencode("http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_UR
                                      
                                    
                                     <!-- Facebook Share -->
-                                    <a href="https://www.facebook.com/sharer/sharer.php?u=<?php echo $currentPageUrl; ?>&amp;t=<?php echo $encodedBlogName; ?>" target="_blank" class="social-icon facebook" title="Share on Facebook">
+                                    <a href="https://www.facebook.com/sharer/sharer.php?u=<?php echo $currentPageUrl; ?>&amp;t=<?php echo $encodedBlogName; ?>" target="_blank" class="facebook" title="Share on Facebook">
                                         <i class="fab fa-facebook-f"></i>
                                     </a>
                                     
                                     <!-- Twitter Share -->
-                                    <a href="https://twitter.com/intent/tweet?text=<?php echo $encodedBlogName; ?>&amp;url=<?php echo $currentPageUrl; ?>" target="_blank" class="social-icon twitter" title="Share on Twitter">
-                                        <i class="fab fa-twitter"></i>
+                                    <a href="https://twitter.com/intent/tweet?text=<?php echo $encodedBlogName; ?>&amp;url=<?php echo $currentPageUrl; ?>" target="_blank" class="twitter" title="Share on Twitter">
+                                        <i class="fab fa-x-twitter"></i>
                                     </a>
                                     
                                     <!-- LinkedIn Share -->
-                                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=<?php echo $currentPageUrl; ?>" target="_blank" class="social-icon linkedin" title="Share on LinkedIn">
+                                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=<?php echo $currentPageUrl; ?>" target="_blank" class="linkedin" title="Share on LinkedIn">
                                         <i class="fab fa-linkedin-in"></i>
                                     </a>
                                 
                                     <!-- WhatsApp Share -->
-                                    <a href="https://api.whatsapp.com/send?text=<?php echo $encodedBlogName; ?>%20<?php echo $currentPageUrl; ?>" target="_blank" class="social-icon whatsapp" title="Share on WhatsApp">
+                                    <a href="https://api.whatsapp.com/send?text=<?php echo $encodedBlogName; ?>%20<?php echo $currentPageUrl; ?>" target="_blank" class="whatsapp" title="Share on WhatsApp">
                                         <i class="fab fa-whatsapp"></i>
                                     </a>
                                     
                                     
                                          <!-- General Share Button -->
                                                     <?php 
-                        $currentPageUrl = "https://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-                        $encodedBlogName = htmlspecialchars("A2P Realtech", ENT_QUOTES, 'UTF-8'); 
+                        $currentPageUrlReal = "https://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+                        $encodedBlogNameReal = htmlspecialchars("A2P Realtech", ENT_QUOTES, 'UTF-8'); 
                         ?>
                         
-                        <a href="#" class="social-icon share" title="Share" onclick="shareContent(event)">
+                        <a href="#" class="share" title="Share" onclick="shareContent(event)">
                             <i class="fas fa-share-alt"></i>
                         </a>
                         
@@ -301,23 +280,28 @@ $currentPageUrl = urlencode("http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_UR
                                      
                                    
                                     <!-- Facebook Share -->
-                                    <a href="https://www.facebook.com/sharer/sharer.php?u=<?php echo $currentPageUrl; ?>&amp;t=<?php echo $encodedBlogName; ?>" target="_blank" class="social-icon facebook" title="Share on Facebook">
+                                    <a href="https://www.facebook.com/sharer/sharer.php?u=<?php echo $currentPageUrl; ?>&amp;t=<?php echo $encodedBlogName; ?>" target="_blank" class="facebook" title="Share on Facebook">
                                         <i class="fab fa-facebook-f"></i>
                                     </a>
                                     
                                     <!-- Twitter Share -->
-                                    <a href="https://twitter.com/intent/tweet?text=<?php echo $encodedBlogName; ?>&amp;url=<?php echo $currentPageUrl; ?>" target="_blank" class="social-icon twitter" title="Share on Twitter">
-                                        <i class="fab fa-twitter"></i>
+                                    <a href="https://twitter.com/intent/tweet?text=<?php echo $encodedBlogName; ?>&amp;url=<?php echo $currentPageUrl; ?>" target="_blank" class="twitter" title="Share on Twitter">
+                                        <i class="fab fa-x-twitter"></i>
                                     </a>
                                     
                                     <!-- LinkedIn Share -->
-                                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=<?php echo $currentPageUrl; ?>" target="_blank" class="social-icon linkedin" title="Share on LinkedIn">
+                                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=<?php echo $currentPageUrl; ?>" target="_blank" class="linkedin" title="Share on LinkedIn">
                                         <i class="fab fa-linkedin-in"></i>
                                     </a>
                                 
                                     <!-- WhatsApp Share -->
-                                    <a href="https://api.whatsapp.com/send?text=<?php echo $encodedBlogName; ?>%20<?php echo $currentPageUrl; ?>" target="_blank" class="social-icon whatsapp" title="Share on WhatsApp">
+                                    <a href="https://api.whatsapp.com/send?text=<?php echo $encodedBlogName; ?>%20<?php echo $currentPageUrl; ?>" target="_blank" class="whatsapp" title="Share on WhatsApp">
                                         <i class="fab fa-whatsapp"></i>
+                                    </a>
+                                    
+                                    <!-- General Share Button -->
+                                    <a href="#" class="share" title="Share" onclick="shareContent(event)">
+                                        <i class="fas fa-share-alt"></i>
                                     </a>
                                 </div>
                                 <br><br>
