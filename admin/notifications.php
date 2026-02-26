@@ -38,7 +38,7 @@ if (isset($_POST['send_notif'])) {
     curl_setopt($ch, CURLOPT_URL, "https://onesignal.com/api/v1/notifications");
     curl_setopt($ch, CURLOPT_HTTPHEADER, array(
         'Content-Type: application/json; charset=utf-8',
-        'Authorization: Basic ' . trim($rest_api_key)
+        'Authorization: Key ' . trim($rest_api_key)
     ));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
     curl_setopt($ch, CURLOPT_HEADER, FALSE);
@@ -52,10 +52,11 @@ if (isset($_POST['send_notif'])) {
     
     if ($q->rowCount()) {
         if (isset($res_json['id'])) {
-            $umessage = '<div class="alert alert-success" role="alert"><strong>Success!</strong> Notification sent to both Website & All Devices.</div>';
+            $umessage = '<div class="alert alert-success" role="alert"><strong>Success!</strong> Notification sent to Website & All Devices.</div>';
         } else {
-            $err_msg = isset($res_json['errors'][0]) ? $res_json['errors'][0] : 'Unknown error';
-            $umessage = '<div class="alert alert-warning" role="alert"><strong>Website Saved!</strong> But Device Push Failed: ' . $err_msg . '. Please verify your REST API Key in <code>admin/notifications.php</code>.</div>';
+            $err_msg = isset($res_json['errors'][0]) ? $res_json['errors'][0] : 'Push failed';
+            // Debug: Show full response
+            $umessage = '<div class="alert alert-warning" role="alert">Website Saved, but Device Push Failed: ' . $err_msg . '<br><small>OneSignal Response: ' . htmlspecialchars($response) . '</small></div>';
         }
     } else {
         $umessage = '<div class="alert alert-danger" role="alert">Failed to save notification to database.</div>';
