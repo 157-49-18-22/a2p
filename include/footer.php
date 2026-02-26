@@ -352,9 +352,9 @@
             <div class="mobile-nav__social">
                             <a href="<?php echo $pr_add['facebook']; ?>" class="facebook"><i class="fab fa-facebook-f"></i></a>
                             <a href="<?php echo $pr_add['twitter']; ?>" class="twitter"><i class="fab fa-x-twitter"></i></a>
-                            <a href="<?php echo $pr_add['youtube']; ?>" class="instagram"><i class="fab fa-instagram"></i></a>
-                            <a href="<?php echo $pr_add['linkedin']; ?>" class="youtube"><i class="fab fa-youtube"></i></a>
-                            <a href="<?php echo $pr_add['linkedin2']; ?>" class="linkedin"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="<?php echo $pr_add['instagram']; ?>" class="instagram"><i class="fab fa-instagram"></i></a>
+                            <a href="<?php echo $pr_add['youtube']; ?>" class="youtube"><i class="fab fa-youtube"></i></a>
+                            <a href="<?php echo $pr_add['linkedin']; ?>" class="linkedin"><i class="fab fa-linkedin-in"></i></a>
                             <a href="https://api.whatsapp.com/send?phone=91<?php echo $pr_add['phone']; ?>" class="whatsapp"><i class="fab fa-whatsapp"></i></a>
             </div><!-- /.mobile-nav__social -->
         </div><!-- /.mobile-nav__top -->

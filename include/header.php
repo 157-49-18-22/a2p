@@ -244,13 +244,15 @@
     }
     .mobile-nav__social {
         display: grid !important;
-        grid-template-columns: repeat(3, 40px) !important;
-        gap: 15px 25px !important; /* Balanced gap for better alignment */
-        padding: 30px 20px !important; 
+        grid-template-columns: repeat(3, 42px) !important;
+        grid-template-rows: auto auto !important;
+        gap: 14px 18px !important;
+        padding: 20px 20px 25px !important;
+        justify-content: start !important;
         justify-items: center !important;
-        justify-content: center !important; /* Center the whole grid */
-        width: 100% !important;
-        margin: 0 auto !important;
+        align-items: center !important;
+        width: auto !important;
+        margin: 0 !important;
     }
     .mobile-nav__social a {
         color: #fff !important;
