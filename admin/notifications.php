@@ -19,7 +19,7 @@ if (isset($_POST['send_notif'])) {
     
     // 2. Send Native Push Notification via OneSignal
     $app_id = "d672c804-fe64-41c5-b321-44e92cf74cc9"; // Actual App ID
-    $rest_api_key = "os_v2_app_2zzmqbh6mra4lmzbitusz52mzgai2ro54eruy44ynhxt3ch3nfnsbnkulxkpfcvj6fve3nl3eapfcbawjzcxqp2kjf5e5ogomgsb5za"; // Your REST API Key
+    $rest_api_key = "os_v2_app_2zzmqbh6mra41mzbitusz52mzgai2ro54eruy44ynhxt3ch3nfnsbnkulxkpfcvj6fve3nl3eapfcbawjzcxqp2kjf5e5ogomgsb5za";
     
     $content = array("en" => $message);
     $headings = array("en" => $title);
@@ -27,6 +27,7 @@ if (isset($_POST['send_notif'])) {
     $fields = array(
         'app_id' => $app_id,
         'included_segments' => array('All'),
+        'data' => array("foo" => "bar"),
         'contents' => $content,
         'headings' => $headings,
         'url' => $link
@@ -38,7 +39,7 @@ if (isset($_POST['send_notif'])) {
     curl_setopt($ch, CURLOPT_URL, "https://onesignal.com/api/v1/notifications");
     curl_setopt($ch, CURLOPT_HTTPHEADER, array(
         'Content-Type: application/json; charset=utf-8',
-        'Authorization: Key ' . trim($rest_api_key)
+        'Authorization: Basic ' . trim($rest_api_key)
     ));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
     curl_setopt($ch, CURLOPT_HEADER, FALSE);
