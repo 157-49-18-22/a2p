@@ -244,8 +244,8 @@
     }
     .mobile-nav__social {
         display: grid !important;
-        grid-template-columns: repeat(3, 50px) !important;
-        gap: 15px !important;
+        grid-template-columns: repeat(3, 45px) !important;
+        gap: 20px !important;
         padding: 20px !important;
         justify-content: center !important;
         margin: 0 auto !important;
