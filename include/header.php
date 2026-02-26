@@ -499,35 +499,39 @@
     }
 
     /* Standardize card image ratios */
-    /* Premium Property Card Redesign - Larger & No Image Cut */
+    /* Premium Property Card Redesign - 3 Cards per Row */
     .project-card-v2 {
         background: #fff !important;
         border-radius: 20px !important;
         overflow: hidden !important;
-        box-shadow: 0 15px 35px rgba(0,0,0,0.1) !important;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.08) !important;
         transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
-        margin: 10px 10px 40px !important;
+        margin: 10px 5px 30px !important;
         border: 1px solid rgba(0,0,0,0.05) !important;
-        width: 100% !important; /* Allow carousel items to define width */
-        max-width: 480px !important; /* Significantly larger */
+        width: 100% !important;
+        max-width: 370px !important; /* Adjusted for 3 cards */
     }
 
     .project-card-v2:hover {
-        transform: translateY(-12px) !important;
-        box-shadow: 0 25px 60px rgba(0,0,0,0.18) !important;
+        transform: translateY(-8px) !important;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.12) !important;
     }
 
     .project-card-v2__img {
         position: relative !important;
-        height: 360px !important; /* Increased height to avoid cutting */
+        height: 250px !important; /* Clean height for 3 in a row */
         overflow: hidden !important;
         background: #fdfdfd !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
     }
 
     .project-card-v2__img img {
         width: 100% !important;
         height: 100% !important;
-        object-fit: cover !important; /* High-quality fitting */
+        object-fit: contain !important; /* Shows full image without cutting */
+        background: #fff !important;
         display: block !important;
     }
 
