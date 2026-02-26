@@ -4,6 +4,17 @@ include "function/function.php";
 if (isset($_GET['query'])) {
     $search_redir = trim($_GET['query']);
     $searchLower_redir = strtolower($search_redir);
+    
+    // 1. Blog redirection
+    $blogKeywords = ['blog', 'news', 'article', 'update', 'blogs'];
+    foreach ($blogKeywords as $kw) {
+        if (strpos($searchLower_redir, $kw) !== false) {
+            header('Location: ' . SITE_URL . 'blog.php');
+            exit();
+        }
+    }
+
+    // 2. Contact redirection
     $contactKeywords_redir = [
         'address', 'location', 'phone', 'mobile', 'call', 'email', 'contact',
         'office', 'address?', 'pincode', 'corporate', 'connect', 'reach',

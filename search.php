@@ -300,7 +300,17 @@ function checkSearchRedirect(form) {
     var query = queryInput ? queryInput.value.trim().toLowerCase() : '';
     if (!query) return true;
 
-    // Contact related keywords
+    // 1. Blog redirection
+    var blogKeywords = ['blog', 'news', 'article', 'update', 'blogs'];
+    var isBlogMatch = blogKeywords.some(function(kw) {
+        return query.indexOf(kw) !== -1;
+    });
+    if (isBlogMatch) {
+        window.location.href = '<?= SITE_URL; ?>blog.php';
+        return false;
+    }
+
+    // 2. Contact related keywords
     var contactKeywords = [
         'address', 'location', 'phone', 'mobile', 'call', 'email', 'contact',
         'office', 'address?', 'pincode', 'corporate', 'connect', 'reach',
