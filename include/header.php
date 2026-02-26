@@ -273,28 +273,43 @@
         flex: 1 !important;
     }
 
-    /* Fix image cutting on mobile */
+    /* Fix image cutting on mobile - Enhanced Robustness */
     .page-header {
-        padding: 50px 0 !important; /* Reduce padding on mobile */
+        padding: 50px 0 !important;
         min-height: auto !important;
     }
     .page-header-bg {
         background-size: cover !important;
         background-position: center !important;
     }
+    
+    /* Centralized Image Scaling Fix */
     .welcome-one__img-box img,
     .about-one__img-box img,
     .service-details__img img,
-    .project-details__img img {
+    .project-details__img img,
+    .blog-details__img img,
+    .project-three__img img,
+    .project-three__imgs img {
         width: 100% !important;
+        max-width: 100% !important;
         height: auto !important;
-        object-fit: contain !important;
+        object-fit: contain !important; /* Never cut the image */
+        display: block !important;
+        margin: 0 auto !important;
     }
-    .blog-details__img img {
+
+    .blog-details {
+        padding: 40px 0 !important;
+    }
+
+    .blog-details__img {
+        overflow: visible !important;
         width: 100% !important;
-        height: auto !important;
-        object-fit: initial !important;
+        display: flex !important;
+        justify-content: center !important;
     }
+    
     .thm-breadcrumb {
         margin-bottom: 10px !important;
     }

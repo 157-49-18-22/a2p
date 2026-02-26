@@ -157,22 +157,28 @@ if (count($sql_ser)) {
         
         
         
-            /* Alignment for Product Images */
+            /* Alignment for Product Images - Robust Mobile Scaling */
             .blog-details__img img {
-                width: 100%;
-                height: auto;
+                width: 100% !important;
+                max-width: 100% !important;
+                height: auto !important;
                 border-radius: 12px;
                 box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+                object-fit: contain !important; /* Ensure image is never cut */
             }
 
             @media (max-width: 991px) {
                 .blog-details__img img {
                     height: auto !important;
-                    object-fit: initial !important;
-                    max-height: none !important;
+                    object-fit: contain !important;
+                    display: block !important;
+                    margin: 0 auto !important;
                 }
                 .blog-details {
-                    padding: 60px 0 60px !important;
+                    padding: 30px 0 !important;
+                }
+                .blog-details__left {
+                    width: 100% !important;
                 }
             }
 
@@ -479,7 +485,7 @@ $currentPageUrl = urlencode("http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_UR
         <section class="blog-details">
             <div class="container">
                 <div class="row">
-                    <div class="col-xl-8 col-lg-7">
+                    <div class="col-xl-8 col-lg-7 col-md-12">
                         <div class="blog-details__left">
                             <div class="blog-details__img">
                                 <img src="<?= SITE_URL; ?>upload/<?php echo trim($subproductss['photo']); ?>" alt=" <?php echo $subproductss['name']; ?>">
