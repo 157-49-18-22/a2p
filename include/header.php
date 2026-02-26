@@ -102,30 +102,57 @@
     z-index: 101 !important;
 }
 
-/* Search Button Style - Attractive & Branded */
+/* Search Button Style - Next Level Redesign */
 .main-menu-two__call .thm-btn {
-    width: 42px !important;
-    height: 42px !important;
-    border-radius: 8px !important;
+    width: 48px !important;
+    height: 48px !important;
+    border-radius: 12px !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    background: linear-gradient(135deg, #c00415 0%, #80020e 100%) !important;
+    background: linear-gradient(145deg, #c00415 0%, #a00311 100%) !important;
     color: #fff !important;
-    border: none !important;
-    box-shadow: 0 4px 10px rgba(192, 4, 21, 0.3) !important;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 
+        0 6px 20px rgba(192, 4, 21, 0.3),
+        inset 0 1px 2px rgba(255, 255, 255, 0.3) !important;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
     cursor: pointer !important;
+    position: relative;
+    overflow: hidden;
+}
+
+.main-menu-two__call .thm-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: 0.5s;
 }
 
 .main-menu-two__call .thm-btn:hover {
-    transform: scale(1.1) rotate(5deg) !important;
-    background: linear-gradient(135deg, #e6051b 0%, #c00415 100%) !important;
-    box-shadow: 0 6px 15px rgba(192, 4, 21, 0.4) !important;
+    transform: translateY(-4px) scale(1.08) !important;
+    background: linear-gradient(145deg, #e6051b 0%, #c00415 100%) !important;
+    box-shadow: 
+        0 12px 30px rgba(192, 4, 21, 0.45),
+        0 0 0 5px rgba(192, 4, 21, 0.1) !important;
+}
+
+.main-menu-two__call .thm-btn:hover::before {
+    left: 100%;
 }
 
 .main-menu-two__call .thm-btn i {
-    font-size: 18px !important;
+    font-size: 20px !important;
+    transition: all 0.4s ease !important;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)) !important;
+}
+
+.main-menu-two__call .thm-btn:hover i {
+    transform: scale(1.2) !important;
 }
 
 /* Notification Bell */
