@@ -146,61 +146,35 @@
 
 
 <style>
+    /* Premium Full-Width Hero Slider */
     .carousel-inner {
-        height: auto;
-        min-height: 200px;
-        background: #fff;
+        height: 600px !important; 
+        background: #000;
     }
 
     .carousel-item {
-        position: relative;
-        overflow: visible;
+        height: 100% !important;
     }
 
     .carousel-item img {
-        width: 100%;
-        height: auto !important;
-        max-height: 650px;
-        object-fit: contain;
-        object-position: center;
-        display: block;
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important; 
+        object-position: center center !important;
+        display: block !important;
     }
 
-    /* Desktop */
-    @media (min-width: 768px) {
-        .carousel-inner {
-            min-height: 400px;
-        }
-        .carousel-item img {
-            max-height: 650px;
-        }
+    @media (min-width: 1200px) {
+        .carousel-inner { height: 650px !important; }
     }
 
-    /* Mobile - show full banner without cropping */
+    @media (max-width: 991px) {
+        .carousel-inner { height: 450px !important; }
+    }
+
     @media (max-width: 767px) {
-        .carousel-inner {
-            height: auto !important;
-            min-height: auto !important;
-        }
-        .carousel-item {
-            height: auto !important;
-            overflow: visible !important;
-        }
-        .carousel-item img {
-            width: 100% !important;
-            height: auto !important;
-            max-height: none !important;
-            object-fit: contain !important;
-            object-position: center !important;
-        }
-        /* Fix for breadcrumb/page-header images on common internal pages */
-        .page-header {
-            padding: 60px 0 40px !important;
-        }
-        .page-header-bg {
-            background-position: center center !important;
-            background-size: cover !important;
-        }
+        .carousel-inner { height: 280px !important; }
+        .carousel-item img { object-fit: cover !important; }
     }
 </style>
 
