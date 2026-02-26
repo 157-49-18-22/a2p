@@ -14,15 +14,17 @@
 
 <style>
 /* Header Layout - Highly Compact for One Row */
+/* Header Layout - Clean Centered Design */
 .main-menu-two__wrapper {
     display: flex !important;
     align-items: center !important;
     justify-content: space-between !important;
-    padding: 0 15px !important; /* Reduced side padding */
-    height: 70px !important; 
+    padding: 0 30px !important; 
+    height: 70px !important; /* Reverted to standard height */
     position: relative !important;
     z-index: 100 !important;
     max-width: 100% !important;
+    background: #fff !important;
 }
 
 .main-menu-two__left {
@@ -32,26 +34,31 @@
 }
 
 .main-menu-two__logo {
-    margin-right: 40px !important; /* Increased gap after logo */
+    margin: 0 !important;
     flex-shrink: 0 !important;
 }
 
 .main-menu-two__logo img {
-    height: 45px !important; /* Slightly smaller logo to save space */
+    height: 45px !important; 
     width: auto !important;
 }
 
+/* Absolute Centering for Menu Box */
 .main-menu-two__main-menu-two-box {
-    flex: 1 !important;
+    position: absolute !important;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
     height: 100% !important;
+    width: auto !important;
 }
 
 .main-menu__list {
     display: flex !important;
-    gap: 8px !important; /* Increased gap between items */
+    gap: 8px !important; /* Reverted to original compact gap */
     align-items: center !important;
     height: 100% !important;
     margin: 0 !important;
@@ -64,12 +71,12 @@
     margin: 0 !important;
     display: flex !important;
     align-items: center !important;
-    height: 70px !important; /* Match wrapper height */
+    height: 70px !important;
 }
 
 .main-menu__list > li > a {
     white-space: nowrap !important;
-    padding: 8px 12px !important; /* Increased horizontal padding */
+    padding: 8px 12px !important; 
     font-size: 13px !important; 
     font-weight: 700 !important;
     text-transform: uppercase !important;
@@ -97,9 +104,21 @@
     display: flex !important;
     align-items: center !important;
     justify-content: flex-end !important;
-    flex-shrink: 0 !important;
-    margin-left: 30px !important; /* Increased gap before search bar */
+    flex: 1 !important;
     z-index: 101 !important;
+}
+
+/* Center Top Bar Content */
+.main-header-three__top-inner {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 40px !important;
+}
+
+.main-header-three__top-left, 
+.main-header-three__top-right {
+    flex: initial !important;
 }
 
 /* Search Button Style - Next Level Redesign */
@@ -263,14 +282,33 @@
         margin-left: 10px;
     }
     .main-menu-two__wrapper {
-        padding: 0 10px !important;
+        padding: 0 15px !important;
+        height: 65px !important;
     }
     .main-menu-two__logo img {
-        height: 35px !important; /* Smaller logo on mobile */
+        height: 40px !important; /* Responsive logo size */
     }
     .main-menu-two__main-menu-two-box {
         justify-content: flex-end !important;
+        flex: 0 !important;
+        order: 3 !important; /* Hamburger on far right */
+    }
+    .main-menu-two__right {
         flex: 1 !important;
+        justify-content: flex-end !important;
+        order: 2 !important;
+        margin-left: 0 !important;
+        gap: 10px !important;
+    }
+    .main-menu-two__call .thm-btn {
+        width: 38px !important;
+        height: 38px !important;
+        border-radius: 8px !important;
+    }
+    .mobile-nav__toggler {
+        margin-left: 8px !important;
+        width: 38px !important;
+        height: 38px !important;
     }
 
     /* Fix image cutting on mobile - Enhanced Robustness */
@@ -698,6 +736,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                             </a>
                         </div>
+                    </div>
                        <div class="main-menu-two__main-menu-two-box">
                             <div class="main-menu-two__main-menu-two-inner">
                                 <a href="#" class="mobile-nav__toggler"><i class="fa fa-bars"></i></a>
@@ -770,7 +809,6 @@ document.addEventListener('DOMContentLoaded', function() {
                                 </ul>
                             </div>
                         </div>
-                    </div>
                     <div class="main-menu-two__right">
 
 
