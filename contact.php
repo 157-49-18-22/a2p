@@ -499,57 +499,85 @@ form.addEventListener('submit', async (e) => {
 </head>
 <body>
 
-  <div class="contact-section">
-    <div class="contact-image"></div>
+<style>
+  .git-contact-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+  .git-contact-item .git-icon {
+    font-size: 20px;
+    color: #1e90ff;
+    width: 28px;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+  .git-contact-item .git-text {
+    display: flex;
+    flex-direction: column;
+  }
+  .git-contact-item .git-text span {
+    font-weight: 700;
+    color: #1e90ff;
+    font-size: 14px;
+    display: block;
+    margin-bottom: 2px;
+  }
+  .git-contact-item .git-text a,
+  .git-contact-item .git-text p {
+    color: #333;
+    text-decoration: none;
+    font-size: 14px;
+    margin: 0;
+  }
+  .git-contact-item .git-text a:hover {
+    text-decoration: underline;
+  }
+  .git-contact-section { padding: 20px 10px; }
+  .git-contact-section h2 { color: #2a2a2a; margin-bottom: 18px; font-size: 26px; }
+</style>
 
-    <div class="contact-details">
-      <h2>Get in Touch</h2>
-      <ul>
-        <li style="display: flex; align-items: center; gap: 15px; text-align: left; margin-bottom: 20px;">
-          <div style="width: 45px; height: 45px; background: #c00415; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; flex-shrink: 0;">
-            <span class="icon-phone-call"></span>
-          </div>
-          <div class="text">
-            <span>Call - Team A2P</span>
-            <a href="tel:+918130525001">+91-8130525001</a><br>
-            <a href="tel:+918130510678">+91-8130510678</a>
-          </div>
-        </li>
+<div class="git-contact-section">
+  <h2>Get in Touch</h2>
 
-        <li style="display: flex; align-items: center; gap: 15px; text-align: left; margin-bottom: 20px;">
-          <div style="width: 45px; height: 45px; background: #c00415; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; flex-shrink: 0;">
-            <span class="icon-message"></span>
-          </div>
-          <div class="text">
-            <span>Send Email</span>
-            <a href="mailto:team@a2prealtech.com">team@a2prealtech.com</a>
-          </div>
-        </li>
-
-        <li style="display: flex; align-items: center; gap: 15px; text-align: left; margin-bottom: 20px;">
-          <div style="width: 45px; height: 45px; background: #c00415; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; flex-shrink: 0;">
-            <span class="icon-location"></span>
-          </div>
-          <div class="text">
-            <span>A2P REALTECH PVT LTD</span>
-            <p style="margin:0; font-size: 14px; color: #333;">S-3 2nd Floor Malik Plaza Plot No -5 Sector 4 Dwarka New Delhi 110078</p>
-          </div>
-        </li>
-      </ul>
+  <div class="git-contact-item">
+    <div class="git-icon"><i class="fa fa-phone-alt"></i></div>
+    <div class="git-text">
+      <span>Call - Team A2P</span>
+      <a href="tel:+918130525001">+91-8130525001</a>
+      <a href="tel:+918130510678">+91-8130510678</a>
     </div>
   </div>
+
+  <div class="git-contact-item">
+    <div class="git-icon"><i class="fa fa-envelope"></i></div>
+    <div class="git-text">
+      <span>Send Email</span>
+      <a href="mailto:team@a2prealtech.com">team@a2prealtech.com</a>
+    </div>
+  </div>
+
+  <div class="git-contact-item">
+    <div class="git-icon"><i class="fa fa-building"></i></div>
+    <div class="git-text">
+      <span>A2P REALTECH PVT LTD</span>
+      <p>S-3 2nd Floor Malik Plaza Plot No -5 Sector 4 Dwarka New Delhi 110078</p>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
 
                         </ul>
-                        <div class="contact-page__social">
-                            <a href="<?php echo $pr_add['facebook']; ?>"><i class="fab fa-facebook-f"></i></a>
-                            <a href="<?php echo $pr_add['twitter']; ?>"><i class="fab fa-x-twitter"></i></a>
-                            <a href="<?php echo $pr_add['instagram']; ?>"><i class="fab fa-instagram"></i></a>
-                            <a href="<?php echo $pr_add['youtube']; ?>"><i class="fab fa-youtube"></i></a>
-                            <a href="<?php echo $pr_add['linkedin']; ?>"><i class="fab fa-linkedin-in"></i></a>
-                            <a href="https://api.whatsapp.com/send?phone=91<?php echo $pr_add['phone']; ?>"><i class="fab fa-whatsapp"></i></a>
+                        <div class="site-footer__social contact-page__social">
+                            <a href="<?php echo $pr_add['facebook']; ?>" class="facebook"><i class="fab fa-facebook-f"></i></a>
+                            <a href="<?php echo $pr_add['twitter']; ?>" class="twitter"><i class="fab fa-x-twitter"></i></a>
+                            <a href="<?php echo $pr_add['youtube']; ?>" class="instagram"><i class="fab fa-instagram"></i></a>
+                            <a href="<?php echo $pr_add['linkedin']; ?>" class="youtube"><i class="fab fa-youtube"></i></a>
+                            <a href="<?php echo $pr_add['linkedin2']; ?>" class="linkedin"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="https://api.whatsapp.com/send?phone=91<?php echo $pr_add['phone']; ?>" class="whatsapp"><i class="fab fa-whatsapp"></i></a>
                         </div>
                     </div>
                 </div>
