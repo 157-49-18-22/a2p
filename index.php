@@ -307,7 +307,7 @@ if (count($sql_ser)) {
                     <div class="col-xl-3">
                         <div class="blog-three__left">
                             <div class="section-title text-left">
-                                <span class="section-title__tagline">Premium Collection</span>
+                                <span class="section-title__tagline">A2P Realtech</span>
                                 <h2 class="section-title__title"><?php echo $category['name']; ?></h2>
                                 <div class="section-title__line"></div>
                             </div>
@@ -337,8 +337,9 @@ if (count($sql_ser)) {
                                 if (count($sub_cat)) {
                                     foreach ($sub_cat as $subproductwww) {
                                 ?>
-                                        <div class="project-card-v2">
-                                            <div class="project-card-v2__img">
+                                        <div class="blog-one__single">
+                                            <a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php">
+                                            <div class="blog-one__img">
                                                 <?php 
                                                     $res_placeholders = [
                                                         "060825060302Vatika Sovereign Park Image1.jpg",
@@ -354,18 +355,17 @@ if (count($sql_ser)) {
                                                         $displayImg = SITE_URL . "upload/" . $res_placeholders[$placeholderIndex];
                                                     }
                                                 ?>
-                                                <a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php">
-                                                    <img src="<?php echo $displayImg; ?>" alt="<?php echo $subproductwww['name']; ?>">
-                                                </a>
-                                                <div class="card-location-ribbon">
-                                                    <i class="fa fa-map-marker-alt"></i> <?php echo $subproductwww['pro_lable']; ?>
-                                                </div>
+                                                <img src="<?php echo $displayImg; ?>" alt="<?php echo $subproductwww['name']; ?>">
                                             </div>
-                                            <div class="project-card-v2__content">
-                                                <h3 class="project-card-v2__title">
-                                                    <a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php"><?php echo $subproductwww['name']; ?></a>
-                                                </h3>
-                                                <p class="project-card-v2__location-text"><i class="fa-solid fa-location-dot"></i> Gurgaon, Haryana</p>
+                                            </a>
+                                            <div class="blog-one__content">
+                                                <h3 class="blog-one__title"><a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php"><?php echo $subproductwww['name']; ?></a></h3>
+                                                <div class="blog-one__date">
+                                                    <p><i class="fa-solid fa-map-pin"></i> <?php echo $subproductwww['pro_lable']; ?></p>
+                                                </div>
+                                                <ul class="list-unstyled blog-one__meta">
+                                                    <li><a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php"><i class="far fa-user-circle"></i> <?php echo $subproductwww['pro_lable']; ?></a></li>
+                                                </ul>
                                             </div>
                                         </div>
                                 <?php }
@@ -503,8 +503,9 @@ if (count($sql_ser)) {
                                 if (count($sub_cat)) {
                                     foreach ($sub_cat as $subproductwww) {
                                 ?>
-                                        <div class="project-card-v2 alt-style">
-                                            <div class="project-card-v2__img">
+                                        <div class="blog-one__single">
+                                            <a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php">
+                                            <div class="blog-one__img">
                                                 <?php 
                                                     $com_placeholders = [
                                                         "030625094659Commercial-Construction-A2P-Realtech.jpg",
@@ -520,18 +521,17 @@ if (count($sql_ser)) {
                                                         $displayImg = SITE_URL . "upload/" . $com_placeholders[$placeholderIndex];
                                                     }
                                                 ?>
-                                                <a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php">
-                                                    <img src="<?php echo $displayImg; ?>" alt="<?php echo $subproductwww['name']; ?>">
-                                                </a>
-                                                <div class="card-location-ribbon">
-                                                    <i class="fa fa-map-marker-alt"></i> <?php echo $subproductwww['pro_lable']; ?>
-                                                </div>
+                                                <img src="<?php echo $displayImg; ?>" alt="<?php echo $subproductwww['name']; ?>">
                                             </div>
-                                            <div class="project-card-v2__content">
-                                                <h3 class="project-card-v2__title">
-                                                    <a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php"><?php echo $subproductwww['name']; ?></a>
-                                                </h3>
-                                                <p class="project-card-v2__location-text"><i class="fa-solid fa-location-dot"></i> Gurgaon, Haryana</p>
+                                            </a>
+                                            <div class="blog-one__content">
+                                                <h3 class="blog-one__title"><a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php"><?php echo $subproductwww['name']; ?></a></h3>
+                                                <div class="blog-one__date">
+                                                    <p><i class="fa-solid fa-map-pin"></i> <?php echo $subproductwww['pro_lable']; ?></p>
+                                                </div>
+                                                <ul class="list-unstyled blog-one__meta">
+                                                    <li><a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php"><i class="far fa-user-circle"></i> <?php echo $subproductwww['pro_lable']; ?></a></li>
+                                                </ul>
                                             </div>
                                         </div>
                                 <?php }
@@ -706,40 +706,35 @@ if (count($sql_ser)) {
                     foreach ($result as $offer) {
                 ?>
                         <div class="col-xl-4 col-lg-4 wow fadeInUp" data-wow-delay="100ms">
-                            <div class="blog-card-v2">
-                                <div class="blog-card-v2__img">
-                                    <?php 
-                                        $placeholders = [
-                                            "060225101913Dwarka_Expressway_Projects_A2P_Realtech_Gurgaon.webp",
-                                            "060225101609Luxury_Homes_on_Dwarka_Expressway_A2P_Realtech.webp",
-                                            "060225101329Dream_House_With_A2P_Realtech.webp",
-                                            "060225100954M3M_Mansion_113_A2P_Realtech.webp",
-                                            "060225100526Dwarka_Expressway_Luxury_Projects_with_A2P_Realtech.webp",
-                                            "060225100348Hero_Homes_Top_Choice_A2P_Realtech.webp"
-                                        ];
-                                        $imagePath = "upload/" . $offer['photo'];
-                                        if (file_exists($imagePath) && !empty($offer['photo'])) {
-                                            $displayImg = SITE_URL . $imagePath;
-                                        } else {
-                                            $placeholderIndex = $offer['id'] % count($placeholders);
-                                            $displayImg = SITE_URL . "upload/" . $placeholders[$placeholderIndex];
-                                        }
-                                    ?>
+                            <div class="blog-one__single">
+                                <?php 
+                                    $placeholders = [
+                                        "060225101913Dwarka_Expressway_Projects_A2P_Realtech_Gurgaon.webp",
+                                        "060225101609Luxury_Homes_on_Dwarka_Expressway_A2P_Realtech.webp",
+                                        "060225101329Dream_House_With_A2P_Realtech.webp",
+                                        "060225100954M3M_Mansion_113_A2P_Realtech.webp",
+                                        "060225100526Dwarka_Expressway_Luxury_Projects_with_A2P_Realtech.webp",
+                                        "060225100348Hero_Homes_Top_Choice_A2P_Realtech.webp"
+                                    ];
+                                    $imagePath = "upload/" . $offer['photo'];
+                                    if (file_exists($imagePath) && !empty($offer['photo'])) {
+                                        $displayImg = SITE_URL . $imagePath;
+                                    } else {
+                                        $placeholderIndex = $offer['id'] % count($placeholders);
+                                        $displayImg = SITE_URL . "upload/" . $placeholders[$placeholderIndex];
+                                    }
+                                ?>
+                                <a href="<?= SITE_URL; ?>blog_detail/<?php echo makeurlnamebynameCategory($offer['name']); ?>.php">
+                                <div class="blog-one__img">
                                     <img src="<?php echo $displayImg; ?>" alt="<?php echo $offer['name']; ?>">
-                                    <div class="blog-card-v2__category">
-                                        <span>News</span>
-                                    </div>
-                                    <a href="<?= SITE_URL; ?>blog_detail/<?php echo makeurlnamebynameCategory($offer['name']); ?>.php" class="blog-card-v2__overlay"></a>
                                 </div>
-                                <div class="blog-card-v2__content">
-                                    <div class="blog-card-v2__meta">
-                                        <span><i class="far fa-user-circle"></i> A2P Realtech</span>
-                                        <span><i class="far fa-calendar-alt"></i> Latest</span>
+                                </a>
+                                <div class="blog-one__content">
+                                    <div class="blog-one__date">
+                                        <p><i class="far fa-user-circle"></i> A2P Realtech &nbsp;|&nbsp; <i class="far fa-calendar-alt"></i> Latest</p>
                                     </div>
-                                    <h3 class="blog-card-v2__title">
-                                        <a href="<?= SITE_URL; ?>blog_detail/<?php echo makeurlnamebynameCategory($offer['name']); ?>.php"><?php custom_echo($offer['name'], 60); ?></a>
-                                    </h3>
-                                    <p class="blog-card-v2__text"><?php custom_echo($offer['des1'], 100); ?></p>
+                                    <h3 class="blog-one__title"><a href="<?= SITE_URL; ?>blog_detail/<?php echo makeurlnamebynameCategory($offer['name']); ?>.php"><?php custom_echo($offer['name'], 60); ?></a></h3>
+                                    <p><?php custom_echo($offer['des1'], 100); ?></p>
                                     <a href="<?= SITE_URL; ?>blog_detail/<?php echo makeurlnamebynameCategory($offer['name']); ?>.php" class="blog-card-v2__btn">
                                         Read More <i class="fa fa-arrow-right"></i>
                                     </a>
