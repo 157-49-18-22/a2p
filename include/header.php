@@ -617,30 +617,92 @@
         display: none !important;
     }
 
-    /* Mobile Optimization for Property Cards */
+    /* Premium Blog Card styling */
+    .blog-card-v2 {
+        background: #fff !important;
+        border-radius: 20px !important;
+        overflow: hidden !important;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.1) !important;
+        transition: all 0.5s ease !important;
+        margin-bottom: 30px !important;
+        border: 1px solid rgba(0,0,0,0.05) !important;
+    }
+
+    .blog-card-v2:hover {
+        transform: translateY(-10px) !important;
+        box-shadow: 0 25px 60px rgba(0,0,0,0.15) !important;
+    }
+
+    .blog-card-v2__img {
+        height: 250px !important;
+        position: relative !important;
+    }
+
+    .blog-card-v2__img img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+        transition: transform 0.5s ease-in-out !important;
+    }
+
+    .blog-card-v2:hover .blog-card-v2__img img {
+        transform: scale(1.05) !important;
+    }
+
+    .blog-card-v2__content {
+        padding: 25px 20px !important;
+    }
+
+    .blog-card-v2__title a {
+        color: #102a83 !important;
+        font-size: 20px !important;
+        font-weight: 700 !important;
+        line-height: 1.4 !important;
+        transition: color 0.3s ease !important;
+    }
+
+    .blog-card-v2__title a:hover {
+        color: #c00415 !important;
+    }
+
+    .blog-card-v2__text {
+        color: #666 !important;
+        font-size: 14px !important;
+        margin: 15px 0 !important;
+    }
+
+    .blog-card-v2__btn {
+        color: #c00415 !important;
+        font-weight: 700 !important;
+        font-size: 14px !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.5px !important;
+    }
+
+    /* Mobile Optimization for Cards */
     @media (max-width: 767px) {
-        .project-card-v2 {
+        .project-card-v2, .blog-card-v2 {
             margin: 5px 5px 30px !important;
             border-radius: 15px !important;
         }
         
-        .project-card-v2__img {
-            height: 220px !important; /* Smaller height on mobile */
+        .project-card-v2__img, .blog-card-v2__img {
+            height: 200px !important; /* Standard small height for mobile */
         }
         
         .card-location-ribbon {
             padding: 10px 15px !important;
-            font-size: 12px !important;
+            font-size: 11px !important;
             gap: 8px !important;
         }
         
-        .project-card-v2__content {
-            padding: 20px 15px !important;
+        .project-card-v2__content, .blog-card-v2__content {
+            padding: 18px 15px !important;
         }
         
-        .project-card-v2__title a {
-            font-size: 18px !important;
-            margin-bottom: 12px !important;
+        .project-card-v2__title a, .blog-card-v2__title a {
+            font-size: 17px !important;
+            margin-bottom: 10px !important;
         }
 
         .project-card-v2__location-text {
@@ -662,7 +724,7 @@
         
         /* Ensure section title doesn't overflow */
         .section-title__title {
-            font-size: 28px !important;
+            font-size: 26px !important;
         }
     }
 
