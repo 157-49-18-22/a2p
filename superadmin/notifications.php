@@ -64,8 +64,7 @@ if (isset($_POST['send_notif'])) {
             $umessage = '<div class="alert alert-success" role="alert"><strong>Success!</strong> Notification sent to Website & All Devices.</div>';
         } else {
             $err_msg = isset($res_json['errors'][0]) ? $res_json['errors'][0] : 'Push failed';
-            // Debug: Show full response to pinpoint the issue
-            $umessage = '<div class="alert alert-warning" role="alert">Website Saved, but Device Push Failed: ' . $err_msg . '<br><small>OneSignal Response: ' . htmlspecialchars($response) . '</small></div>';
+            $umessage = '<div class="alert alert-warning" role="alert">Website Saved, but Device Push Failed: ' . $err_msg . '</div>';
         }
     } else {
         $umessage = '<div class="alert alert-danger" role="alert">Failed to save notification.</div>';
