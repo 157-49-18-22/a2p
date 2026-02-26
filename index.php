@@ -358,6 +358,9 @@ if (count($sql_ser)) {
                                                 <a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php">
                                                     <img src="<?php echo $displayImg; ?>" alt="<?php echo $subproductwww['name']; ?>">
                                                 </a>
+                                                <div class="project-card-v2__badge">
+                                                    <i class="fa-solid fa-location-dot"></i> <?php echo $subproductwww['pro_lable']; ?>
+                                                </div>
                                             </div>
                                             <div class="project-card-v2__content">
                                                 <h3 class="project-card-v2__title">
@@ -522,6 +525,9 @@ if (count($sql_ser)) {
                                                 <a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php">
                                                     <img src="<?php echo $displayImg; ?>" alt="<?php echo $subproductwww['name']; ?>">
                                                 </a>
+                                                <div class="project-card-v2__badge">
+                                                    <i class="fa-solid fa-location-dot"></i> <?php echo $subproductwww['pro_lable']; ?>
+                                                </div>
                                             </div>
                                             <div class="project-card-v2__content">
                                                 <h3 class="project-card-v2__title">
