@@ -316,56 +316,43 @@ if (count($sql_ser)) {
                     </div>
                     <div class="col-xl-9">
                         <div class="blog-three__right">
-                            <div class="blgo-three__carousel owl-carousel owl-theme thm-owl__carousel residential-carousel" data-owl-options='{
-                                "loop": true,
-                                "autoplay": false,
-                                "margin": 30,
-                                "nav": true,
-                                "dots": false,
-                                "smartSpeed": 700,
-                                "navText": ["<span class=\"fa fa-angle-left\"></span>","<span class=\"fa fa-angle-right\"></span>"],
-                                "responsive": {
-                                    "0": { "items": 1 },
-                                    "768": { "items": 2 },
-                                    "992": { "items": 2 },
-                                    "1200": { "items": 2.5 }
-                                }
-                            }'>
-
+                            <div class="row">
                                 <?php
-                                $sub_cat = sqlfetch("SELECT * FROM subproduct where  subcat2='" . $category['id'] . "' ORDER BY id DESC  ");
+                                $sub_cat = sqlfetch("SELECT * FROM subproduct where subcat2='" . $category['id'] . "' ORDER BY id DESC LIMIT 6");
                                 if (count($sub_cat)) {
                                     foreach ($sub_cat as $subproductwww) {
                                 ?>
-                                        <div class="project-card-v2">
-                                            <div class="project-card-v2__img">
-                                                <?php 
-                                                    $res_placeholders = [
-                                                        "060825060302Vatika Sovereign Park Image1.jpg",
-                                                        "100725050048Sobha-City-Sector-108-Dwarka-Expressway-Gurgaon.jpg",
-                                                        "160425091419Sobha Altus image A2P Realtech.jpg",
-                                                        "20260128161604_M3M-GIC-Manesar-Gurgaon.jpg"
-                                                    ];
-                                                    $imagePath = "upload/" . $subproductwww['photo'];
-                                                    if (file_exists($imagePath) && !empty($subproductwww['photo'])) {
-                                                        $displayImg = SITE_URL . $imagePath;
-                                                    } else {
-                                                        $placeholderIndex = $subproductwww['id'] % count($res_placeholders);
-                                                        $displayImg = SITE_URL . "upload/" . $res_placeholders[$placeholderIndex];
-                                                    }
-                                                ?>
-                                                <a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php">
-                                                    <img src="<?php echo $displayImg; ?>" alt="<?php echo $subproductwww['name']; ?>">
-                                                </a>
-                                                <div class="card-location-ribbon">
-                                                    <i class="fa fa-map-marker-alt"></i> <?php echo $subproductwww['pro_lable']; ?>
+                                        <div class="col-xl-4 col-md-6 mb-4">
+                                            <div class="project-card-v2">
+                                                <div class="project-card-v2__img">
+                                                    <?php 
+                                                        $res_placeholders = [
+                                                            "060825060302Vatika Sovereign Park Image1.jpg",
+                                                            "100725050048Sobha-City-Sector-108-Dwarka-Expressway-Gurgaon.jpg",
+                                                            "160425091419Sobha Altus image A2P Realtech.jpg",
+                                                            "20260128161604_M3M-GIC-Manesar-Gurgaon.jpg"
+                                                        ];
+                                                        $imagePath = "upload/" . $subproductwww['photo'];
+                                                        if (file_exists($imagePath) && !empty($subproductwww['photo'])) {
+                                                            $displayImg = SITE_URL . $imagePath;
+                                                        } else {
+                                                            $placeholderIndex = $subproductwww['id'] % count($res_placeholders);
+                                                            $displayImg = SITE_URL . "upload/" . $res_placeholders[$placeholderIndex];
+                                                        }
+                                                    ?>
+                                                    <a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php">
+                                                        <img src="<?php echo $displayImg; ?>" alt="<?php echo $subproductwww['name']; ?>">
+                                                    </a>
+                                                    <div class="card-location-ribbon">
+                                                        <i class="fa fa-map-marker-alt"></i> <?php echo $subproductwww['pro_lable']; ?>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="project-card-v2__content">
-                                                <h3 class="project-card-v2__title">
-                                                    <a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php"><?php echo $subproductwww['name']; ?></a>
-                                                </h3>
-                                                <p class="project-card-v2__location-text"><i class="fa-solid fa-location-dot"></i> Gurgaon, Haryana</p>
+                                                <div class="project-card-v2__content">
+                                                    <h3 class="project-card-v2__title">
+                                                        <a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php"><?php echo $subproductwww['name']; ?></a>
+                                                    </h3>
+                                                    <p class="project-card-v2__location-text"><i class="fa-solid fa-location-dot"></i> Gurgaon, Haryana</p>
+                                                </div>
                                             </div>
                                         </div>
                                 <?php }
@@ -482,56 +469,43 @@ if (count($sql_ser)) {
                     </div>
                     <div class="col-xl-9">
                         <div class="blog-three__right">
-                            <div class="blgo-three__carousel owl-carousel owl-theme thm-owl__carousel commercial-carousel" data-owl-options='{
-                                "loop": true,
-                                "autoplay": false,
-                                "margin": 30,
-                                "nav": true,
-                                "dots": false,
-                                "smartSpeed": 700,
-                                "navText": ["<span class=\"fa fa-angle-left\"></span>","<span class=\"fa fa-angle-right\"></span>"],
-                                "responsive": {
-                                    "0": { "items": 1 },
-                                    "768": { "items": 2 },
-                                    "992": { "items": 2 },
-                                    "1200": { "items": 2.5 }
-                                }
-                            }'>
-
+                            <div class="row">
                                 <?php
-                                $sub_cat = sqlfetch("SELECT * FROM subproduct where subcat2='" . $category['id'] . "'  ORDER BY id DESC ");
+                                $sub_cat = sqlfetch("SELECT * FROM subproduct where subcat2='" . $category['id'] . "'  ORDER BY id DESC LIMIT 6");
                                 if (count($sub_cat)) {
                                     foreach ($sub_cat as $subproductwww) {
                                 ?>
-                                        <div class="project-card-v2 alt-style">
-                                            <div class="project-card-v2__img">
-                                                <?php 
-                                                    $com_placeholders = [
-                                                        "030625094659Commercial-Construction-A2P-Realtech.jpg",
-                                                        "070225085304M3M_Capital_Walk113.jpg",
-                                                        "110225084138M3M CAPITAL WALK SECTOR 113 DWARKA EXPRESSWAY GURGAON (1).jpg",
-                                                        "140625094558build-your-commercial-building-A2P-Realtech.jpg"
-                                                    ];
-                                                    $imagePath = "upload/" . $subproductwww['photo'];
-                                                    if (file_exists($imagePath) && !empty($subproductwww['photo'])) {
-                                                        $displayImg = SITE_URL . $imagePath;
-                                                    } else {
-                                                        $placeholderIndex = $subproductwww['id'] % count($com_placeholders);
-                                                        $displayImg = SITE_URL . "upload/" . $com_placeholders[$placeholderIndex];
-                                                    }
-                                                ?>
-                                                <a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php">
-                                                    <img src="<?php echo $displayImg; ?>" alt="<?php echo $subproductwww['name']; ?>">
-                                                </a>
-                                                <div class="card-location-ribbon">
-                                                    <i class="fa fa-map-marker-alt"></i> <?php echo $subproductwww['pro_lable']; ?>
+                                        <div class="col-xl-4 col-md-6 mb-4">
+                                            <div class="project-card-v2 alt-style">
+                                                <div class="project-card-v2__img">
+                                                    <?php 
+                                                        $com_placeholders = [
+                                                            "030625094659Commercial-Construction-A2P-Realtech.jpg",
+                                                            "070225085304M3M_Capital_Walk113.jpg",
+                                                            "110225084138M3M CAPITAL WALK SECTOR 113 DWARKA EXPRESSWAY GURGAON (1).jpg",
+                                                            "140625094558build-your-commercial-building-A2P-Realtech.jpg"
+                                                        ];
+                                                        $imagePath = "upload/" . $subproductwww['photo'];
+                                                        if (file_exists($imagePath) && !empty($subproductwww['photo'])) {
+                                                            $displayImg = SITE_URL . $imagePath;
+                                                        } else {
+                                                            $placeholderIndex = $subproductwww['id'] % count($com_placeholders);
+                                                            $displayImg = SITE_URL . "upload/" . $com_placeholders[$placeholderIndex];
+                                                        }
+                                                    ?>
+                                                    <a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php">
+                                                        <img src="<?php echo $displayImg; ?>" alt="<?php echo $subproductwww['name']; ?>">
+                                                    </a>
+                                                    <div class="card-location-ribbon">
+                                                        <i class="fa fa-map-marker-alt"></i> <?php echo $subproductwww['pro_lable']; ?>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="project-card-v2__content">
-                                                <h3 class="project-card-v2__title">
-                                                    <a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php"><?php echo $subproductwww['name']; ?></a>
-                                                </h3>
-                                                <p class="project-card-v2__location-text"><i class="fa-solid fa-location-dot"></i> Gurgaon, Haryana</p>
+                                                <div class="project-card-v2__content">
+                                                    <h3 class="project-card-v2__title">
+                                                        <a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php"><?php echo $subproductwww['name']; ?></a>
+                                                    </h3>
+                                                    <p class="project-card-v2__location-text"><i class="fa-solid fa-location-dot"></i> Gurgaon, Haryana</p>
+                                                </div>
                                             </div>
                                         </div>
                                 <?php }

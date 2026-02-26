@@ -243,11 +243,12 @@
         align-items: center !important;
     }
     .mobile-nav__social {
-        display: flex !important;
-        flex-wrap: wrap !important;
+        display: grid !important;
+        grid-template-columns: repeat(3, 50px) !important;
         gap: 15px !important;
-        padding: 20px 30px !important;
+        padding: 20px !important;
         justify-content: center !important;
+        margin: 0 auto !important;
     }
     .mobile-nav__social a {
         color: #fff !important;
