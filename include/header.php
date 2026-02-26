@@ -244,10 +244,12 @@
     }
     .mobile-nav__social {
         display: grid !important;
-        grid-template-columns: repeat(3, 45px) !important;
-        gap: 20px !important;
-        padding: 20px !important;
-        justify-content: center !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 15px !important;
+        padding: 20px 30px !important;
+        justify-items: center !important;
+        width: 100% !important;
+        max-width: 250px !important;
         margin: 0 auto !important;
     }
     .mobile-nav__social a {
@@ -497,107 +499,115 @@
     }
 
     /* Standardize card image ratios */
-    /* Premium Property Card Redesign */
+    /* Premium Property Card Redesign - Exact Match to Reference */
     .project-card-v2 {
         background: #fff !important;
-        border-radius: 15px !important;
+        border-radius: 20px !important;
         overflow: hidden !important;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.08) !important;
-        transition: all 0.4s ease !important;
-        margin-bottom: 20px !important;
-        border: 1px solid #eee !important;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.1) !important;
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        margin: 10px 10px 30px !important;
+        border: 1px solid rgba(0,0,0,0.05) !important;
+        max-width: 340px !important; /* Fixed width adjustment */
     }
 
     .project-card-v2:hover {
-        transform: translateY(-10px) !important;
-        box-shadow: 0 20px 40px rgba(0,0,0,0.12) !important;
+        transform: translateY(-12px) !important;
+        box-shadow: 0 25px 50px rgba(0,0,0,0.15) !important;
     }
 
     .project-card-v2__img {
         position: relative !important;
-        height: 250px !important;
+        height: 280px !important;
         overflow: hidden !important;
     }
 
-    /* The Blue Location Ribbon - matches image1 style */
+    /* The Solid Blue Section Ribbon - Exactly как в image1 */
     .card-location-ribbon {
         position: absolute !important;
-        top: 60% !important;
+        bottom: 0 !important;
         left: 0 !important;
-        background: #102a83 !important; /* Premium Blue */
+        width: 100% !important;
+        background: #102a83 !important; /* Premium Navy Blue */
         color: #fff !important;
-        padding: 8px 15px !important;
-        font-size: 12px !important;
-        font-weight: 600 !important;
+        padding: 12px 18px !important;
+        font-size: 13px !important;
+        font-weight: 700 !important;
         z-index: 5 !important;
-        border-radius: 0 5px 5px 0 !important;
-        box-shadow: 5px 5px 15px rgba(0,0,0,0.2) !important;
         display: flex !important;
         align-items: center !important;
-        gap: 8px !important;
-        max-width: 85% !important;
+        gap: 10px !important;
         text-transform: capitalize !important;
+        border-top: 1px solid rgba(255,255,255,0.1) !important;
     }
 
     .project-card-v2__content {
-        padding: 25px 20px !important;
+        padding: 30px 25px !important;
         text-align: center !important;
     }
 
     .project-card-v2__title a {
-        color: #c00415 !important; /* Premium Red */
-        font-size: 19px !important;
+        color: #c00415 !important;
+        font-size: 22px !important;
         font-weight: 800 !important;
-        line-height: 1.4 !important;
-        display: block !important;
-        margin-bottom: 10px !important;
+        line-height: 1.3 !important;
+        display: -webkit-box !important;
+        -webkit-line-clamp: 2 !important;
+        -webkit-box-orient: vertical !important;
+        overflow: hidden !important;
+        margin-bottom: 15px !important;
+        text-decoration: none !important;
     }
 
     .project-card-v2__location-text {
-        font-size: 13px !important;
+        font-size: 14px !important;
         color: #102a83 !important;
-        font-weight: 600 !important;
+        font-weight: 700 !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
-        gap: 5px !important;
+        gap: 6px !important;
+        opacity: 0.8 !important;
     }
 
-    /* Owl Nav Bottom Buttons - Next Level Redesign */
+    /* Owl Nav - Fixed Bottom Positioning */
     .blgo-three__carousel.owl-carousel .owl-nav {
-        position: relative !important;
+        position: static !important;
         display: flex !important;
         justify-content: center !important;
-        gap: 20px !important;
-        margin-top: 40px !important;
+        gap: 30px !important;
+        margin: 50px auto 0 !important;
+        width: 100% !important;
     }
 
     .blgo-three__carousel.owl-carousel .owl-nav button.owl-prev,
     .blgo-three__carousel.owl-carousel .owl-nav button.owl-next {
-        width: 55px !important;
-        height: 55px !important;
+        width: 60px !important;
+        height: 60px !important;
         background: #fff !important;
         color: #c00415 !important;
         border-radius: 50% !important;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.1) !important;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
-        font-size: 22px !important;
-        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
-        border: 1px solid #eee !important;
+        font-size: 24px !important;
+        transition: all 0.4s ease !important;
+        border: 1px solid #f0f0f0 !important;
+        margin: 0 !important;
     }
 
     .blgo-three__carousel.owl-carousel .owl-nav button:hover {
         background: #c00415 !important;
         color: #fff !important;
-        transform: scale(1.1) translateY(-3px) !important;
-        box-shadow: 0 12px 25px rgba(192, 4, 21, 0.3) !important;
+        transform: scale(1.15) !important;
+        box-shadow: 0 15px 30px rgba(192, 4, 21, 0.4) !important;
     }
 
     .blgo-three__carousel.owl-carousel .owl-dots {
-        display: none !important; /* Removed dots as requested */
+        display: none !important;
     }
+
 
     .welcome-one__img-s2 img {
         width: 100% !important;
