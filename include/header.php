@@ -492,6 +492,32 @@
         background: #f8f9fa !important;
     }
 
+    /* Global Responsive Iframe/Video Fix (YouTube, etc.) */
+    .blog-details__content iframe,
+    .tab-content iframe:not([src*="google.com/maps"]),
+    .blog-details__text-2 iframe {
+        width: 100% !important;
+        height: 500px !important;
+        border: 0 !important;
+        border-radius: 15px !important;
+        margin-top: 15px !important;
+        margin-bottom: 25px !important;
+        display: block !important;
+        background: #000 !important;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.15) !important;
+        max-width: 100% !important;
+    }
+
+    @media (max-width: 768px) {
+        .blog-details__content iframe,
+        .tab-content iframe:not([src*="google.com/maps"]),
+        .blog-details__text-2 iframe {
+            height: auto !important;
+            aspect-ratio: 16 / 9 !important;
+            border-radius: 10px !important;
+        }
+    }
+
     /* welcome-one__img-box should NOT clip the .welcom text */
     .welcome-one__img-box {
         overflow: visible !important;
@@ -502,12 +528,12 @@
     /* Premium Property Card - Large & Perfect Image Fit */
     .project-card-v2 {
         background: #fff !important;
-        border-radius: 20px !important;
+        border-radius: 0 !important;
         overflow: hidden !important;
-        box-shadow: 0 15px 40px rgba(0,0,0,0.12) !important;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.10) !important;
         transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
-        margin: 10px 10px 20px !important; /* Reduced bottom margin */
-        border: 1px solid rgba(0,0,0,0.05) !important;
+        margin: 10px 10px 20px !important;
+        border: 1px solid rgba(0,0,0,0.08) !important;
     }
 
     .project-card-v2:hover {
@@ -535,7 +561,7 @@
         transform: scale(1.08) !important;
     }
 
-    /* The Solid Blue Section Ribbon - Exactly как в reference */
+    /* The Solid Blue Section Ribbon - Exactly like reference Image 2 */
     .card-location-ribbon {
         position: absolute !important;
         bottom: 0 !important;
@@ -543,14 +569,16 @@
         width: 100% !important;
         background: #102a83 !important;
         color: #fff !important;
-        padding: 14px 20px !important;
-        font-size: 14px !important;
-        font-weight: 700 !important;
+        padding: 10px 16px !important;
+        font-size: 13px !important;
+        font-weight: 600 !important;
         z-index: 5 !important;
         display: flex !important;
         align-items: center !important;
-        gap: 12px !important;
-        text-transform: capitalize !important;
+        gap: 10px !important;
+        text-transform: none !important;
+        border-radius: 0 !important;
+        letter-spacing: 0.2px !important;
     }
 
     .project-card-v2__content {
@@ -591,17 +619,17 @@
 
     .blgo-three__carousel.owl-carousel .owl-nav button.owl-prev,
     .blgo-three__carousel.owl-carousel .owl-nav button.owl-next {
-        width: 60px !important;
-        height: 60px !important;
+        width: 50px !important;
+        height: 50px !important;
         background: #fff !important;
         color: #c00415 !important;
         border-radius: 50% !important;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
-        font-size: 24px !important;
-        transition: all 0.4s ease !important;
+        font-size: 20px !important;
+        transition: all 0.3s ease !important;
         border: 1px solid #f0f0f0 !important;
         margin: 0 !important;
     }
@@ -683,7 +711,7 @@
     @media (max-width: 767px) {
         .project-card-v2, .blog-card-v2 {
             margin: 5px 5px 30px !important;
-            border-radius: 15px !important;
+            border-radius: 0 !important;
         }
         
         .project-card-v2__img, .blog-card-v2__img {
@@ -717,9 +745,9 @@
 
         .blgo-three__carousel.owl-carousel .owl-nav button.owl-prev,
         .blgo-three__carousel.owl-carousel .owl-nav button.owl-next {
-            width: 45px !important;
-            height: 45px !important;
-            font-size: 18px !important;
+            width: 42px !important;
+            height: 42px !important;
+            font-size: 16px !important;
         }
         
         /* Ensure section title doesn't overflow */
