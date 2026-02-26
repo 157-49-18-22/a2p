@@ -499,7 +499,7 @@
     }
 
     /* Standardize card image ratios */
-    /* Balanced Property Card - No Image Cut */
+    /* Premium Property Card - Full Cover No Gaps */
     .project-card-v2 {
         background: #fff !important;
         border-radius: 20px !important;
@@ -509,7 +509,6 @@
         margin: 10px 10px 40px !important;
         border: 1px solid rgba(0,0,0,0.05) !important;
         width: 100% !important;
-        max-width: 420px !important; /* Balanced width */
     }
 
     .project-card-v2:hover {
@@ -519,19 +518,18 @@
 
     .project-card-v2__img {
         position: relative !important;
-        height: 280px !important; /* Reduced height for better proportion */
+        height: 260px !important; /* Compact height for 3-item row */
         overflow: hidden !important;
-        background: #f8f9fa !important; /* Subtle gray for empty areas if contain is used */
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
+        display: block !important;
+        background: none !important; /* Removed background */
     }
 
     .project-card-v2__img img {
         width: 100% !important;
         height: 100% !important;
-        object-fit: contain !important; /* SHOW FULL IMAGE WITHOUT CUTTING */
-        padding: 5px !important;
+        object-fit: cover !important; /* Fulfill the gap completely */
+        display: block !important;
+        padding: 0 !important; /* Removed padding */
     }
 
     /* The Solid Blue Section Ribbon - Exactly как в image1 */
