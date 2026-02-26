@@ -225,27 +225,48 @@ if (count($sql_add))
 }
 
 @media (max-width: 767px) {
+    .search-container-wrap {
+        padding: 40px 0;
+    }
     .search-glass-card {
-        padding: 30px 20px;
-        margin: 0 15px;
+        padding: 30px 15px;
+        margin: 0 10px;
+        border-radius: 20px;
     }
     .search-bar-premium {
-        flex-direction: column;
-        border-radius: 20px;
-        padding: 10px;
+        background: transparent;
+        box-shadow: none;
+        padding: 0;
+        border: none;
+    }
+    .search-bar-premium form {
+        flex-direction: column !important;
+        gap: 15px;
+    }
+    .search-bar-premium form i {
+        display: none; /* Hide magnifying glass on mobile to save space */
     }
     .search-input-premium {
-        width: 100%;
+        width: 100% !important;
+        background: #fff !important;
+        border-radius: 12px !important;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05) !important;
         text-align: center;
-        padding: 15px;
+        padding: 15px !important;
+        font-size: 15px !important;
     }
     .btn-search-glow {
-        width: 100%;
+        width: 100% !important;
         justify-content: center;
-        border-radius: 15px;
+        border-radius: 12px !important;
+        padding: 15px !important;
+        font-size: 16px !important;
     }
     .search-tagline h2 {
-        font-size: 28px;
+        font-size: 24px !important;
+    }
+    .search-tagline p {
+        font-size: 13px !important;
     }
 }
 </style>
@@ -262,7 +283,7 @@ if (count($sql_add))
             <div class="search-bar-premium">
                 <form action="<?= SITE_URL; ?>search_result.php" method="GET" class="d-flex w-100 align-items-center" onsubmit="return checkSearchRedirect(this)">
                     <i class="fa-solid fa-magnifying-glass ms-4 text-muted"></i>
-                    <input type="text" class="search-input-premium" placeholder="Enter Location, Property Name, or Developer..." name="query" autocomplete="off">
+                    <input type="text" class="search-input-premium" placeholder="Location, Property, or Developer..." name="query" autocomplete="off">
                     <button type="submit" class="btn-search-glow">
                         <span>Search</span>
                         <i class="fa-solid fa-arrow-right-long"></i>
