@@ -283,7 +283,7 @@
         background-position: center !important;
     }
     
-    /* Centralized Image Scaling Fix */
+    /* Centralized Image Scaling Fix - Ultra Aggressive for Mobile */
     .welcome-one__img-box img,
     .about-one__img-box img,
     .service-details__img img,
@@ -291,23 +291,26 @@
     .blog-details__img img,
     .project-three__img img,
     .project-three__imgs img {
-        width: 100% !important;
+        width: 95% !important; /* Slightly smaller than 100% for padding */
         max-width: 100% !important;
         height: auto !important;
+        max-height: 70vh !important; /* Prevent too long images on mobile */
         object-fit: contain !important; /* Never cut the image */
         display: block !important;
-        margin: 0 auto !important;
+        margin: 10px auto !important; /* Added vertical margin and centered */
+        box-shadow: none !important; /* Optional: remove shadow if it adds extra width */
     }
 
     .blog-details {
-        padding: 40px 0 !important;
+        padding: 30px 10px !important;
+        overflow-x: hidden !important; /* Prevent horizontal scroll */
     }
 
     .blog-details__img {
         overflow: visible !important;
         width: 100% !important;
-        display: flex !important;
-        justify-content: center !important;
+        display: block !important;
+        text-align: center !important;
     }
     
     .thm-breadcrumb {

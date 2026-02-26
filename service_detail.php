@@ -157,28 +157,35 @@ if (count($sql_ser)) {
         
         
         
-            /* Alignment for Product Images - Robust Mobile Scaling */
+            /* Alignment for Product Images - Ultra Aggressive Mobile Fix */
             .blog-details__img img {
-                width: 100% !important;
+                width: 90% !important; /* Made smaller to ensure it fits */
                 max-width: 100% !important;
                 height: auto !important;
+                max-height: 80vh !important;
                 border-radius: 12px;
-                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
                 object-fit: contain !important; /* Ensure image is never cut */
+                display: block !important;
+                margin: 0 auto !important;
+                box-shadow: none !important;
             }
 
             @media (max-width: 991px) {
                 .blog-details__img img {
+                    width: 90% !important;
                     height: auto !important;
+                    max-height: 80vh !important;
                     object-fit: contain !important;
                     display: block !important;
                     margin: 0 auto !important;
                 }
                 .blog-details {
-                    padding: 30px 0 !important;
+                    padding: 20px 0 !important;
+                    overflow-x: hidden !important;
                 }
                 .blog-details__left {
                     width: 100% !important;
+                    overflow-x: hidden !important;
                 }
             }
 
