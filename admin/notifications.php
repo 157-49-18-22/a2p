@@ -39,8 +39,8 @@ if (isset($_POST['send_notif'])) {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, "https://api.onesignal.com/notifications");
     curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-        'Content-Type: application/json; charset=utf-8',
-        'Authorization: Key ' . trim($rest_api_key)
+        "Content-Type: application/json",
+        "Authorization: Key os_v2_app_2zzmqbh6mra4lmzbitusz52mzh2srdmqcqke2je6x2lltzfz6umhi5r2s4sl5ipdvspr7h3unk6mzitwg2bjq3lwqa5af7agwvq7nfa"
     ));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
     curl_setopt($ch, CURLOPT_HEADER, FALSE);
