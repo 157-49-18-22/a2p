@@ -244,16 +244,77 @@
                     width="155" alt="" /></a>
         </div>
         <!-- /.logo-box -->
+        <style>
+            .mobile-nav__search-box {
+                padding: 15px 20px 15px;
+                border-bottom: 1px solid rgba(255,255,255,0.05);
+                margin-top: 5px;
+            }
+            .mobile-nav__search-box form {
+                position: relative;
+                display: flex;
+                align-items: center;
+                background: rgba(255,255,255,0.08);
+                border-radius: 12px;
+                padding: 12px 18px;
+                border: 1px solid rgba(255,255,255,0.15);
+                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            }
+            .mobile-nav__search-box form:focus-within {
+                background: rgba(255,255,255,1);
+                border-color: #c00415;
+                box-shadow: 0 8px 25px rgba(192, 4, 21, 0.2);
+                transform: translateY(-2px);
+            }
+            .mobile-nav__search-box input {
+                width: 100%;
+                background: transparent;
+                border: none;
+                color: #fff;
+                font-size: 16px;
+                font-weight: 500;
+                outline: none !important;
+                letter-spacing: 0.3px;
+            }
+            .mobile-nav__search-box form:focus-within input {
+                color: #222;
+            }
+            .mobile-nav__search-box button {
+                background: transparent;
+                border: none;
+                color: rgba(255,255,255,0.8);
+                font-size: 20px;
+                cursor: pointer;
+                transition: all 0.3s;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .mobile-nav__search-box form:focus-within button {
+                color: #c00415;
+                transform: scale(1.1);
+            }
+            .mobile-nav__search-box input::placeholder {
+                color: rgba(255,255,255,0.5);
+                transition: all 0.3s;
+            }
+            .mobile-nav__search-box form:focus-within input::placeholder {
+                color: #999;
+            }
+        </style>
+
+        <div class="mobile-nav__search-box">
+            <form action="<?= SITE_URL; ?>search_result.php" method="GET">
+                <input type="text" name="query" placeholder="Tell us what you're looking for..." required>
+                <button type="submit"><i class="fa fa-search"></i></button>
+            </form>
+        </div>
+
         <div class="mobile-nav__container"></div>
         <!-- /.mobile-nav__container -->
 
         <ul class="mobile-nav__contact list-unstyled">
-           <li>
-                <a href="<?= SITE_URL; ?>search.php">
-                    <i class="fa fa-search"></i> Search
-                </a>
-            </li>
-
             <li>
                 <i class="fa fa-phone-alt"></i>
                 <a href="tel:+91-8130525001"><?php echo $pr_add['phone']; ?></a>
