@@ -244,15 +244,35 @@
     }
     .mobile-nav__social {
         display: flex !important;
-        flex-direction: row !important;
+        flex-wrap: wrap !important;
         gap: 15px !important;
-        padding: 20px !important;
-        justify-content: flex-start !important;
+        padding: 20px 30px !important;
+        justify-content: center !important;
     }
     .mobile-nav__social a {
         color: #fff !important;
         font-size: 18px !important;
+        width: 45px !important;
+        height: 45px !important;
+        background: rgba(255,255,255,0.1) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border-radius: 50% !important;
+        transition: all 0.3s ease !important;
     }
+    .mobile-nav__social a:hover {
+        background: #fff !important;
+        color: #c00415 !important;
+        transform: translateY(-3px) !important;
+    }
+    /* Unique colors for mobile icons if needed, pulling from desktop styles */
+    .mobile-nav__social a.facebook { background: #1877F2 !important; }
+    .mobile-nav__social a.twitter { background: #000000 !important; }
+    .mobile-nav__social a.instagram { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%) !important; }
+    .mobile-nav__social a.linkedin { background: #0077B5 !important; }
+    .mobile-nav__social a.youtube { background: #FF0000 !important; }
+    .mobile-nav__social a.whatsapp { background: #25D366 !important; }
     .mobile-nav__top {
         margin-top: 20px !important;
     }
