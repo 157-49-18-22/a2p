@@ -586,56 +586,41 @@ if ($current_page !== 'application_seating.php') {
 
 
 try {
-    // Database connection parameters
-    $dsn = "mysql:host=localhost;dbname=u435351083_cms;charset=utf8mb4";
-    $username = "u435351083_jms";
-    $password = "Maydivjms1@3";
-
-    // Create a new PDO instance
-    $pdo = new PDO($dsn, $username, $password);
-
-    // Set PDO error mode to exception
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    // Use the existing getPDOObject function if available, otherwise include the function file
+    if (!function_exists('getPDOObject')) {
+        include_once __DIR__ . '/../function/function.php';
+    }
+    
+    $pdo_header = getPDOObject();
 
     // Ensure $admin_id is set and sanitize it
     if (!isset($admin_id) || empty($admin_id)) {
-        throw new Exception("Admin ID is not provided.");
+        // Fallback to session if not set
+        $admin_id = isset($_SESSION['admin_id']) ? $_SESSION['admin_id'] : 0;
     }
-    $admin_id = htmlspecialchars($admin_id);
+    
+    if ($admin_id > 0) {
+        $admin_id = htmlspecialchars($admin_id);
 
-    // Prepare and execute the SQL query
-    $query = "SELECT * FROM `admin` WHERE id = :admin_id";
-    $stmt = $pdo->prepare($query);
-    $stmt->bindParam(':admin_id', $admin_id, PDO::PARAM_INT);
-    $stmt->execute();
+        // Prepare and execute the SQL query
+        $query = "SELECT * FROM `admin` WHERE id = :admin_id";
+        $stmt = $pdo_header->prepare($query);
+        $stmt->bindParam(':admin_id', $admin_id, PDO::PARAM_INT);
+        $stmt->execute();
 
-    // Fetch the results
-    $data = $stmt->fetchAll();
-
-    // Check if data is returned
-    if (empty($data)) {
-        throw new Exception("No admin found with ID: " . htmlspecialchars($admin_id));
+        // Fetch the results
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } else {
+        $data = array();
     }
 
-    // Loop through the results and display the name and photo
-    foreach ($data as $menu) {
-        // Display name in <h1>
-        // echo "<h1>" . htmlspecialchars($menu['name']) . "</h1>";
-
-        // Display photo if it exists
-        if (!empty($menu['photo'])) {
-            $photoPath = "../upload/" . htmlspecialchars($menu['photo']);
-            // echo "<img src='" . $photoPath . "' alt='Admin Photo' />";
-        } else {
-            // echo "<p>No photo available.</p>";
-        }
-    }
 } catch (PDOException $e) {
-    // Display database connection errors
-    echo "<h1>Database Error: " . $e->getMessage() . "</h1>";
+    // Log error silently or show a small debug message instead of breaking the layout
+    error_log("Header DB Error: " . $e->getMessage());
+    $data = array();
 } catch (Exception $e) {
-    // Display general errors
-    echo "<h1>Error: " . $e->getMessage() . "</h1>";
+    error_log("Header Error: " . $e->getMessage());
+    $data = array();
 }
 ?>
                                      <?php

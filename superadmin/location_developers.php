@@ -185,4 +185,4 @@ require('include/header.php');
     </div>
 </div>
 
-<?php require('include/header.php'); ?>
+<?php require('include/footer.php'); ?>
