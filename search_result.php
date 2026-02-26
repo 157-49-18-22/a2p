@@ -1,9 +1,37 @@
 <?php
+include "function/function.php";
 
+if (isset($_GET['query'])) {
+    $search_redir = trim($_GET['query']);
+    $searchLower_redir = strtolower($search_redir);
+    $contactKeywords_redir = [
+        'address', 'location', 'phone', 'mobile', 'call', 'email', 'contact',
+        'office', 'address?', 'pincode', 'corporate', 'connect', 'reach',
+        'enquiry', 'help', 'support', 'number', 'whatsapp'
+    ];
+    
+    $isKeywordMatch_redir = false;
+    foreach ($contactKeywords_redir as $kw) {
+        if (strpos($searchLower_redir, $kw) !== false) {
+            $isKeywordMatch_redir = true;
+            break;
+        }
+    }
+
+    $isPhone_redir = preg_match('/\d{7,}/', preg_replace('/[^\d]/', '', $search_redir));
+    $isEmail_redir = filter_var($search_redir, FILTER_VALIDATE_EMAIL) ||
+               preg_match('/[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/', $search_redir);
+
+    if ($isKeywordMatch_redir || $isPhone_redir || $isEmail_redir) {
+        header('Location: ' . SITE_URL . 'contact.php');
+        exit();
+    }
+}
+?>
+<?php
 error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE);
 ini_set('display_errors', 1);
-
-include "function/function.php"; ?>
+?>
 
 
 
@@ -181,32 +209,7 @@ function highlightTerms($text, $term) {
             $searchSafe = "%$search%";
             $locSafe = "%$location%";
 
-            // ─── CONTACT REDIRECT: Phone, Email, or Contact Keywords detected ───
-            $searchLower = strtolower($search);
-            $contactKeywords = [
-                'address', 'location', 'phone', 'mobile', 'call', 'email', 'contact',
-                'office', 'address?', 'pincode', 'corporate', 'connect', 'reach',
-                'enquiry', 'help', 'support', 'number', 'whatsapp'
-            ];
-            
-            $isKeywordMatch = false;
-            foreach ($contactKeywords as $kw) {
-                if (strpos($searchLower, $kw) !== false) {
-                    $isKeywordMatch = true;
-                    break;
-                }
-            }
-
-            // Phone: contains 7+ digits
-            $isPhone = preg_match('/\d{7,}/', preg_replace('/[^\d]/', '', $search));
-            // Email: standard email pattern
-            $isEmail = filter_var($search, FILTER_VALIDATE_EMAIL) ||
-                       preg_match('/[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/', $search);
-
-            if ($isKeywordMatch || $isPhone || $isEmail) {
-                header('Location: ' . SITE_URL . 'contact.php');
-                exit();
-            }
+            // Redirection handled at top of file
             // ─────────────────────────────────────────────────────────────────
 
             // --- Fetch Subproducts (Searching in Name, Meta Title, Keywords, Location, City, and Developer) ---
