@@ -499,64 +499,118 @@
     }
 
     /* Standardize card image ratios */
-    /* Reverting to Standard Card Styles */
+    /* Premium Property Card Redesign - Larger & No Image Cut */
     .project-card-v2 {
         background: #fff !important;
-        border-radius: 12px !important;
+        border-radius: 20px !important;
         overflow: hidden !important;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
-        margin-bottom: 20px !important;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.1) !important;
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        margin: 10px 10px 40px !important;
+        border: 1px solid rgba(0,0,0,0.05) !important;
+        width: 100% !important; /* Allow carousel items to define width */
+        max-width: 480px !important; /* Significantly larger */
+    }
+
+    .project-card-v2:hover {
+        transform: translateY(-12px) !important;
+        box-shadow: 0 25px 60px rgba(0,0,0,0.18) !important;
     }
 
     .project-card-v2__img {
         position: relative !important;
-        height: 240px !important;
+        height: 360px !important; /* Increased height to avoid cutting */
+        overflow: hidden !important;
+        background: #fdfdfd !important;
     }
 
+    .project-card-v2__img img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important; /* High-quality fitting */
+        display: block !important;
+    }
+
+    /* The Solid Blue Section Ribbon - Exactly как в image1 */
     .card-location-ribbon {
         position: absolute !important;
         bottom: 0 !important;
         left: 0 !important;
         width: 100% !important;
-        background: #102a83 !important;
+        background: #102a83 !important; /* Premium Navy Blue */
         color: #fff !important;
-        padding: 10px !important;
+        padding: 12px 18px !important;
         font-size: 13px !important;
-        font-weight: 600 !important;
+        font-weight: 700 !important;
         z-index: 5 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+        text-transform: capitalize !important;
+        border-top: 1px solid rgba(255,255,255,0.1) !important;
     }
 
     .project-card-v2__content {
-        padding: 20px !important;
-        text-align: left !important;
+        padding: 30px 25px !important;
+        text-align: center !important;
     }
 
     .project-card-v2__title a {
         color: #c00415 !important;
-        font-size: 18px !important;
-        font-weight: 700 !important;
-        line-height: 1.4 !important;
+        font-size: 22px !important;
+        font-weight: 800 !important;
+        line-height: 1.3 !important;
+        display: -webkit-box !important;
+        -webkit-line-clamp: 2 !important;
+        -webkit-box-orient: vertical !important;
+        overflow: hidden !important;
+        margin-bottom: 15px !important;
+        text-decoration: none !important;
     }
 
     .project-card-v2__location-text {
-        font-size: 13px !important;
-        color: #666 !important;
-        margin-top: 5px !important;
+        font-size: 14px !important;
+        color: #102a83 !important;
+        font-weight: 700 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 6px !important;
+        opacity: 0.8 !important;
     }
 
+    /* Owl Nav - Fixed Bottom Positioning */
     .blgo-three__carousel.owl-carousel .owl-nav {
+        position: static !important;
         display: flex !important;
         justify-content: center !important;
-        gap: 15px !important;
-        margin-top: 20px !important;
+        gap: 30px !important;
+        margin: 50px auto 0 !important;
+        width: 100% !important;
     }
 
-    .blgo-three__carousel.owl-carousel .owl-nav button {
-        width: 45px !important;
-        height: 45px !important;
-        background: #eee !important;
+    .blgo-three__carousel.owl-carousel .owl-nav button.owl-prev,
+    .blgo-three__carousel.owl-carousel .owl-nav button.owl-next {
+        width: 60px !important;
+        height: 60px !important;
+        background: #fff !important;
+        color: #c00415 !important;
         border-radius: 50% !important;
-        color: #333 !important;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-size: 24px !important;
+        transition: all 0.4s ease !important;
+        border: 1px solid #f0f0f0 !important;
+        margin: 0 !important;
+    }
+
+    .blgo-three__carousel.owl-carousel .owl-nav button:hover {
+        background: #c00415 !important;
+        color: #fff !important;
+        transform: scale(1.15) !important;
+        box-shadow: 0 15px 30px rgba(192, 4, 21, 0.4) !important;
     }
 
     .blgo-three__carousel.owl-carousel .owl-dots {
