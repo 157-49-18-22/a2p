@@ -7887,25 +7887,24 @@ ul {
   margin-right: 4px;
 }
 
-/* Carousel Nav - Bottom Center (image2/3 style) */
+/* Carousel Customization */
 .residential-carousel.owl-carousel .owl-nav,
 .commercial-carousel.owl-carousel .owl-nav {
-  position: relative;
-  top: auto;
-  right: auto;
-  text-align: center;
-  margin-top: 25px;
-  display: flex;
-  justify-content: center;
-  gap: 12px;
+  position: absolute;
+  top: -95px;
+  right: 0;
 }
 
-/* Mobile: same bottom center style */
+/* Mobile: move nav buttons below cards so they don't overlap */
 @media (max-width: 767px) {
 
   .residential-carousel.owl-carousel .owl-nav,
   .commercial-carousel.owl-carousel .owl-nav {
-    margin-top: 20px;
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
+    text-align: center !important;
+    margin-top: 20px !important;
   }
 }
 
@@ -7915,56 +7914,42 @@ ul {
 .commercial-carousel.owl-carousel .owl-nav button.owl-next {
   width: 45px;
   height: 45px;
-  background-color: #c00415 !important;
-  color: #fff !important;
+  background-color: #fff !important;
+  color: var(--ambed-base, #102a83) !important;
   border-radius: 50% !important;
-  box-shadow: 0 5px 15px rgba(192, 4, 21, 0.3);
-  margin: 0 !important;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  margin-left: 10px;
   transition: all 400ms ease;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .residential-carousel.owl-carousel .owl-nav button:hover,
 .commercial-carousel.owl-carousel .owl-nav button:hover {
-  background-color: #900010 !important;
+  background-color: var(--ambed-base, #102a83) !important;
   color: #fff !important;
-  transform: scale(1.08);
-  box-shadow: 0 8px 20px rgba(192, 4, 21, 0.4);
 }
 
-/* Hide dots since nav buttons are visible at bottom */
 .residential-carousel.owl-carousel .owl-dots,
 .commercial-carousel.owl-carousel .owl-dots {
-  display: none;
+  text-align: center;
+  margin-top: 30px;
 }
 
-/* Bottom location badge on card image (image3 style) */
-.project-card-v2__badge {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
+.residential-carousel.owl-carousel .owl-dot span,
+.commercial-carousel.owl-carousel .owl-dot span {
+  width: 10px;
+  height: 10px;
+  background: #ddd;
+  display: block;
+  border-radius: 50%;
+  margin: 0 5px;
+  transition: all 400ms ease;
+}
+
+.residential-carousel.owl-carousel .owl-dot.active span,
+.commercial-carousel.owl-carousel .owl-dot.active span {
   background: var(--ambed-base, #102a83);
-  color: #fff;
-  padding: 7px 14px;
-  font-size: 13px;
-  font-weight: 600;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.project-card-v2__badge i {
-  font-size: 12px;
-  flex-shrink: 0;
-}
-
-/* Commercial badge - red */
-.project-card-v2.alt-style .project-card-v2__badge {
-  background: #c00415;
+  width: 25px;
+  border-radius: 5px;
 }
 
 .residential-section .section-title,
