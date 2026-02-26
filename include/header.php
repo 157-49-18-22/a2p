@@ -244,14 +244,13 @@
     }
     .mobile-nav__social {
         display: grid !important;
-        grid-template-columns: repeat(6, 1fr) !important;
-        gap: 8px !important; /* Smaller gap to fit in one row */
-        padding: 20px 15px !important; /* Reduced side padding */
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 15px !important;
+        padding: 20px 30px !important;
         justify-items: center !important;
         width: 100% !important;
-        max-width: 280px !important; /* Adjusted for 6 icons */
+        max-width: 200px !important; /* Forces 3 per row naturally */
         margin: 0 auto !important;
-        overflow: hidden !important; /* Prevent horizontal shift */
     }
     .mobile-nav__social a {
         color: #fff !important;
