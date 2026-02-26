@@ -9,6 +9,7 @@ $pdo = getPDOObject();
 if (isset($_POST['send_notif'])) {
     extract($_POST);
     
+    // 1. Save to Database for the website's Bell icon
     $q = $pdo->prepare("INSERT INTO notifications (title, message, link) VALUES (:title, :message, :link)");
     $q->execute(array(
         ':title' => $title,
@@ -16,10 +17,48 @@ if (isset($_POST['send_notif'])) {
         ':link' => $link
     ));
     
+    // 2. Send Native Push Notification via OneSignal
+    $app_id = "d672c804-fe64-41c5-b321-44e92cf74cc9"; // Actual App ID
+    $rest_api_key = "os_v2_app_2zzmqbh6mra41mzbitusz52mzfn17mcodfyuw5vgpwhhulb1muyz62ahe15i3ttilv5qus2noji26xbraitlgzxkfvgt5qydgbp2egi"; // Your REST API Key
+    
+    $content = array("en" => $message);
+    $headings = array("en" => $title);
+    
+    $fields = array(
+        'app_id' => $app_id,
+        'included_segments' => array('All'),
+        'contents' => $content,
+        'headings' => $headings,
+        'url' => $link
+    );
+    
+    $fields_json = json_encode($fields);
+    
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, "https://onesignal.com/api/v1/notifications");
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+        'Content-Type: application/json; charset=utf-8',
+        'Authorization: Basic ' . $rest_api_key
+    ));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    curl_setopt($ch, CURLOPT_HEADER, FALSE);
+    curl_setopt($ch, CURLOPT_POST, TRUE);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $fields_json);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+
+    $response = curl_exec($ch);
+    $res_json = json_decode($response, true);
+    curl_close($ch);
+    
     if ($q->rowCount()) {
-        $umessage = '<div class="alert alert-success" role="alert">Notification Sent Successfully!</div>';
+        if (isset($res_json['id'])) {
+            $umessage = '<div class="alert alert-success" role="alert"><strong>Success!</strong> Notification sent to both Website & All Devices.</div>';
+        } else {
+            $err_msg = isset($res_json['errors'][0]) ? $res_json['errors'][0] : 'Unknown error';
+            $umessage = '<div class="alert alert-warning" role="alert"><strong>Website Saved!</strong> But Device Push Failed: ' . $err_msg . '. Please verify your REST API Key in <code>admin/notifications.php</code>.</div>';
+        }
     } else {
-        $umessage = '<div class="alert alert-danger" role="alert">Failed to send notification.</div>';
+        $umessage = '<div class="alert alert-danger" role="alert">Failed to save notification to database.</div>';
     }
 }
 

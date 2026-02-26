@@ -50,15 +50,7 @@ if (count($sql_add))
    
 
 
-<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
-<script>
-  window.OneSignalDeferred = window.OneSignalDeferred || [];
-  OneSignalDeferred.push(async function(OneSignal) {
-    await OneSignal.init({
-      appId: "2571f3ad-53c7-4ee3-a0d3-0c5a0025b1d8",
-    });
-  });
-</script>
+
 
 
 <!-- Google tag (gtag.js) -->

@@ -1,14 +1,16 @@
-    <!-- Native Browser Push Notifications Registration -->
+    <!-- OneSignal Desktop & Mobile Push Notifications -->
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
     <script>
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function() {
-            navigator.serviceWorker.register('<?= SITE_URL; ?>sw.js').then(function(registration) {
-                console.log('ServiceWorker registration successful with scope: ', registration.scope);
-            }, function(err) {
-                console.log('ServiceWorker registration failed: ', err);
-            });
+    window.OneSignalDeferred = window.OneSignalDeferred || [];
+    OneSignalDeferred.push(async function(OneSignal) {
+        await OneSignal.init({
+            appId: "d672c804-fe64-41c5-b321-44e92cf74cc9",
+            safari_web_id: "web.onesignal.auto.1f3ad53c-7ee3-4ee3-a0d3-0c5a0025b1d8",
+            notifyButton: {
+                enable: true,
+            },
         });
-    }
+    });
     </script>
 <body class="custom-cursor">
 
@@ -1005,43 +1007,8 @@ $notif_count = count($notif_data);
 function toggleNotifPanel() {
     var panel = document.getElementById('notifPanel');
     panel.classList.toggle('active');
-    
-    // Also trigger native permission if not already granted
-    if (Notification.permission !== "granted") {
-        Notification.requestPermission();
-    }
 }
 
-function requestNotification() {
-    if (!("Notification" in window)) {
-        alert("This browser does not support desktop notification");
-    } else if (Notification.permission === "granted") {
-        showLocalNotification("A2P Realtech", "You are already subscribed to our latest updates!");
-    } else if (Notification.permission !== "denied") {
-        Notification.requestPermission().then(function (permission) {
-            if (permission === "granted") {
-                showLocalNotification("Welcome!", "Thank you for subscribing to A2P Realtech. You will now receive property updates.");
-            }
-        });
-    } else {
-        alert("Notifications are blocked. Please enable them in browser settings.");
-    }
-}
-
-function showLocalNotification(title, body) {
-    if ('serviceWorker' in navigator && Notification.permission === 'granted') {
-        navigator.serviceWorker.ready.then(function(registration) {
-            registration.showNotification(title, {
-                body: body,
-                icon: '<?= SITE_URL; ?>upload/<?php echo $pr_add['photo']; ?>',
-                badge: '<?= SITE_URL; ?>upload/<?php echo $pr_add['photo']; ?>',
-                vibrate: [200, 100, 200]
-            });
-        });
-    } else {
-        new Notification(title, { body: body });
-    }
-}
 
 // Force rebuild mobile menu on load to ensure it's not hidden
 document.addEventListener('DOMContentLoaded', function() {
