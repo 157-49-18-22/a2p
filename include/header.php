@@ -245,12 +245,12 @@
     .mobile-nav__social {
         display: grid !important;
         grid-template-columns: repeat(3, 40px) !important;
-        gap: 5px 20px !important; /* Reduced vertical gap to 5px, horizontal to 20px */
-        padding: 20px 20px !important; 
+        gap: 15px 25px !important; /* Balanced gap for better alignment */
+        padding: 30px 20px !important; 
         justify-items: center !important;
-        justify-content: start !important;
+        justify-content: center !important; /* Center the whole grid */
         width: 100% !important;
-        margin: 0 !important;
+        margin: 0 auto !important;
     }
     .mobile-nav__social a {
         color: #fff !important;
