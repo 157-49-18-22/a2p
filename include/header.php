@@ -244,15 +244,13 @@
     }
     .mobile-nav__social {
         display: grid !important;
-        grid-template-columns: repeat(3, 42px) !important;
-        grid-template-rows: auto auto !important;
-        gap: 14px 18px !important;
-        padding: 20px 20px 25px !important;
-        justify-content: start !important;
+        grid-template-columns: repeat(3, 40px) !important;
+        gap: 15px 25px !important; /* Balanced gap for better alignment */
+        padding: 30px 20px !important; 
         justify-items: center !important;
-        align-items: center !important;
-        width: auto !important;
-        margin: 0 !important;
+        justify-content: center !important; /* Center the whole grid */
+        width: 100% !important;
+        margin: 0 auto !important;
     }
     .mobile-nav__social a {
         color: #fff !important;
@@ -272,7 +270,7 @@
         transform: translateY(-3px) !important;
     }
     /* Unique colors for mobile icons if needed, pulling from desktop styles */
-    .mobile-nav__social a.facebook { background: #1877F2 !important;margin-left: 1.4rem; }
+    .mobile-nav__social a.facebook { background: #1877F2 !important;margin-left: 1.5rem; }
     .mobile-nav__social a.twitter { background: #000000 !important; }
     .mobile-nav__social a.instagram { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%) !important; }
     .mobile-nav__social a.linkedin { background: #0077B5 !important; }
