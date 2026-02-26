@@ -245,8 +245,8 @@
     .mobile-nav__social {
         display: grid !important;
         grid-template-columns: repeat(3, 40px) !important;
-        gap: 15px 25px !important;
-        padding: 20px 20px !important; /* Shifted right by 20px */
+        gap: 5px 20px !important; /* Reduced vertical gap to 5px, horizontal to 20px */
+        padding: 20px 20px !important; 
         justify-items: center !important;
         justify-content: start !important;
         width: 100% !important;
