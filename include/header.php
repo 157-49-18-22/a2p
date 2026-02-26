@@ -272,7 +272,7 @@
         transform: translateY(-3px) !important;
     }
     /* Unique colors for mobile icons if needed, pulling from desktop styles */
-    .mobile-nav__social a.facebook { background: #1877F2 !important; }
+    .mobile-nav__social a.facebook { background: #1877F2 !important;margin-left: 1.4rem; }
     .mobile-nav__social a.twitter { background: #000000 !important; }
     .mobile-nav__social a.instagram { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%) !important; }
     .mobile-nav__social a.linkedin { background: #0077B5 !important; }
