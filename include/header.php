@@ -246,11 +246,11 @@
         display: grid !important;
         grid-template-columns: repeat(3, 1fr) !important;
         gap: 15px !important;
-        padding: 20px 0 !important; /* Removed side padding for extreme left */
-        justify-items: start !important; /* Align icons left */
+        padding: 20px 30px !important; /* Added left padding so it doesn't touch the edge */
+        justify-items: start !important;
         width: fit-content !important;
-        max-width: 200px !important;
-        margin: 0 !important; /* Remove centering */
+        max-width: 250px !important;
+        margin: 0 !important;
     }
     .mobile-nav__social a {
         color: #fff !important;
