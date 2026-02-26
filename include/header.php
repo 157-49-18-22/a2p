@@ -66,13 +66,40 @@
 }
 
 /* Dropdown Visibility Fix */
-.main-menu__list li ul {
+.main-menu__list li.dropdown ul {
+    position: absolute !important;
+    top: 100% !important;
+    left: 0 !important;
+    background: #fff !important;
+    min-width: 220px !important;
+    display: none !important;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.1) !important;
+    padding: 10px 0 !important;
     z-index: 9999 !important;
+    border-top: 3px solid #c00415 !important;
 }
-.main-menu__list li:hover > ul {
+
+.main-menu__list li.dropdown:hover > ul {
     display: block !important;
     visibility: visible !important;
-    opacity: 1 !important;
+}
+
+.main-menu__list li.dropdown ul li {
+    width: 100% !important;
+    border-bottom: 1px solid #f2f2f2 !important;
+}
+
+.main-menu__list li.dropdown ul li a {
+    color: #333 !important;
+    padding: 10px 20px !important;
+    font-size: 14px !important;
+    display: block !important;
+    width: 100% !important;
+}
+
+.main-menu__list li.dropdown ul li a:hover {
+    color: #c00415 !important;
+    background: #f9f9f9 !important;
 }
 
 .main-menu__list {
