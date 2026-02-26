@@ -285,7 +285,7 @@
         height: 65px !important;
         display: flex !important;
         align-items: center !important;
-        justify-content: flex-end !important;
+        justify-content: space-between !important; /* Space between side items */
         position: relative !important;
     }
     .main-menu-two__left {
@@ -296,22 +296,23 @@
         margin: 0 !important;
         flex: none !important;
         min-width: auto !important;
+        z-index: 5 !important;
     }
     .main-menu-two__logo img {
         height: 38px !important;
     }
     .main-menu-two__main-menu-two-box {
-        order: 3 !important;
+        order: 1 !important; /* Move Hamburger to left */
         display: flex !important;
         align-items: center !important;
-        margin-left: 12px !important;
+        margin: 0 !important;
         flex: none !important;
     }
     .main-menu-two__right {
-        order: 2 !important;
+        order: 2 !important; /* Move Search to right */
         display: flex !important;
         align-items: center !important;
-        margin-left: 0 !important;
+        margin: 0 !important;
         flex: none !important;
     }
     .mobile-nav__toggler {
@@ -324,11 +325,15 @@
         align-items: center !important;
         justify-content: center !important;
         color: #333 !important;
+        font-size: 18px !important;
     }
     .main-menu-two__call .thm-btn {
         width: 38px !important;
         height: 38px !important;
         border-radius: 8px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
     }
 
     /* Fix image cutting on mobile - Enhanced Robustness */
