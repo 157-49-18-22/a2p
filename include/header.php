@@ -61,7 +61,8 @@
     height: 100% !important;
     width: auto !important;
     margin: 0 10px !important; 
-    overflow: hidden !important; /* Safety against overflow */
+    /* removed overflow: hidden to allow dropdowns to show */
+    min-width: 0 !important; /* allow shrinking */
 }
 
 .main-menu__list {
@@ -97,25 +98,39 @@
 }
 
 @media (max-width: 1450px) {
+    .main-menu-two__wrapper {
+        padding: 0 10px !important;
+    }
     .main-menu__list {
-        gap: 3px !important;
+        gap: 2px !important;
     }
     .main-menu__list > li > a {
         font-size: 11px !important;
-        padding: 6px 8px !important;
+        padding: 6px 6px !important;
     }
     .main-menu-two__logo img {
         height: 38px !important;
     }
 }
 
-@media (max-width: 1250px) {
+@media (max-width: 1300px) {
     .main-menu__list > li > a {
         font-size: 10px !important;
-        padding: 5px 6px !important;
+        padding: 5px 4px !important;
+        letter-spacing: -0.2px !important;
     }
     .main-menu-two__main-menu-two-box {
-        margin: 0 10px !important;
+        margin: 0 5px !important;
+    }
+}
+
+@media (max-width: 1200px) {
+    .main-menu__list > li > a {
+        font-size: 9px !important;
+        padding: 4px 3px !important;
+    }
+    .main-menu-two__logo img {
+        height: 32px !important;
     }
 }
 
@@ -137,6 +152,18 @@
     justify-content: flex-end !important;
     flex: 0 0 auto !important; /* Don't grow, just take needed space */
     z-index: 101 !important;
+    margin-left: auto !important; /* Push it to the right if needed */
+}
+
+/* Dropdown Visibility Fix */
+.main-menu__list li ul {
+    z-index: 9999 !important;
+    visibility: visible !important;
+}
+.main-menu__list li:hover > ul {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
 }
 
 /* Center Top Bar Content */
