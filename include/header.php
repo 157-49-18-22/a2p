@@ -285,7 +285,7 @@
         height: 65px !important;
         display: flex !important;
         align-items: center !important;
-        justify-content: space-between !important; /* Space between side items */
+        justify-content: space-between !important;
         position: relative !important;
     }
     .main-menu-two__left {
@@ -294,46 +294,53 @@
         top: 50% !important;
         transform: translate(-50%, -50%) !important;
         margin: 0 !important;
-        flex: none !important;
-        min-width: auto !important;
-        z-index: 5 !important;
+        z-index: 1 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: auto !important;
     }
     .main-menu-two__logo img {
-        height: 38px !important;
+        height: 35px !important;
+        width: auto !important;
     }
     .main-menu-two__main-menu-two-box {
-        order: 1 !important; /* Move Hamburger to left */
         display: flex !important;
         align-items: center !important;
-        margin: 0 !important;
-        flex: none !important;
+        order: 1 !important;
+        z-index: 10 !important;
     }
     .main-menu-two__right {
-        order: 2 !important; /* Move Search to right */
         display: flex !important;
         align-items: center !important;
-        margin: 0 !important;
-        flex: none !important;
+        order: 2 !important;
+        z-index: 10 !important;
     }
     .mobile-nav__toggler {
         margin: 0 !important;
-        width: 38px !important;
-        height: 38px !important;
+        width: 40px !important;
+        height: 40px !important;
+        background: #f8f9fa !important;
+        border: 1px solid #eee !important;
         border-radius: 8px !important;
-        background: #f4f4f4 !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
         color: #333 !important;
         font-size: 18px !important;
+        transition: all 0.3s ease !important;
     }
     .main-menu-two__call .thm-btn {
-        width: 38px !important;
-        height: 38px !important;
+        width: 40px !important;
+        height: 40px !important;
         border-radius: 8px !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
+        padding: 0 !important;
+    }
+    .main-menu-two__call .thm-btn i {
+        font-size: 18px !important;
     }
 
     /* Fix image cutting on mobile - Enhanced Robustness */
