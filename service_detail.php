@@ -158,26 +158,29 @@ if (count($sql_ser)) {
         
         
             /* Alignment for Product Images - Ultra Aggressive Mobile Fix */
-            .blog-details__img img {
-                width: 90% !important; /* Made smaller to ensure it fits */
+            .blog-details__img img,
+            .blog-details__left img,
+            .tab-content img {
+                width: 100% !important; /* Forces responsive width */
                 max-width: 100% !important;
                 height: auto !important;
-                max-height: 80vh !important;
-                border-radius: 12px;
-                object-fit: contain !important; /* Ensure image is never cut */
+                max-height: none !important;
+                object-fit: contain !important;
                 display: block !important;
-                margin: 0 auto !important;
+                margin: 10px auto !important;
                 box-shadow: none !important;
             }
 
             @media (max-width: 991px) {
-                .blog-details__img img {
-                    width: 90% !important;
+                .blog-details__img img,
+                .blog-details__left img,
+                .tab-content img {
+                    width: 100% !important;
+                    max-width: 100% !important;
                     height: auto !important;
-                    max-height: 80vh !important;
                     object-fit: contain !important;
                     display: block !important;
-                    margin: 0 auto !important;
+                    margin: 10px auto !important;
                 }
                 .blog-details {
                     padding: 20px 0 !important;
