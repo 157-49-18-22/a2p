@@ -19,7 +19,7 @@ if (isset($_POST['send_notif'])) {
     
     // 2. Send Native Push Notification via OneSignal
     $app_id = "d672c804-fe64-41c5-b321-44e92cf74cc9"; // Actual App ID
-    $rest_api_key = "os_v2_app_2zzmqbh6mra41mzbitusz52mzgai2ro54eruy44ynhxt3ch3nfnsbnkulxkpfcvj6fve3nl3eapfcbawjzcxqp2kjf5e5ogomgsb5za";
+    $rest_api_key = "os_v2_app_2zzmqbh6mra4lmzbitusz52mzgns5dpyvwru5u45emdcaf7e34cuoncvcvxhbaxtl74p7ux767dj52nej3kmesajs36wiobb6kwtk7q";
     
     $content = array("en" => $message);
     $headings = array("en" => $title);
