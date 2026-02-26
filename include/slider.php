@@ -146,35 +146,31 @@
 
 
 <style>
-    /* Premium Full-Width Hero Slider */
+    /* Compact Full-Visibility Hero Slider */
     .carousel-inner {
-        height: 600px !important; 
-        background: #000;
+        height: auto !important; /* Allow height to adjust naturally */
+        background: #fdfdfd; /* Light neutral background for gaps */
     }
 
     .carousel-item {
-        height: 100% !important;
+        height: auto !important;
     }
 
     .carousel-item img {
         width: 100% !important;
-        height: 100% !important;
-        object-fit: cover !important; 
-        object-position: center center !important;
+        height: auto !important;
+        max-height: 480px !important; /* Smaller, more compact desktop height */
+        object-fit: contain !important; /* Shows full image contents (Text cut nahi hoga) */
+        object-position: center !important;
         display: block !important;
+        margin: 0 auto !important;
     }
 
-    @media (min-width: 1200px) {
-        .carousel-inner { height: 650px !important; }
-    }
-
-    @media (max-width: 991px) {
-        .carousel-inner { height: 450px !important; }
-    }
-
+    /* Mobile - Full visibility and compact */
     @media (max-width: 767px) {
-        .carousel-inner { height: 280px !important; }
-        .carousel-item img { object-fit: cover !important; }
+        .carousel-item img {
+            max-height: 220px !important; /* Small & sharp for mobile */
+        }
     }
 </style>
 
