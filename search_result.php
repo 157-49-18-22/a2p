@@ -218,24 +218,30 @@ function highlightTerms($text, $term) {
                 }
             }
 
-            // --- Fetch Offers ---
-            $stmt4 = $pdo->prepare("SELECT * FROM offer WHERE name LIKE ?");
-            $stmt4->execute([$searchSafe]);
+            // --- Fetch Offers (Blogs) ---
+            $stmt4 = $pdo->prepare("SELECT * FROM offer WHERE name LIKE ? OR des1 LIKE ?");
+            $stmt4->execute([$searchSafe, $searchSafe]);
             $offers = $stmt4->fetchAll(PDO::FETCH_ASSOC);
+
+            // --- Fetch Media Gallery (fixed_delivery_time) ---
+            $stmt5 = $pdo->prepare("SELECT * FROM fixed_delivery_time WHERE name LIKE ? OR meta_title LIKE ?");
+            $stmt5->execute([$searchSafe, $searchSafe]);
+            $mediaItems = $stmt5->fetchAll(PDO::FETCH_ASSOC);
 
             echo '<div class="row"><div class="col-md-12">';
             echo '<h3 class="cool">Search Results for: "' . htmlspecialchars($search) . '"</h3>';
 
             // Show products
             if (!empty($products)) {
+                echo '<h4 class="mb-4 mt-5">Projects & Properties</h4>';
                 echo '<div class="row">';
                 foreach ($products as $subproductwww) {
                     ?>
-                    <div class="col-xl-4 col-lg-4 col-md-6 productr">
+                    <div class="col-xl-4 col-lg-4 col-md-6 productr mb-4">
                         <div class="services-one__single wow fadeInUp" data-wow-delay="100ms">
                             <div class="services-one__img">
                                 <a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php">
-                                    <img src="<?= SITE_URL; ?>upload/<?php echo $subproductwww['photo']; ?>" alt="" style="height:250px;">
+                                    <img src="<?= SITE_URL; ?>upload/<?php echo $subproductwww['photo']; ?>" alt="" style="height:250px; width:100%; object-fit:cover;">
                                 </a>
                             </div>
                             <div class="services-one__content">
@@ -257,48 +263,79 @@ function highlightTerms($text, $term) {
                 echo '</div>';
             }
 
-            // Show offers
-            if (!empty($offers)) {
+            // Show Media Gallery Results
+            if (!empty($mediaItems)) {
+                echo '<hr class="my-5">';
+                echo '<h4 class="mb-4">Media Gallery Results</h4>';
                 echo '<div class="row">';
-                foreach ($offers as $offer) {
+                foreach ($mediaItems as $media) {
                     ?>
-                    <div class="col-xl-4 col-lg-4 wow fadeInUp" data-wow-delay="100ms">
-                        <a href="<?= SITE_URL; ?>blog_detail/<?php echo makeurlnamebynameCategory($offer['name']); ?>.php">
-                            <div class="blog-one__single">
-                                <div class="blog-one__img">
-                                    <img src="upload/<?php echo $offer['photo']; ?>" alt="<?php echo htmlspecialchars($offer['name']); ?>">
-                                </div>
-                                <div class="blog-one__content">
-                                    <div class="blog-one__date">
-                                        <p><?php echo htmlspecialchars($offer['des1']); ?></p>
-                                    </div>
-                                    <ul class="list-unstyled blog-one__meta">
-                                        <li><a href="<?= SITE_URL; ?>blog_detail/<?php echo makeurlnamebynameCategory($offer['name']); ?>.php"><i class="far fa-user-circle"></i> <?php echo htmlspecialchars($offer['by_blog']); ?></a></li>
-                                        <li><span>/</span></li>
-                                    </ul>
-                                    <h3 class="blog-one__title">
-                                        <a href="<?= SITE_URL; ?>blog_detail/<?php echo makeurlnamebynameCategory($offer['name']); ?>.php">
-                                            <?php echo highlightTerms(custom_echo(htmlspecialchars($offer['name']), 40), $search); ?>
-                                        </a>
-                                    </h3>
+                    <div class="col-xl-4 col-lg-4 col-md-6 mb-4">
+                        <div class="blog-one__single wow fadeInUp" data-wow-delay="100ms">
+                            <div class="blog-one__img">
+                                <img src="upload/<?php echo $media['photo']; ?>" alt="<?php echo htmlspecialchars($media['name']); ?>" style="height:250px; width:100%; object-fit:cover;">
+                            </div>
+                            <div class="blog-one__content">
+                                <h3 class="blog-one__title text-center">
+                                    <a href="<?= SITE_URL; ?>media-gallery-detail/<?php echo makeurlnamebynameCategory($media['name']); ?>.php">
+                                        <?php echo highlightTerms(htmlspecialchars($media['name']), $search); ?>
+                                    </a>
+                                </h3>
+                                <div class="text-center">
+                                    <a href="<?= SITE_URL; ?>media-gallery-detail/<?php echo makeurlnamebynameCategory($media['name']); ?>.php" class="btn btn-sm btn-danger mt-3">View Gallery</a>
                                 </div>
                             </div>
-                        </a>
+                        </div>
                     </div>
                     <?php
                 }
                 echo '</div>';
             }
 
-            if (empty($products) && empty($offers)) {
-                echo '<div class="alert alert-info">No results found for: "' . htmlspecialchars($search) . '"</div>';
+            // Show Offers (Blogs)
+            if (!empty($offers)) {
+                echo '<hr class="my-5">';
+                echo '<h4 class="mb-4">News & Blogs</h4>';
+                echo '<div class="row">';
+                foreach ($offers as $offer) {
+                    ?>
+                    <div class="col-xl-4 col-lg-4 col-md-6 mb-4">
+                        <div class="blog-one__single">
+                            <div class="blog-one__img">
+                                <img src="upload/<?php echo $offer['photo']; ?>" alt="<?php echo htmlspecialchars($offer['name']); ?>" style="height:220px; width:100%; object-fit:cover;">
+                            </div>
+                            <div class="blog-one__content">
+                                <div class="blog-one__date">
+                                    <p><?php echo htmlspecialchars($offer['des1']); ?></p>
+                                </div>
+                                <h3 class="blog-one__title">
+                                    <a href="<?= SITE_URL; ?>blog_detail/<?php echo makeurlnamebynameCategory($offer['name']); ?>.php">
+                                        <?php echo highlightTerms(custom_echo(htmlspecialchars($offer['name']), 45), $search); ?>
+                                    </a>
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                    <?php
+                }
+                echo '</div>';
+            }
+
+            if (empty($products) && empty($offers) && empty($mediaItems)) {
+                echo '<div class="alert alert-info text-center py-5">
+                    <i class="fa fa-frown fa-3x mb-3 text-muted"></i>
+                    <h4>No direct results found for: "' . htmlspecialchars($search) . '"</h4>
+                    <p>Try searching for a different keyword or check our categories.</p>
+                </div>';
             }
 
             echo '</div></div>';
         } else {
-            echo '<div class="alert alert-warning">Please enter a search term</div>';
+            echo '<div class="alert alert-warning text-center py-4">Please enter a search term above to begin.</div>';
         }
         ?>
+    </div>
+</section>
     </div>
 </section>
 

@@ -90,27 +90,49 @@ if (count($sql_add))
 }
 
 .search-bar {
-        position: relative !important; 
-    display: flex
-;
+    position: relative !important; 
+    display: flex;
     justify-content: center;
-    padding: 20px 0;
+    padding: 30px 0;
 }
+
 .search-input {
-    width: 600px;
-    flex: 1;
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 25px 0 0 25px;
+    width: 500px;
+    flex: 0 1 auto;
+    padding: 15px 25px;
+    border: 2px solid #eee;
+    border-radius: 50px 0 0 50px;
     font-size: 16px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
 }
+
+.search-input:focus {
+    border-color: #c00415;
+    box-shadow: 0 4px 20px rgba(192, 4, 21, 0.1);
+    outline: none;
+}
+
 .search-btn {
-    padding: 12px 20px;
-    border: 1px solid #ccc;
-    background: #007bff;
+    padding: 12px 35px;
+    border: none;
+    background: linear-gradient(135deg, #c00415 0%, #a00312 100%);
     color: white;
-    border-radius: 0 25px 25px 0;
-    cursor: pointer;}
+    border-radius: 0 50px 50px 0;
+    cursor: pointer;
+    font-size: 18px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(192, 4, 21, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.search-btn:hover {
+    background: linear-gradient(135deg, #a00312 0%, #80020e 100%);
+    transform: translateX(3px);
+    box-shadow: 0 6px 20px rgba(192, 4, 21, 0.4);
+}
 
 
 @media (max-width: 600px) {
@@ -142,7 +164,7 @@ if (count($sql_add))
                                 <form action="<?= SITE_URL; ?>search_result.php"  method="GET" class="d-flex">
                                     <input type="text" class="form-control search-input" placeholder="Search here..." name="query">
                                     <button type="submit" class="search-btn">
-                                        <i class="fa-solid fa-search"></i>
+                                        <i class="fa-solid fa-search"></i> Search
                                     </button>
                                 </form>
 

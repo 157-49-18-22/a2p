@@ -102,18 +102,30 @@
     z-index: 101 !important;
 }
 
-/* Search Button Style - Ensuring visibility */
+/* Search Button Style - Attractive & Branded */
 .main-menu-two__call .thm-btn {
-    width: 38px !important;
-    height: 38px !important;
-    border-radius: 5px !important;
+    width: 42px !important;
+    height: 42px !important;
+    border-radius: 8px !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    background-color: #c00415 !important;
+    background: linear-gradient(135deg, #c00415 0%, #80020e 100%) !important;
     color: #fff !important;
     border: none !important;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1) !important;
+    box-shadow: 0 4px 10px rgba(192, 4, 21, 0.3) !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    cursor: pointer !important;
+}
+
+.main-menu-two__call .thm-btn:hover {
+    transform: scale(1.1) rotate(5deg) !important;
+    background: linear-gradient(135deg, #e6051b 0%, #c00415 100%) !important;
+    box-shadow: 0 6px 15px rgba(192, 4, 21, 0.4) !important;
+}
+
+.main-menu-two__call .thm-btn i {
+    font-size: 18px !important;
 }
 
 /* Notification Bell */
