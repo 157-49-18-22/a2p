@@ -281,7 +281,7 @@
         margin-left: 10px;
     }
     .main-menu-two__wrapper {
-        padding: 0 15px !important;
+        padding: 0 5px !important;
         height: 65px !important;
         display: flex !important;
         align-items: center !important;
