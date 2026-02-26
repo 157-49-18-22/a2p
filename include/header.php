@@ -499,74 +499,73 @@
     }
 
     /* Standardize card image ratios */
-    /* Premium Property Card - Full Cover No Gaps */
+    /* Premium Property Card - Large & Perfect Image Fit */
     .project-card-v2 {
         background: #fff !important;
         border-radius: 20px !important;
         overflow: hidden !important;
-        box-shadow: 0 15px 35px rgba(0,0,0,0.1) !important;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.12) !important;
         transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
-        margin: 10px 10px 40px !important;
+        margin: 10px 10px 50px !important;
         border: 1px solid rgba(0,0,0,0.05) !important;
-        width: 100% !important;
     }
 
     .project-card-v2:hover {
-        transform: translateY(-12px) !important;
-        box-shadow: 0 25px 60px rgba(0,0,0,0.18) !important;
+        transform: translateY(-15px) !important;
+        box-shadow: 0 30px 70px rgba(0,0,0,0.2) !important;
     }
 
     .project-card-v2__img {
         position: relative !important;
-        height: 260px !important; /* Compact height for 3-item row */
+        height: 320px !important; /* Increased height for larger impact */
         overflow: hidden !important;
-        display: block !important;
-        background: none !important; /* Removed background */
+        background: #eee !important;
     }
 
     .project-card-v2__img img {
         width: 100% !important;
         height: 100% !important;
-        object-fit: cover !important; /* Fulfill the gap completely */
+        object-fit: cover !important;
+        object-position: center top !important; /* Prevents cutting faces/top logos */
         display: block !important;
-        padding: 0 !important; /* Removed padding */
+        transition: transform 0.6s ease !important;
     }
 
-    /* The Solid Blue Section Ribbon - Exactly как в image1 */
+    .project-card-v2:hover .project-card-v2__img img {
+        transform: scale(1.08) !important;
+    }
+
+    /* The Solid Blue Section Ribbon - Exactly как в reference */
     .card-location-ribbon {
         position: absolute !important;
         bottom: 0 !important;
         left: 0 !important;
         width: 100% !important;
-        background: #102a83 !important; /* Premium Navy Blue */
+        background: #102a83 !important;
         color: #fff !important;
-        padding: 12px 18px !important;
-        font-size: 13px !important;
+        padding: 14px 20px !important;
+        font-size: 14px !important;
         font-weight: 700 !important;
         z-index: 5 !important;
         display: flex !important;
         align-items: center !important;
-        gap: 10px !important;
+        gap: 12px !important;
         text-transform: capitalize !important;
-        border-top: 1px solid rgba(255,255,255,0.1) !important;
     }
 
     .project-card-v2__content {
-        padding: 30px 25px !important;
-        text-align: center !important;
+        padding: 35px 30px !important;
+        text-align: left !important; /* Align left like reference */
     }
 
     .project-card-v2__title a {
         color: #c00415 !important;
-        font-size: 22px !important;
+        font-size: 24px !important; /* Larger title */
         font-weight: 800 !important;
         line-height: 1.3 !important;
-        display: -webkit-box !important;
-        -webkit-line-clamp: 2 !important;
-        -webkit-box-orient: vertical !important;
-        overflow: hidden !important;
-        margin-bottom: 15px !important;
+        margin-bottom: 18px !important;
         text-decoration: none !important;
+        display: block !important;
     }
 
     .project-card-v2__location-text {

@@ -326,9 +326,9 @@ if (count($sql_ser)) {
                                 "navText": ["<span class=\"fa fa-angle-left\"></span>","<span class=\"fa fa-angle-right\"></span>"],
                                 "responsive": {
                                     "0": { "items": 1 },
-                                    "768": { "items": 3 },
-                                    "992": { "items": 3 },
-                                    "1200": { "items": 3 }
+                                    "768": { "items": 2.1 },
+                                    "992": { "items": 2.1 },
+                                    "1200": { "items": 2.1 }
                                 }
                             }'>
 
@@ -492,9 +492,9 @@ if (count($sql_ser)) {
                                 "navText": ["<span class=\"fa fa-angle-left\"></span>","<span class=\"fa fa-angle-right\"></span>"],
                                 "responsive": {
                                     "0": { "items": 1 },
-                                    "768": { "items": 3 },
-                                    "992": { "items": 3 },
-                                    "1200": { "items": 3 }
+                                    "768": { "items": 2.1 },
+                                    "992": { "items": 2.1 },
+                                    "1200": { "items": 2.1 }
                                 }
                             }'>
 
