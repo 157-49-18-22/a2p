@@ -244,12 +244,12 @@
     }
     .mobile-nav__social {
         display: grid !important;
-        grid-template-columns: repeat(3, 1fr) !important;
-        gap: 15px !important;
-        padding: 20px 30px !important; /* Added left padding so it doesn't touch the edge */
-        justify-items: start !important;
-        width: fit-content !important;
-        max-width: 250px !important;
+        grid-template-columns: repeat(3, 40px) !important; /* Fixed width columns for perfect stacking */
+        gap: 15px 25px !important; /* Spacing between rows and columns */
+        padding: 20px 0 !important;
+        justify-items: center !important; /* Center icon within its grid cell */
+        justify-content: start !important; /* Keep the whole grid on the left */
+        width: 100% !important;
         margin: 0 !important;
     }
     .mobile-nav__social a {
