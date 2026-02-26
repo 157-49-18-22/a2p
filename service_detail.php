@@ -660,8 +660,8 @@ $currentPageUrl = urlencode("http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_UR
 
                                                 <div class="project-three__single">
                                                     <div class="project-three__img-box">
-                                                        <div class="project-three__imgs">
-                                                            <img src="<?= SITE_URL; ?>upload/<?php echo trim($subcategory2ee['photo']); ?>" alt="" style="height:250px;">
+                                                        <div class="project-three__img">
+                                                            <img src="<?= SITE_URL; ?>upload/<?php echo trim($subcategory2ee['photo']); ?>" alt="">
                                                             
                                                             <h3 class="mt-4"><?php echo $subcategory2ee['name']; ?></h3>
 

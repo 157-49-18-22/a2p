@@ -380,6 +380,27 @@
         object-position: center !important;
     }
 
+    /* Detail Pages (Service/Blog) & Floor Plans Image Fix */
+    .blog-details__img img,
+    .project-three__img img,
+    .project-three__imgs img {
+        width: 100% !important;
+        height: auto !important;
+        max-width: 100% !important;
+        object-fit: contain !important; /* Ensures whole image (like Plans) is visible */
+        display: block !important;
+        margin: 0 auto !important;
+    }
+
+    @media (max-width: 767px) {
+        .blog-details {
+            padding: 60px 0 60px !important;
+        }
+        .project-three__img, .blog-details__img {
+            overflow: visible !important;
+        }
+    }
+
     /* Small process icons should fit contain */
     .working-process__icon img {
         object-fit: contain !important;
