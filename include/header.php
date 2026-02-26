@@ -19,19 +19,27 @@
     display: flex !important;
     align-items: center !important;
     justify-content: space-between !important;
-    padding: 0 30px !important; 
-    height: 70px !important; /* Reverted to standard height */
+    padding: 0 40px !important; 
+    height: 70px !important; 
     position: relative !important;
     z-index: 100 !important;
     max-width: 100% !important;
     background: #fff !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+@media (max-width: 1500px) {
+    .main-menu-two__wrapper {
+        padding: 0 15px !important;
+    }
 }
 
 .main-menu-two__left {
     display: flex !important;
     align-items: center !important;
-    min-width: 180px !important; /* Ensure logo has its own space */
-    flex: 0 0 auto !important;
+    min-width: 140px !important; 
+    flex: 0 1 auto !important; /* Allow it to shrink slightly if needed */
 }
 
 .main-menu-two__logo {
@@ -46,13 +54,14 @@
 
 /* Relative Positioning for Menu Box to prevent overlap */
 .main-menu-two__main-menu-two-box {
-    flex: 1 !important;
+    flex: 1 1 auto !important; /* Grow and shrink as needed */
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
     height: 100% !important;
     width: auto !important;
-    margin: 0 20px !important; /* Gap between logo/menu/right */
+    margin: 0 10px !important; 
+    overflow: hidden !important; /* Safety against overflow */
 }
 
 .main-menu__list {
@@ -75,7 +84,7 @@
 
 .main-menu__list > li > a {
     white-space: nowrap !important;
-    padding: 8px 12px !important; 
+    padding: 8px 10px !important; 
     font-size: 13px !important; 
     font-weight: 700 !important;
     text-transform: uppercase !important;
@@ -85,6 +94,29 @@
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
+}
+
+@media (max-width: 1450px) {
+    .main-menu__list {
+        gap: 3px !important;
+    }
+    .main-menu__list > li > a {
+        font-size: 11px !important;
+        padding: 6px 8px !important;
+    }
+    .main-menu-two__logo img {
+        height: 38px !important;
+    }
+}
+
+@media (max-width: 1250px) {
+    .main-menu__list > li > a {
+        font-size: 10px !important;
+        padding: 5px 6px !important;
+    }
+    .main-menu-two__main-menu-two-box {
+        margin: 0 10px !important;
+    }
 }
 
 .main-menu-two .main-menu__list > li.current > a,
@@ -103,7 +135,7 @@
     display: flex !important;
     align-items: center !important;
     justify-content: flex-end !important;
-    flex: 1 !important;
+    flex: 0 0 auto !important; /* Don't grow, just take needed space */
     z-index: 101 !important;
 }
 
