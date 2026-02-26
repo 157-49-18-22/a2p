@@ -61,7 +61,18 @@
     height: 100% !important;
     width: auto !important;
     margin: 0 10px !important; 
-    overflow: hidden !important; /* Safety against overflow */
+    /* removed overflow: hidden to allow dropdowns to show */
+    position: relative !important;
+}
+
+/* Dropdown Visibility Fix */
+.main-menu__list li ul {
+    z-index: 9999 !important;
+}
+.main-menu__list li:hover > ul {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
 }
 
 .main-menu__list {
