@@ -181,14 +181,29 @@ function highlightTerms($text, $term) {
             $searchSafe = "%$search%";
             $locSafe = "%$location%";
 
-            // ─── CONTACT REDIRECT: Phone or Email detected ───────────────────
-            // Phone: contains 5+ consecutive digits (handles +91-813..., 8130525001, etc.)
-            $isPhone = preg_match('/\d{5,}/', preg_replace('/[\s\-\(\)\+]/', '', $search));
+            // ─── CONTACT REDIRECT: Phone, Email, or Contact Keywords detected ───
+            $searchLower = strtolower($search);
+            $contactKeywords = [
+                'address', 'location', 'phone', 'mobile', 'call', 'email', 'contact',
+                'office', 'address?', 'pincode', 'corporate', 'connect', 'reach',
+                'enquiry', 'help', 'support', 'number', 'whatsapp'
+            ];
+            
+            $isKeywordMatch = false;
+            foreach ($contactKeywords as $kw) {
+                if (strpos($searchLower, $kw) !== false) {
+                    $isKeywordMatch = true;
+                    break;
+                }
+            }
+
+            // Phone: contains 7+ digits
+            $isPhone = preg_match('/\d{7,}/', preg_replace('/[^\d]/', '', $search));
             // Email: standard email pattern
             $isEmail = filter_var($search, FILTER_VALIDATE_EMAIL) ||
                        preg_match('/[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/', $search);
 
-            if ($isPhone || $isEmail) {
+            if ($isKeywordMatch || $isPhone || $isEmail) {
                 header('Location: ' . SITE_URL . 'contact.php');
                 exit();
             }

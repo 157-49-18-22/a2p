@@ -297,12 +297,27 @@ if (count($sql_add))
 <script>
 function checkSearchRedirect(form) {
     var queryInput = form.querySelector('[name="query"]');
-    var query = queryInput ? queryInput.value.trim() : '';
+    var query = queryInput ? queryInput.value.trim().toLowerCase() : '';
     if (!query) return true;
-    var digitsOnly = query.replace(/[\s\-\(\)\+]/g, '');
-    var isPhone = /\d{5,}/.test(digitsOnly);
-    var isEmail = /[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/.test(query);
-    if (isPhone || isEmail) {
+
+    // Contact related keywords
+    var contactKeywords = [
+        'address', 'location', 'phone', 'mobile', 'call', 'email', 'contact',
+        'office', 'address?', 'pincode', 'corporate', 'connect', 'reach',
+        'enquiry', 'help', 'support', 'number', 'whatsapp'
+    ];
+
+    // Check if query contains any contact keyword
+    var isKeywordMatch = contactKeywords.some(function(kw) {
+        return query.indexOf(kw) !== -1;
+    });
+
+    // Check for phone number pattern or email pattern
+    var digitsOnly = query.replace(/[^\d]/g, '');
+    var isPhone = digitsOnly.length >= 7; // Basic phone check
+    var isEmail = /[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}/.test(query);
+
+    if (isKeywordMatch || isPhone || isEmail) {
         window.location.href = '<?= SITE_URL; ?>contact.php';
         return false;
     }
