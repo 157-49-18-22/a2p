@@ -30,7 +30,8 @@
 .main-menu-two__left {
     display: flex !important;
     align-items: center !important;
-    flex: 1 !important;
+    min-width: 180px !important; /* Ensure logo has its own space */
+    flex: 0 0 auto !important;
 }
 
 .main-menu-two__logo {
@@ -43,17 +44,15 @@
     width: auto !important;
 }
 
-/* Absolute Centering for Menu Box */
+/* Relative Positioning for Menu Box to prevent overlap */
 .main-menu-two__main-menu-two-box {
-    position: absolute !important;
-    left: 50% !important;
-    top: 50% !important;
-    transform: translate(-50%, -50%) !important;
+    flex: 1 !important;
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
     height: 100% !important;
     width: auto !important;
+    margin: 0 20px !important; /* Gap between logo/menu/right */
 }
 
 .main-menu__list {
