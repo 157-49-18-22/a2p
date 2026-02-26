@@ -355,26 +355,15 @@ if (count($sql_ser)) {
                                                         $displayImg = SITE_URL . "upload/" . $res_placeholders[$placeholderIndex];
                                                     }
                                                 ?>
-                                                <img src="<?php echo $displayImg; ?>" alt="<?php echo $subproductwww['name']; ?>">
-                                                <div class="project-card-v2__location">
-                                                    <i class="fa-solid fa-location-dot"></i> <?php echo $subproductwww['pro_lable']; ?>
-                                                </div>
-                                                <a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php" class="project-card-v2__link">
-                                                    <i class="fa fa-plus"></i>
+                                                <a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php">
+                                                    <img src="<?php echo $displayImg; ?>" alt="<?php echo $subproductwww['name']; ?>">
                                                 </a>
                                             </div>
                                             <div class="project-card-v2__content">
                                                 <h3 class="project-card-v2__title">
                                                     <a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php"><?php echo $subproductwww['name']; ?></a>
                                                 </h3>
-                                                <div class="project-card-v2__footer">
-                                                    <span class="project-card-v2__subtitle">
-                                                        <i class="fa-solid fa-building"></i> Luxury Residence
-                                                    </span>
-                                                    <a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php" class="project-card-v2__arrow">
-                                                        Explore <i class="fa fa-arrow-right"></i>
-                                                    </a>
-                                                </div>
+                                                <p class="project-card-v2__location-text"><i class="fa-solid fa-location-dot"></i> <?php echo $subproductwww['pro_lable']; ?></p>
                                             </div>
                                         </div>
                                 <?php }
@@ -530,26 +519,15 @@ if (count($sql_ser)) {
                                                         $displayImg = SITE_URL . "upload/" . $com_placeholders[$placeholderIndex];
                                                     }
                                                 ?>
-                                                <img src="<?php echo $displayImg; ?>" alt="<?php echo $subproductwww['name']; ?>">
-                                                <div class="project-card-v2__location">
-                                                    <i class="fa-solid fa-location-dot"></i> <?php echo $subproductwww['pro_lable']; ?>
-                                                </div>
-                                                <a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php" class="project-card-v2__link">
-                                                    <i class="fa fa-plus"></i>
+                                                <a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php">
+                                                    <img src="<?php echo $displayImg; ?>" alt="<?php echo $subproductwww['name']; ?>">
                                                 </a>
                                             </div>
                                             <div class="project-card-v2__content">
                                                 <h3 class="project-card-v2__title">
                                                     <a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php"><?php echo $subproductwww['name']; ?></a>
                                                 </h3>
-                                                <div class="project-card-v2__footer">
-                                                    <span class="project-card-v2__subtitle">
-                                                        <i class="fa-solid fa-briefcase"></i> Commercial Space
-                                                    </span>
-                                                    <a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php" class="project-card-v2__arrow">
-                                                        View Details <i class="fa fa-arrow-right"></i>
-                                                    </a>
-                                                </div>
+                                                <p class="project-card-v2__location-text"><i class="fa-solid fa-location-dot"></i> <?php echo $subproductwww['pro_lable']; ?></p>
                                             </div>
                                         </div>
                                 <?php }

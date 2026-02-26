@@ -7753,156 +7753,138 @@ ul {
   visibility: visible;
 }
 
-/* Project Card V2 Styles */
+/* Project Card V2 Styles - Old Style (Image3 like a2prealtech.com) */
 .project-card-v2 {
   position: relative;
   display: block;
   background: #fff;
-  border-radius: 20px;
+  border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-  transition: all 500ms ease;
-  height: 100%;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: all 400ms ease;
+  margin-bottom: 5px;
 }
 
 .project-card-v2:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
 .project-card-v2__img {
   position: relative;
   display: block;
   overflow: hidden;
-  height: 250px;
+  height: auto;
 }
 
 .project-card-v2__img img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: all 700ms ease;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  transition: all 500ms ease;
 }
 
 .project-card-v2:hover .project-card-v2__img img {
-  transform: scale(1.1);
+  transform: scale(1.03);
 }
 
+/* Location badge hidden - shown as text below title instead */
 .project-card-v2__location {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  background-color: var(--ambed-base, #102a83);
-  color: #fff;
-  padding: 6px 15px;
-  border-radius: 30px;
-  font-size: 13px;
-  font-weight: 500;
-  z-index: 2;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  display: none;
 }
 
+/* Plus link hidden */
 .project-card-v2__link {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(0);
-  width: 50px;
-  height: 50px;
-  background-color: #fff;
-  color: var(--ambed-base, #102a83);
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 18px;
-  z-index: 3;
-  transition: all 400ms ease;
-}
-
-.project-card-v2:hover .project-card-v2__link {
-  transform: translate(-50%, -50%) scale(1);
-}
-
-.project-card-v2:hover .project-card-v2__link:hover {
-  background-color: var(--ambed-base, #102a83);
-  color: #fff;
+  display: none;
 }
 
 .project-card-v2__content {
-  padding: 25px;
+  padding: 15px 18px 20px;
   background: #fff;
 }
 
 .project-card-v2__title {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 700;
-  margin-bottom: 15px;
+  margin-bottom: 8px;
   line-height: 1.4;
 }
 
 .project-card-v2__title a {
-  color: #222;
-  transition: all 400ms ease;
+  color: #c00415;
+  transition: all 300ms ease;
 }
 
 .project-card-v2__title a:hover {
-  color: var(--ambed-base, #102a83);
+  color: #900010;
 }
 
 .project-card-v2__footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-top: 1px solid #f0f0f0;
-  padding-top: 15px;
+  padding-top: 8px;
+  border-top: none;
 }
 
 .project-card-v2__subtitle {
-  font-size: 14px;
-  color: #666;
+  font-size: 13px;
+  color: #555;
   font-weight: 400;
 }
 
 .project-card-v2__subtitle i {
-  color: var(--ambed-base, #102a83);
+  color: #c00415;
   margin-right: 5px;
 }
 
 .project-card-v2__arrow {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
-  color: var(--ambed-base, #102a83);
+  color: #c00415;
   display: flex;
   align-items: center;
-  transition: all 400ms ease;
+  transition: all 300ms ease;
 }
 
 .project-card-v2__arrow i {
-  margin-left: 8px;
-  transition: all 400ms ease;
+  margin-left: 6px;
+  transition: all 300ms ease;
 }
 
 .project-card-v2__arrow:hover {
-  color: #c00415;
+  color: #900010;
 }
 
 .project-card-v2__arrow:hover i {
-  transform: translateX(5px);
+  transform: translateX(4px);
 }
 
 /* Alt Style for Commercial */
-.project-card-v2.alt-style .project-card-v2__location {
-  background-color: #c00415;
+.project-card-v2.alt-style .project-card-v2__subtitle i {
+  color: #c00415;
 }
 
-.project-card-v2.alt-style .project-card-v2__subtitle i,
 .project-card-v2.alt-style .project-card-v2__arrow {
   color: #c00415;
 }
 
 .project-card-v2.alt-style .project-card-v2__arrow:hover {
-  color: var(--ambed-base, #102a83);
+  color: #900010;
+}
+
+/* Location text below title - old style */
+.project-card-v2__location-text {
+  font-size: 13px;
+  color: #555;
+  margin: 0;
+  padding: 0;
+}
+
+.project-card-v2__location-text i {
+  color: #c00415;
+  margin-right: 4px;
 }
 
 /* Carousel Customization */
@@ -7915,6 +7897,7 @@ ul {
 
 /* Mobile: move nav buttons below cards so they don't overlap */
 @media (max-width: 767px) {
+
   .residential-carousel.owl-carousel .owl-nav,
   .commercial-carousel.owl-carousel .owl-nav {
     position: relative !important;
