@@ -146,9 +146,9 @@
 
 
 <style>
-    /* Fixed-Height Premium Hero Slider */
+    /* Full-Frame Premium Hero Slider (No Cut-off) */
     .carousel-inner {
-        height: 420px !important; /* Fixed height for strictly same look (Desktop) */
+        height: 400px !important; /* Perfect fixed height for all images */
         background: #000;
         overflow: hidden !important;
     }
@@ -160,12 +160,11 @@
     .carousel-item img {
         width: 100% !important;
         height: 100% !important;
-        object-fit: cover !important; /* Full fill, no stretching (Fate nahi) */
-        object-position: center center !important;
+        object-fit: fill !important; /* Shows 100% of the image (Nothing cut off) */
         display: block !important;
     }
 
-    /* Mobile - Strictly fixed and compact */
+    /* Mobile - Full frame and compact */
     @media (max-width: 767px) {
         .carousel-inner {
             height: 180px !important; /* Elegant mobile fixed height */
