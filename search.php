@@ -70,108 +70,213 @@ if (count($sql_add))
     </div>
 </section>
 <style>
-    
-    .search-bar {
-   
-    margin-top: 10px;
-    top: 0;
-    z-index: 9;
-    right: 0;
+/* Futuristic Premium Search Layout */
+.search-container-wrap {
+    position: relative;
+    padding: 80px 0;
+    background: radial-gradient(circle at top right, rgba(192, 4, 21, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at bottom left, rgba(16, 42, 131, 0.05) 0%, transparent 40%);
+    overflow: hidden;
+}
+
+.search-container-wrap::before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 200px;
+    height: 200px;
+    background: rgba(192, 4, 21, 0.03);
+    border-radius: 50%;
+    filter: blur(50px);
+}
+
+.search-glass-card {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 30px;
+    padding: 50px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
 }
 
 .welcome-one {
-  
-    padding: 0px 0px 45px;
+    padding: 0;
+    background: transparent;
 }
 
-
-    .sp1 {
-    padding: 48px 0 27px;
-}
-
-.search-bar {
-    position: relative !important; 
+.search-bar-premium {
+    position: relative;
     display: flex;
-    justify-content: center;
-    padding: 30px 0;
+    align-items: center;
+    background: #fff;
+    border-radius: 60px;
+    padding: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    border: 2px solid transparent;
 }
 
-.search-input {
-    width: 500px;
-    flex: 0 1 auto;
-    padding: 15px 25px;
-    border: 2px solid #eee;
-    border-radius: 50px 0 0 50px;
-    font-size: 16px;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+.search-bar-premium:focus-within {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(192, 4, 21, 0.12);
+    border-color: rgba(192, 4, 21, 0.3);
 }
 
-.search-input:focus {
-    border-color: #c00415;
-    box-shadow: 0 4px 20px rgba(192, 4, 21, 0.1);
+.search-input-premium {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 15px 30px;
+    font-size: 18px;
+    color: #333;
+    font-weight: 500;
+}
+
+.search-input-premium:focus {
     outline: none;
 }
 
-.search-btn {
-    padding: 12px 35px;
+.search-input-premium::placeholder {
+    color: #aaa;
+    font-weight: 400;
+}
+
+.btn-search-glow {
+    background: #c00415;
+    color: #fff;
     border: none;
-    background: linear-gradient(135deg, #c00415 0%, #a00312 100%);
-    color: white;
-    border-radius: 0 50px 50px 0;
-    cursor: pointer;
+    padding: 15px 40px;
+    border-radius: 50px;
     font-size: 18px;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(192, 4, 21, 0.3);
+    font-weight: 700;
+    cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 12px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s ease;
+    box-shadow: 0 8px 20px rgba(192, 4, 21, 0.3);
 }
 
-.search-btn:hover {
-    background: linear-gradient(135deg, #a00312 0%, #80020e 100%);
-    transform: translateX(3px);
-    box-shadow: 0 6px 20px rgba(192, 4, 21, 0.4);
+.btn-search-glow::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: 0.5s;
 }
 
-
-@media (max-width: 600px) {
-    
-    
- .search-input {
-    width: 100% !important;}
-  
-  
+.btn-search-glow:hover {
+    background: #900010;
+    transform: scale(1.02);
+    box-shadow: 0 12px 25px rgba(192, 4, 21, 0.4);
 }
 
+.btn-search-glow:hover::before {
+    left: 100%;
+}
+
+.btn-search-glow i {
+    font-size: 20px;
+    transition: all 0.3s ease;
+}
+
+.btn-search-glow:hover i {
+    transform: rotate(20deg) scale(1.2);
+}
+
+.search-tagline {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.search-tagline h2 {
+    font-size: 42px;
+    font-weight: 900;
+    color: #222;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.05);
+}
+
+.search-tagline p {
+    color: #666;
+    font-size: 16px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.accent-line {
+    width: 60px;
+    height: 4px;
+    background: #c00415;
+    margin: 15px auto;
+    border-radius: 2px;
+}
+
+@media (max-width: 767px) {
+    .search-glass-card {
+        padding: 30px 20px;
+        margin: 0 15px;
+    }
+    .search-bar-premium {
+        flex-direction: column;
+        border-radius: 20px;
+        padding: 10px;
+    }
+    .search-input-premium {
+        width: 100%;
+        text-align: center;
+        padding: 15px;
+    }
+    .btn-search-glow {
+        width: 100%;
+        justify-content: center;
+        border-radius: 15px;
+    }
+    .search-tagline h2 {
+        font-size: 28px;
+    }
+}
 </style>
 
-<section class="welcome-one">
- 
-
-
-
-<div class="blog-top-area sp1">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-lg-5 m-auto">
-                <div class="testimonia4-header text-center heading8">
-                    <h2 class="text-center ">Search Here</h2>
-                </div>
+<section class="search-container-wrap">
+    <div class="container">
+        <div class="search-glass-card wow fadeInUp" data-wow-duration="1500ms">
+            <div class="search-tagline">
+                <p>Find Your Perfect Space</p>
+                <h2>Start Your Journey Here</h2>
+                <div class="accent-line"></div>
+            </div>
+            
+            <div class="search-bar-premium">
+                <form action="<?= SITE_URL; ?>search_result.php" method="GET" class="d-flex w-100 align-items-center" onsubmit="return checkSearchRedirect(this)">
+                    <i class="fa-solid fa-magnifying-glass ms-4 text-muted"></i>
+                    <input type="text" class="search-input-premium" placeholder="Enter Location, Property Name, or Developer..." name="query" autocomplete="off">
+                    <button type="submit" class="btn-search-glow">
+                        <span>Search</span>
+                        <i class="fa-solid fa-arrow-right-long"></i>
+                    </button>
+                </form>
             </div>
         </div>
- <div class="search-bar">
-                                <form action="<?= SITE_URL; ?>search_result.php" method="GET" class="d-flex" onsubmit="return checkSearchRedirect(this)">
-                                    <input type="text" class="form-control search-input" placeholder="Search properties, locations, phone, email..." name="query">
-                                    <button type="submit" class="search-btn">
-                                        <i class="fa-solid fa-search"></i> Search
-                                    </button>
-                                </form>
+    </div>
+</section>
 
-                            </div>
 <script>
 function checkSearchRedirect(form) {
-    var query = form.querySelector('[name="query"]').value.trim();
+    var queryInput = form.querySelector('[name="query"]');
+    var query = queryInput ? queryInput.value.trim() : '';
     if (!query) return true;
     var digitsOnly = query.replace(/[\s\-\(\)\+]/g, '');
     var isPhone = /\d{5,}/.test(digitsOnly);
@@ -183,11 +288,6 @@ function checkSearchRedirect(form) {
     return true;
 }
 </script>
-        
-    </div>
-</div>
-
-</section>
 
 
 

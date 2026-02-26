@@ -277,27 +277,132 @@
 </div>
 
 
+<style>
+/* Premium Search Popup Redesign */
+.search-popup {
+    background: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.search-popup__content {
+    max-width: 800px !important;
+    width: 90%;
+    margin: 0 auto;
+    position: relative;
+}
+
+.search-popup form {
+    position: relative;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 60px;
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+}
+
+.search-popup form:focus-within {
+    background: rgba(255, 255, 255, 1);
+    border-color: #c00415;
+    box-shadow: 0 0 50px rgba(192, 4, 21, 0.3);
+    transform: scale(1.02);
+}
+
+.search-popup input[type="text"] {
+    background: transparent !important;
+    color: #fff !important;
+    font-size: 26px !important;
+    font-weight: 600 !important;
+    padding: 15px 30px !important;
+    border: none !important;
+    flex: 1;
+    letter-spacing: 0.5px;
+}
+
+.search-popup form:focus-within input[type="text"] {
+    color: #222 !important;
+}
+
+.search-popup .thm-btn {
+    width: 60px !important;
+    height: 60px !important;
+    border-radius: 50% !important;
+    background: #c00415 !important;
+    color: #fff !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.4s ease !important;
+    padding: 0 !important;
+    box-shadow: 0 8px 15px rgba(192, 4, 21, 0.3) !important;
+}
+
+.search-popup .thm-btn:hover {
+    transform: rotate(90deg) scale(1.1) !important;
+    background: #900010 !important;
+}
+
+.search-popup .thm-btn i {
+    font-size: 22px !important;
+}
+
+/* Close button enhancement */
+.mobile-nav__close.search-toggler {
+    font-size: 35px;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    top: 30px;
+    right: 30px;
+}
+
+.mobile-nav__close.search-toggler:hover {
+    color: #c00415;
+    transform: rotate(90deg);
+}
+
+.popup-tagline {
+    color: #c00415;
+    text-align: center;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.8s ease 0.2s;
+}
+
+.search-popup.active .popup-tagline {
+    opacity: 1;
+    transform: translateY(0);
+}
+</style>
+
 <div class="search-popup">
     <div class="search-popup__overlay search-toggler"></div>
-    <!-- /.search-popup__overlay -->
-<div class="search-popup__content">
+    <div class="search-popup__content">
+        <div class="popup-tagline">Experience the future of property search</div>
         <form action="<?= SITE_URL; ?>search_result.php" method="GET" onsubmit="return checkSearchRedirect(this)">
-            <label for="search" class="sr-only">search here</label><!-- /.sr-only -->
-            <input type="text" id="search" name="query" placeholder="Search Here..." />
+            <input type="text" id="search" name="query" placeholder="Tell us what you're looking for..." autocomplete="off" />
             <button type="submit" aria-label="search submit" class="thm-btn">
                 <i class="icon-magnifying-glass"></i>
             </button>
         </form>
     </div>
-    <!-- /.search-popup__content -->
 </div>
+
 <script>
 function checkSearchRedirect(form) {
-    var query = form.querySelector('[name="query"]') ? form.querySelector('[name="query"]').value.trim()
-                : (form.querySelector('#search') ? form.querySelector('#search').value.trim() : '');
+    var queryField = form.querySelector('[name="query"]');
+    var query = queryField ? queryField.value.trim() : '';
     if (!query) return true;
 
-    // Phone: 5+ consecutive digits (handles +91..., 8130525001, etc.)
+    // Phone: 5+ consecutive digits
     var digitsOnly = query.replace(/[\s\-\(\)\+]/g, '');
     var isPhone = /\d{5,}/.test(digitsOnly);
 
