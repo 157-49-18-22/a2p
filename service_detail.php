@@ -853,7 +853,7 @@ $currentPageUrl = urlencode("http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_UR
                                                 <div class="sidebar__post-content">
                                                     <h3>
                                                         <span class="sidebar__post-content-meta"><i
-                                                                class="far fa-user-circle"></i> by Admin</span>
+                                                                class="far fa-user-circle"></i> by A2P Realtech</span>
                                                         <a href="<?= SITE_URL; ?>blog_detail/<?php echo makeurlnamebynameCategory($offer['name']); ?>.php"><?php custom_echo($offer['name'], 30); ?></a>
                                                     </h3>
                                                 </div>

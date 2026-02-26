@@ -283,31 +283,52 @@
     .main-menu-two__wrapper {
         padding: 0 15px !important;
         height: 65px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-end !important;
+        position: relative !important;
+    }
+    .main-menu-two__left {
+        position: absolute !important;
+        left: 50% !important;
+        top: 50% !important;
+        transform: translate(-50%, -50%) !important;
+        margin: 0 !important;
+        flex: none !important;
+        min-width: auto !important;
     }
     .main-menu-two__logo img {
-        height: 40px !important; /* Responsive logo size */
+        height: 38px !important;
     }
     .main-menu-two__main-menu-two-box {
-        justify-content: flex-end !important;
-        flex: 0 !important;
-        order: 3 !important; /* Hamburger on far right */
+        order: 3 !important;
+        display: flex !important;
+        align-items: center !important;
+        margin-left: 12px !important;
+        flex: none !important;
     }
     .main-menu-two__right {
-        flex: 1 !important;
-        justify-content: flex-end !important;
         order: 2 !important;
+        display: flex !important;
+        align-items: center !important;
         margin-left: 0 !important;
-        gap: 10px !important;
+        flex: none !important;
+    }
+    .mobile-nav__toggler {
+        margin: 0 !important;
+        width: 38px !important;
+        height: 38px !important;
+        border-radius: 8px !important;
+        background: #f4f4f4 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        color: #333 !important;
     }
     .main-menu-two__call .thm-btn {
         width: 38px !important;
         height: 38px !important;
         border-radius: 8px !important;
-    }
-    .mobile-nav__toggler {
-        margin-left: 8px !important;
-        width: 38px !important;
-        height: 38px !important;
     }
 
     /* Fix image cutting on mobile - Enhanced Robustness */

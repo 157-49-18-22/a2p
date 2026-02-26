@@ -729,7 +729,7 @@ if (count($sql_ser)) {
                                 </div>
                                 <div class="blog-card-v2__content">
                                     <div class="blog-card-v2__meta">
-                                        <span><i class="far fa-user-circle"></i> Admin</span>
+                                        <span><i class="far fa-user-circle"></i> A2P Realtech</span>
                                         <span><i class="far fa-calendar-alt"></i> Latest</span>
                                     </div>
                                     <h3 class="blog-card-v2__title">
