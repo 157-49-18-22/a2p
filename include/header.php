@@ -452,6 +452,40 @@
         }
     }
 
+/* Header Top Social Icons - Footer Style */
+.main-header-three__top-right-social {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+}
+
+.main-header-three__top-right-social a {
+    position: relative !important;
+    height: 30px !important;
+    width: 30px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: #fff !important;
+    font-size: 13px !important;
+    border-radius: 50% !important;
+    transition: all 400ms ease !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+}
+
+.main-header-three__top-right-social a:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25) !important;
+}
+
+.main-header-three__top-right-social a.facebook { background: #1877F2 !important; }
+.main-header-three__top-right-social a.twitter { background: #000000 !important; }
+.main-header-three__top-right-social a.instagram { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%) !important; }
+.main-header-three__top-right-social a.linkedin { background: #0077B5 !important; }
+.main-header-three__top-right-social a.youtube { background: #FF0000 !important; }
+.main-header-three__top-right-social a.whatsapp { background: #25D366 !important; }
+
+
 @keyframes slideUp {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
@@ -575,12 +609,12 @@ document.addEventListener('DOMContentLoaded', function() {
                                     <li><a href="#">About Us</a></li>
                                 </ul>
                                 <div class="main-header-three__top-right-social">
-                                    <a href="<?php echo $pr_add['facebook']; ?>" class="facebook"><i class="fab fa-facebook-f"></i></a>
-                                    <a href="<?php echo $pr_add['twitter']; ?>" class="twitter"><i class="fab fa-x-twitter"></i></a>
-                                    <a href="<?php echo $pr_add['instagram']; ?>" class="instagram"><i class="fab fa-instagram"></i></a>
-                                    <a href="<?php echo $pr_add['youtube']; ?>" class="youtube"><i class="fab fa-youtube"></i></a>
-                                    <a href="<?php echo $pr_add['linkedin']; ?>" class="linkedin"><i class="fab fa-linkedin-in"></i></a>
-                                    <a href="https://api.whatsapp.com/send?phone=91<?php echo $pr_add['phone']; ?>" class="whatsapp"><i class="fab fa-whatsapp"></i></a>
+                                    <a href="<?php echo $pr_add['facebook']; ?>" class="facebook" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                                    <a href="<?php echo $pr_add['twitter']; ?>" class="twitter" target="_blank"><i class="fab fa-x-twitter"></i></a>
+                                    <a href="<?php echo $pr_add['instagram']; ?>" class="instagram" target="_blank"><i class="fab fa-instagram"></i></a>
+                                    <a href="<?php echo $pr_add['youtube']; ?>" class="youtube" target="_blank"><i class="fab fa-youtube"></i></a>
+                                    <a href="<?php echo $pr_add['linkedin']; ?>" class="linkedin" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                                    <a href="https://api.whatsapp.com/send?phone=91<?php echo $pr_add['phone']; ?>" class="whatsapp" target="_blank"><i class="fab fa-whatsapp"></i></a>
                                 </div>
                             </div>
                         </div>

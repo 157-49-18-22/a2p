@@ -87,42 +87,22 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </head>
 
 
-    /* Home Page Carousel Nav Override (image2/3 style) */
-    .residential-carousel.owl-carousel .owl-nav,
-    .commercial-carousel.owl-carousel .owl-nav {
-        position: relative !important;
-        top: auto !important;
-        right: auto !important;
-        display: flex !important;
-        justify-content: center !important;
-        margin-top: 30px !important;
-        gap: 15px !important;
-        visibility: visible !important;
-        opacity: 1 !important;
-    }
+<style>
 
-    .residential-carousel.owl-carousel .owl-nav button.owl-prev,
-    .residential-carousel.owl-carousel .owl-nav button.owl-next,
-    .commercial-carousel.owl-carousel .owl-nav button.owl-prev,
-    .commercial-carousel.owl-carousel .owl-nav button.owl-next {
-        width: 50px !important;
-        height: 50px !important;
-        background-color: #c00415 !important;
-        color: #fff !important;
-        border-radius: 50% !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        box-shadow: 0 4px 12px rgba(192, 4, 21, 0.4) !important;
-        margin: 0 !important;
-        border: none !important;
-        font-size: 18px !important;
-    }
 
-    .residential-carousel.owl-carousel .owl-dots,
-    .commercial-carousel.owl-carousel .owl-dots {
-        display: none !important;
-    }
+    /* Add these styles in your stylesheet */
+.modal-border-red {
+    border: 3px solid red;
+}
+
+.modal-border-dark-blue {
+    border: 3px solid darkblue;
+}
+
+.modal-border-auto {
+    border: 3px solid #333; /* Example auto color */
+}
+
 </style>
   
   
