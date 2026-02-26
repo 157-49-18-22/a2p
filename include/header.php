@@ -14,60 +14,49 @@
 
 <style>
 /* Header Layout - Highly Compact for One Row */
-/* Header Layout - Clean Centered Design */
+/* Header Layout - Final Precision Spacing */
 .main-menu-two__wrapper {
     display: flex !important;
     align-items: center !important;
     justify-content: space-between !important;
-    padding: 0 40px !important; 
+    padding: 0 20px !important; 
     height: 70px !important; 
-    position: relative !important;
-    z-index: 100 !important;
-    max-width: 100% !important;
     background: #fff !important;
     width: 100% !important;
     box-sizing: border-box !important;
-}
-
-@media (max-width: 1500px) {
-    .main-menu-two__wrapper {
-        padding: 0 15px !important;
-    }
+    position: relative !important;
+    z-index: 100 !important;
 }
 
 .main-menu-two__left {
     display: flex !important;
     align-items: center !important;
-    min-width: 140px !important; 
-    flex: 0 1 auto !important; /* Allow it to shrink slightly if needed */
-}
-
-.main-menu-two__logo {
-    margin: 0 !important;
-    flex-shrink: 0 !important;
+    flex: 0 0 auto !important; 
+    margin-right: 25px !important; /* Guaranteed gap from logo */
 }
 
 .main-menu-two__logo img {
-    height: 45px !important; 
+    height: 48px !important; 
     width: auto !important;
+    max-width: 180px !important;
 }
 
-/* Relative Positioning for Menu Box to prevent overlap */
 .main-menu-two__main-menu-two-box {
-    flex: 1 1 auto !important; /* Grow and shrink as needed */
+    flex: 1 1 auto !important; 
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
     height: 100% !important;
-    width: auto !important;
-    margin: 0 10px !important; 
-    /* removed overflow: hidden to allow dropdowns to show */
-    min-width: 0 !important; /* allow shrinking */
+    min-width: 0 !important; 
+    overflow-x: auto !important; /* Fallback for extreme cases */
+    scrollbar-width: none !important; /* Hide scrollbar for clean look */
 }
+
+.main-menu-two__main-menu-two-box::-webkit-scrollbar { display: none !important; }
 
 .main-menu__list {
     display: flex !important;
-    gap: 8px !important; /* Reverted to original compact gap */
+    gap: 8px !important; 
     align-items: center !important;
     height: 100% !important;
     margin: 0 !important;
@@ -76,62 +65,46 @@
 }
 
 .main-menu-two .main-menu__list > li {
-    padding: 0 !important;
-    margin: 0 !important;
     display: flex !important;
     align-items: center !important;
-    height: 70px !important;
+    height: 100% !important;
+    flex-shrink: 0 !important; /* Don't squash text */
 }
 
 .main-menu__list > li > a {
     white-space: nowrap !important;
-    padding: 8px 10px !important; 
+    padding: 8px 12px !important; 
     font-size: 13px !important; 
     font-weight: 700 !important;
     text-transform: uppercase !important;
     color: #333 !important;
     border-radius: 5px !important;
-    transition: all 0.2s ease !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
+}
+
+/* laptop & Medium Desktop Precision scaling */
+@media (max-width: 1600px) {
+    .main-menu__list { gap: 6px !important; }
+    .main-menu__list > li > a { font-size: 12px !important; padding: 6px 10px !important; }
 }
 
 @media (max-width: 1450px) {
-    .main-menu-two__wrapper {
-        padding: 0 10px !important;
-    }
-    .main-menu__list {
-        gap: 2px !important;
-    }
-    .main-menu__list > li > a {
-        font-size: 11px !important;
-        padding: 6px 6px !important;
-    }
-    .main-menu-two__logo img {
-        height: 38px !important;
-    }
+    .main-menu-two__left { margin-right: 15px !important; }
+    .main-menu__list { gap: 4px !important; }
+    .main-menu__list > li > a { font-size: 11px !important; padding: 5px 8px !important; }
+    .main-menu-two__logo img { height: 40px !important; }
 }
 
 @media (max-width: 1300px) {
-    .main-menu__list > li > a {
-        font-size: 10px !important;
-        padding: 5px 4px !important;
-        letter-spacing: -0.2px !important;
-    }
-    .main-menu-two__main-menu-two-box {
-        margin: 0 5px !important;
-    }
+    .main-menu-two__wrapper { padding: 0 10px !important; }
+    .main-menu-two__left { margin-right: 10px !important; }
+    .main-menu__list { gap: 2px !important; }
+    .main-menu__list > li > a { font-size: 10px !important; padding: 4px 6px !important; }
+    .main-menu-two__logo img { height: 35px !important; }
 }
 
-@media (max-width: 1200px) {
-    .main-menu__list > li > a {
-        font-size: 9px !important;
-        padding: 4px 3px !important;
-    }
-    .main-menu-two__logo img {
-        height: 32px !important;
-    }
+@media (max-width: 1150px) {
+    .main-menu__list { gap: 1px !important; }
+    .main-menu__list > li > a { font-size: 9px !important; padding: 4px 4px !important; letter-spacing: -0.3px !important; }
 }
 
 .main-menu-two .main-menu__list > li.current > a,
@@ -140,19 +113,11 @@
     color: #fff !important;
 }
 
-.main-menu-two__main-menu-two-inner {
-    display: flex !important;
-    align-items: center !important;
-    height: 100% !important;
-}
-
 .main-menu-two__right {
     display: flex !important;
     align-items: center !important;
-    justify-content: flex-end !important;
-    flex: 0 0 auto !important; /* Don't grow, just take needed space */
-    z-index: 101 !important;
-    margin-left: auto !important; /* Push it to the right if needed */
+    flex: 0 0 auto !important;
+    margin-left: 15px !important; /* Guaranteed gap from search */
 }
 
 /* Dropdown Visibility Fix */
