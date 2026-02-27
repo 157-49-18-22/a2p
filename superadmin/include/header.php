@@ -473,6 +473,13 @@ if ($current_page !== 'application_seating.php') {
                                         <div data-i18n="Add Career">Add Career</div>
                                     </a>
                                 </li>
+                                <li class="menu-item">
+                                    <a href="job_applications.php" class="menu-link">
+                                        <div data-i18n="Job Applications">Job Applications</div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
 
 
 
