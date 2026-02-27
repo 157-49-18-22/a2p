@@ -632,12 +632,13 @@ try {
 ?>
                                      <?php
 // Ensure that the admin's data is fetched correctly and store the photo path
-foreach ($data as $menu) {
-    // Display the photo in the dropdown
-    $photoPath = "../upload/" . htmlspecialchars($menu['photo']); // Assuming 'photo' is the column holding the image filename
-    $admin_name = htmlspecialchars($menu['name']); // Assuming 'name' is the admin's name
-    $admin_id = htmlspecialchars($menu['id']); // Assuming 'id' is the admin's ID
-    ?>
+if (!empty($data)) {
+    $menu = $data[0];
+    // Display the photo if available
+    $photoPath = isset($menu['photo']) ? "../upload/" . htmlspecialchars($menu['photo']) : "assets/img/avatars/1.png";
+    $admin_name = isset($menu['name']) ? htmlspecialchars($menu['name']) : (isset($menu['username']) ? htmlspecialchars($menu['username']) : 'Admin');
+    $admin_id = isset($menu['id']) ? htmlspecialchars($menu['id']) : 0;
+?>
 
 
 
