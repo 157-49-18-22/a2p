@@ -74,7 +74,8 @@
     left: 0 !important;
     background: #fff !important;
     min-width: 220px !important;
-    display: none !important;
+    display: none; 
+    visibility: hidden;
     box-shadow: 0 5px 25px rgba(0,0,0,0.1) !important;
     padding: 10px 0 !important;
     z-index: 9999 !important;
@@ -159,11 +160,6 @@
     }
 }
 
-.main-menu-two .main-menu__list > li.current > a,
-.main-menu-two .main-menu__list > li:hover > a {
-    background-color: #c00415 !important;
-    color: #fff !important;
-}
 
 .main-menu-two__main-menu-two-inner {
     display: flex !important;
@@ -286,65 +282,162 @@
         display: none !important; /* Hide desktop list on mobile */
     }
     .mobile-nav__container .main-menu__list {
-        display: block !important; /* Force show in mobile drawer */
+        display: block !important;
         list-style: none !important;
-        padding: 20px !important;
+        padding: 10px 0 !important;
+    }
+    .mobile-nav__container .main-menu__list > li {
+        width: 100% !important;
+        border-bottom: 1px solid rgba(255,255,255,0.05) !important;
+        height: auto !important; /* Critical: Remove fixed desktop height */
+        display: block !important; /* Critical: Allow UL to stack below A */
+        padding: 0 !important;
+        margin: 0 !important;
     }
     .mobile-nav__container .main-menu__list > li > a {
-        color: #fff !important; /* White text for red background */
-        font-size: 16px !important;
-        padding: 12px 0 !important;
+        color: #fff !important;
+        font-size: 15px !important;
+        font-weight: 600 !important;
+        padding: 15px 20px !important;
         display: flex !important;
         align-items: center !important;
         justify-content: space-between !important;
-        border-bottom: 1px solid rgba(255,255,255,0.1);
+        text-decoration: none !important;
+        transition: none !important; /* Remove conflicts with slideToggle */
+        height: 60px !important; /* Consistent height for the link part only */
+    }
+    .mobile-nav__container .main-menu__list > li:hover > a {
+        background: rgba(255,255,255,0.1) !important;
+    }
+
+    /* Mobile Dropdown Styling - Clean Accordion Style */
+    .mobile-nav__container .main-menu__list li.dropdown ul {
+        display: none; 
         position: relative !important;
-    }
-    .mobile-nav__container .main-menu__list > li > a i {
-        color: #fff !important; /* Force icon white in mobile */
-    }
-    /* Fix for the blue dropdown arrows */
-    .mobile-nav__container .main-menu__list .dropdown > a button {
-        background: transparent !important;
-        border: none !important;
-        color: #fff !important;
-        font-size: 14px !important;
+        width: 100% !important;
+        background: rgba(0,0,0,0.1) !important;
         padding: 0 !important;
-        margin-left: 10px !important;
+        margin: 0 !important;
+        list-style: none !important;
+        box-shadow: none !important;
+        border: none !important;
+        visibility: visible !important; 
+        opacity: 1 !important; 
+        transition: none !important;
+        transform: none !important;
+        /* Scrollbar for long lists */
+        max-height: 350px !important;
+        overflow-y: auto !important;
+        scrollbar-width: thin !important;
+        scrollbar-color: rgba(255,255,255,0.2) transparent !important;
+    }
+
+    /* Custom Scrollbar for Mobile Menu */
+    .mobile-nav__container .main-menu__list li.dropdown ul::-webkit-scrollbar {
+        width: 4px;
+    }
+    .mobile-nav__container .main-menu__list li.dropdown ul::-webkit-scrollbar-thumb {
+        background: rgba(255,255,255,0.2);
+        border-radius: 10px;
+    }
+    .mobile-nav__container .main-menu__list li.dropdown ul::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    
+    /* Ensure sub-menu items are also styled */
+    .mobile-nav__container .main-menu__list li.dropdown ul li a {
+        padding: 12px 20px 12px 40px !important;
+        color: rgba(255,255,255,0.8) !important;
+        font-size: 14px !important;
+        display: block !important;
+        border-bottom: 1px solid rgba(255,255,255,0.05) !important;
+        text-decoration: none !important;
+    }
+    .mobile-nav__container .main-menu__list li.dropdown ul li:last-child a {
+        border-bottom: none !important;
+    }
+
+    /* Mobile Dropdown - Clean Accordion Logic */
+    .mobile-nav__container .main-menu__list li.dropdown > ul {
+        display: none; 
+        visibility: visible !important; 
+        opacity: 1 !important;
+        overflow: hidden;
+        position: relative !important;
+        top: 0 !important;
+        width: 100% !important;
+        background: rgba(0,0,0,0.1) !important;
+        padding: 0 !important;
+    }
+
+    /* REMOVED: display:block !important because it was preventing the menu from closing */
+
+    /* Prevent desktop hover rules from interfering on mobile */
+    .mobile-nav__container .main-menu__list li.dropdown:hover > ul {
+        display: none !important; 
+    }
+    
+    /* Dropdown Toggle Button Styling - Better alignment */
+    .mobile-nav__container .main-menu__list .dropdown > a button {
+        background: rgba(255,255,255,0.1) !important;
+        border: 1px solid rgba(255,255,255,0.2) !important;
+        color: #fff !important;
+        width: 32px !important;
+        height: 32px !important;
+        border-radius: 6px !important;
         display: flex !important;
         align-items: center !important;
+        justify-content: center !important;
+        cursor: pointer !important;
+        transition: all 0.3s ease !important;
+        position: absolute !important;
+        right: 15px !important;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+        z-index: 10 !important;
+    }
+    .mobile-nav__container .main-menu__list .dropdown > a button.expanded {
+        background: #fff !important;
+        color: #c00415 !important;
+        /* Removed rotation to allow icon swap in JS */
     }
     .mobile-nav__social {
-        display: grid !important;
-        grid-template-columns: repeat(3, 40px) !important;
-        gap: 15px 25px !important; /* Balanced gap for better alignment */
-        padding: 30px 20px !important; 
-        justify-items: center !important;
-        justify-content: center !important; /* Center the whole grid */
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        gap: 4px !important;
+        padding: 20px 15px !important; 
+        justify-content: center !important;
+        align-items: center !important;
         width: 100% !important;
         margin: 0 auto !important;
     }
     .mobile-nav__social a {
         color: #fff !important;
-        font-size: 14px !important; /* Smaller icons */
-        width: 34px !important; /* Smaller circular base */
-        height: 34px !important;
-        background: rgba(255,255,255,0.1) !important;
+        font-size: 13px !important; 
+        width: 30px !important; 
+        height: 30px !important;
+        background: rgba(255,255,255,0.15) !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
         border-radius: 50% !important;
-        transition: all 0.3s ease !important;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1) !important;
+        text-decoration: none !important;
+        flex-shrink: 0 !important;
     }
     .mobile-nav__social a:hover {
         background: #fff !important;
         color: #c00415 !important;
-        transform: translateY(-3px) !important;
+        transform: translateY(-3px) scale(1.1) !important;
+        box-shadow: 0 8px 15px rgba(0,0,0,0.2) !important;
     }
     /* Unique colors for mobile icons if needed, pulling from desktop styles */
-    .mobile-nav__social a.facebook { background: #1877F2 !important;margin-left: 1.5rem; }
-    .mobile-nav__social a.twitter { background: #000000 !important; }
-    .mobile-nav__social a.instagram { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%) !important; }
+    .mobile-nav__social a.facebook { background: #1877F2 !important; }
+    .mobile-nav__social a.instagram { 
+        background: #f09433 !important;
+        background: linear-gradient(45deg, #405de6, #5851db, #833ab4, #c13584, #e1306c, #fd1d1d) !important;
+    }
     .mobile-nav__social a.linkedin { background: #0077B5 !important; }
     .mobile-nav__social a.youtube { background: #FF0000 !important; }
     .mobile-nav__social a.whatsapp { background: #25D366 !important; }
@@ -376,44 +469,47 @@
         margin-left: 10px;
     }
     .main-menu-two__wrapper {
-        padding: 0 5px !important;
-        height: 65px !important;
+        padding: 0 15px !important;
+        height: 70px !important;
         display: flex !important;
         align-items: center !important;
         justify-content: space-between !important;
         position: relative !important;
+        background: #fff !important;
     }
     .main-menu-two__left {
-        position: absolute !important;
-        left: 50% !important;
-        top: 50% !important;
-        transform: translate(-50%, -50%) !important;
+        position: relative !important;
+        left: auto !important;
+        top: auto !important;
+        transform: none !important;
         margin: 0 !important;
-        z-index: 2 !important;
+        order: 2 !important;
+        flex: 1 !important;
         display: flex !important;
-        align-items: center !important;
         justify-content: center !important;
-        width: auto !important;
+        z-index: 10 !important;
     }
     .main-menu-two__logo img {
-        height: 32px !important;
+        height: 48px !important;
         width: auto !important;
+        display: block !important;
+        filter: none !important;
     }
     .main-menu-two__main-menu-two-box {
-        flex: 1 !important;
+        flex: 0 0 auto !important;
         display: flex !important;
         justify-content: flex-start !important;
-        align-items: center !important;
         order: 1 !important;
         z-index: 10 !important;
+        min-width: 50px !important;
     }
     .main-menu-two__right {
-        flex: 1 !important;
+        flex: 0 0 auto !important;
         display: flex !important;
         justify-content: flex-end !important;
-        align-items: center !important;
         order: 3 !important;
         z-index: 10 !important;
+        min-width: 50px !important;
     }
     .mobile-nav__toggler {
         margin: 0 !important;
@@ -427,7 +523,6 @@
         justify-content: center !important;
         color: #c00415 !important;
         font-size: 20px !important;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
     }
     .main-menu-two__call .thm-btn {
         width: 42px !important;
@@ -938,34 +1033,89 @@
 
 .main-header-three__top-right-social a {
     position: relative !important;
-    height: 24px !important;
-    width: 24px !important;
+    height: 30px !important;
+    width: 30px !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
     color: #fff !important;
-    font-size: 11px !important;
+    font-size: 14px !important;
     border-radius: 50% !important;
     transition: all 400ms ease !important;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1) !important;
+    text-decoration: none !important;
 }
 
 .main-header-three__top-right-social a:hover {
-    transform: translateY(-3px) !important;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25) !important;
+    transform: translateY(-4px) !important;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.25) !important;
 }
 
-.main-header-three__top-right-social a.facebook { background: #1877F2 !important; }
-.main-header-three__top-right-social a.twitter { background: #000000 !important; }
-.main-header-three__top-right-social a.instagram { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%) !important; }
-.main-header-three__top-right-social a.linkedin { background: #0077B5 !important; }
-.main-header-three__top-right-social a.youtube { background: #FF0000 !important; }
-.main-header-three__top-right-social a.whatsapp { background: #25D366 !important; }
+.main-header-three__top-right-social a.facebook { background-color: #1877F2 !important; }
+.main-header-three__top-right-social a.twitter { background-color: #000000 !important; }
+.main-header-three__top-right-social a.instagram { 
+    background: #f09433 !important;
+    background: linear-gradient(45deg, #405de6, #5851db, #833ab4, #c13584, #e1306c, #fd1d1d) !important;
+    background-image: linear-gradient(45deg, #405de6, #5851db, #833ab4, #c13584, #e1306c, #fd1d1d) !important;
+}
+.main-header-three__top-right-social a.linkedin { background-color: #0077B5 !important; }
+.main-header-three__top-right-social a.youtube { background-color: #FF0000 !important; }
+.main-header-three__top-right-social a.whatsapp { background-color: #25D366 !important; }
 
 
 @keyframes slideUp {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
+}
+
+/* Desktop Menu Background Fix */
+@media (min-width: 1200px) {
+    /* Reset all top level menu links to be transparent/white by default */
+    .main-menu__list > li > a {
+        background: transparent !important;
+        color: #333 !important;
+    }
+
+    /* Red background for current page (non-dropdowns like Home) and all hover states */
+    .main-menu__list > li.current:not(.dropdown) > a,
+    .main-menu__list > li:hover > a {
+        background: #c00415 !important;
+        color: #fff !important;
+    }
+
+    /* Ensure dropdowns stay white/transparent by default even if they get current class (e.g. from '#' links) */
+    .main-menu__list > li.dropdown.current > a {
+        background: transparent !important;
+        color: #333 !important;
+    }
+    
+    /* Re-affirm hover state for dropdowns regardless of current class */
+    .main-menu__list > li.dropdown:hover > a {
+        background: #c00415 !important;
+        color: #fff !important;
+    }
+
+    /* Dropdown Reset - Ensure items have white background */
+    .main-menu__list li.dropdown ul {
+        background: #fff !important;
+    }
+
+    .main-menu__list li.dropdown ul li {
+        background: #fff !important;
+        border-bottom: 1px solid #f2f2f2 !important;
+    }
+
+    .main-menu__list li.dropdown ul li a {
+        background: #fff !important;
+        color: #333 !important;
+        padding: 10px 20px !important;
+    }
+
+    /* Dropdown hover state - light grey background with red text */
+    .main-menu__list li.dropdown ul li a:hover {
+        background: #f9f9f9 !important;
+        color: #c00415 !important;
+    }
 }
 </style>
 
@@ -1010,18 +1160,57 @@ function toggleNotifPanel() {
 }
 
 
-// Force rebuild mobile menu on load to ensure it's not hidden
+// Enhanced Mobile Menu Logic
 document.addEventListener('DOMContentLoaded', function() {
-    setTimeout(function() {
+    function initMobileMenu() {
         var desktopMenu = document.querySelector('.main-menu__list');
         var mobileContainer = document.querySelector('.mobile-nav__container');
+        
         if (desktopMenu && mobileContainer && mobileContainer.children.length === 0) {
             var clone = desktopMenu.cloneNode(true);
             clone.style.display = 'block';
+            
+            $(clone).find('li.dropdown > a').each(function() {
+                if ($(this).find('button').length === 0) {
+                    $(this).append('<button type="button" class="dropdown-toggle-btn"><i class="fa fa-chevron-right"></i></button>');
+                }
+            });
+            
             mobileContainer.appendChild(clone);
-            console.log("Mobile menu rebuilt manually.");
         }
-    }, 500);
+    }
+
+    setTimeout(initMobileMenu, 500);
+
+    // Toggle dropdowns on button or hashtag-link click
+    $(document).on('click', '.mobile-nav__container .dropdown > a', function(e) {
+        var $link = $(this);
+        var href = $link.attr('href');
+        
+        // If clicking the button OR the text is just a hashtag (#), toggle the menu
+        if ($(e.target).closest('button').length > 0 || href === '#' || href === 'javascript:void(0)') {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            var $btn = $link.find('button');
+            var $parentLi = $link.closest('li');
+            var $subMenu = $parentLi.children('ul');
+            
+            // Toggle classes
+            $btn.toggleClass('expanded');
+            $parentLi.toggleClass('expanded');
+            
+            // Slide animation
+            $subMenu.stop().slideToggle(300);
+            
+            // Swap Icons: Chevron Right (>) when closed, Chevron Down (v) when open
+            if ($btn.hasClass('expanded')) {
+                $btn.find('i').attr('class', 'fa fa-chevron-down');
+            } else {
+                $btn.find('i').attr('class', 'fa fa-chevron-right');
+            }
+        }
+    });
 });
 </script>
 
@@ -1053,9 +1242,9 @@ document.addEventListener('DOMContentLoaded', function() {
                                 <div class="main-header-three__top-right-social">
                                     <a href="<?php echo $pr_add['facebook']; ?>" class="facebook" target="_blank"><i class="fab fa-facebook-f"></i></a>
                                     <a href="<?php echo $pr_add['twitter']; ?>" class="twitter" target="_blank"><i class="fab fa-x-twitter"></i></a>
-                                    <a href="<?php echo $pr_add['instagram']; ?>" class="instagram" target="_blank"><i class="fab fa-instagram"></i></a>
-                                    <a href="<?php echo $pr_add['youtube']; ?>" class="youtube" target="_blank"><i class="fab fa-youtube"></i></a>
-                                    <a href="<?php echo $pr_add['linkedin']; ?>" class="linkedin" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                                    <a href="<?php echo $pr_add['youtube']; ?>" class="instagram" target="_blank"><i class="fab fa-instagram"></i></a>
+                                    <a href="<?php echo $pr_add['linkedin']; ?>" class="youtube" target="_blank"><i class="fab fa-youtube"></i></a>
+                                    <a href="<?php echo $pr_add['linkedin2']; ?>" class="linkedin" target="_blank"><i class="fab fa-linkedin-in"></i></a>
                                     <a href="https://api.whatsapp.com/send?phone=91<?php echo $pr_add['phone']; ?>" class="whatsapp" target="_blank"><i class="fab fa-whatsapp"></i></a>
                                 </div>
                             </div>

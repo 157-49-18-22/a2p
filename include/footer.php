@@ -128,19 +128,24 @@
         display: inline-flex !important;
         align-items: center !important;
         justify-content: center !important;
-        width: 40px !important;
-        height: 40px !important;
+        width: 44px !important;
+        height: 44px !important;
         border-radius: 50% !important;
         margin-right: 8px !important;
-        font-size: 16px !important;
+        font-size: 20px !important;
+        text-decoration: none !important;
     }
 
-    .site-footer__social a.facebook { background: #1877F2 !important; }
-    .site-footer__social a.twitter { background: #000 !important; }
-    .site-footer__social a.instagram { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%) !important; }
-    .site-footer__social a.linkedin { background: #0077B5 !important; }
-    .site-footer__social a.youtube { background: #FF0000 !important; }
-    .site-footer__social a.whatsapp { background: #25D366 !important; }
+    .site-footer__social a.facebook { background-color: #1877F2 !important; }
+    .site-footer__social a.twitter { background-color: #000 !important; }
+    .site-footer__social a.instagram { 
+        background: #f09433 !important;
+        background: linear-gradient(45deg, #405de6, #5851db, #833ab4, #c13584, #e1306c, #fd1d1d) !important;
+        background-image: linear-gradient(45deg, #405de6, #5851db, #833ab4, #c13584, #e1306c, #fd1d1d) !important;
+    }
+    .site-footer__social a.linkedin { background-color: #0077B5 !important; }
+    .site-footer__social a.youtube { background-color: #FF0000 !important; }
+    .site-footer__social a.whatsapp { background-color: #25D366 !important; }
 
     .site-footer__social a:hover {
         transform: translateY(-3px) !important;
@@ -166,9 +171,9 @@
                         <div class="site-footer__social">
                             <a href="<?php echo $pr_add['facebook']; ?>" class="facebook"><i class="fab fa-facebook-f"></i></a>
                             <a href="<?php echo $pr_add['twitter']; ?>" class="twitter"><i class="fab fa-x-twitter"></i></a>
-                            <a href="<?php echo $pr_add['instagram']; ?>" class="instagram"><i class="fab fa-instagram"></i></a>
-                            <a href="<?php echo $pr_add['youtube']; ?>" class="youtube"><i class="fab fa-youtube"></i></a>
-                            <a href="<?php echo $pr_add['linkedin']; ?>" class="linkedin"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="<?php echo $pr_add['youtube']; ?>" class="instagram"><i class="fab fa-instagram"></i></a>
+                            <a href="<?php echo $pr_add['linkedin']; ?>" class="youtube"><i class="fab fa-youtube"></i></a>
+                            <a href="<?php echo $pr_add['linkedin2']; ?>" class="linkedin"><i class="fab fa-linkedin-in"></i></a>
                             <a href="https://api.whatsapp.com/send?phone=91<?php echo $pr_add['phone']; ?>" class="whatsapp"><i class="fab fa-whatsapp"></i></a>
                         </div>
                     </div>
@@ -268,60 +273,49 @@
         <span class="mobile-nav__close mobile-nav__toggler"><i class="fa fa-times"></i></span>
 
         <div class="logo-box">
-            <a href="#" aria-label="logo image"><img src="<?= SITE_URL; ?>upload/<?php echo $pr_add['photo']; ?>"
+            <a href="<?= SITE_URL; ?>" aria-label="logo image"><img src="<?= SITE_URL; ?>upload/<?php echo $pr_add['photo']; ?>"
                     width="155" alt="" /></a>
         </div>
         <!-- /.logo-box -->
         <style>
             .mobile-nav__search-box {
-                padding: 15px 20px 15px;
-                border-bottom: 1px solid rgba(255,255,255,0.05);
-                margin-top: 5px;
+                padding: 20px 20px;
+                border-bottom: 1px solid rgba(255,255,255,0.08);
             }
             .mobile-nav__search-box form {
                 position: relative;
                 display: flex;
                 align-items: center;
-                background: rgba(255,255,255,0.08);
+                background: rgba(255,255,255,0.1) !important;
                 border-radius: 12px;
-                padding: 12px 18px;
-                border: 1px solid rgba(255,255,255,0.15);
-                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-                box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            }
-            .mobile-nav__search-box form:focus-within {
-                background: rgba(255,255,255,1);
-                border-color: #c00415;
-                box-shadow: 0 8px 25px rgba(192, 4, 21, 0.2);
-                transform: translateY(-2px);
+                padding: 5px;
+                border: 1px solid rgba(255,255,255,0.1) !important;
+                box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
             }
             .mobile-nav__search-box input {
-                width: 100%;
+                flex: 1;
                 background: transparent;
                 border: none;
-                color: #fff;
-                font-size: 16px;
-                font-weight: 500;
+                color: #fff !important;
+                padding: 10px 15px;
+                font-size: 14px;
                 outline: none !important;
-                letter-spacing: 0.3px;
-            }
-            .mobile-nav__search-box form:focus-within input {
-                color: #222;
             }
             .mobile-nav__search-box button {
-                background: transparent;
+                width: 45px;
+                height: 40px;
+                background: #fff !important;
+                border-radius: 8px;
+                color: #c00415 !important;
                 border: none;
-                color: rgba(255,255,255,0.8);
-                font-size: 20px;
-                cursor: pointer;
-                transition: all 0.3s;
                 display: flex;
                 align-items: center;
                 justify-content: center;
+                cursor: pointer;
+                margin-left: 5px;
             }
             .mobile-nav__search-box form:focus-within button {
                 color: #c00415;
-                transform: scale(1.1);
             }
             .mobile-nav__search-box input::placeholder {
                 color: rgba(255,255,255,0.5);
@@ -334,7 +328,7 @@
 
         <div class="mobile-nav__search-box">
             <form action="<?= SITE_URL; ?>search_result.php" method="GET">
-                <input type="text" name="query" placeholder="Tell us what you're looking for..." required>
+                <input type="text" name="query" placeholder="Search for property..." required>
                 <button type="submit"><i class="fa fa-search"></i></button>
             </form>
         </div>
@@ -350,12 +344,11 @@
         </ul><!-- /.mobile-nav__contact -->
         <div class="mobile-nav__top">
             <div class="mobile-nav__social">
-                            <a href="<?php echo $pr_add['facebook']; ?>" class="facebook"><i class="fab fa-facebook-f"></i></a>
-                            <a href="<?php echo $pr_add['twitter']; ?>" class="twitter"><i class="fab fa-x-twitter"></i></a>
-                            <a href="<?php echo $pr_add['youtube']; ?>" class="instagram"><i class="fab fa-instagram"></i></a>
-                            <a href="<?php echo $pr_add['linkedin']; ?>" class="youtube"><i class="fab fa-youtube"></i></a>
-                            <a href="<?php echo $pr_add['linkedin2']; ?>" class="linkedin"><i class="fab fa-linkedin-in"></i></a>
-                            <a href="https://api.whatsapp.com/send?phone=91<?php echo $pr_add['phone']; ?>" class="whatsapp"><i class="fab fa-whatsapp"></i></a>
+                <a href="<?php echo $pr_add['facebook']; ?>" class="facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="<?php echo $pr_add['youtube']; ?>" class="instagram"><i class="fab fa-instagram"></i></a>
+                <a href="<?php echo $pr_add['linkedin']; ?>" class="youtube"><i class="fab fa-youtube"></i></a>
+                <a href="<?php echo $pr_add['linkedin2']; ?>" class="linkedin"><i class="fab fa-linkedin-in"></i></a>
+                <a href="https://api.whatsapp.com/send?phone=91<?php echo $pr_add['phone']; ?>" class="whatsapp"><i class="fab fa-whatsapp"></i></a>
             </div><!-- /.mobile-nav__social -->
         </div><!-- /.mobile-nav__top -->
 
