@@ -547,9 +547,9 @@ if ($current_page !== 'application_seating.php') {
                                     </a>
                                 </li>
 
-                                <li class="menu-item">
+                                 <li class="menu-item">
                                     <a href="location_developers.php" class="menu-link">
-                                        <div data-i18n="Location & Developers">Location & Developers</div>
+                                        <div data-i18n="By City Location">By City Location</div>
                                     </a>
                                 </li>
 
