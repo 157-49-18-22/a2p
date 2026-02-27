@@ -618,7 +618,7 @@ function checkSearchRedirect(form) {
         <div class="chat-header">
             <div class="bot-info">
                 <div class="bot-avatar">
-                   <img src="<?= SITE_URL; ?>upload/<?php echo $pr_add['photo']; ?>" alt="A2P Bot">
+                   <img src="<?= SITE_URL; ?>assets/images/favicons/favicon.ico" alt="A2P Bot">
                 </div>
                 <div class="bot-details">
                     <h6>A2P Assistant</h6>
