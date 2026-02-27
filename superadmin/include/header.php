@@ -1,7 +1,7 @@
-    <?php include __DIR__ . '/../config.php' ?>
-    <?php
-
-    error_reporting(0);
+<?php 
+include __DIR__ . '/../config.php';
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 
     if (session_status() == PHP_SESSION_NONE) { session_start(); } // Start the session only if not started
 
