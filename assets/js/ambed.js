@@ -435,6 +435,7 @@
     dynamicCurrentMenuClass(mainNavUL);
   }
 
+  /* 
   if ($(".main-menu__list").length && $(".mobile-nav__container").length) {
     let mainNav = document.querySelector(".main-menu__list");
     let navContent = mainNav.cloneNode(true);
@@ -472,6 +473,7 @@
       });
     });
   }
+  */
 
   if ($(".mobile-nav__toggler").length) {
     $(".mobile-nav__toggler").on("click", function (e) {

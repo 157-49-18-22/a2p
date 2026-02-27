@@ -82,9 +82,11 @@
     border-top: 3px solid #c00415 !important;
 }
 
-.main-menu__list li.dropdown:hover > ul {
-    display: block !important;
-    visibility: visible !important;
+@media (min-width: 1200px) {
+    .main-menu__list li.dropdown:hover > ul {
+        display: block !important;
+        visibility: visible !important;
+    }
 }
 
 .main-menu__list li.dropdown ul li {
@@ -298,13 +300,13 @@
         color: #fff !important;
         font-size: 15px !important;
         font-weight: 600 !important;
-        padding: 15px 20px !important;
+        padding: 0 20px !important; /* Side padding only */
         display: flex !important;
         align-items: center !important;
         justify-content: space-between !important;
         text-decoration: none !important;
-        transition: none !important; /* Remove conflicts with slideToggle */
-        height: 60px !important; /* Consistent height for the link part only */
+        height: 60px !important;
+        position: relative !important;
     }
     .mobile-nav__container .main-menu__list > li:hover > a {
         background: rgba(255,255,255,0.1) !important;
@@ -372,9 +374,9 @@
 
     /* REMOVED: display:block !important because it was preventing the menu from closing */
 
-    /* Prevent desktop hover rules from interfering on mobile */
-    .mobile-nav__container .main-menu__list li.dropdown:hover > ul {
-        display: none !important; 
+    /* Fixed: Removed hover-hidden rule to prevent flickering on mobile devices */
+    .mobile-nav__container .main-menu__list li.dropdown.expanded > ul {
+        display: block;
     }
     
     /* Dropdown Toggle Button Styling - Better alignment */
@@ -382,24 +384,32 @@
         background: rgba(255,255,255,0.1) !important;
         border: 1px solid rgba(255,255,255,0.2) !important;
         color: #fff !important;
-        width: 32px !important;
-        height: 32px !important;
-        border-radius: 6px !important;
+        width: 38px !important;
+        height: 38px !important;
+        border-radius: 8px !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
         cursor: pointer !important;
         transition: all 0.3s ease !important;
-        position: absolute !important;
-        right: 15px !important;
-        top: 50% !important;
-        transform: translateY(-50%) !important;
-        z-index: 10 !important;
+        margin-left: 10px !important; 
+        flex-shrink: 0 !important;
+        font-size: 14px !important;
+        position: relative !important;
+        right: 0 !important;
+        top: 0 !important;
+        transform: none !important;
     }
-    .mobile-nav__container .main-menu__list .dropdown > a button.expanded {
+    .mobile-nav__container .main-menu__list .dropdown.expanded > a button {
         background: #fff !important;
         color: #c00415 !important;
-        /* Removed rotation to allow icon swap in JS */
+    }
+    .mobile-nav__container .main-menu__list .dropdown > a button i {
+        font-size: 14px !important;
+        transition: transform 0.3s ease !important;
+    }
+    .mobile-nav__container .main-menu__list .dropdown.expanded > a button i {
+        transform: rotate(90deg) !important;
     }
     .mobile-nav__social {
         display: flex !important;
@@ -1160,55 +1170,81 @@ function toggleNotifPanel() {
 }
 
 
-// Enhanced Mobile Menu Logic
+// Final Robust Mobile Menu Fix - V2
 document.addEventListener('DOMContentLoaded', function() {
-    function initMobileMenu() {
-        var desktopMenu = document.querySelector('.main-menu__list');
-        var mobileContainer = document.querySelector('.mobile-nav__container');
+    function setupMobileMenu() {
+        const desktopMenu = document.querySelector('.main-menu__list');
+        const mobileNav = document.querySelector('.mobile-nav__container');
         
-        if (desktopMenu && mobileContainer && mobileContainer.children.length === 0) {
-            var clone = desktopMenu.cloneNode(true);
-            clone.style.display = 'block';
+        if (!desktopMenu || !mobileNav) return;
+        if (mobileNav.querySelector('ul')) return;
+
+        // Clone and Clean
+        const clone = desktopMenu.cloneNode(true);
+        clone.classList.remove('main-menu__list');
+        clone.classList.add('mobile-nav__list');
+        clone.style.display = 'block';
+
+        const items = clone.querySelectorAll('li.dropdown');
+        items.forEach(li => {
+            const link = li.querySelector('> a');
+            if (link && !link.querySelector('button')) {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'dropdown-toggle-btn';
+                btn.innerHTML = '<i class="fa fa-angle-right"></i>';
+                link.appendChild(btn);
+            }
             
-            $(clone).find('li.dropdown > a').each(function() {
-                if ($(this).find('button').length === 0) {
-                    $(this).append('<button type="button" class="dropdown-toggle-btn"><i class="fa fa-chevron-right"></i></button>');
-                }
-            });
-            
-            mobileContainer.appendChild(clone);
-        }
+            // Submenu starts hidden
+            const sub = li.querySelector('> ul');
+            if (sub) {
+                sub.style.display = 'none';
+                sub.style.visibility = 'visible';
+                sub.style.opacity = '1';
+                sub.style.position = 'relative';
+                sub.style.transition = 'none';
+            }
+        });
+
+        mobileNav.innerHTML = '';
+        mobileNav.appendChild(clone);
     }
 
-    setTimeout(initMobileMenu, 500);
+    setupMobileMenu();
+    setTimeout(setupMobileMenu, 500);
 
-    // Toggle dropdowns on button or hashtag-link click
-    $(document).on('click', '.mobile-nav__container .dropdown > a', function(e) {
-        var $link = $(this);
-        var href = $link.attr('href');
+    // Simplified Toggle Logic for Single Tap
+    $(document).off('click', '.mobile-nav__container li.dropdown > a').on('click', '.mobile-nav__container li.dropdown > a', function(e) {
+        const $link = $(this);
+        const $li = $link.parent();
+        const $subMenu = $li.children('ul');
+        const href = $link.attr('href');
         
-        // If clicking the button OR the text is just a hashtag (#), toggle the menu
-        if ($(e.target).closest('button').length > 0 || href === '#' || href === 'javascript:void(0)') {
+        const isPlaceholder = !href || href === '#' || href === 'javascript:void(0)' || href === '';
+        const isBtnClick = $(e.target).closest('button').length > 0;
+
+        if (isBtnClick || isPlaceholder) {
             e.preventDefault();
             e.stopPropagation();
-            
-            var $btn = $link.find('button');
-            var $parentLi = $link.closest('li');
-            var $subMenu = $parentLi.children('ul');
-            
-            // Toggle classes
-            $btn.toggleClass('expanded');
-            $parentLi.toggleClass('expanded');
-            
-            // Slide animation
-            $subMenu.stop().slideToggle(300);
-            
-            // Swap Icons: Chevron Right (>) when closed, Chevron Down (v) when open
-            if ($btn.hasClass('expanded')) {
-                $btn.find('i').attr('class', 'fa fa-chevron-down');
-            } else {
-                $btn.find('i').attr('class', 'fa fa-chevron-right');
+
+            // Accordion: Close others if we are opening this one
+            if (!$li.hasClass('expanded')) {
+                $li.siblings('.dropdown.expanded').each(function() {
+                    $(this).removeClass('expanded');
+                    $(this).children('ul').stop().slideUp(200);
+                });
             }
+
+            // Toggle logic: One tap open, one tap close
+            if ($li.hasClass('expanded')) {
+                $li.removeClass('expanded');
+                $subMenu.stop().slideUp(200);
+            } else {
+                $li.addClass('expanded');
+                $subMenu.stop().slideDown(200);
+            }
+            return false;
         }
     });
 });
