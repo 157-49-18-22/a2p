@@ -217,13 +217,12 @@ function highlightTerms($text, $term) {
         if (isset($_GET['query'])) {
             $search = trim($_GET['query']);
             $location = isset($_GET['location']) ? trim($_GET['location']) : '';
+            $category_id = isset($_GET['category_id']) ? trim($_GET['category_id']) : '';
+            $subcategory_id = isset($_GET['subcategory_id']) ? trim($_GET['subcategory_id']) : '';
+
             $searchSafe = "%$search%";
             $locSafe = "%$location%";
 
-            // Redirection handled at top of file
-            // ─────────────────────────────────────────────────────────────────
-
-            // --- Fetch Subproducts (Searching in Name, Meta Title, Keywords, Location, City, and Developer) ---
             $query = "SELECT DISTINCT * FROM subproduct 
                       WHERE (name LIKE ? 
                       OR meta_title LIKE ? 
@@ -238,6 +237,16 @@ function highlightTerms($text, $term) {
                 $query .= " AND (pro_lable LIKE ? OR city LIKE ?)";
                 $params[] = $locSafe;
                 $params[] = $locSafe;
+            }
+
+            if(!empty($category_id)) {
+                $query .= " AND subcat2 = ?";
+                $params[] = $category_id;
+            }
+
+            if(!empty($subcategory_id)) {
+                $query .= " AND subcat = ?";
+                $params[] = $subcategory_id;
             }
             
             $query .= " AND actstat = 1";

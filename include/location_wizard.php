@@ -324,7 +324,7 @@ function loadDevelopers() {
 
 function finishWizard(dev) {
     selection.developer = dev;
-    const url = `<?= SITE_URL; ?>search_result.php?query=${encodeURIComponent(dev)}&location=${encodeURIComponent(selection.city)}`;
+    const url = `<?= SITE_URL; ?>search_result.php?query=${encodeURIComponent(dev)}&location=${encodeURIComponent(selection.city)}&category_id=${selection.category_id}&subcategory_id=${selection.subcategory_id}`;
     window.location.href = url;
 }
 </script>

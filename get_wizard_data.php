@@ -4,16 +4,18 @@ error_reporting(0);
 ini_set('display_errors', 0);
 
 require_once('./function/function.php');
+$pdo = getPDOObject();
 
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 $response = [];
 
 try {
     if ($action == 'get_locations') {
-        // Check if city column exists to avoid Fatal Error
         $check = sqlfetch("SHOW COLUMNS FROM subproduct LIKE 'city'");
         if (count($check) > 0) {
-            $data = sqlfetch("SELECT DISTINCT city FROM subproduct WHERE actstat=1 AND city != '' ORDER BY city ASC");
+            $stmt = $pdo->prepare("SELECT DISTINCT city FROM subproduct WHERE actstat=1 AND city != '' ORDER BY city ASC");
+            $stmt->execute();
+            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
             foreach($data as $row) {
                 $response[] = ['location' => $row['city']];
             }
@@ -22,20 +24,26 @@ try {
     
     else if ($action == 'get_categories') {
         $city = $_GET['city'] ?? '';
-        $response = sqlfetch("SELECT DISTINCT c.id, c.name FROM subproduct s JOIN category c ON s.subcat2 = c.id WHERE s.city = '$city' AND s.actstat=1 ORDER BY c.name ASC");
+        $stmt = $pdo->prepare("SELECT DISTINCT c.id, c.name FROM subproduct s JOIN category c ON s.subcat2 = c.id WHERE s.city = ? AND s.actstat=1 ORDER BY c.name ASC");
+        $stmt->execute([$city]);
+        $response = $stmt->fetchAll(PDO::FETCH_ASSOC);
     } 
     
     else if ($action == 'get_property_types') {
         $city = $_GET['city'] ?? '';
         $cat_id = $_GET['category_id'] ?? '';
-        $response = sqlfetch("SELECT DISTINCT sc.id, sc.name as property_type FROM subproduct s JOIN subcategory sc ON s.subcat = sc.id WHERE s.city = '$city' AND s.subcat2 = '$cat_id' AND s.actstat=1 ORDER BY sc.name ASC");
+        $stmt = $pdo->prepare("SELECT DISTINCT sc.id, sc.name as property_type FROM subproduct s JOIN subcategory sc ON s.subcat = sc.id WHERE s.city = ? AND s.subcat2 = ? AND s.actstat=1 ORDER BY sc.name ASC");
+        $stmt->execute([$city, $cat_id]);
+        $response = $stmt->fetchAll(PDO::FETCH_ASSOC);
     } 
     
     else if ($action == 'get_developers') {
         $city = $_GET['city'] ?? '';
         $cat_id = $_GET['category_id'] ?? '';
         $subcat_id = $_GET['subcategory_id'] ?? '';
-        $response = sqlfetch("SELECT DISTINCT developer FROM subproduct WHERE city = '$city' AND subcat2 = '$cat_id' AND subcat = '$subcat_id' AND actstat = 1 AND developer != '' ORDER BY developer ASC");
+        $stmt = $pdo->prepare("SELECT DISTINCT developer FROM subproduct WHERE city = ? AND subcat2 = ? AND subcat = ? AND actstat = 1 AND developer != '' ORDER BY developer ASC");
+        $stmt->execute([$city, $cat_id, $subcat_id]);
+        $response = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
 } catch (Throwable $e) {
