@@ -9,10 +9,9 @@ error_reporting(E_ALL);
     $admin_name = isset($_SESSION['admin_name']) ? $_SESSION['admin_name'] : 'Admin';
     $admin_id = isset($_SESSION['admin_id']) ? $_SESSION['admin_id'] : 'Not available'; // Default value if not set
 
+    echo "DEBUG: Starting HTML content<br>";
     ?>
-
-
-    <!DOCTYPE html>
+<!DOCTYPE html>
 
     <html lang="en" class="light-style layout-navbar-fixed layout-menu-fixed layout-compact " dir="ltr" data-theme="theme-semi-dark" data-assets-path="assets/" data-template="vertical-menu-template-semi-dark">
 
@@ -598,7 +597,9 @@ try {
         include_once __DIR__ . '/../function/function.php';
     }
     
+    echo "DEBUG: Before DB call<br>";
     $pdo_header = getPDOObject();
+    echo "DEBUG: After DB call<br>";
 
     // Ensure $admin_id is set and sanitize it
     if (!isset($admin_id) || empty($admin_id)) {

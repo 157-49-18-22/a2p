@@ -27,14 +27,5 @@ try {
     echo "<p style='color:red'>✗ DB Error: " . $e->getMessage() . "</p>";
 }
 
-echo "<p>Testing header.php include...</p>";
-$no_visible_elements = true;
-ob_start();
+echo "<p>Testing header.php include directly...</p>";
 include('include/header.php');
-$headerOutput = ob_get_clean();
-if(!empty($headerOutput)) {
-    echo "<p style='color:green'>✓ header.php loaded OK (" . strlen($headerOutput) . " bytes)</p>";
-} else {
-    echo "<p style='color:red'>✗ header.php returned EMPTY output</p>";
-}
-echo "<pre>First 300 chars of header: " . htmlspecialchars(substr($headerOutput, 0, 300)) . "</pre>";
