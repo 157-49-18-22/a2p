@@ -15,7 +15,7 @@ try {
     // Database connection parameters
     $dsn = "mysql:host=localhost;dbname=u615712904_a2p;charset=utf8mb4";
     $username = "u615712904_a2p";
-    $password = "eFJYgph0]Fw";
+    $password = "JRZd4jg?Ia:0";
 
     // Create a new PDO instance
     $pdo = new PDO($dsn, $username, $password, [
