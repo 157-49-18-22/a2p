@@ -375,9 +375,9 @@ echo $outputMessage; // Output the complete message
 
 try {
     // Database connection parameters
-    $dsn = "mysql:host=localhost;dbname=u615712904_a2p;charset=utf8mb4"; // Replace 'localhost' with the correct host if needed
-    $username = "u615712904_a2p"; // Replace with your database username
-    $password = "JRZd4jg?Ia:0"; // Replace with your database password
+    $dsn = "mysql:host=localhost;dbname=u435351083_cms;charset=utf8mb4";
+    $username = "u435351083_jms";
+    $password = "Maydivjms1@3";
 
     // Create a new PDO instance
     $pdo = new PDO($dsn, $username, $password);
