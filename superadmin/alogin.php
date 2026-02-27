@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 include('./function/function.php');
 $umessage = '<div class="alert alert-info">
                 Please login with your Username and Password.
