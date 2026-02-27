@@ -23,7 +23,7 @@ if (count($sql_ser)) {
             <title><?php echo $offer['meta_title']; ?></title>
             <meta name="description" content="<?php echo $offer['meta_description']; ?>">
             <meta name="keywords" content="<?php echo $offer['meta_keyword']; ?>">
-            <link rel="shortcut icon" href="<?= SITE_URL; ?>upload/<?php echo $offer['photo']; ?>">
+            <link rel="icon" href="<?= SITE_URL; ?>assets/images/favicons/favicon.ico" type="image/x-icon">
             <link rel="manifest" href="<?= SITE_URL; ?>upload/<?php echo $offer['photo']; ?>" />
             
             <meta property="og:title" content="<?php echo $offer['meta_title']; ?>">

@@ -64,7 +64,7 @@ if (count($sql_add))
     <title><?php echo $pr_add['test_date']; ?></title>
     <meta name="description" content="<?php echo $pr_add['class9']; ?>">
     <meta name="keywords" content="<?php echo $pr_add['class8']; ?>">
-    <link rel="shortcut icon" href="upload/<?php echo $pr_add['photo']; ?>">
+    <link rel="icon" href="<?= SITE_URL; ?>assets/images/favicons/favicon.ico">
     <link rel="manifest" href="<?= SITE_URL; ?>assets/images/favicons/site.webmanifest" />
     <link rel="preconnect" href="https://fonts.googleapis.com/">
     <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>

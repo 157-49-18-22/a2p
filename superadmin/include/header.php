@@ -1,69 +1,76 @@
-<?php include 'config.php' ?>
-<?php
+    <?php include 'config.php' ?>
+    <?php
 
-error_reporting(0);
+    error_reporting(0);
 
-session_start(); // Start the session
+    session_start(); // Start the session
 
-// Retrieve the admin's name and ID from the session
-$admin_name = isset($_SESSION['admin_name']) ? $_SESSION['admin_name'] : 'Admin';
-$admin_id = isset($_SESSION['admin_id']) ? $_SESSION['admin_id'] : 'Not available'; // Default value if not set
+    // Retrieve the admin's name and ID from the session
+    $admin_name = isset($_SESSION['admin_name']) ? $_SESSION['admin_name'] : 'Admin';
+    $admin_id = isset($_SESSION['admin_id']) ? $_SESSION['admin_id'] : 'Not available'; // Default value if not set
 
-?>
-
-
-<!DOCTYPE html>
-
-<html lang="en" class="light-style layout-navbar-fixed layout-menu-fixed layout-compact " dir="ltr" data-theme="theme-semi-dark" data-assets-path="assets/" data-template="vertical-menu-template-semi-dark">
-
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
-
-    <title><?php echo $siteTitle; ?> </title>
+    ?>
 
 
-    <meta name="description" content="" />
-    <meta name="keywords" content="">
-    <!-- Canonical SEO -->
-    <link rel="canonical" href="https://1.envato.market/materialize_admin">
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="https://demos.pixinvent.com/materialize-html-admin-template/assets/img/favicon/favicon.ico" />
+    <!DOCTYPE html>
+
+    <html lang="en" class="light-style layout-navbar-fixed layout-menu-fixed layout-compact " dir="ltr" data-theme="theme-semi-dark" data-assets-path="assets/" data-template="vertical-menu-template-semi-dark">
+
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+
+        <title><?php echo $siteTitle; ?> </title>
 
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com/">
-    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;ampdisplay=swap" rel="stylesheet">
+        <meta name="description" content="" />
+        <meta name="keywords" content="">
+        <!-- Canonical SEO -->
+        <link rel="canonical" href="https://1.envato.market/materialize_admin">
+        <!-- Favicon -->
+        <!-- Global Favicon -->
+        <link rel="icon" href="<?= SITE_URL; ?>assets/images/favicons/favicon.ico" type="image/x-icon">
+        <link rel="icon" type="image/png" sizes="32x32"
+            href="<?= SITE_URL; ?>assets/images/favicons/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16"
+            href="<?= SITE_URL; ?>assets/images/favicons/favicon-16x16.png">
+        <link rel="apple-touch-icon"
+            href="<?= SITE_URL; ?>assets/images/favicons/apple-touch-icon.png">
 
-    <link rel="stylesheet" href="assets/vendor/fonts/materialdesignicons.css" />
-    <link rel="stylesheet" href="assets/vendor/fonts/fontawesome.css" />
-    <link rel="stylesheet" href="assets/vendor/fonts/flag-icons.css" />
 
-    <!-- Menu waves for no-customizer fix -->
-    <link rel="stylesheet" href="assets/vendor/libs/node-waves/node-waves.css" />
+        <!-- Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com/">
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;ampdisplay=swap" rel="stylesheet">
 
-    <!-- Core CSS -->
-    <link rel="stylesheet" href="assets/vendor/css/rtl/core.css" class="template-customizer-core-css" />
-    <link rel="stylesheet" href="assets/vendor/css/rtl/theme-default.css" class="template-customizer-theme-css" />
-    <link rel="stylesheet" href="assets/css/demo.css" />
+        <link rel="stylesheet" href="assets/vendor/fonts/materialdesignicons.css" />
+        <link rel="stylesheet" href="assets/vendor/fonts/fontawesome.css" />
+        <link rel="stylesheet" href="assets/vendor/fonts/flag-icons.css" />
 
-    <!-- Vendors CSS -->
-    <link rel="stylesheet" href="assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
-    <link rel="stylesheet" href="assets/vendor/libs/typeahead-js/typeahead.css" />
-    <link rel="stylesheet" href="assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css">
-    <link rel="stylesheet" href="assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css">
-    <link rel="stylesheet" href="assets/vendor/libs/datatables-select-bs5/select.bootstrap5.css">
-    <link rel="stylesheet" href="assets/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css">
-    <link rel="stylesheet" href="assets/vendor/libs/datatables-fixedcolumns-bs5/fixedcolumns.bootstrap5.css">
-    <link rel="stylesheet" href="assets/vendor/libs/datatables-fixedheader-bs5/fixedheader.bootstrap5.css">
+        <!-- Menu waves for no-customizer fix -->
+        <link rel="stylesheet" href="assets/vendor/libs/node-waves/node-waves.css" />
 
-    <script src="assets/vendor/js/helpers.js"></script>
-    <script src="assets/vendor/js/template-customizer.js"></script>
-    <script src="assets/js/config.js"></script>
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css" />
-    <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js">
-    </script>
+        <!-- Core CSS -->
+        <link rel="stylesheet" href="assets/vendor/css/rtl/core.css" class="template-customizer-core-css" />
+        <link rel="stylesheet" href="assets/vendor/css/rtl/theme-default.css" class="template-customizer-theme-css" />
+        <link rel="stylesheet" href="assets/css/demo.css" />
+
+        <!-- Vendors CSS -->
+        <link rel="stylesheet" href="assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+        <link rel="stylesheet" href="assets/vendor/libs/typeahead-js/typeahead.css" />
+        <link rel="stylesheet" href="assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css">
+        <link rel="stylesheet" href="assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css">
+        <link rel="stylesheet" href="assets/vendor/libs/datatables-select-bs5/select.bootstrap5.css">
+        <link rel="stylesheet" href="assets/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css">
+        <link rel="stylesheet" href="assets/vendor/libs/datatables-fixedcolumns-bs5/fixedcolumns.bootstrap5.css">
+        <link rel="stylesheet" href="assets/vendor/libs/datatables-fixedheader-bs5/fixedheader.bootstrap5.css">
+
+        <script src="assets/vendor/js/helpers.js"></script>
+        <script src="assets/vendor/js/template-customizer.js"></script>
+        <script src="assets/js/config.js"></script>
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css" />
+        <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js">
+        </script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js">
     </script>
 
