@@ -1,4 +1,4 @@
-<?php include 'config.php' ?>
+<?php include '../config.php' ?>
 
 <?php
 if (session_status() == PHP_SESSION_NONE) { session_start(); } // Start the session
