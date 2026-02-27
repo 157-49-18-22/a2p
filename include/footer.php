@@ -350,7 +350,14 @@
             </div>
             <div class="mobile-phone-card__text">
                 <span>Call Us Anytime</span>
-                <a href="tel:+91-<?php echo $pr_add['phone']; ?>"><?php echo $pr_add['phone']; ?></a>
+                <?php
+                    $phone_raw = $pr_add['phone'];
+                    // Remove +91- or +91 prefix for clean display
+                    $phone_display = preg_replace('/^\+91[-\s]?/', '', $phone_raw);
+                    // Strip everything except digits for tel: link
+                    $phone_digits = preg_replace('/[^0-9]/', '', $phone_raw);
+                ?>
+                <a href="tel:+91<?php echo $phone_digits; ?>"><?php echo $phone_display; ?></a>
             </div>
         </div>
         <style>
