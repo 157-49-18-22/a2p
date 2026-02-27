@@ -118,7 +118,7 @@ if (count($sql_banner) > 0): // Check if there are any active team members
                         <?php $count_banner = 0; foreach ($sql_banner as $team): ?>
                         <div class="carousel-item <?php if($count_banner == 0){ echo 'active'; } ?>">
                             <a href="<?php echo $team['name']; ?>">
-                                <img src="upload/<?php echo $team['photo']; ?>" class="d-block w-100" alt="Slide">
+                                <img src="upload/<?php echo $team['photo']; ?>" class="d-block mx-auto" style="width: auto !important; max-width: 100% !important; height: auto !important; object-fit: contain !important;" alt="Slide">
                             </a>   
                         </div>
                         <?php $count_banner++; endforeach; ?>
@@ -655,10 +655,6 @@ if (count($sql_ser)) {
 
 
 <style>
-    .gols img {
-        height: 100px;
-        width: 100%;
-    }
     .blog-one__single:hover .blog-one__img>a {
     visibility: visible;
     -webkit-transform: translateY(0%);

@@ -146,28 +146,33 @@
 
 
 <style>
-    /* Full-Frame Premium Hero Slider (No Cut-off) */
+    /* Premium Hero Slider - Maintaining Aspect Ratio */
     .carousel-inner {
-        height: 400px !important; /* Perfect fixed height for all images */
+        height: auto !important;
+        max-height: 85vh; /* Safety limit for very tall images */
         background: #000;
         overflow: hidden !important;
     }
 
     .carousel-item {
-        height: 100% !important;
+        height: auto !important;
     }
 
     .carousel-item img {
-        width: 100% !important;
-        height: 100% !important;
-        object-fit: fill !important; /* Shows 100% of the image (Nothing cut off) */
+        width: auto !important; /* Natural width */
+        max-width: 100% !important; /* Responsive safeguard */
+        height: auto !important; /* Natural height */
+        max-height: 85vh !important; /* Don't exceed screen height */
+        object-fit: contain !important; /* Never stretch */
         display: block !important;
+        margin: 0 auto; /* Center if narrow */
     }
 
-    /* Mobile - Full frame and compact */
+    /* Mobile Adaptations */
     @media (max-width: 767px) {
         .carousel-inner {
-            height: 180px !important; /* Elegant mobile fixed height */
+            height: auto !important;
+            min-height: 180px;
         }
     }
 </style>

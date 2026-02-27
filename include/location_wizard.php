@@ -2,7 +2,7 @@
 <div id="locationWizard" class="wizard-modal">
     <div class="wizard-content">
         <div class="wizard-header">
-            <h3>Find Property by Location</h3>
+            <h3>Find Property by City Location</h3>
             <button class="close-wizard" onclick="closeWizard()">&times;</button>
         </div>
         
@@ -17,7 +17,7 @@
         <div class="wizard-body">
             <!-- Step 1: Select City -->
             <div class="wizard-step active" id="step1">
-                <h4>Select City / Location</h4>
+                <h4>Select City Location</h4>
                 <div class="wizard-grid" id="cityGrid">
                     <!-- Cities will be loaded here -->
                 </div>

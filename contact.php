@@ -619,7 +619,7 @@ form.addEventListener('submit', async (e) => {
     <a href="<?php echo $pr_add['youtube']; ?>" class="instagram" target="_blank"><i class="fab fa-instagram"></i></a>
     <a href="<?php echo $pr_add['linkedin']; ?>" class="youtube" target="_blank"><i class="fab fa-youtube"></i></a>
     <a href="<?php echo $pr_add['linkedin2']; ?>" class="linkedin" target="_blank"><i class="fab fa-linkedin-in"></i></a>
-    <a href="https://api.whatsapp.com/send?phone=91<?php echo $pr_add['phone']; ?>" class="whatsapp" target="_blank"><i class="fab fa-whatsapp"></i></a>
+    <a href="https://api.whatsapp.com/send?phone=918130525001" class="whatsapp" target="_blank"><i class="fab fa-whatsapp"></i></a>
   </div>
 
 </div>

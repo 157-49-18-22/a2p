@@ -1144,7 +1144,7 @@
 @media (max-width: 1199px) {
     /* By Location - Glowing Pill in Mobile Menu */
     .mobile-nav__container .mobile-bylocation-item > a {
-        background: linear-gradient(135deg, #c00415 0%, #ff2d3d 100%) !important;
+        background: linear-gradient(135deg, #ff9800 0%, #ffc107 100%) !important;
         margin: 8px 15px !important;
         border-radius: 50px !important;
         padding: 0 20px !important;
@@ -1176,8 +1176,8 @@
         60%, 100% { left: 150%; }
     }
     @keyframes locationGlow {
-        0%, 100% { box-shadow: 0 6px 20px rgba(192,4,21,0.45), 0 0 0 0 rgba(192,4,21,0.3); }
-        50% { box-shadow: 0 6px 25px rgba(192,4,21,0.6), 0 0 0 8px rgba(192,4,21,0.08); }
+        0%, 100% { box-shadow: 0 6px 20px rgba(255,152,0,0.45), 0 0 0 0 rgba(255,152,0,0.3); }
+        50% { box-shadow: 0 6px 25px rgba(255,152,0,0.6), 0 0 0 8px rgba(255,152,0,0.08); }
     }
     .mobile-nav__container .mobile-bylocation-item > a span {
         gap: 8px !important;
@@ -1353,7 +1353,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                     <a href="<?php echo $pr_add['youtube']; ?>" class="instagram" target="_blank"><i class="fab fa-instagram"></i></a>
                                     <a href="<?php echo $pr_add['linkedin']; ?>" class="youtube" target="_blank"><i class="fab fa-youtube"></i></a>
                                     <a href="<?php echo $pr_add['linkedin2']; ?>" class="linkedin" target="_blank"><i class="fab fa-linkedin-in"></i></a>
-                                    <a href="https://api.whatsapp.com/send?phone=91<?php echo $pr_add['phone']; ?>" class="whatsapp" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                                    <a href="https://api.whatsapp.com/send?phone=918130525001" class="whatsapp" target="_blank"><i class="fab fa-whatsapp"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -1394,6 +1394,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
                                         </ul>
                                     </li>
+
+                                    <li class="mobile-bylocation-item">
+                                        <a href="javascript:void(0)" onclick="openWizard()"><span style="display:inline-flex;align-items:center;gap:6px;"><i class="fa fa-map-marker-alt"></i> by City location</span></a>
+                                    </li>
+
 <?php 
                                         $result = sqlfetch("SELECT * FROM category WHERE actstat=1 ORDER BY fld_order LIMIT 0,5");
                                         if (count($result)) {
@@ -1420,10 +1425,6 @@ document.addEventListener('DOMContentLoaded', function() {
                                             }
                                         } 
                                         ?>
-
-                                    <li class="mobile-bylocation-item">
-                                        <a href="javascript:void(0)" onclick="openWizard()"><span style="display:inline-flex;align-items:center;gap:6px;"><i class="fa fa-map-marker-alt"></i> By Location</span></a>
-                                    </li>
 
 
 

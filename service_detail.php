@@ -528,8 +528,8 @@ $currentPageUrl = urlencode("http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_UR
                                 <i class="fab fa-linkedin-in"></i>
                             </a>
                         
-                            <!-- WhatsApp Share -->
-                            <a href="https://api.whatsapp.com/send?text=<?php echo $encodedBlogName; ?>%20<?php echo $currentPageUrl; ?>" target="_blank" class="whatsapp" title="Share on WhatsApp">
+                            <!-- WhatsApp Enquiry -->
+                            <a href="https://api.whatsapp.com/send?phone=918130525001&text=Hello! I am interested in: <?php echo $encodedBlogName; ?> (<?php echo $currentPageUrl; ?>)" target="_blank" class="whatsapp" title="Enquire on WhatsApp">
                                 <i class="fab fa-whatsapp"></i>
                             </a>
                             

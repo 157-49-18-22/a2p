@@ -174,7 +174,7 @@
                             <a href="<?php echo $pr_add['youtube']; ?>" class="instagram"><i class="fab fa-instagram"></i></a>
                             <a href="<?php echo $pr_add['linkedin']; ?>" class="youtube"><i class="fab fa-youtube"></i></a>
                             <a href="<?php echo $pr_add['linkedin2']; ?>" class="linkedin"><i class="fab fa-linkedin-in"></i></a>
-                            <a href="https://api.whatsapp.com/send?phone=91<?php echo $pr_add['phone']; ?>" class="whatsapp"><i class="fab fa-whatsapp"></i></a>
+                            <a href="https://api.whatsapp.com/send?phone=918130525001" class="whatsapp" target="_blank"><i class="fab fa-whatsapp"></i></a>
                         </div>
                     </div>
                 </div>
@@ -352,12 +352,20 @@
                 <span>Call Us Anytime</span>
                 <?php
                     $phone_raw = $pr_add['phone'];
-                    // Remove +91- or +91 prefix for clean display
-                    $phone_display = preg_replace('/^\+91[-\s]?/', '', $phone_raw);
-                    // Strip everything except digits for tel: link
-                    $phone_digits = preg_replace('/[^0-9]/', '', $phone_raw);
+                    // Split numbers if they are comma-separated
+                    $phone_arr = explode(',', $phone_raw);
+                    foreach($phone_arr as $p) {
+                        $p = trim($p);
+                        if(empty($p)) continue;
+                        
+                        // Remove +91 prefix for display
+                        $display = preg_replace('/^\+91[-\s]?/', '', $p);
+                        // Keep only digits for tel link
+                        $digits = preg_replace('/[^0-9]/', '', $p);
+                        
+                        echo '<a href="tel:+91'.$digits.'" style="display:block; margin-top:2px; letter-spacing:1px; color:#fff !important;">'.$display.'</a>';
+                    }
                 ?>
-                <a href="tel:+91<?php echo $phone_digits; ?>"><?php echo $phone_display; ?></a>
             </div>
         </div>
         <style>
@@ -440,7 +448,7 @@
                 <a href="<?php echo $pr_add['youtube']; ?>" class="instagram"><i class="fab fa-instagram"></i></a>
                 <a href="<?php echo $pr_add['linkedin']; ?>" class="youtube"><i class="fab fa-youtube"></i></a>
                 <a href="<?php echo $pr_add['linkedin2']; ?>" class="linkedin"><i class="fab fa-linkedin-in"></i></a>
-                <a href="https://api.whatsapp.com/send?phone=91<?php echo $pr_add['phone']; ?>" class="whatsapp"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://api.whatsapp.com/send?phone=918130525001" class="whatsapp" target="_blank"><i class="fab fa-whatsapp"></i></a>
             </div><!-- /.mobile-nav__social -->
         </div><!-- /.mobile-nav__top -->
 
