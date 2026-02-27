@@ -1,5 +1,5 @@
 <?php
-error_reporting(0);
+// error_reporting(0);
 $siteTitle = 'Ssts';
 if (session_status() == PHP_SESSION_NONE) { session_start(); }
 function getPDOObject()
