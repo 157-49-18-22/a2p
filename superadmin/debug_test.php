@@ -13,9 +13,9 @@ try {
     $pdo = getPDOObject();
     echo "<p style='color:green'>✓ DB connected OK</p>";
     
-    $stmt = $pdo->query("SHOW TABLES");
-    $tables = $stmt->fetchAll(PDO::FETCH_COLUMN);
-    echo "<p>Tables: " . implode(", ", $tables) . "</p>";
+    $stmt = $pdo->query("DESCRIBE admin");
+    $columns = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    echo "<p>Admin Table Columns: " . implode(", ", array_column($columns, 'Field')) . "</p>";
     
     $stmt2 = $pdo->query("SELECT * FROM admin LIMIT 1");
     $admins = $stmt2->fetchAll(PDO::FETCH_ASSOC);
