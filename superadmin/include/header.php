@@ -483,13 +483,6 @@ if ($current_page !== 'application_seating.php') {
 
 
 
-
-
-                            </ul>
-                        </li>
-
-
-
                      <li class="menu-item ">
                             <a href="javascript:void(0);" class="menu-link menu-toggle">
                                 <i class='menu-icon tf-icons mdi mdi-folder'></i>
