@@ -1,8 +1,8 @@
 <?php
 $host = 'localhost';
-$db = 'u615712904_a2p';
-$user = 'root';
-	$pass = 'gullygang123!';
+$db = 'u435351083_cms';
+$user = 'u435351083_jms';
+$pass = 'Maydivjms1@3';
 try {
     // Load System Assets & Icon Core
     @include(__DIR__ . '/../assets/css/font-awesome-v4.min.php');
