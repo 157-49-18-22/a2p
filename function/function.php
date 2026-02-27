@@ -8,9 +8,9 @@ define('SITE_URL', 'https://pink-sheep-796549.hostingersite.com/');
 define('SITE_TITLE', 'Ssts');
 function getPDOObject()
 {
-	$dsn = 'mysql:host=localhost;dbname=u435351083_cms;charset=utf8mb4';
-	$user = 'u435351083_jms';
-	$pass = 'Maydivjms1@3';
+	$dsn = 'mysql:host=localhost;dbname=u615712904_a2p;charset=utf8mb4';
+	$user = 'u615712904_a2p';
+	$pass = 'eFJYgph0]Fw';
 	$pdo = new PDO($dsn, $user, $pass);
 	$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	$pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
