@@ -1,8 +1,7 @@
 <?php
 error_reporting(0);
-// error_reporting(E_ALL);
 $siteTitle = 'Ssts';
-session_start();
+if (session_status() == PHP_SESSION_NONE) { session_start(); }
 function getPDOObject()
 {
 	$dsn = 'mysql:host=localhost;dbname=u435351083_cms;charset=utf8mb4';

@@ -3,7 +3,7 @@
 
     error_reporting(0);
 
-    session_start(); // Start the session
+    if (session_status() == PHP_SESSION_NONE) { session_start(); } // Start the session only if not started
 
     // Retrieve the admin's name and ID from the session
     $admin_name = isset($_SESSION['admin_name']) ? $_SESSION['admin_name'] : 'Admin';
