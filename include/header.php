@@ -1285,7 +1285,7 @@ document.addEventListener('DOMContentLoaded', function() {
     setupMobileMenu();
     setTimeout(setupMobileMenu, 500);
 
-    // Simplified Toggle Logic for Single Tap
+    // Toggle Logic - Trigger ONLY on icon/button click
     $(document).off('click', '.mobile-nav__container li.dropdown > a').on('click', '.mobile-nav__container li.dropdown > a', function(e) {
         const $link = $(this);
         const $li = $link.parent();
@@ -1296,11 +1296,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const isBtnClick = $(e.target).closest('.dropdown-toggle-btn').length > 0;
         const isPlaceholder = !href || href === '#' || href === 'javascript:void(0)' || href === '';
 
-        // If user wants ONLY icon to trigger toggle, uncomment line below and comment out the current logic
-        // if (isBtnClick) { 
-        
-        // Current logic: Toggle if button clicked OR it's a placeholder link
-        if (isBtnClick || isPlaceholder) {
+        // Trigger toggle ONLY if the button was clicked
+        if (isBtnClick) {
             e.preventDefault();
             e.stopPropagation();
 
@@ -1318,6 +1315,12 @@ document.addEventListener('DOMContentLoaded', function() {
             $li.toggleClass('expanded');
             $subMenu.stop().slideToggle(250);
             return false;
+        }
+        
+        // If text is clicked and it's a placeholder, prevent default but don't toggle
+        if (isPlaceholder) {
+            // Uncomment line below if you want placeholder text to also toggle
+            // $link.find('.dropdown-toggle-btn').click(); 
         }
     });
 });
