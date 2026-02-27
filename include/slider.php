@@ -150,7 +150,7 @@
     .carousel-inner {
         height: auto !important;
         max-height: 85vh; /* Safety limit for very tall images */
-        background: #000;
+        background: transparent;
         overflow: hidden !important;
     }
 
@@ -162,7 +162,7 @@
         width: 100% !important; /* Fill the banner width */
         height: auto !important; /* Maintain aspect ratio */
         max-height: 85vh !important; /* Cap height to screen size */
-        object-fit: contain !important; /* Ensure full image is visible without stretching */
+        object-fit: cover !important; /* Fill area while maintaining aspect ratio (prevents gaps) */
         display: block !important;
         margin: 0 auto;
     }
@@ -171,32 +171,37 @@
     @media (max-width: 767px) {
         .carousel-inner {
             height: auto !important;
-            min-height: 180px;
+            min-height: auto !important; /* Remove fixed minimum height to stop black gaps */
         }
     }
 </style>
 
-<div id="carouselExampleCaptions" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="4000" data-bs-pause="false">
+<div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel" data-bs-interval="4000" data-bs-pause="false">
+    <?php
+        $sql_gal = sqlfetch("select * from client where actstat=1 order by fld_order");
+        $slide_count = count($sql_gal);
+        if ($slide_count > 0) {
+    ?>
     <div class="carousel-indicators">
-        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
-        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        <?php for($i = 0; $i < $slide_count; $i++) { ?>
+            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="<?= $i ?>" <?php if($i == 0) echo 'class="active" aria-current="true"'; ?> aria-label="Slide <?= ($i+1) ?>"></button>
+        <?php } ?>
     </div>
     <div class="carousel-inner">
         <?php
-        $sql_gal = sqlfetch("select * from client where actstat=1 order by fld_order");
-        if (count($sql_gal)) {
             $count = 0;
             foreach ($sql_gal as $pr_gal) {
+                // Encode spaces and special chars in filename
+                $photo_name = str_replace(' ', '%20', $pr_gal['photo']);
         ?>
             <div class="carousel-item <?php if($count == 0) { ?>active<?php } ?>">
-                <img src="<?= SITE_URL; ?>upload/<?php echo $pr_gal['photo']; ?>" class="d-block" alt="...">
+                <img src="<?= rtrim(SITE_URL, '/'); ?>/upload/<?= $photo_name; ?>" class="d-block" alt="Banner">
                 <div class="carousel-caption d-none d-md-block">
-                    <!-- Optional: Add captions or text here -->
                 </div>
             </div>
-        <?php $count++; } } ?>
+        <?php $count++; } ?>
     </div>
+    <?php } ?>
 </div>
 
 
