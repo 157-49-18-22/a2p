@@ -288,22 +288,17 @@
                 align-items: center;
                 background: rgba(255,255,255,0.1) !important;
                 border-radius: 12px;
-                padding: 5px;
+                padding: 2px;
                 border: 1px solid rgba(255,255,255,0.1) !important;
                 box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
-            }
-            .mobile-nav__search-box input {
-                flex: 1;
-                background: transparent;
-                border: none;
-                color: #fff !important;
-                padding: 10px 15px;
-                font-size: 14px;
-                outline: none !important;
+                overflow: hidden;
             }
             .mobile-nav__search-box button {
-                width: 45px;
-                height: 40px;
+                position: absolute;
+                left: 5px; /* Moved to left */
+                top: 5px;
+                bottom: 5px;
+                width: 40px;
                 background: #fff !important;
                 border-radius: 8px;
                 color: #c00415 !important;
@@ -312,7 +307,19 @@
                 align-items: center;
                 justify-content: center;
                 cursor: pointer;
-                margin-left: 5px;
+                transition: all 0.3s;
+                z-index: 2;
+            }
+            .mobile-nav__search-box input {
+                flex: 1;
+                background: transparent;
+                border: none;
+                color: #fff !important;
+                padding: 12px 15px 12px 50px; /* Space on left for button */
+                font-size: 14px;
+                outline: none !important;
+                width: 100%;
+                z-index: 1;
             }
             .mobile-nav__search-box form:focus-within button {
                 color: #c00415;

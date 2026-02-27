@@ -298,15 +298,21 @@
     }
     .mobile-nav__container .main-menu__list > li > a {
         color: #fff !important;
-        font-size: 15px !important;
+        font-size: 14px !important; /* Slightly smaller for better fit */
         font-weight: 600 !important;
-        padding: 0 20px !important; /* Side padding only */
+        padding: 0 15px !important; 
         display: flex !important;
         align-items: center !important;
         justify-content: space-between !important;
         text-decoration: none !important;
         height: 60px !important;
         position: relative !important;
+        overflow: hidden !important;
+    }
+    /* Specific fix for the long "BOOK YOUR CONSTRUCTIONS" item */
+    .mobile-nav__container .main-menu__list > li > a:contains('BOOK YOUR CONSTRUCTIONS'),
+    .mobile-nav__container .main-menu__list > li > a:contains('Book Your Constructions') {
+        font-size: 12px !important;
     }
     .mobile-nav__container .main-menu__list > li:hover > a {
         background: rgba(255,255,255,0.1) !important;
@@ -381,28 +387,32 @@
     
     /* Dropdown Toggle Button Styling - Better alignment */
     .mobile-nav__container .main-menu__list .dropdown > a button {
-        background: rgba(255,255,255,0.1) !important;
-        border: 1px solid rgba(255,255,255,0.2) !important;
+        background: rgba(255,255,255,0.05) !important;
+        border-left: 1px solid rgba(255,255,255,0.1) !important;
         color: #fff !important;
-        width: 38px !important;
-        height: 38px !important;
-        border-radius: 8px !important;
+        width: 55px !important; /* Larger hit area */
+        height: 100% !important;
+        border-radius: 0 !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
         cursor: pointer !important;
         transition: all 0.3s ease !important;
-        margin-left: 10px !important; 
+        margin-left: auto !important; 
         flex-shrink: 0 !important;
-        font-size: 14px !important;
-        position: relative !important;
+        font-size: 18px !important; /* Larger icon */
+        position: absolute !important;
         right: 0 !important;
         top: 0 !important;
         transform: none !important;
+        z-index: 5 !important;
+         border-top: none !important;
+        border-right: none !important;
+        border-bottom: none !important;
     }
     .mobile-nav__container .main-menu__list .dropdown.expanded > a button {
-        background: #fff !important;
-        color: #c00415 !important;
+        background: rgba(255,255,255,0.2) !important;
+        color: #fff !important;
     }
     .mobile-nav__container .main-menu__list .dropdown > a button i {
         font-size: 14px !important;
@@ -1215,35 +1225,36 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(setupMobileMenu, 500);
 
     // Simplified Toggle Logic for Single Tap
+    $(document).off('click',    // Single click delegation for performance and reliability
     $(document).off('click', '.mobile-nav__container li.dropdown > a').on('click', '.mobile-nav__container li.dropdown > a', function(e) {
         const $link = $(this);
         const $li = $link.parent();
+        const $btn = $link.find('button');
         const $subMenu = $li.children('ul');
         const href = $link.attr('href');
         
+        // Check if the actual click target was the button or the icon inside it
+        const isBtnClick = $(e.target).closest('.dropdown-toggle-btn').length > 0;
         const isPlaceholder = !href || href === '#' || href === 'javascript:void(0)' || href === '';
-        const isBtnClick = $(e.target).closest('button').length > 0;
 
+        // If user wants ONLY icon to trigger toggle, or it's a placeholder link
         if (isBtnClick || isPlaceholder) {
             e.preventDefault();
             e.stopPropagation();
 
-            // Accordion: Close others if we are opening this one
-            if (!$li.hasClass('expanded')) {
+            const isOpening = !$li.hasClass('expanded');
+
+            // Accordion: Close others
+            if (isOpening) {
                 $li.siblings('.dropdown.expanded').each(function() {
                     $(this).removeClass('expanded');
-                    $(this).children('ul').stop().slideUp(200);
+                    $(this).children('ul').stop().slideUp(250);
                 });
             }
 
-            // Toggle logic: One tap open, one tap close
-            if ($li.hasClass('expanded')) {
-                $li.removeClass('expanded');
-                $subMenu.stop().slideUp(200);
-            } else {
-                $li.addClass('expanded');
-                $subMenu.stop().slideDown(200);
-            }
+            // Toggle current
+            $li.toggleClass('expanded');
+            $subMenu.stop().slideToggle(250);
             return false;
         }
     });
