@@ -24,8 +24,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
+    // Use absolute path for reliability
+    $upload_dir = __DIR__ . '/upload/resumes/';
+    
+    // Auto-create directory if it doesn't exist
+    if (!is_dir($upload_dir)) {
+        if (!mkdir($upload_dir, 0755, true)) {
+            echo json_encode(['status' => 'error', 'message' => 'Could not create upload directory. Please contact admin.']);
+            exit;
+        }
+    }
+    
+    // Check if writable
+    if (!is_writable($upload_dir)) {
+        echo json_encode(['status' => 'error', 'message' => 'Upload directory not writable. Please check server permissions.']);
+        exit;
+    }
+
     $new_file_name = time() . '_' . preg_replace('/[^a-zA-Z0-9.]/', '_', $file['name']);
-    $upload_path = 'upload/resumes/' . $new_file_name;
+    $upload_path = $upload_dir . $new_file_name;
 
     if (move_uploaded_file($file['tmp_name'], $upload_path)) {
         $pdo = getPDOObject();
