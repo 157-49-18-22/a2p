@@ -294,7 +294,8 @@ $menuItems = [
         ["name" => "Add Products Gallery", "link" => "sub_image.php"]
     ],
     "Manage Career" => [
-        ["name" => "Add Career", "link" => "blog.php"]
+        ["name" => "Add Career", "link" => "blog.php"],
+        ["name" => "Job Applications", "link" => "job_applications.php"]
     ],
     "Manage Query" => [
         ["name" => "Query List", "link" => "client.php"]

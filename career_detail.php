@@ -128,51 +128,112 @@ if (count($sql_ser)) {
                                 <p class="blog-details__text-2"><?php echo $blog['des']; ?></p>
                             </div>
 
-                            <div class="comment-form mt-4">
-                                <h3 class="comment-form__title">Apply Now</h3>
-                                <form action="assets/inc/sendemail.php" class="comment-one__form contact-form-validated" novalidate="novalidate">
+                            <div class="comment-form mt-4 p-4 shadow-sm rounded bg-white border">
+                                <h3 class="comment-form__title mb-4" style="color: #ed1c24; font-weight: 700; border-bottom: 2px solid #eee; padding-bottom: 15px;">Apply Now</h3>
+                                <form action="<?= SITE_URL; ?>apply_job.php" method="POST" enctype="multipart/form-data" class="apply-job-form">
+                                    <input type="hidden" name="job_id" value="<?php echo $blog['id']; ?>">
                                     <div class="row">
                                         <div class="col-xl-6">
-                                            <div class="comment-form__input-box">
-                                                <label for="name">Your Name</label>
-                                                <input type="text" id="name" placeholder="Your name" name="name">
+                                            <div class="comment-form__input-box mb-3">
+                                                <label for="name" class="form-label fw-bold">Full Name</label>
+                                                <input type="text" id="name" class="form-control" placeholder="Enter your full name" name="name" required style="border-radius: 8px; padding: 12px; border: 1px solid #ddd;">
                                             </div>
                                         </div>
                                         <div class="col-xl-6">
-                                            <div class="comment-form__input-box">
-                                                <label for="email">Email Address</label>
-                                                <input type="email" id="email" placeholder="Email address" name="email">
-                                            </div>
-                                        </div>
-
-                                        <div class="col-xl-6">
-                                            <div class="comment-form__input-box">
-                                                <label for="phone">Your Phone</label>
-                                                <input type="text" id="phone" placeholder="Your Phone" name="phone">
+                                            <div class="comment-form__input-box mb-3">
+                                                <label for="email" class="form-label fw-bold">Email Address</label>
+                                                <input type="email" id="email" class="form-control" placeholder="Enter your email" name="email" required style="border-radius: 8px; padding: 12px; border: 1px solid #ddd;">
                                             </div>
                                         </div>
 
                                         <div class="col-xl-6">
-                                            <div class="comment-form__input-box">
-                                                <label for="resume">Upload Resume</label>
-                                                <input type="file" id="resume" class="form-control" name="resume">
+                                            <div class="comment-form__input-box mb-3">
+                                                <label for="phone" class="form-label fw-bold">Phone Number</label>
+                                                <input type="text" id="phone" class="form-control" placeholder="Enter your phone number" name="phone" required style="border-radius: 8px; padding: 12px; border: 1px solid #ddd;">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xl-6">
+                                            <div class="comment-form__input-box mb-3">
+                                                <label for="resume" class="form-label fw-bold">Upload Resume (PDF/DOC)</label>
+                                                <input type="file" id="resume" class="form-control" name="resume" accept=".pdf,.doc,.docx" required style="border-radius: 8px; padding: 10px; border: 1px solid #ddd;">
+                                                <div id="resume-preview" class="mt-2 text-muted small"></div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-xl-12">
-                                            <div class="comment-form__input-box text-message-box">
-                                                <label for="message">Your Message</label>
-                                                <textarea id="message" name="message" placeholder="Write comment"></textarea>
+                                            <div class="comment-form__input-box text-message-box mb-3">
+                                                <label for="message" class="form-label fw-bold">Short Introduction</label>
+                                                <textarea id="message" name="message" class="form-control" placeholder="Tell us why you are a good fit..." style="border-radius: 8px; padding: 12px; border: 1px solid #ddd; height: 150px;"></textarea>
                                             </div>
-                                            <br>
+                                            <div class="form-result mt-3"></div>
                                             <div class="comment-form__btn-box mt-4">
-                                                <button type="submit" class="thm-btn comment-form__btn">Submit Comment</button>
+                                                <button type="submit" class="thm-btn comment-form__btn w-100" style="background: #ed1c24; color: white; border: none; padding: 15px; border-radius: 8px; font-weight: 600; text-transform: uppercase; transition: all 0.3s ease;">
+                                                    <i class="fas fa-paper-plane me-2"></i> Send Application
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
                                 </form>
                             </div>
+
+                            <script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                const form = document.querySelector('.apply-job-form');
+                                const resumeInput = document.getElementById('resume');
+                                const resumePreview = document.getElementById('resume-preview');
+
+                                resumeInput.addEventListener('change', function() {
+                                    if (this.files && this.files[0]) {
+                                        const file = this.files[0];
+                                        const fileName = file.name;
+                                        const fileSize = (file.size / 1024 / 1024).toFixed(2);
+                                        resumePreview.innerHTML = `<i class="fas fa-file-pdf text-danger me-2"></i> Selected: <strong>${fileName}</strong> (${fileSize} MB)`;
+                                        resumePreview.style.color = '#28a745';
+                                    }
+                                });
+
+                                form.addEventListener('submit', function(e) {
+                                    e.preventDefault();
+                                    const submitBtn = form.querySelector('button[type="submit"]');
+                                    const resultDiv = form.querySelector('.form-result');
+                                    
+                                    submitBtn.disabled = true;
+                                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+                                    
+                                    const formData = new FormData(this);
+                                    
+                                    fetch(this.getAttribute('action'), {
+                                        method: 'POST',
+                                        body: formData
+                                    })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        if(data.status === 'success') {
+                                            resultDiv.innerHTML = `<div class="alert alert-success mt-3" style="border-radius: 8px; border-left: 5px solid #28a745;">
+                                                <i class="fas fa-check-circle me-2"></i> ${data.message}
+                                            </div>`;
+                                            form.reset();
+                                            resumePreview.innerHTML = '';
+                                        } else {
+                                            resultDiv.innerHTML = `<div class="alert alert-danger mt-3" style="border-radius: 8px; border-left: 5px solid #dc3545;">
+                                                <i class="fas fa-exclamation-triangle me-2"></i> ${data.message}
+                                            </div>`;
+                                        }
+                                    })
+                                    .catch(error => {
+                                        resultDiv.innerHTML = `<div class="alert alert-danger mt-3" style="border-radius: 8px; border-left: 5px solid #dc3545;">
+                                            <i class="fas fa-exclamation-triangle me-2"></i> An error occurred. Please try again.
+                                        </div>`;
+                                    })
+                                    .finally(() => {
+                                        submitBtn.disabled = false;
+                                        submitBtn.innerHTML = '<i class="fas fa-paper-plane me-2"></i> Send Application';
+                                    });
+                                });
+                            });
+                            </script>
                         </div>
                     </div>
                     <div class="col-xl-4 col-lg-5">
