@@ -553,22 +553,24 @@ form.addEventListener('submit', async (e) => {
   .contact-social-icons {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px; /* Slightly reduced gap */
     margin-top: 20px;
-    flex-wrap: wrap;
+    flex-wrap: nowrap; /* Force one row */
+    justify-content: flex-start;
   }
   .contact-social-icons a {
-    width: 38px;
-    height: 38px;
+    width: 32px; /* Slightly smaller to ensure fit on mobile */
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: #fff;
-    font-size: 16px;
+    font-size: 14px; /* Slightly smaller font */
     border-radius: 50%;
     transition: all 400ms ease;
     box-shadow: 0 4px 10px rgba(0,0,0,0.15);
     text-decoration: none;
+    flex-shrink: 0; /* Don't shrink the icons */
   }
   .contact-social-icons a:hover {
     transform: translateY(-3px);
