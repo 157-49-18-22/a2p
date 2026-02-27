@@ -1,16 +1,15 @@
 <?php 
-include __DIR__ . '/../config.php';
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
+if(!defined('SITE_URL')) define('SITE_URL', '');
+include_once __DIR__ . '/../config.php';
 
-    if (session_status() == PHP_SESSION_NONE) { session_start(); } // Start the session only if not started
+if (session_status() == PHP_SESSION_NONE) { 
+    session_start(); 
+}
 
-    // Retrieve the admin's name and ID from the session
-    $admin_name = isset($_SESSION['admin_name']) ? $_SESSION['admin_name'] : 'Admin';
-    $admin_id = isset($_SESSION['admin_id']) ? $_SESSION['admin_id'] : 'Not available'; // Default value if not set
-
-    echo "DEBUG: Starting HTML content<br>";
-    ?>
+// Retrieve the admin's name and ID from the session
+$admin_name = isset($_SESSION['admin_name']) ? $_SESSION['admin_name'] : 'Admin';
+$admin_id = isset($_SESSION['admin_id']) ? $_SESSION['admin_id'] : 0;
+?>
 <!DOCTYPE html>
 
     <html lang="en" class="light-style layout-navbar-fixed layout-menu-fixed layout-compact " dir="ltr" data-theme="theme-semi-dark" data-assets-path="assets/" data-template="vertical-menu-template-semi-dark">
