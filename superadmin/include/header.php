@@ -1,7 +1,4 @@
-    <?php 
-    error_reporting(E_ALL);
-    ini_set('display_errors', 1);
-    include 'config.php' ?>
+    <?php include 'config.php' ?>
     <?php
 
     error_reporting(0);
@@ -596,7 +593,7 @@ if ($current_page !== 'application_seating.php') {
 
 
 try {
-    // Use the existing getPDOObject function if available, otherwise include the correct superadmin function file
+    // Use the existing getPDOObject function if available, otherwise include the function file
     if (!function_exists('getPDOObject')) {
         include_once __DIR__ . '/../function/function.php';
     }
@@ -613,7 +610,7 @@ try {
         $admin_id = htmlspecialchars($admin_id);
 
         // Prepare and execute the SQL query
-        $query = "SELECT * FROM `subadmin` WHERE id = :admin_id";
+        $query = "SELECT * FROM `admin` WHERE id = :admin_id";
         $stmt = $pdo_header->prepare($query);
         $stmt->bindParam(':admin_id', $admin_id, PDO::PARAM_INT);
         $stmt->execute();
