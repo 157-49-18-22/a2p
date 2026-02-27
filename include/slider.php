@@ -146,12 +146,11 @@
 
 
 <style>
-    /* Premium Hero Slider - Maintaining Aspect Ratio */
+    /* Premium Hero Slider - Maintaining Aspect Ratio - No Cropping */
     .carousel-inner {
         height: auto !important;
-        max-height: 85vh; /* Safety limit for very tall images */
         background: transparent;
-        overflow: hidden !important;
+        overflow: visible !important; /* Allow image to show fully */
     }
 
     .carousel-item {
@@ -160,9 +159,9 @@
 
     .carousel-item img {
         width: 100% !important; /* Fill the banner width */
-        height: auto !important; /* Maintain aspect ratio */
-        max-height: 85vh !important; /* Cap height to screen size */
-        object-fit: cover !important; /* Fill area while maintaining aspect ratio (prevents gaps) */
+        height: auto !important; /* Maintain natural aspect ratio */
+        max-height: none !important; /* Allow image to be as tall as its ratio requires */
+        object-fit: contain !important; /* Ensure the whole image is visible */
         display: block !important;
         margin: 0 auto;
     }
