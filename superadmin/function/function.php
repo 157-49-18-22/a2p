@@ -264,7 +264,6 @@ function login_me()
         if ($num > 0) {
             $row = $stmt->fetch(PDO::FETCH_ASSOC); // Fetch only one row (PDO::FETCH_ASSOC)
 
-            session_start();
             $_SESSION['admin_id'] = $row['id'];
             $_SESSION['admin_name'] = $row['name']; // Assuming you have a 'name' column in the `admin` table
             $message = '<div class="alert alert-success">Login Successful, Please Refresh the page if not redirected.</div>';

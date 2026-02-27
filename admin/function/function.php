@@ -273,7 +273,6 @@ function login_me()
 
 			foreach ($row as $admin) {
 
-				session_start();
 				$_SESSION['admin_id'] = $admin['id'];
 				$message = '<div class="alert alert-success">Login Successful ,Please Refresh page if not redirected.</div>';
 				header('location:./index.php');

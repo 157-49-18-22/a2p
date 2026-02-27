@@ -1,94 +1,4 @@
 <?php
-
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
-require 'vendor/autoload.php';
-include('db.php');  // Ensure PDO is properly initialized here
-
-function sendOTP($email, $otp)
-{
-    $mail = new PHPMailer(true);
-    try {
-        // Server settings
-        $mail->isSMTP();
-        $mail->Host = getenv('SMTP_HOST') ?: 'smtp.hostinger.com';
-        $mail->SMTPAuth = true;
-        $mail->Username = getenv('SMTP_USERNAME') ?: 'mail@famepixel.in';
-        $mail->Password = getenv('SMTP_PASSWORD') ?: 'Singhravi@#123';
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
-        $mail->Port = 465;
-
-        // Recipients
-        $mail->setFrom('mail@famepixel.in', 'OTP System');
-        $mail->addAddress($email);
-
-        // Content
-        $mail->isHTML(true);
-        $mail->Subject = 'Your OTP Code';
-        $mail->Body = 'Your OTP code is: ' . $otp;
-
-        $mail->send();
-        return true;
-    } catch (Exception $e) {
-        error_log("Mailer Error: " . $mail->ErrorInfo);
-        return false;
-    }
-}
-
-function generateOTP()
-{
-    return rand(100000, 999999);
-}
-
-$message = '';
-$otpSent = false;
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
-    $password = $_POST['password']; // Get password from POST
-
-    if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        try {
-            // Check if the email exists in the subadmin table
-            $stmt = $pdo->prepare("SELECT * FROM subadmin WHERE username = :email");
-            $stmt->execute(['email' => $email]);
-            $user = $stmt->fetch();
-
-            if ($user) {
-                // Directly compare plain text passwords
-                if ($password === $user['password']) {
-                    $otp = generateOTP();
-
-                    // Update OTP
-                    $stmt = $pdo->prepare("UPDATE subadmin SET otp = :otp, otp_created_at = NOW() WHERE username = :email");
-                    $stmt->execute(['otp' => $otp, 'email' => $email]);
-
-                    if (sendOTP($email, $otp)) {
-                        // Redirect to OTP verification page with email as query parameter
-                        header("Location: verify_otp.php?email=" . urlencode($email));
-                        exit();
-                    } else {
-                        $message = 'Failed to send OTP. Please try again later.';
-                    }
-                } else {
-                    $message = 'Email and password do not match.';
-                }
-            } else {
-                $message = 'Your email is not registered with us.';
-            }
-        } catch (Exception $e) {
-            error_log("Database Error: " . $e->getMessage());
-            $message = 'Database error. Please try again later.';
-        }
-    } else {
-        $message = 'Invalid email format.';
-    }
-}
-?>
-
-
-<?php
 include('./function/function.php');
 $umessage = '<div class="alert alert-info">
                 Please login with your Username and Password.
@@ -114,7 +24,6 @@ include('include/header.php'); ?>
         background: white;
     }
 </style>
-
 
 
 <div class="authentication-wrapper authentication-cover">
@@ -158,26 +67,32 @@ include('include/header.php'); ?>
                 <h4 class="mb-2">Welcome to <?php echo $siteTitle; ?> Admin! 👋</h4>
                 <p class="mb-4">Please sign-in to your account </p>
                 <?php echo $umessage; ?>
-
-                <form id="formAuthentication" class="mb-3" method="post" action="">
+                <form id="formAuthentication" class="mb-3" action="alogin.php" method="post">
                     <div class="form-floating form-floating-outline mb-3">
-                        <input class="form-control" type="email" name="email" placeholder="Enter your email or username" autofocus>
-                        <label for="email">Email or Username</label>
+                        <input class="form-control" type="text" name="email" placeholder="Enter your username" autofocus>
+                        <label for="email">Username</label>
                     </div>
                     <div class="mb-3">
                         <div class="form-password-toggle">
                             <div class="input-group input-group-merge">
                                 <div class="form-floating form-floating-outline">
-                                    <input class="form-control" type="password" name="password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password" />
+                                    <input class="form-control" type="password" name="pass" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password" />
                                     <label for="password">Password</label>
                                 </div>
                                 <span class="input-group-text cursor-pointer"><i class="mdi mdi-eye-off-outline"></i></span>
                             </div>
                         </div>
                     </div>
-                 
-                    <button class="btn btn-primary d-grid w-100" type="submit"  name="login_me" type="submit">
-                    Send OTP
+                    <div class="mb-3 d-flex justify-content-between">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="remember-me">
+                            <label class="form-check-label" for="remember-me">
+                                Remember Me
+                            </label>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary d-grid w-100" name="login_me" type="submit">
+                        Sign in
                     </button>
                 </form>
 
@@ -210,32 +125,7 @@ include('include/header.php'); ?>
         <!-- /Login -->
     </div>
 </div>
-<?php if (!empty($message)): ?>
-    <script>
-        alert('<?php echo addslashes($message); ?>');
-    </script>
-<?php endif; ?>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<!-- / Content -->
 
 <?php include 'include/footer.php' ?>
