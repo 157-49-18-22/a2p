@@ -1,4 +1,4 @@
-    <?php include '../config.php' ?>
+    <?php include __DIR__ . '/../config.php' ?>
     <?php
 
     error_reporting(0);
