@@ -1,152 +1,144 @@
 <?php
+error_reporting(0);
 include('./function/function.php');
-$umessage = '<div class="alert alert-info">
-                Please login with your Username and Password.
-            </div>';
+
+$umessage = '';
 check_login();
 if (isset($_POST['login_me'])) {
     $umessage = login_me();
 }
-$no_visible_elements = true;
-include('include/header.php'); ?>
-
-<style>
-    .authentication-wrapper .auth-cover-illustration {
-        z-index: 1;
-        max-inline-size: 38rem;
-    }
-
-    .w-100 {
-        width: 100% !important;
-    }
-
-    .d-flex.col-12.col-lg-6.col-xl-6.align-items-center.authentication-bg.position-relative.py-sm-5.px-4.py-4 {
-        background: white;
-    }
-</style>
-
-
-<div class="authentication-wrapper authentication-cover">
-    <!-- Logo -->
-    <a href="#" class="auth-cover-brand d-flex align-items-center gap-2">
-        <span class="app-brand-logo demo">
-            <span style="color:var(--bs-primary);">
-                <svg width="268" height="150" viewBox="0 0 38 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M30.0944 2.22569C29.0511 0.444187 26.7508 -0.172113 24.9566 0.849138C23.1623 1.87039 22.5536 4.14247 23.5969 5.92397L30.5368 17.7743C31.5801 19.5558 33.8804 20.1721 35.6746 19.1509C37.4689 18.1296 38.0776 15.8575 37.0343 14.076L30.0944 2.22569Z" fill="currentColor" />
-                    <path d="M30.171 2.22569C29.1277 0.444187 26.8274 -0.172113 25.0332 0.849138C23.2389 1.87039 22.6302 4.14247 23.6735 5.92397L30.6134 17.7743C31.6567 19.5558 33.957 20.1721 35.7512 19.1509C37.5455 18.1296 38.1542 15.8575 37.1109 14.076L30.171 2.22569Z" fill="url(#paint0_linear_2989_100980)" fill-opacity="0.4" />
-                    <path d="M22.9676 2.22569C24.0109 0.444187 26.3112 -0.172113 28.1054 0.849138C29.8996 1.87039 30.5084 4.14247 29.4651 5.92397L22.5251 17.7743C21.4818 19.5558 19.1816 20.1721 17.3873 19.1509C15.5931 18.1296 14.9843 15.8575 16.0276 14.076L22.9676 2.22569Z" fill="currentColor" />
-                    <path d="M14.9558 2.22569C13.9125 0.444187 11.6122 -0.172113 9.818 0.849138C8.02377 1.87039 7.41502 4.14247 8.45833 5.92397L15.3983 17.7743C16.4416 19.5558 18.7418 20.1721 20.5361 19.1509C22.3303 18.1296 22.9391 15.8575 21.8958 14.076L14.9558 2.22569Z" fill="currentColor" />
-                    <path d="M14.9558 2.22569C13.9125 0.444187 11.6122 -0.172113 9.818 0.849138C8.02377 1.87039 7.41502 4.14247 8.45833 5.92397L15.3983 17.7743C16.4416 19.5558 18.7418 20.1721 20.5361 19.1509C22.3303 18.1296 22.9391 15.8575 21.8958 14.076L14.9558 2.22569Z" fill="url(#paint1_linear_2989_100980)" fill-opacity="0.4" />
-                    <path d="M7.82901 2.22569C8.87231 0.444187 11.1726 -0.172113 12.9668 0.849138C14.7611 1.87039 15.3698 4.14247 14.3265 5.92397L7.38656 17.7743C6.34325 19.5558 4.04298 20.1721 2.24875 19.1509C0.454514 18.1296 -0.154233 15.8575 0.88907 14.076L7.82901 2.22569Z" fill="currentColor" />
-                    <defs>
-                        <linearGradient id="paint0_linear_2989_100980" x1="5.36642" y1="0.849138" x2="10.532" y2="24.104" gradientUnits="userSpaceOnUse">
-                            <stop offset="0" stop-opacity="1" />
-                            <stop offset="1" stop-opacity="0" />
-                        </linearGradient>
-                        <linearGradient id="paint1_linear_2989_100980" x1="5.19475" y1="0.849139" x2="10.3357" y2="24.1155" gradientUnits="userSpaceOnUse">
-                            <stop offset="0" stop-opacity="1" />
-                            <stop offset="1" stop-opacity="0" />
-                        </linearGradient>
-                    </defs>
-                </svg>
-            </span>
-        </span>
-        <span class="app-brand-text demo text-heading fw-bold"><?php echo $siteTitle; ?> </span>
-    </a>
-    <!-- /Logo -->
-    <div class="authentication-inner row m-0">
-        <!-- /Left Section -->
-        <div class="d-none d-lg-flex col-lg-6 col-xl-6 align-items-center  p-5 pb-2">
-            <img src="assets/img/illustrations/auth-login-illustration-light.png" class="auth-cover-illustration w-100" alt="auth-illustration" data-app-light-img="illustrations/auth-login-illustration-light.png" data-app-dark-img="illustrations/auth-login-illustration-dark.html" />
-             </div>
-        <!-- /Left Section -->
-
-        <!-- Login -->
-        <div class="d-flex col-12 col-lg-6 col-xl-6 align-items-center authentication-bg position-relative py-sm-5 px-4 py-4">
-            <div class="w-px-400 mx-auto pt-5 pt-lg-0">
-                <h4 class="mb-2">Welcome to <?php echo $siteTitle; ?> Admin! 👋</h4>
-                <p class="mb-4">Please sign-in to your account </p>
-                <?php echo $umessage; ?>
-                <form id="formAuthentication" class="mb-3" action="alogin.php" method="post">
-                    <div class="form-floating form-floating-outline mb-3">
-                        <input class="form-control" type="text" name="email" placeholder="Enter your email or username" autofocus>
-                        <label for="email">Email or Username</label>
-                    </div>
-                    <div class="mb-3">
-                        <div class="form-password-toggle">
-                            <div class="input-group input-group-merge">
-                                <div class="form-floating form-floating-outline">
-                                    <input class="form-control" type="password" name="pass" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password" />
-                                    <label for="password">Password</label>
-                                </div>
-                                <span class="input-group-text cursor-pointer"><i class="mdi mdi-eye-off-outline"></i></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mb-3 d-flex justify-content-between">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="remember-me">
-                            <label class="form-check-label" for="remember-me">
-                                Remember Me
-                            </label>
-                        </div>
-
-                    </div>
-                    <button class="btn btn-primary d-grid w-100" name="login_me" type="submit">
-                        Sign in
-                    </button>
-                </form>
-
-
-                <div class="divider my-4">
-                    <div class="divider-text">or</div>
-                </div>
-
-                <div class="d-flex justify-content-center gap-2">
-                    <a href="javascript:;" class="btn btn-icon btn-lg rounded-pill btn-text-facebook">
-                        <i class="tf-icons mdi mdi-24px mdi-facebook"></i>
-                    </a>
-
-                    <a href="javascript:;" class="btn btn-icon btn-lg rounded-pill btn-text-twitter">
-                        <i class="tf-icons mdi mdi-24px mdi-twitter"></i>
-                    </a>
-
-                    <a href="javascript:;" class="btn btn-icon btn-lg rounded-pill btn-text-github">
-                        <i class="tf-icons mdi mdi-24px mdi-github"></i>
-                    </a>
-
-                    <a href="javascript:;" class="btn btn-icon btn-lg rounded-pill btn-text-google-plus">
-                        <i class="tf-icons mdi mdi-24px mdi-google"></i>
-                    </a>
-                </div>
-            </div>
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Superadmin Login | <?php echo $siteTitle ?? 'Admin'; ?></title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-card {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 50px 40px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+        }
+        .brand {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+        .brand h1 {
+            color: #fff;
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        .brand p {
+            color: rgba(255,255,255,0.5);
+            font-size: 13px;
+        }
+        .badge-super {
+            display: inline-block;
+            background: linear-gradient(135deg, #e53e3e, #c53030);
+            color: #fff;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 20px;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+        .alert {
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+        .alert-danger { background: rgba(229,62,62,0.15); color: #fc8181; border: 1px solid rgba(229,62,62,0.3); }
+        .alert-success { background: rgba(72,187,120,0.15); color: #9ae6b4; border: 1px solid rgba(72,187,120,0.3); }
+        .alert-info { background: rgba(66,153,225,0.15); color: #90cdf4; border: 1px solid rgba(66,153,225,0.3); }
+        .form-group { margin-bottom: 20px; }
+        .form-group label {
+            display: block;
+            color: rgba(255,255,255,0.7);
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        .form-control {
+            width: 100%;
+            padding: 13px 16px;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .form-control:focus { border-color: #e53e3e; }
+        .form-control::placeholder { color: rgba(255,255,255,0.3); }
+        .btn-login {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #e53e3e, #c53030);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 5px;
+        }
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(229,62,62,0.4);
+        }
+        .footer-text {
+            text-align: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 12px;
+            margin-top: 25px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <div class="brand">
+            <div class="badge-super">SUPERADMIN</div>
+            <h1>Welcome Back 👋</h1>
+            <p>Sign in to your superadmin account</p>
         </div>
-        <!-- /Login -->
+
+        <?php if (!empty($umessage)) echo $umessage; ?>
+
+        <form method="post" action="">
+            <div class="form-group">
+                <label>Username</label>
+                <input class="form-control" type="text" name="email" placeholder="Enter username" required autofocus>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input class="form-control" type="password" name="pass" placeholder="Enter password" required>
+            </div>
+            <button type="submit" name="login_me" class="btn-login">Sign In</button>
+        </form>
+
+        <div class="footer-text">&copy; <?php echo date('Y'); ?> <?php echo $siteTitle ?? 'Admin Panel'; ?></div>
     </div>
-</div>
-
-<!-- / Content -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<?php include 'include/footer.php' ?>
+</body>
+</html>
