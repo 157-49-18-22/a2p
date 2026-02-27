@@ -1252,7 +1252,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Clone and Clean
         const clone = desktopMenu.cloneNode(true);
-        clone.classList.remove('main-menu__list');
+        // Important: Keep main-menu__list as CSS depends on it for mobile styling overrides
         clone.classList.add('mobile-nav__list');
         clone.style.display = 'block';
 
@@ -1289,7 +1289,6 @@ document.addEventListener('DOMContentLoaded', function() {
     $(document).off('click', '.mobile-nav__container li.dropdown > a').on('click', '.mobile-nav__container li.dropdown > a', function(e) {
         const $link = $(this);
         const $li = $link.parent();
-        const $btn = $link.find('button');
         const $subMenu = $li.children('ul');
         const href = $link.attr('href');
         
@@ -1297,7 +1296,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const isBtnClick = $(e.target).closest('.dropdown-toggle-btn').length > 0;
         const isPlaceholder = !href || href === '#' || href === 'javascript:void(0)' || href === '';
 
-        // If user wants ONLY icon to trigger toggle, or it's a placeholder link
+        // If user wants ONLY icon to trigger toggle, uncomment line below and comment out the current logic
+        // if (isBtnClick) { 
+        
+        // Current logic: Toggle if button clicked OR it's a placeholder link
         if (isBtnClick || isPlaceholder) {
             e.preventDefault();
             e.stopPropagation();
