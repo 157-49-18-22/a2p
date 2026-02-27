@@ -1286,7 +1286,6 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(setupMobileMenu, 500);
 
     // Simplified Toggle Logic for Single Tap
-    $(document).off('click',    // Single click delegation for performance and reliability
     $(document).off('click', '.mobile-nav__container li.dropdown > a').on('click', '.mobile-nav__container li.dropdown > a', function(e) {
         const $link = $(this);
         const $li = $link.parent();
@@ -1451,11 +1450,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         <div class="main-menu-two__call-search">
 
                             <div class="main-menu-two__call">
-                               <button type="button" class="thm-btn" onclick="window.location.href='<?= SITE_URL; ?>search.php'">
+                               <button type="button" class="thm-btn search-toggler">
                                     <i class="icon-magnifying-glass"></i>
                                 </button>
-
-
                             </div>
 
                         </div>

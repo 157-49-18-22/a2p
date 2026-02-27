@@ -360,10 +360,10 @@
                         
                         // Remove +91 prefix for display
                         $display = preg_replace('/^\+91[-\s]?/', '', $p);
-                        // Keep only digits for tel link
-                        $digits = preg_replace('/[^0-9]/', '', $p);
+                        // Keep only digits from the prefix-removed string
+                        $digits = preg_replace('/[^0-9]/', '', $display);
                         
-                        echo '<a href="tel:+91'.$digits.'" style="display:block; margin-top:2px; letter-spacing:1px; color:#fff !important;">'.$display.'</a>';
+                        echo '<a href="tel:+91'.$digits.'" style="display:block; margin-top:2px; letter-spacing:1px; color:#fff !important; position:relative; z-index:5;">'.$display.'</a>';
                     }
                 ?>
             </div>
@@ -392,6 +392,7 @@
             height: 200%;
             background: radial-gradient(circle at center, rgba(255,255,255,0.05) 0%, transparent 60%);
             animation: phonePulse 3s ease-in-out infinite;
+            pointer-events: none;
         }
         @keyframes phonePulse {
             0%, 100% { opacity: 0.5; transform: scale(0.8); }
