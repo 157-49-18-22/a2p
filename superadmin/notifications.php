@@ -101,7 +101,7 @@ require('include/header.php');
                         </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Target Link (Optional)</label>
-                            <input type="text" name="link" class="form-control" placeholder="http://a2prealtech.com/property.php">
+                            <input type="text" name="link" class="form-control" placeholder="https://pink-sheep-796549.hostingersite.com/property.php">
                         </div>
                         <div class="col-md-12 mb-3">
                             <label class="form-label">Message Content</label>
