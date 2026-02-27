@@ -159,13 +159,12 @@
     }
 
     .carousel-item img {
-        width: auto !important; /* Natural width */
-        max-width: 100% !important; /* Responsive safeguard */
-        height: auto !important; /* Natural height */
-        max-height: 85vh !important; /* Don't exceed screen height */
-        object-fit: contain !important; /* Never stretch */
+        width: 100% !important; /* Fill the banner width */
+        height: auto !important; /* Maintain aspect ratio */
+        max-height: 85vh !important; /* Cap height to screen size */
+        object-fit: contain !important; /* Ensure full image is visible without stretching */
         display: block !important;
-        margin: 0 auto; /* Center if narrow */
+        margin: 0 auto;
     }
 
     /* Mobile Adaptations */
