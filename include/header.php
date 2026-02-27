@@ -1137,6 +1137,67 @@
         color: #c00415 !important;
     }
 }
+
+/* =============================================
+   MOBILE ONLY - By Location Attractive Style
+   ============================================= */
+@media (max-width: 1199px) {
+    /* By Location - Glowing Pill in Mobile Menu */
+    .mobile-nav__container .mobile-bylocation-item > a {
+        background: linear-gradient(135deg, #c00415 0%, #ff2d3d 100%) !important;
+        margin: 8px 15px !important;
+        border-radius: 50px !important;
+        padding: 0 20px !important;
+        height: 50px !important;
+        font-weight: 700 !important;
+        font-size: 13px !important;
+        letter-spacing: 0.5px !important;
+        color: #fff !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: calc(100% - 30px) !important;
+        box-shadow: 0 6px 20px rgba(192, 4, 21, 0.45), 0 0 0 0 rgba(192,4,21,0.4) !important;
+        animation: locationGlow 2s ease-in-out infinite !important;
+        position: relative !important;
+        overflow: hidden !important;
+        border-bottom: none !important;
+    }
+    .mobile-nav__container .mobile-bylocation-item > a::before {
+        content: '';
+        position: absolute;
+        top: 0; left: -100%;
+        width: 60%; height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+        animation: locationShine 2.5s ease-in-out infinite;
+    }
+    @keyframes locationShine {
+        0% { left: -100%; }
+        60%, 100% { left: 150%; }
+    }
+    @keyframes locationGlow {
+        0%, 100% { box-shadow: 0 6px 20px rgba(192,4,21,0.45), 0 0 0 0 rgba(192,4,21,0.3); }
+        50% { box-shadow: 0 6px 25px rgba(192,4,21,0.6), 0 0 0 8px rgba(192,4,21,0.08); }
+    }
+    .mobile-nav__container .mobile-bylocation-item > a span {
+        gap: 8px !important;
+        font-size: 13px !important;
+    }
+    .mobile-nav__container .mobile-bylocation-item > a i {
+        font-size: 16px !important;
+        animation: pinBounce 1.5s ease-in-out infinite !important;
+    }
+    @keyframes pinBounce {
+        0%, 100% { transform: translateY(0); }
+        40% { transform: translateY(-4px); }
+        60% { transform: translateY(-2px); }
+    }
+    /* Remove border-bottom from this special item */
+    .mobile-nav__container .mobile-bylocation-item {
+        border-bottom: none !important;
+        padding: 4px 0 !important;
+    }
+}
 </style>
 
 
@@ -1360,7 +1421,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                         } 
                                         ?>
 
-                                    <li>
+                                    <li class="mobile-bylocation-item">
                                         <a href="javascript:void(0)" onclick="openWizard()"><span style="display:inline-flex;align-items:center;gap:6px;"><i class="fa fa-map-marker-alt"></i> By Location</span></a>
                                     </li>
 

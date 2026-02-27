@@ -343,12 +343,90 @@
         <div class="mobile-nav__container"></div>
         <!-- /.mobile-nav__container -->
 
-        <ul class="mobile-nav__contact list-unstyled">
-            <li>
+        <!-- Attractive Phone Card -->
+        <div class="mobile-phone-card">
+            <div class="mobile-phone-card__icon">
                 <i class="fa fa-phone-alt"></i>
-                <a href="tel:+91-8130525001"><?php echo $pr_add['phone']; ?></a>
-            </li>
-        </ul><!-- /.mobile-nav__contact -->
+            </div>
+            <div class="mobile-phone-card__text">
+                <span>Call Us Anytime</span>
+                <a href="tel:+91-<?php echo $pr_add['phone']; ?>"><?php echo $pr_add['phone']; ?></a>
+            </div>
+        </div>
+        <style>
+        .mobile-phone-card {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin: 0 15px 5px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 14px;
+            padding: 12px 16px;
+            backdrop-filter: blur(5px);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .mobile-phone-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(255,255,255,0.05) 0%, transparent 60%);
+            animation: phonePulse 3s ease-in-out infinite;
+        }
+        @keyframes phonePulse {
+            0%, 100% { opacity: 0.5; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+        .mobile-phone-card__icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, #c00415, #ff2d3d);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 18px;
+            flex-shrink: 0;
+            box-shadow: 0 4px 15px rgba(192,4,21,0.4);
+            animation: phoneRing 2.5s ease-in-out infinite;
+        }
+        @keyframes phoneRing {
+            0%, 100% { transform: rotate(0deg); }
+            10% { transform: rotate(-15deg); }
+            20% { transform: rotate(15deg); }
+            30% { transform: rotate(-10deg); }
+            40% { transform: rotate(10deg); }
+            50% { transform: rotate(0deg); }
+        }
+        .mobile-phone-card__text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.3;
+        }
+        .mobile-phone-card__text span {
+            font-size: 10px;
+            color: rgba(255,255,255,0.5);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+        .mobile-phone-card__text a {
+            font-size: 15px;
+            color: #fff !important;
+            font-weight: 700;
+            text-decoration: none;
+            letter-spacing: 0.5px;
+        }
+        .mobile-phone-card__text a:hover {
+            color: #ffcdd2 !important;
+        }
+        </style>
         <div class="mobile-nav__top">
             <div class="mobile-nav__social">
                 <a href="<?php echo $pr_add['facebook']; ?>" class="facebook"><i class="fab fa-facebook-f"></i></a>
