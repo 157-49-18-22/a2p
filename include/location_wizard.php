@@ -214,7 +214,7 @@ function goToStep(step) {
     });
 }
 
-const WIZARD_API = 'get_wizard_data.php';
+const WIZARD_API = '<?= SITE_URL; ?>get_wizard_data.php';
 
 function loadCities() {
     const grid = document.getElementById('cityGrid');
