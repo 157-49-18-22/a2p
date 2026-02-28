@@ -10,7 +10,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $budget   = htmlspecialchars($_POST['budget'] ?? '');
     $message  = htmlspecialchars($_POST['message'] ?? '');
 
-    // Combine data for storage
     $full_message = "Interested In: $interest | Budget: $budget | Message: $message";
     $page_source  = isset($_POST['source']) ? htmlspecialchars($_POST['source']) : "Contact Us Page";
 
@@ -25,26 +24,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     ];
     insert('enquiry', $data);
 
-    // ── Admin notification ────────────────────────────────────────
+    // Prepare Admin Body
     $adminSubject = "New Property Inquiry from $name";
-    $adminBody = "
-    <html><body style='font-family:Arial,sans-serif;color:#333;'>
-    <h2 style='color:#0f3460;'>New Property Inquiry — A2P Realtech</h2>
-    <table cellpadding='8' cellspacing='0' style='border-collapse:collapse;width:100%;max-width:500px;'>
-      <tr style='background:#f9f5ea;'><td><strong>Name</strong></td><td>$name</td></tr>
-      <tr><td><strong>Email</strong></td><td>$email</td></tr>
-      <tr style='background:#f9f5ea;'><td><strong>Phone</strong></td><td>$phone</td></tr>
-      <tr><td><strong>Interested In</strong></td><td>$interest</td></tr>
-      <tr style='background:#f9f5ea;'><td><strong>Budget</strong></td><td>$budget</td></tr>
-      <tr><td><strong>Message</strong></td><td>$message</td></tr>
-      <tr style='background:#f9f5ea;'><td><strong>Source Page</strong></td><td>$page_source</td></tr>
-    </table>
-    </body></html>";
+    $adminBody = "<h3>New Property Inquiry</h3>
+                  <p><b>Name:</b> $name<br>
+                  <b>Email:</b> $email<br>
+                  <b>Phone:</b> $phone<br>
+                  <b>Budget:</b> $budget<br>
+                  <b>Source:</b> $page_source</p>";
 
-    sendAdminNotification($adminSubject, $adminBody);
-
-    // ── Auto-reply to user ────────────────────────────────────────
-    sendAutoReply($email, $name);
+    // Send BOTH in one go
+    sendAllMails($email, $name, $adminSubject, $adminBody);
 
     echo "success";
 }
