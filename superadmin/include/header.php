@@ -297,6 +297,11 @@ if ($current_page !== 'application_seating.php') {
                                         <div data-i18n="Push Notifications">Push Notifications</div>
                                     </a>
                                 </li>
+                                <li class="menu-item">
+                                    <a href="subscribers.php" class="menu-link">
+                                        <div data-i18n="Device List (Subscribers)">Device List (Subscribers)</div>
+                                    </a>
+                                </li>
 
 
 
