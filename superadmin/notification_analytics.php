@@ -479,10 +479,9 @@ canvas { max-height: 220px !important; }
             </div>
             <div class="card-body">
                 <?php
-                    $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
-                    $host = $_SERVER['HTTP_HOST'];
-                    $path = dirname($_SERVER['PHP_SELF']);
-                    $site_base = $protocol . $host . $path;
+                    $site_base = ($_SERVER['HTTP_HOST'] == 'localhost' || $_SERVER['HTTP_HOST'] == '127.0.0.1')
+                        ? 'http://localhost/cms/superadmin'
+                        : 'https://a2prealtech.com/superadmin';
                     $tracking_url = $site_base . '/track_click.php?notif_id=' . $notif_id . '&redirect=' . urlencode($notif['link']);
                 ?>
                 <div class="input-group">

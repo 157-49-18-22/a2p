@@ -38,11 +38,10 @@ $rest_api_key = "os_v2_app_2zzmqbh6mra4lmzbitusz52mzh2srdmqcqke2je6x2lltzfz6umhi
 if (isset($_POST['send_notif'])) {
     extract($_POST);
 
-    // 1. Build tracking URL dynamically based on current domain
-    $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
-    $host = $_SERVER['HTTP_HOST'];
-    $path = dirname($_SERVER['PHP_SELF']); // returns /cms/superadmin or /superadmin
-    $site_base = $protocol . $host . $path;
+    // 1. Build tracking URL if link provided
+    $site_base = ($_SERVER['HTTP_HOST'] == 'localhost' || $_SERVER['HTTP_HOST'] == '127.0.0.1')
+        ? 'http://localhost/cms/superadmin'
+        : 'https://a2prealtech.com/superadmin';
 
     // 2. Save to Database first to get ID
     $q = $pdo->prepare("INSERT INTO notifications (title, message, link) VALUES (:title, :message, :link)");
