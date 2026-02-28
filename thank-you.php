@@ -124,6 +124,27 @@ if (count($sql_add))
       <p><strong><i class="fa fa-envelope" style="color: #c00415;"></i> Send Email:</strong>
         <a href="mailto:team@a2prealtech.com">team@a2prealtech.com</a></p>
     </div>
+
+    <?php if (isset($_GET['brochure'])): ?>
+        <div class="mt-4">
+            <a href="<?= SITE_URL; ?>upload/<?php echo htmlspecialchars($_GET['brochure']); ?>" class="btn btn-danger btn-lg" style="background-color: #c00415; border: none; padding: 15px 30px; border-radius: 10px;" download>
+                <i class="fas fa-file-download"></i> Download Brochure Again
+            </a>
+            <p class="mt-2 text-muted">Your brochure should have opened in a new tab. If not, click the button above.</p>
+        </div>
+
+        <script>
+            // Try to open the brochure in a new tab automatically
+            window.addEventListener('load', function() {
+                var brochureUrl = '<?= SITE_URL; ?>upload/<?php echo htmlspecialchars($_GET['brochure']); ?>';
+                window.open(brochureUrl, '_blank');
+            });
+        </script>
+    <?php else: ?>
+        <div class="mt-4 alert alert-info" style="background-color: #f8f9fa; border-left: 5px solid #c00415; color: #333; padding: 20px; border-radius: 10px;">
+            <p style="margin-bottom: 0; font-weight: 600;">Brochure not available right now but team will reach out to you.</p>
+        </div>
+    <?php endif; ?>
   </div>
 
 

@@ -593,7 +593,7 @@ $currentPageUrl = urlencode("http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_UR
                                         <button class="nav-link" id="video-tab" data-bs-toggle="tab" data-bs-target="#video" type="button" role="tab" aria-controls="video" aria-selected="false">Video</button>
                                     </li>
                                     <li class="nav-item" role="presentation">
-                                        <button class="nav-link" id="download-link" >Request Brochure</button>
+                                        <button class="nav-link" id="download-link" ><?php echo !empty($subproductss['photo4']) ? 'Download Brochure' : 'Request Brochure'; ?></button>
                                     </li>
                                 </ul>
 
@@ -775,11 +775,13 @@ $currentPageUrl = urlencode("http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_UR
                                         <!--<h3>Download Brochure</h3>-->
                                       
                                         
-                                                      <?php if (empty($subproductss['photo4'])): ?>
-                                                      
-                                                    <h3>Coming Soon</h3>
+                                                       <?php if (empty($subproductss['photo4'])): ?>
+                                                          <h3>Brochure Not Available</h3>
+                                                          <p style="color: #666; font-size: 16px;">The brochure is not available right now but our team will reach out to you.</p>
+                                                          <button class="btn btn-danger mt-3" id="download-link" style="background-color: #c00415; border: none; padding: 10px 25px;">Request Brochure</button>
                                                       <?php else: ?>
-                                                          <p><a href="#" id="download-link">Request the brochure here.</a></p>
+                                                          <p style="color: #666; font-size: 16px;">Click the button below to download the project brochure.</p>
+                                                          <button class="btn btn-danger mt-3" id="download-link" style="background-color: #c00415; border: none; padding: 10px 25px;">Download Brochure</button>
                                                       <?php endif; ?>
   
                                     </div>
@@ -1009,6 +1011,7 @@ $currentPageUrl = urlencode("http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_UR
               </div>
               <input type="hidden" name="page" value="<?php echo $subproductss['name']; ?>">
               <input type="hidden" name="destination" value="Brochure Enquiry">
+              <input type="hidden" name="brochure_file" value="<?php echo $subproductss['photo4']; ?>">
               <button type="submit" class="btn-submit-custom">Submit Enquiry</button>
             </form>
           </div>
@@ -1040,10 +1043,25 @@ $currentPageUrl = urlencode("http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_UR
     return true; 
   }
 
+  // Define brochure availability for JS
+  const isBrochureAvailable = <?php echo !empty($subproductss['photo4']) ? 'true' : 'false'; ?>;
+
   // Open the enquiry modal when any link with id 'download-link' is clicked
   document.querySelectorAll('[id="download-link"]').forEach(element => {
     element.addEventListener('click', function (event) {
         event.preventDefault(); // Prevent default link behavior
+        
+        const modalTitle = document.querySelector('#enquiryModal h3');
+        const modalDesc = document.querySelector('#enquiryModal .brochure-form-content p');
+        
+        if (!isBrochureAvailable) {
+            if (modalTitle) modalTitle.innerText = "Brochure Not Available";
+            if (modalDesc) modalDesc.innerText = "Brochure not available right now but team will reach out to you. Please fill in your details.";
+        } else {
+            if (modalTitle) modalTitle.innerText = "Download Brochure";
+            if (modalDesc) modalDesc.innerText = "Please fill in your details to get the brochure.";
+        }
+
         var myModal = new bootstrap.Modal(document.getElementById('enquiryModal'));
         myModal.show();
     });

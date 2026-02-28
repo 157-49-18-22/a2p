@@ -43,11 +43,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </html>
     ";
 
-    if (mail($to, $subject, $emailBody, $headers)) {
-        echo "<script>alert('Message sent successfully!'); window.location.href='thank-you.php';</script>";
+    @mail($to, $subject, $emailBody, $headers);
+    
+    $brochure_file = isset($_POST["brochure_file"]) ? $_POST["brochure_file"] : "";
+    if (!empty($brochure_file)) {
+        header("Location: thank-you.php?brochure=" . urlencode($brochure_file));
     } else {
-        echo "<script>alert('Failed to send message. Try again later.'); window.location.href='thank-you.php';</script>";
+        header("Location: thank-you.php");
     }
+    exit();
 } else {
     echo "<script>alert('Invalid Request.'); window.location.href='thank-you.php';</script>";
 }
