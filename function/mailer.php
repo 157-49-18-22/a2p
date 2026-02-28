@@ -21,12 +21,19 @@ require_once $phpmailerBase . 'SMTP.php';
 //  Gmail SMTP credentials
 // ──────────────────────────────────────────────
 define('SMTP_HOST',     'smtp.gmail.com');
-define('SMTP_PORT',     587);
+define('SMTP_PORT',     465); // Changed to 465 for SSL
 define('SMTP_USER',     'team@a2prealtech.com');
 define('SMTP_PASS',     'peyutflqslgkfutv');
 define('SMTP_FROM',     'team@a2prealtech.com');
 define('SMTP_FROM_NAME','A2P Realtech');
 define('ADMIN_EMAIL',   'team@a2prealtech.com');
+
+// Debug log function
+function writeMailLog($msg) {
+    $logFile = __DIR__ . '/../mail_debug.log';
+    $timestamp = date('Y-m-d H:i:s');
+    file_put_contents($logFile, "[$timestamp] $msg\n", FILE_APPEND);
+}
 
 /**
  * Returns a configured PHPMailer instance (SMTP / Gmail).
@@ -39,7 +46,7 @@ function getMailer(): PHPMailer
     $mail->SMTPAuth   = true;
     $mail->Username   = SMTP_USER;
     $mail->Password   = SMTP_PASS;
-    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS; // SSL for port 465
     $mail->Port       = SMTP_PORT;
     $mail->CharSet    = 'UTF-8';
     $mail->setFrom(SMTP_FROM, SMTP_FROM_NAME);
@@ -62,9 +69,11 @@ function sendAdminNotification(string $subject, string $htmlBody): bool
         $mail->Subject = $subject;
         $mail->Body    = $htmlBody;
         $mail->AltBody = strip_tags($htmlBody);
-        return $mail->send();
+        $mail->send();
+        writeMailLog("Admin Email Sent SUCCESSFULLY to " . ADMIN_EMAIL);
+        return true;
     } catch (Exception $e) {
-        error_log('[A2P Mailer] Admin notification failed: ' . $e->getMessage());
+        writeMailLog("Admin Email FAILED: " . $mail->ErrorInfo);
         return false;
     }
 }
@@ -212,9 +221,11 @@ function sendAutoReply(string $toEmail, string $toName): bool
         $mail->Subject = $subject;
         $mail->Body    = $body;
         $mail->AltBody = "Dear $toName,\n\nThank you for contacting A2P Realtech regarding premium real estate opportunities.\n\nOur senior property advisor will personally review your requirements and connect with you shortly.\n\nFor urgent inquiries:\nPhone: +91-8130525001 / +91-8130510678\nEmail: team@a2prealtech.com\n\nWarm regards,\nLuxury Property Advisory Team\nA2P Realtech";
-        return $mail->send();
+        $mail->send();
+        writeMailLog("Auto-Reply Sent SUCCESSFULLY to " . $toEmail);
+        return true;
     } catch (Exception $e) {
-        error_log('[A2P Mailer] Auto-reply failed: ' . $e->getMessage());
+        writeMailLog("Auto-Reply FAILED for $toEmail: " . $mail->ErrorInfo);
         return false;
     }
 }
