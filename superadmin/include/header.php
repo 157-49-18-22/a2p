@@ -613,14 +613,17 @@ if ($current_page !== 'application_seating.php') {
 
 
 <?php
-
-
 try {
-    // Use the existing getPDOObject function if available, otherwise include the function file
+    // Make sure we have the required function available
     if (!function_exists('getPDOObject')) {
-        include_once __DIR__ . '/../function/function.php';
+        include_once __DIR__ . '/function/function.php';
     }
     
+    // Safety fallback if it STILL isn't defined
+    if(!function_exists('getPDOObject')) {
+        include_once '../function/function.php';
+    }
+
     $pdo_header = getPDOObject();
 
     // Ensure $admin_id is set and sanitize it
