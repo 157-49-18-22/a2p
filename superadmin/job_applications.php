@@ -38,6 +38,7 @@ require('include/header.php');
                             <th>Applicant Name</th>
                             <th>Contact Details</th>
                             <th>Job ID</th>
+                            <th>Location</th>
                             <th>Resume</th>
                             <th>Message</th>
                             <th>Applied Date</th>
@@ -58,6 +59,14 @@ require('include/header.php');
                                     <small><i class="mdi mdi-phone-outline me-1"></i><?php echo htmlspecialchars($app['phone']); ?></small>
                                 </td>
                                 <td><?php echo htmlspecialchars($app['job_id']); ?></td>
+                                <td>
+                                    <?php echo htmlspecialchars($app['city']); ?>
+                                    <?php if(!empty($app['lat_long'])): ?>
+                                        <br><a href="https://www.google.com/maps/search/?api=1&query=<?php echo urlencode($app['lat_long']); ?>" target="_blank" class="btn btn-xs btn-outline-info mt-1" style="font-size: 10px; padding: 2px 5px;">
+                                            <i class="mdi mdi-map-marker"></i> View Map
+                                        </a>
+                                    <?php endif; ?>
+                                </td>
                                 <td>
                                     <?php if (!empty($app['resume'])): ?>
                                         <a href="../upload/resumes/<?php echo $app['resume']; ?>" target="_blank" class="btn btn-sm btn-primary">

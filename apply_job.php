@@ -8,6 +8,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'] ?? '';
     $phone = $_POST['phone'] ?? '';
     $message = $_POST['message'] ?? '';
+    $city = $_POST['city'] ?? 'Unknown';
+    $lat_long = $_POST['lat_long'] ?? '';
     $job_id = $_POST['job_id'] ?? 0;
 
     if (empty($name) || empty($email) || empty($phone) || !isset($_FILES['resume'])) {
@@ -46,9 +48,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (move_uploaded_file($file['tmp_name'], $upload_path)) {
         $pdo = getPDOObject();
-        $stmt = $pdo->prepare("INSERT INTO job_applications (name, email, phone, resume, message, job_id) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt = $pdo->prepare("INSERT INTO job_applications (name, email, phone, city, lat_long, resume, message, job_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
         
-        if ($stmt->execute([$name, $email, $phone, $new_file_name, $message, $job_id])) {
+        if ($stmt->execute([$name, $email, $phone, $city, $lat_long, $new_file_name, $message, $job_id])) {
             echo json_encode(['status' => 'success', 'message' => 'Application submitted successfully! Our team will contact you soon.']);
         } else {
             echo json_encode(['status' => 'error', 'message' => 'Database error. Please try again later.']);

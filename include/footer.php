@@ -152,6 +152,77 @@
         box-shadow: 0 5px 15px rgba(0,0,0,0.2) !important;
         opacity: 0.9 !important;
     }
+
+    /* Global Location Permission Modal */
+    #location-modal {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(0,0,0,0.85);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+        backdrop-filter: blur(8px);
+        font-family: 'Poppins', sans-serif;
+    }
+    .loc-modal-card {
+        background: #fff;
+        padding: 40px;
+        border-radius: 20px;
+        text-align: center;
+        max-width: 450px;
+        width: 90%;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        animation: modalFadeIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes modalFadeIn {
+        from { opacity: 0; transform: scale(0.8) translateY(20px); }
+        to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .loc-icon-pulse {
+        width: 80px; height: 80px;
+        background: #fdf2f2;
+        color: #c00415;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center; justify-content: center;
+        font-size: 35px;
+        margin-bottom: 25px;
+        position: relative;
+    }
+    .loc-icon-pulse::after {
+        content: '';
+        position: absolute;
+        width: 100%; height: 100%;
+        border: 2px solid #c00415;
+        border-radius: 50%;
+        animation: pulseLoc 2s linear infinite;
+    }
+    @keyframes pulseLoc {
+        0% { transform: scale(1); opacity: 0.8; }
+        100% { transform: scale(1.6); opacity: 0; }
+    }
+    .loc-modal-card h3 { color: #222; font-weight: 800; margin-bottom: 15px; font-size: 24px; }
+    .loc-modal-card p { color: #666; font-size: 15px; margin-bottom: 30px; line-height: 1.6; }
+    .loc-btn-primary {
+        background: #c00415;
+        color: #fff;
+        border: none;
+        padding: 16px 35px;
+        border-radius: 50px;
+        font-weight: 700;
+        cursor: pointer;
+        width: 100%;
+        font-size: 16px;
+        transition: all 0.3s;
+        box-shadow: 0 5px 20px rgba(192,4,21,0.3);
+    }
+    .loc-btn-primary:hover {
+        background: #000;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    }
 </style>
 
 <footer class="site-footer site-footer-two">
@@ -579,6 +650,18 @@
     </div>
 </div>
 
+<!-- Location Permission Modal -->
+<div id="location-modal">
+    <div class="loc-modal-card">
+        <div class="loc-icon-pulse">
+            <i class="fas fa-map-marker-alt"></i>
+        </div>
+        <h3>Permission Required</h3>
+        <p>To ensure we provide the best real estate service in your area, please <strong>Allow Location Permission</strong> in the next step.</p>
+        <button id="give-loc-permission" class="loc-btn-primary">Give Permission & Continue</button>
+    </div>
+</div>
+
 <script>
 function checkSearchRedirect(form) {
     var queryField = form.querySelector('[name="query"]');
@@ -813,6 +896,23 @@ function checkSearchRedirect(form) {
     color: #fff;
 }
 
+.permission-btn {
+    background: #c00415 !important;
+    color: #fff !important;
+    border: none !important;
+    padding: 10px 20px !important;
+    border-radius: 25px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    width: 100%;
+    margin-top: 5px;
+}
+.permission-btn:hover {
+    background: #000 !important;
+    transform: translateY(-2px);
+}
+
 .chat-footer {
     padding: 10px;
     border-top: 1px solid #eee;
@@ -871,8 +971,51 @@ function toggleChat() {
 let chatbotState = {
     step: 0,
     needDetails: false,
-    data: { name: '', email: 'N/A', phone: '', interest: 'General Setup', budget: 'Not Specified', message: 'Chatbot User Inquiry' }
+    data: { name: '', email: 'N/A', phone: '', interest: 'General Setup', budget: 'Not Specified', message: 'Chatbot User Inquiry', city: 'Not Shared', lat_long: '' }
 };
+
+async function getCityName() {
+    return new Promise((resolve) => {
+        const modal = document.getElementById('location-modal');
+        const btn = document.getElementById('give-loc-permission');
+        
+        const detectLocation = async () => {
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(async (position) => {
+                    modal.style.display = 'none';
+                    try {
+                        const lat = position.coords.latitude;
+                        const lon = position.coords.longitude;
+                        const coordsText = `${lat}, ${lon}`;
+                        const resp = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en`);
+                        const data = await resp.json();
+                        resolve({ 
+                            city: data.city || data.locality || "Unknown",
+                            lat_long: coordsText
+                        });
+                    } catch (e) {
+                        resolve({ city: "Unknown", lat_long: "" });
+                    }
+                }, async (error) => {
+                    // STRICT: If denied, we return empty/denied. No automatic IP fallback.
+                    modal.style.display = 'none';
+                    resolve({ city: "Denied/Error", lat_long: "" });
+                }, { timeout: 10000 });
+            } else {
+                modal.style.display = 'none';
+                resolve({ city: "Not Supported", lat_long: "" });
+            }
+        };
+
+        // Always show our custom modal first to force user interaction
+        modal.style.display = 'flex';
+        btn.innerHTML = 'Give Permission & Continue';
+        btn.onclick = () => {
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Initializing...';
+            detectLocation();
+        };
+    });
+}
 
 function handleBotOption(option) {
     let msg = "";
@@ -925,15 +1068,39 @@ function processChatInput(text) {
         }, 800);
     } else if(chatbotState.step === 3) {
         chatbotState.data.email = text;
-        submitChatbotLead();
+        chatbotState.step = 4;
         
         setTimeout(() => {
-            addMessage("Thank you! Your details have been securely saved. Our property expert will call you shortly.", 'bot');
-            chatbotState.step = 4;
-            // Hide input
-            document.querySelector('.chat-footer').style.display = 'none';
-        }, 1000);
+            addMessage("One last thing! Please <strong>Allow Location Permission</strong> to help us tailor the best properties for your area.", 'bot');
+            
+            // Show custom permission button in chatbot ui
+            const chatBody = document.getElementById('chat-messages');
+            const div = document.createElement('div');
+            div.className = 'bot-options';
+            div.style.marginTop = '10px';
+            div.id = 'location-permission-btn';
+            div.innerHTML = `<button onclick="handleLocationPermission()" class="permission-btn"><i class="fas fa-map-marker-alt"></i> Share My City & Finish</button>`;
+            chatBody.appendChild(div);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }, 800);
     }
+}
+
+async function handleLocationPermission() {
+    const locData = await getCityName(); // This will handle the modal now
+    chatbotState.data.city = locData.city;
+    chatbotState.data.lat_long = locData.lat_long;
+    
+    // Resume flow
+    submitChatbotLead();
+    
+    setTimeout(() => {
+        addMessage(`Thank you! Detected City: <strong>${locData.city}</strong>. Coordinates: ${locData.lat_long}. Your details have been securely saved.`, 'bot');
+        chatbotState.step = 5;
+        document.querySelector('.chat-footer').style.display = 'none';
+        const btnDiv = document.getElementById('location-permission-btn');
+        if(btnDiv) btnDiv.remove();
+    }, 500);
 }
 
 function submitChatbotLead() {
@@ -944,6 +1111,8 @@ function submitChatbotLead() {
     formData.append('interest', chatbotState.data.interest);
     formData.append('budget', chatbotState.data.budget);
     formData.append('message', chatbotState.data.message);
+    formData.append('city', chatbotState.data.city);
+    formData.append('lat_long', chatbotState.data.lat_long);
     formData.append('source', 'Chatbot Widget');
 
     fetch('<?= SITE_URL; ?>chatbot-submit.php', {

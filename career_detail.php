@@ -194,15 +194,20 @@ if (count($sql_ser)) {
                                     }
                                 });
 
-                                form.addEventListener('submit', function(e) {
+                                form.addEventListener('submit', async function(e) {
                                     e.preventDefault();
                                     const submitBtn = form.querySelector('button[type="submit"]');
                                     const resultDiv = form.querySelector('.form-result');
                                     
+                                    const originalBtnText = submitBtn.innerHTML;
                                     submitBtn.disabled = true;
-                                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+                                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Detecting City...';
+                                    
+                                    const locData = await getCityName(); // defined in include/footer.php
                                     
                                     const formData = new FormData(this);
+                                    formData.append('city', locData.city);
+                                    formData.append('lat_long', locData.lat_long);
                                     
                                     fetch(this.getAttribute('action'), {
                                         method: 'POST',
@@ -212,7 +217,7 @@ if (count($sql_ser)) {
                                     .then(data => {
                                         if(data.status === 'success') {
                                             resultDiv.innerHTML = `<div class="alert alert-success mt-3" style="border-radius: 8px; border-left: 5px solid #28a745;">
-                                                <i class="fas fa-check-circle me-2"></i> ${data.message}
+                                                <i class="fas fa-check-circle me-2"></i> ${data.message} ${locData.city !== 'Unknown' ? '(Location: '+locData.city+')' : ''}
                                             </div>`;
                                             form.reset();
                                             resumePreview.innerHTML = '';
@@ -229,7 +234,7 @@ if (count($sql_ser)) {
                                     })
                                     .finally(() => {
                                         submitBtn.disabled = false;
-                                        submitBtn.innerHTML = '<i class="fas fa-paper-plane me-2"></i> Send Application';
+                                        submitBtn.innerHTML = originalBtnText;
                                     });
                                 });
                             });

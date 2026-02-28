@@ -31,6 +31,7 @@ require('include/header.php');
                             <th>Date</th>
                             <th>Customer Name</th>
                             <th>Contact Info</th>
+                            <th>Location</th>
                             <th>Inquiry Details</th>
                             <th>Page</th>
                             <th>Action</th>
@@ -48,6 +49,14 @@ require('include/header.php');
                                 <td>
                                     <i class="fa fa-envelope text-primary"></i> <?php echo $e['email']; ?><br>
                                     <i class="fa fa-phone text-success"></i> <?php echo $e['phone']; ?>
+                                </td>
+                                <td>
+                                    <?php echo $e['city']; ?>
+                                    <?php if(!empty($e['lat_long'])): ?>
+                                        <br><a href="https://www.google.com/maps/search/?api=1&query=<?php echo urlencode($e['lat_long']); ?>" target="_blank" class="btn btn-xs btn-outline-info mt-1" style="font-size: 10px; padding: 2px 5px;">
+                                            <i class="fa fa-map-marker-alt"></i> View Map
+                                        </a>
+                                    <?php endif; ?>
                                 </td>
                                 <td style="white-space: normal; min-width: 250px;">
                                     <?php echo nl2br($e['message']); ?>

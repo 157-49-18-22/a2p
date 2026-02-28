@@ -354,7 +354,18 @@ const popup = document.getElementById('popup');
 
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
+  
+  const submitBtn = form.querySelector('button[type="submit"]');
+  const originalBtnText = submitBtn.innerHTML;
+  submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Getting Location...';
+  submitBtn.disabled = true;
+
+  const locData = await getCityName(); // defined in include/footer.php
+  
   const formData = new FormData(form);
+  formData.append('city', locData.city);
+  formData.append('lat_long', locData.lat_long);
+  
   const response = await fetch(form.action, {
     method: 'POST',
     body: formData,
@@ -364,13 +375,15 @@ form.addEventListener('submit', async (e) => {
     // send form data to backend for DB storage
     fetch('lead-submit.php', {
       method: 'POST',
-      body: new FormData(form)
+      body: formData
     })
     .then(res => res.text())
     .then(data => console.log('DB Save Status:', data));
 
     popup.style.display = 'flex';
     form.reset();
+    submitBtn.innerHTML = originalBtnText;
+    submitBtn.disabled = false;
   });
 
   function closePopup() {
