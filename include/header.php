@@ -1272,8 +1272,14 @@ $notif_count = count($notif_data);
     </div>
     <div class="notif-list">
         <?php if($notif_count > 0) { 
-            foreach($notif_data as $nt) { ?>
-            <div class="notif-item" onclick="window.location.href='<?php echo $nt['link'] ?: '#'; ?>'">
+            foreach($notif_data as $nt) { 
+                $original_link = $nt['link'] ?: '#';
+                // Wrap in tracking URL if there's a real link
+                $tracking_link = ($original_link != '#') 
+                    ? SITE_URL . 'superadmin/track_click.php?notif_id=' . $nt['id'] . '&redirect=' . urlencode($original_link)
+                    : '#';
+            ?>
+            <div class="notif-item" onclick="window.location.href='<?php echo $tracking_link; ?>'">
                 <p><strong><?php echo $nt['title']; ?></strong> <?php echo $nt['message']; ?></p>
                 <span><?php echo date('d M, h:i A', strtotime($nt['created_at'])); ?></span>
             </div>
