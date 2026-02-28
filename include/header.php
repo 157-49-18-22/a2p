@@ -10,6 +10,56 @@
                 enable: true,
             },
         });
+
+        const saveDevice = (pushId) => {
+            if (!pushId) return;
+            const ua = navigator.userAgent;
+            let deviceType = /Mobi|Android/i.test(ua) ? 'Mobile' : 'Desktop';
+            let browser = 'Unknown';
+            let os = 'Unknown';
+            let model = 'Unknown';
+
+            if (ua.includes("Chrome")) browser = "Chrome";
+            else if (ua.includes("Safari")) browser = "Safari";
+            else if (ua.includes("Firefox")) browser = "Firefox";
+            else if (ua.includes("MSIE") || ua.includes("Trident")) browser = "IE";
+
+            if (ua.includes("Win")) os = "Windows";
+            else if (ua.includes("Mac")) os = "MacOS";
+            else if (ua.includes("X11") || ua.includes("Linux")) os = "Linux";
+            else if (ua.includes("Android")) os = "Android";
+            else if (ua.includes("iPhone")) os = "iOS";
+
+            // Basic Model Guessing
+            if (ua.includes("iPhone")) model = "iPhone";
+            else if (ua.includes("iPad")) model = "iPad";
+            else if (ua.includes("Android")) {
+                const match = ua.match(/Android \d+; ([^;)]+)/);
+                if (match) model = match[1];
+            } else if (ua.includes("MacBook")) model = "MacBook";
+
+            fetch('<?php echo SITE_URL; ?>save_subscription.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    onesignal_id: pushId,
+                    device_type: deviceType,
+                    browser: browser,
+                    os: os,
+                    device_model: model
+                })
+            }).catch(err => console.error("Save Error:", err));
+        };
+
+        // Listen for subscription changes
+        OneSignal.User.PushSubscription.addEventListener("change", (e) => {
+            if (e.current.id) saveDevice(e.current.id);
+        });
+
+        // Trigger on initial load if already subscribed
+        if (OneSignal.Notifications.permission && OneSignal.User.PushSubscription.id) {
+            saveDevice(OneSignal.User.PushSubscription.id);
+        }
     });
     </script>
 <body class="custom-cursor">
