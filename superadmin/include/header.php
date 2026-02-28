@@ -565,6 +565,11 @@ if ($current_page !== 'application_seating.php') {
                                         <div data-i18n="By City Location">By City Location</div>
                                     </a>
                                 </li>
+                                <li class="menu-item">
+                                    <a href="enquiry.php" class="menu-link">
+                                        <div data-i18n="Contact Enquiries">Contact Enquiries</div>
+                                    </a>
+                                </li>
 
 
 
