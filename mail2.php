@@ -22,27 +22,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     ];
     insert('enquiry', $data);
 
-    // ── Admin notification ────────────────────────────────────────
+    // Prepare Admin Body
     $adminSubject = "New Brochure Inquiry from $name";
-    $adminBody = "
-    <html><body style='font-family:Arial,sans-serif;color:#333;'>
-    <h2 style='color:#0f3460;'>New Brochure Download Inquiry — A2P Realtech</h2>
-    <table cellpadding='8' cellspacing='0' style='border-collapse:collapse;width:100%;max-width:500px;'>
-      <tr style='background:#f9f5ea;'><td><strong>Name</strong></td><td>$name</td></tr>
-      <tr><td><strong>Email</strong></td><td>$email</td></tr>
-      <tr style='background:#f9f5ea;'><td><strong>Phone</strong></td><td>$phone</td></tr>
-      <tr><td><strong>Message</strong></td><td>$message</td></tr>
-      <tr style='background:#f9f5ea;'><td><strong>Source Page</strong></td><td>$page</td></tr>
-      <tr><td><strong>Property</strong></td><td>$destination</td></tr>
-    </table>
-    </body></html>";
+    $adminBody = "<h3>New Brochure Inquiry</h3>
+                  <p><b>Name:</b> $name<br>
+                  <b>Email:</b> $email<br>
+                  <b>Phone:</b> $phone<br>
+                  <b>Message:</b> $message<br>
+                  <b>Property / Destination:</b> $destination<br>
+                  <b>Source Page:</b> $page</p>";
 
-    sendAdminNotification($adminSubject, $adminBody);
+    // Send BOTH in one go
+    sendAllMails($email, $name, $adminSubject, $adminBody);
 
-    // ── Auto-reply to user ────────────────────────────────────────
-    sendAutoReply($email, $name);
-
-    // ── Redirect ──────────────────────────────────────────────────
+    // Redirect to thank-you
     $brochure_file = isset($_POST["brochure_file"]) ? $_POST["brochure_file"] : "";
     if (!empty($brochure_file)) {
         header("Location: thank-you.php?brochure=" . urlencode($brochure_file));
