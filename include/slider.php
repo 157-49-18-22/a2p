@@ -5,8 +5,10 @@
     </div>
     <div class="news-ticker-content">
         <div class="news-ticker-wrapper">
-            <?php 
+             <?php 
             $result = sqlfetch("select * from news ");
+            $ticker_data = sqlfetch("select ticker_speed from address limit 1");
+            $ticker_speed = (!empty($ticker_data) && isset($ticker_data[0]['ticker_speed'])) ? $ticker_data[0]['ticker_speed'] : 40;
             if (count($result)) {
                 // Repeat the items to ensure continuous scroll
                 $news_items = array_merge($result, $result);
@@ -89,7 +91,7 @@
     align-items: center;
     height: 100%;
     white-space: nowrap;
-    animation: ticker-scroll 40s linear infinite;
+    animation: ticker-scroll <?php echo $ticker_speed; ?>s linear infinite;
 }
 
 .news-ticker-wrapper:hover {

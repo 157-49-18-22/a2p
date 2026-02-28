@@ -113,7 +113,7 @@ if (isset($_POST['editdone'])) {
       </div>';
 }
 
-function about_form($pid = '0', $addr = '', $email = '', $phone = '', $des = '', $photo = '', $link = '', $facebook = '', $twitter = '', $youtube = '', $linkedin = '', $test_date = '', $class8 = '', $class9 = '', $class10 = '', $class11 = '', $all_tag = '', $linkedin2 = '',   $formname = 'addabout')
+function about_form($pid = '0', $addr = '', $email = '', $phone = '', $des = '', $photo = '', $link = '', $facebook = '', $twitter = '', $youtube = '', $linkedin = '', $test_date = '', $class8 = '', $class9 = '', $class10 = '', $class11 = '', $all_tag = '', $linkedin2 = '', $ticker_speed = '40', $formname = 'addabout')
 { ?>
 
 
@@ -256,6 +256,16 @@ function about_form($pid = '0', $addr = '', $email = '', $phone = '', $des = '',
                     </div>
                 </div>
                 
+                <div class="col-lg-12  mt-5">
+                    <div class="input-group input-group-merge">
+                        <span class="input-group-text">@</span>
+                        <div class="form-floating form-floating-outline">
+                            <input type="number" class="form-control" name="ticker_speed" placeholder="Trending Speed (Seconds)" aria-label="Trending Speed" value="<?php echo $ticker_speed; ?>" />
+                            <label for="basic-addon11">Trending Speed (Smaller is Faster, default 40)</label>
+                        </div>
+                    </div>
+                </div>
+                
                  <div class="col-lg-12  mt-5">
                     <div class="input-group input-group-merge">
                         <span class="input-group-text">@</span>
@@ -386,7 +396,7 @@ function about_form($pid = '0', $addr = '', $email = '', $phone = '', $des = '',
                                 $productdata = sqlfetch("SELECT * FROM `address` where id='$pid' ");
                                 foreach ($productdata as $product) {
                                     extract($product);
-                                    about_form($pid, $addr, $email, $phone, $des, $photo, $link, $facebook, $twitter, $youtube, $linkedin, $test_date, $class8, $class9, $class10, $class11,  $all_tag, $linkedin2, $formname = 'editdone');
+                                    about_form($pid, $addr, $email, $phone, $des, $photo, $link, $facebook, $twitter, $youtube, $linkedin, $test_date, $class8, $class9, $class10, $class11,  $all_tag, $linkedin2, $ticker_speed, $formname = 'editdone');
                                 } ?>
                             </div>
                         </div>
