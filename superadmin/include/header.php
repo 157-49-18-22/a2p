@@ -212,7 +212,7 @@ if ($current_page !== 'application_seating.php') {
                                 </li>
                                 <li class="menu-item">
                                     <a href="subscribers.php" class="menu-link">
-                                        <div data-i18n="Subscribed Devices">Subscribed Devices</div>
+                                        <div data-i18n="Subscriber Analytics">Subscriber Analytics</div>
                                     </a>
                                 </li>
 
@@ -309,7 +309,7 @@ if ($current_page !== 'application_seating.php') {
                                 </li>
                                 <li class="menu-item">
                                     <a href="subscribers.php" class="menu-link">
-                                        <div data-i18n="Subscribed Devices">Subscribed Devices</div>
+                                        <div data-i18n="Subscriber Analytics">Subscriber Analytics</div>
                                     </a>
                                 </li>
 
