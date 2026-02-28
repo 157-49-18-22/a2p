@@ -601,9 +601,7 @@ try {
         include_once __DIR__ . '/../function/function.php';
     }
     
-    echo "DEBUG: Before DB call<br>";
     $pdo_header = getPDOObject();
-    echo "DEBUG: After DB call<br>";
 
     // Ensure $admin_id is set and sanitize it
     if (!isset($admin_id) || empty($admin_id)) {
