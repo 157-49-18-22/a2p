@@ -130,11 +130,11 @@ canvas {
         <p class="text-muted mb-4">Push notification subscriber insights: devices, browsers, and monthly trends.</p>
 
         <!-- Stats Row -->
-        <div class="row g-4 mb-4">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-5 g-4 mb-4">
 
             <!-- Total Subscribers -->
-            <div class="col-xl-3 col-sm-6">
-                <div class="card stat-card shadow-sm" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <div class="col">
+                <div class="card stat-card shadow-sm h-100" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
                     <div class="card-body text-white">
                         <div class="d-flex justify-content-between align-items-start">
                             <div>
@@ -147,15 +147,15 @@ canvas {
                         </div>
                         <div class="mt-3 d-flex align-items-center gap-1">
                             <i class="mdi mdi-devices" style="font-size:1rem;opacity:0.8;"></i>
-                            <small style="opacity:0.85;">All subscribed push devices</small>
+                            <small style="opacity:0.85;">All push devices</small>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Visitors This Month -->
-            <div class="col-xl-3 col-sm-6">
-                <div class="card stat-card shadow-sm" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">
+            <div class="col">
+                <div class="card stat-card shadow-sm h-100" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">
                     <div class="card-body text-white">
                         <div class="d-flex justify-content-between align-items-start">
                             <div>
@@ -168,15 +168,15 @@ canvas {
                         </div>
                         <div class="mt-3 d-flex align-items-center gap-1">
                             <i class="mdi mdi-trending-up" style="font-size:1rem;opacity:0.8;"></i>
-                            <small style="opacity:0.85;">Subscribed in <?php echo date('F Y'); ?></small>
+                            <small style="opacity:0.85;">Subscribed in <?php echo date('F'); ?></small>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Browser Count -->
-            <div class="col-xl-3 col-sm-6">
-                <div class="card stat-card shadow-sm" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+            <div class="col">
+                <div class="card stat-card shadow-sm h-100" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
                     <div class="card-body text-white">
                         <div class="d-flex justify-content-between align-items-start">
                             <div>
@@ -190,7 +190,7 @@ canvas {
                         <div class="mt-3 d-flex align-items-center gap-1">
                             <i class="mdi mdi-google-chrome" style="font-size:1rem;opacity:0.8;"></i>
                             <small style="opacity:0.85;">
-                                <?php echo !empty($browser_stats) ? $browser_stats[0]['browser'] . ' is top browser' : 'No data'; ?>
+                                <?php echo !empty($browser_stats) ? $browser_stats[0]['browser'] : 'No data'; ?>
                             </small>
                         </div>
                     </div>
@@ -198,8 +198,8 @@ canvas {
             </div>
 
             <!-- Device Types -->
-            <div class="col-xl-3 col-sm-6">
-                <div class="card stat-card shadow-sm" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+            <div class="col">
+                <div class="card stat-card shadow-sm h-100" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
                     <div class="card-body text-white">
                         <div class="d-flex justify-content-between align-items-start">
                             <div>
@@ -213,8 +213,29 @@ canvas {
                         <div class="mt-3 d-flex align-items-center gap-1">
                             <i class="mdi mdi-cellphone" style="font-size:1rem;opacity:0.8;"></i>
                             <small style="opacity:0.85;">
-                                <?php echo !empty($device_stats) ? $device_stats[0]['device_type'] . ' leads' : 'No data'; ?>
+                                <?php echo !empty($device_stats) ? $device_stats[0]['device_type'] : 'No data'; ?>
                             </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- City / Regions -->
+            <div class="col">
+                <div class="card stat-card shadow-sm h-100" style="background: linear-gradient(135deg, #fbbebe 0%, #ff85a2 100%);">
+                    <div class="card-body text-white">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <div class="stat-number"><?php echo count($city_stats); ?></div>
+                                <div class="stat-label">Top Regions</div>
+                            </div>
+                            <div class="stat-icon" style="background:rgba(255,255,255,0.2);">
+                                <i class="mdi mdi-map-marker-radius-outline" style="color:#fff;"></i>
+                            </div>
+                        </div>
+                        <div class="mt-3 d-flex align-items-center gap-1">
+                            <i class="mdi mdi-map-marker-outline" style="font-size:1rem;opacity:0.8;"></i>
+                            <small style="opacity:0.85;">Unique IPs/Locations</small>
                         </div>
                     </div>
                 </div>
