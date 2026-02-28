@@ -11,12 +11,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   // Combine data for storage
   $full_message = "Interested In: $interest | Budget: $budget | Message: $message";
 
+  $page_source = isset($_POST['source']) ? htmlspecialchars($_POST['source']) : "Contact Us Page";
+
   $data = array(
       'name' => $name,
       'email' => $email,
       'phone' => $phone,
       'message' => $full_message,
-      'page' => "Contact Us Page",
+      'page' => $page_source,
       'destination' => "Direct Inquiry",
       'tdate' => date('Y-m-d')
   );

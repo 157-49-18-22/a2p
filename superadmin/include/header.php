@@ -570,6 +570,11 @@ if ($current_page !== 'application_seating.php') {
                                         <div data-i18n="Contact Enquiries">Contact Enquiries</div>
                                     </a>
                                 </li>
+                                <li class="menu-item">
+                                    <a href="chatbot_leads.php" class="menu-link">
+                                        <div data-i18n="Chatbot Leads">Chatbot Leads</div>
+                                    </a>
+                                </li>
 
 
 

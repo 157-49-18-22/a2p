@@ -868,28 +868,89 @@ function toggleChat() {
     }
 }
 
+let chatbotState = {
+    step: 0,
+    needDetails: false,
+    data: { name: '', email: 'N/A', phone: '', interest: 'General Setup', budget: 'Not Specified', message: 'Chatbot User Inquiry' }
+};
+
 function handleBotOption(option) {
     let msg = "";
-    let reply = "";
     
     if(option === 'buy') {
         msg = "I'm looking to buy a property.";
-        reply = "Great choice! Do you want to search by location or property type (Residential/Commercial)?";
+        chatbotState.data.interest = "Residential/Commercial";
     } else if(option === 'offers') {
         msg = "Show me the latest offers.";
-        reply = "Check out our premium projects in Gurgaon and Delhi. I'll redirect you to our top deals.";
-        setTimeout(() => window.location.href = "<?= SITE_URL; ?>blog.php", 2000);
+        chatbotState.data.interest = "Latest Offers";
     } else if(option === 'location') {
         msg = "I want to search by location.";
-        reply = "We have properties in Gurgaon, Delhi, Noida, and more. You can select your city from the 'By Location' menu in the header!";
+        chatbotState.data.interest = "Search Location";
     } else if(option === 'contact') {
-        msg = "I want to talk to an agent.";
-        reply = "Sure! An expert will assist you. You can call us at +91-8130525001 or drop a message on WhatsApp.";
-        setTimeout(() => window.open("https://api.whatsapp.com/send?phone=918130525001", "_blank"), 2000);
+        msg = "I want to talk to an expert.";
+        chatbotState.data.interest = "Talk to Expert";
     }
 
     addMessage(msg, 'user');
-    setTimeout(() => addMessage(reply, 'bot'), 1000);
+    
+    setTimeout(() => {
+        addMessage("To assist you better, could you please tell me your <strong>Full Name</strong>?", 'bot');
+        chatbotState.step = 1;
+        chatbotState.needDetails = true;
+    }, 1000);
+}
+
+function processChatInput(text) {
+    if(!chatbotState.needDetails) {
+        chatbotState.data.message = text;
+        chatbotState.needDetails = true;
+        chatbotState.step = 1;
+        setTimeout(() => {
+            addMessage("Thanks! May I know your <strong>Full Name</strong> to assist you better?", 'bot');
+        }, 800);
+        return;
+    }
+
+    if(chatbotState.step === 1) {
+        chatbotState.data.name = text;
+        chatbotState.step = 2;
+        setTimeout(() => {
+            addMessage("Nice to meet you, " + text + "! Please provide your <strong>Phone Number</strong> so our expert can connect with you.", 'bot');
+        }, 800);
+    } else if(chatbotState.step === 2) {
+        chatbotState.data.phone = text;
+        chatbotState.step = 3;
+        setTimeout(() => {
+            addMessage("Got it! Lastly, what is your <strong>Email ID</strong>?", 'bot');
+        }, 800);
+    } else if(chatbotState.step === 3) {
+        chatbotState.data.email = text;
+        submitChatbotLead();
+        
+        setTimeout(() => {
+            addMessage("Thank you! Your details have been securely saved. Our property expert will call you shortly.", 'bot');
+            chatbotState.step = 4;
+            // Hide input
+            document.querySelector('.chat-footer').style.display = 'none';
+        }, 1000);
+    }
+}
+
+function submitChatbotLead() {
+    let formData = new FormData();
+    formData.append('name', chatbotState.data.name);
+    formData.append('email', chatbotState.data.email);
+    formData.append('phone', chatbotState.data.phone);
+    formData.append('interest', chatbotState.data.interest);
+    formData.append('budget', chatbotState.data.budget);
+    formData.append('message', chatbotState.data.message);
+    formData.append('source', 'Chatbot Widget');
+
+    fetch('<?= SITE_URL; ?>chatbot-submit.php', {
+        method: 'POST',
+        body: formData
+    })
+    .catch(err => console.error(err));
 }
 
 function addMessage(text, type) {
@@ -907,9 +968,7 @@ function sendMessage() {
     if (text) {
         addMessage(text, 'user');
         input.value = '';
-        setTimeout(() => {
-            addMessage("Searching for '" + text + "'... Our team will get back to you with the best matches!", 'bot');
-        }, 1000);
+        processChatInput(text);
     }
 }
 
