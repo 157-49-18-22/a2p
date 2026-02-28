@@ -272,24 +272,22 @@ if (count($sql_add))
 </style>
 
 <section class="search-container-wrap">
-    <div class="container">
-        <div class="search-glass-card wow fadeInUp" data-wow-duration="1500ms">
-            <div class="search-tagline">
-                <p>Find Your Perfect Space</p>
-                <h2>Start Your Journey Here</h2>
-                <div class="accent-line"></div>
-            </div>
-            
-            <div class="search-bar-premium">
-                <form action="<?= SITE_URL; ?>search_result.php" method="GET" class="d-flex w-100 align-items-center" onsubmit="return checkSearchRedirect(this)">
-                    <i class="fa-solid fa-magnifying-glass ms-4 text-muted"></i>
-                    <input type="text" class="search-input-premium" placeholder="Location, Property, or Developer..." name="query" autocomplete="off">
-                    <button type="submit" class="btn-search-glow">
-                        <span>Search</span>
-                        <i class="fa-solid fa-arrow-right-long"></i>
-                    </button>
-                </form>
-            </div>
+    <div class="container text-center">
+        <!-- Search Here Title -->
+        <h1 style="color: #c00415; font-size: 48px; font-weight: 800; margin-bottom: 30px; text-transform: none;">Search Here</h1>
+        
+        <div class="search-bar-wrapper" style="max-width: 900px; margin: 0 auto; background: #fff; border: 1px solid #ddd; border-radius: 50px; display: flex; align-items: center; overflow: hidden; box-shadow: 0 5px 25px rgba(0,0,0,0.05);">
+            <form action="<?= SITE_URL; ?>search_result.php" method="GET" class="d-flex w-100 align-items-center" onsubmit="return checkSearchRedirect(this)">
+                <input type="text" 
+                       style="flex: 1; border: none; padding: 20px 35px; font-size: 18px; outline: none;" 
+                       placeholder="Search here..." 
+                       name="query" 
+                       autocomplete="off">
+                <button type="submit" 
+                        style="background: #2196F3; color: #fff; border: none; height: 65px; width: 80px; font-size: 22px; cursor: pointer; transition: background 0.3s; display: flex; align-items: center; justify-content: center; border-radius: 0 50px 50px 0;">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </form>
         </div>
     </div>
 </section>
