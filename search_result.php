@@ -170,12 +170,41 @@ function highlightTerms($text, $term) {
         margin-top: 10px;
     }
 
+    .project-card-v2 {
+        background: #fff !important;
+        border-radius: 12px !important;
+        overflow: hidden !important;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08) !important;
+        transition: all 0.4s ease !important;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .project-card-v2:hover {
+        transform: translateY(-10px) !important;
+        box-shadow: 0 20px 45px rgba(0,0,0,0.12) !important;
+    }
+
+    .project-card-v2__img {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .card-location-ribbon i {
+        font-size: 14px;
+        color: #ffc107; /* gold pin */
+    }
+
     h3.cool {
         font-weight: 800;
         letter-spacing: -1px;
-        border-left: 5px solid #c00415;
+        border-left: 8px solid #c00415;
         padding-left: 20px;
         margin-bottom: 40px;
+        color: #222;
+        text-transform: uppercase;
+        font-size: 28px;
     }
 </style>
 
@@ -289,23 +318,32 @@ function highlightTerms($text, $term) {
                 foreach ($products as $subproductwww) {
                     ?>
                     <div class="col-xl-4 col-lg-4 col-md-6 productr mb-4">
-                        <div class="services-one__single wow fadeInUp" data-wow-delay="100ms">
-                            <div class="services-one__img">
+                        <div class="project-card-v2 wow fadeInUp" data-wow-delay="100ms">
+                            <div class="project-card-v2__img">
                                 <a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php">
                                     <img src="<?= SITE_URL; ?>upload/<?php echo $subproductwww['photo']; ?>" alt="" style="height:250px; width:100%; object-fit:cover;">
                                 </a>
+                                <div class="card-location-ribbon" style="position: absolute; bottom: 0; left: 0; width: 100%; background: #102a83; color: #fff; padding: 10px 15px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+                                    <i class="fa-solid fa-map-marker-alt"></i> 
+                                    <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                        <?php echo htmlspecialchars($subproductwww['pro_lable']); ?>
+                                    </span>
+                                </div>
                             </div>
-                            <div class="services-one__content">
-                                <h3 class="services-one__title">
-                                    <a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php">
+                            <div class="project-card-v2__content" style="padding: 20px 15px; background: #fff;">
+                                <h3 class="project-card-v2__title" style="margin-bottom: 12px;">
+                                    <a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php" style="color: #c00415 !important; font-size: 20px !important; font-weight: 800 !important; display: block; line-height: 1.3;">
                                         <?php echo highlightTerms(htmlspecialchars($subproductwww['name']), $search); ?>
                                     </a>
                                 </h3>
-                                <p class="services-one__text"><i class="fa-solid fa-map-pin"></i> <?php echo htmlspecialchars($subproductwww['pro_lable']); ?></p>
-                                <?php if(!empty($subproductwww['developer'])) { ?>
-                                    <p class="services-one__text"><i class="fa-solid fa-user-tie"></i> <strong>Developer:</strong> <?php echo htmlspecialchars($subproductwww['developer']); ?></p>
-                                <?php } ?>
-                                <p class="services-one__text price"><i class="fa-solid fa-indian-rupee-sign"></i> <?php echo htmlspecialchars($subproductwww['pro_discountprice']); ?></p>
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <p class="services-one__text price" style="margin: 0; color: #102a83; font-weight: 700; font-size: 16px;">
+                                        <i class="fa-solid fa-indian-rupee-sign"></i> <?php echo htmlspecialchars($subproductwww['pro_discountprice']); ?>
+                                    </p>
+                                    <span style="font-size: 11px; color: #888;">
+                                        <i class="fa-solid fa-user-tie"></i> <?php echo htmlspecialchars($subproductwww['developer']); ?>
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
