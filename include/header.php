@@ -1455,9 +1455,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         <div class="main-menu-two__call-search">
 
                             <div class="main-menu-two__call">
-                               <button type="button" class="thm-btn search-toggler">
+                               <a href="<?= SITE_URL; ?>search.php" class="thm-btn">
                                     <i class="icon-magnifying-glass"></i>
-                                </button>
+                                </a>
                             </div>
 
                         </div>
