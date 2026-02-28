@@ -178,7 +178,7 @@ function highlightTerms($text, $term) {
         margin-bottom: 32px;
         font-weight: 800;
         font-size: 24px;
-        color: #222;
+        color: #007bff;
     }
 </style>
 
@@ -200,9 +200,10 @@ function highlightTerms($text, $term) {
                 </li>
             </ul>
             <h2>
+                <span style="color: #007bff;">Search Results for:</span> 
                 <?php 
                 if (isset($_GET['query']) && $_GET['query'] != '') {
-                    echo 'Search Results for: "' . highlightTerms(htmlspecialchars($_GET['query']), $_GET['query']) . '"';
+                    echo '"' . highlightTerms(htmlspecialchars($_GET['query']), $_GET['query']) . '"';
                 } else {
                     echo 'Search';
                 }
@@ -283,7 +284,7 @@ function highlightTerms($text, $term) {
             $mediaItems = $stmt5->fetchAll(PDO::FETCH_ASSOC);
 
             echo '<div class="row"><div class="col-md-12">';
-            echo '<h3 class="cool">Search Results for: "' . htmlspecialchars($search) . '"</h3>';
+            echo '<h3 class="cool"><span style="color: #007bff;">Search Results for:</span> "' . htmlspecialchars($search) . '"</h3>';
 
             // Show products
             if (!empty($products)) {
