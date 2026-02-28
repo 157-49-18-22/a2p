@@ -111,36 +111,38 @@ function highlightTerms($text, $term) {
 ?>
 
 <style>
-    /* Theme-matched search term highlight */
+    /* Highlight - Match Image 2 (just bold and red) */
     strong {
-        background-color: rgba(90, 0, 8, 0.15); /* soft maroon tint */
-        color: #5a0008; /* theme color */
-        padding: 2px 4px;
-        border-radius: 3px;
-        font-weight: 600;
-    }
-
-    strong:hover {
-        background-color: rgba(90, 0, 8, 0.28); /* deeper tint on hover */
-        transition: background-color 0.3s ease;
+        background-color: transparent;
+        color: inherit;
+        font-weight: 900;
+        text-decoration: none;
     }
 
     .services-one__single.wow.fadeInUp.animated {
-        box-shadow: rgb(90 0 8) 0px 3px 8px !important;
+        box-shadow: rgb(90 0 8) 0px 3px 12px !important;
     }
 
     .services-one__single {
         margin-bottom: 30px;
         background: #fff;
-        border-radius: 0px;
+        border-radius: 0px !important; /* Square as per Image 2 */
         overflow: hidden;
         transition: all 0.3s ease;
+        border: 1px solid #ddd;
+    }
+
+    .services-one__img {
+        position: relative;
+        height: 250px;
+        overflow: hidden;
     }
 
     .services-one__img img {
-        height: 250px;
+        height: 100%;
         width: 100%;
-        object-fit: cover;
+        object-fit: fill; /* Ensure whole image is displayed correctly */
+        display: block;
     }
 
     .services-one__content {
@@ -148,19 +150,28 @@ function highlightTerms($text, $term) {
     }
 
     .services-one__title {
-        font-size: 20px;
-        font-weight: 700;
-        margin-bottom: 10px;
+        font-size: 22px !important;
+        font-weight: 800 !important;
+        margin-bottom: 15px;
+        line-height: 1.2;
     }
 
     .services-one__title a {
-        color: #222;
+        color: #c00415 !important;
+        text-decoration: none !important;
+        display: block;
+    }
+
+    .services-one__title a strong {
+        color: #c00415 !important;
     }
 
     .price {
-        font-size: 18px;
-        font-weight: 700;
+        font-size: 20px;
+        font-weight: 800;
         color: #c00415;
+        margin-top: 15px;
+        display: block;
     }
 
     h3.cool {
@@ -246,7 +257,7 @@ function highlightTerms($text, $term) {
                         <div class="services-one__single wow fadeInUp" data-wow-delay="100ms">
                             <div class="services-one__img">
                                 <a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php">
-                                    <img src="<?= SITE_URL; ?>upload/<?php echo $subproductwww['photo']; ?>" alt="" style="height:250px;">
+                                    <img src="<?= SITE_URL; ?>upload/<?php echo $subproductwww['photo']; ?>" alt="">
                                 </a>
                             </div>
                             <div class="services-one__content">
