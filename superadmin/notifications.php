@@ -214,26 +214,26 @@ require('include/header.php');
                 <i class="mdi mdi-bell-plus-outline me-2"></i> Create New Push Notification
             </div>
             <div class="card-body">
-                <form action="notifications.php" method="POST">
+                <form method="POST">
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label fw-medium">Notification Title <span class="text-danger">*</span></label>
+                            <label class="form-label">Notification Title <span class="text-danger">*</span></label>
                             <input type="text" name="title" class="form-control" placeholder="e.g. New Property Launch!" required>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label fw-medium">Target Link <span class="text-muted fw-normal">(optional — click tracking auto-applied)</span></label>
-                            <input type="text" name="link" class="form-control" placeholder="https://a2prealtech.com/product.php">
+                            <label class="form-label">Target Link <small class="text-muted">(optional — click tracking auto-applied)</small></label>
+                            <input type="url" name="link" class="form-control" placeholder="https://a2prealtech.com/product.php">
                         </div>
-                        <div class="col-md-12 mb-3">
-                            <label class="form-label fw-medium">Message Content <span class="text-danger">*</span></label>
+                        <div class="col-12 mb-3">
+                            <label class="form-label">Message Content <span class="text-danger">*</span></label>
                             <textarea name="message" class="form-control" rows="3" placeholder="Enter your notification message..." required></textarea>
                         </div>
                     </div>
-                    <div class="d-flex align-items-center gap-3">
-                        <button type="submit" name="send_notif" class="btn btn-primary">
-                            <i class="mdi mdi-send me-2"></i> Send to <?php echo number_format($total_subs); ?> Subscriber(s)
-                        </button>
-                        <small class="text-muted"><i class="mdi mdi-information-outline me-1"></i>Click tracking is automatically applied to the link.</small>
+                    <button type="submit" name="send_notif" class="btn btn-primary d-flex align-items-center">
+                        <i class="mdi mdi-send me-2"></i> SEND NOTIFICATION
+                    </button>
+                    <div class="form-text mt-2">
+                        <i class="mdi mdi-information-outline"></i> Click tracking is automatically enabled for individual notifications.
                     </div>
                 </form>
             </div>
