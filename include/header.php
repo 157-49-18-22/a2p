@@ -10,27 +10,6 @@
                 enable: true,
             },
         });
-
-        OneSignal.User.PushSubscription.addEventListener("change", (event) => {
-            if (event.current.id) { // User just subscribed
-                sendToAdmin(event.current.id);
-            }
-        });
-        
-        // Check existing subscription
-        setTimeout(() => {
-            if (OneSignal.User.PushSubscription.id) {
-                sendToAdmin(OneSignal.User.PushSubscription.id);
-            }
-        }, 1000);
-
-        function sendToAdmin(subs_id) {
-            fetch('<?= SITE_URL; ?>save_subscription.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: 'onesignal_id=' + subs_id
-            });
-        }
     });
     </script>
 <body class="custom-cursor">
