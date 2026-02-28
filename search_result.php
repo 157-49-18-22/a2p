@@ -219,41 +219,79 @@ function highlightTerms($text, $term) {
 
         if (isset($_GET['query'])) {
             $search = trim($_GET['query']);
-            $searchSafe = "%$search%";
+            $location = isset($_GET['location']) ? trim($_GET['location']) : '';
+            $category_id = isset($_GET['category_id']) ? trim($_GET['category_id']) : '';
+            $subcategory_id = isset($_GET['subcategory_id']) ? trim($_GET['subcategory_id']) : '';
 
-            // --- Fetch Subproducts ---
-            $stmt = $pdo->prepare("SELECT * FROM subproduct WHERE name LIKE ?");
-            $stmt->execute([$searchSafe]);
+            $searchSafe = "%$search%";
+            $locSafe = "%$location%";
+
+            $query = "SELECT DISTINCT * FROM subproduct 
+                      WHERE (name LIKE ? 
+                      OR meta_title LIKE ? 
+                      OR meta_keyword LIKE ? 
+                      OR pro_lable LIKE ?
+                      OR city LIKE ?
+                      OR developer LIKE ?)";
+            
+            $params = [$searchSafe, $searchSafe, $searchSafe, $searchSafe, $searchSafe, $searchSafe];
+            
+            if(!empty($location)) {
+                $query .= " AND (pro_lable LIKE ? OR city LIKE ?)";
+                $params[] = $locSafe;
+                $params[] = $locSafe;
+            }
+
+            if(!empty($category_id)) {
+                $query .= " AND subcat2 = ?";
+                $params[] = $category_id;
+            }
+
+            if(!empty($subcategory_id)) {
+                $query .= " AND subcat = ?";
+                $params[] = $subcategory_id;
+            }
+            
+            $query .= " AND actstat = 1";
+            
+            $stmt = $pdo->prepare($query);
+            $stmt->execute($params);
             $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            // If no direct product match, search via subcategory
+            // If no products found, try searching in subcategory names
             if (empty($products)) {
-                $stmt2 = $pdo->prepare("SELECT id FROM subcategory WHERE name LIKE ?");
+                $stmt2 = $pdo->prepare("SELECT id FROM subcategory WHERE name LIKE ? AND actstat = 1");
                 $stmt2->execute([$searchSafe]);
                 $subcat = $stmt2->fetch(PDO::FETCH_ASSOC);
 
                 if ($subcat) {
                     $subcatId = $subcat['id'];
-                    $stmt3 = $pdo->prepare("SELECT * FROM subproduct WHERE subcat = ?");
+                    $stmt3 = $pdo->prepare("SELECT DISTINCT * FROM subproduct WHERE subcat = ? AND actstat = 1");
                     $stmt3->execute([$subcatId]);
                     $products = $stmt3->fetchAll(PDO::FETCH_ASSOC);
                 }
             }
 
-            // --- Fetch Offers ---
-            $stmt4 = $pdo->prepare("SELECT * FROM offer WHERE name LIKE ?");
-            $stmt4->execute([$searchSafe]);
+            // --- Fetch Offers (Blogs) ---
+            $stmt4 = $pdo->prepare("SELECT * FROM offer WHERE name LIKE ? OR des1 LIKE ?");
+            $stmt4->execute([$searchSafe, $searchSafe]);
             $offers = $stmt4->fetchAll(PDO::FETCH_ASSOC);
+
+            // --- Fetch Media Gallery (fixed_delivery_time) ---
+            $stmt5 = $pdo->prepare("SELECT * FROM fixed_delivery_time WHERE name LIKE ? OR meta_title LIKE ?");
+            $stmt5->execute([$searchSafe, $searchSafe]);
+            $mediaItems = $stmt5->fetchAll(PDO::FETCH_ASSOC);
 
             echo '<div class="row"><div class="col-md-12">';
             echo '<h3 class="cool">Search Results for: "' . htmlspecialchars($search) . '"</h3>';
 
             // Show products
             if (!empty($products)) {
+                echo '<h4 class="mb-4 mt-5">Projects & Properties</h4>';
                 echo '<div class="row">';
                 foreach ($products as $subproductwww) {
                     ?>
-                    <div class="col-xl-4 col-lg-4 col-md-6 productr">
+                    <div class="col-xl-4 col-lg-4 col-md-6 productr mb-4">
                         <div class="services-one__single wow fadeInUp" data-wow-delay="100ms">
                             <div class="services-one__img">
                                 <a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php">
@@ -276,8 +314,41 @@ function highlightTerms($text, $term) {
                 echo '</div>';
             }
 
+            // Show Media Gallery Results
+            if (!empty($mediaItems)) {
+                echo '<hr class="my-5">';
+                echo '<h4 class="mb-4">Media Gallery Results</h4>';
+                echo '<div class="row">';
+                foreach ($mediaItems as $media) {
+                    ?>
+                    <div class="col-xl-4 col-lg-4 col-md-6 mb-4">
+                        <div class="services-one__single wow fadeInUp" data-wow-delay="100ms">
+                            <div class="services-one__img">
+                                <a href="<?= SITE_URL; ?>media-gallery-detail/<?php echo makeurlnamebynameCategory($media['name']); ?>.php">
+                                    <img src="<?= SITE_URL; ?>upload/<?php echo $media['photo']; ?>" alt="" style="height:250px; width:100%; object-fit:fill;">
+                                </a>
+                            </div>
+                            <div class="services-one__content">
+                                <h3 class="services-one__title text-center">
+                                    <a href="<?= SITE_URL; ?>media-gallery-detail/<?php echo makeurlnamebynameCategory($media['name']); ?>.php">
+                                        <?php echo highlightTerms(htmlspecialchars($media['name']), $search); ?>
+                                    </a>
+                                </h3>
+                                <div class="text-center">
+                                    <a href="<?= SITE_URL; ?>media-gallery-detail/<?php echo makeurlnamebynameCategory($media['name']); ?>.php" class="btn btn-sm btn-danger mt-3">View Gallery</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <?php
+                }
+                echo '</div>';
+            }
+
             // Show offers
             if (!empty($offers)) {
+                echo '<hr class="my-5">';
+                echo '<h4 class="mb-4">News & Blogs</h4>';
                 echo '<div class="row">';
                 foreach ($offers as $offer) {
                     ?>
@@ -309,8 +380,12 @@ function highlightTerms($text, $term) {
                 echo '</div>';
             }
 
-            if (empty($products) && empty($offers)) {
-                echo '<div class="alert alert-info">No results found for: "' . htmlspecialchars($search) . '"</div>';
+            if (empty($products) && empty($offers) && empty($mediaItems)) {
+                echo '<div class="alert alert-info text-center py-5">
+                    <i class="fa fa-frown fa-3x mb-3 text-muted"></i>
+                    <h4>No direct results found for: "' . htmlspecialchars($search) . '"</h4>
+                    <p>Try searching for a different keyword or check our categories.</p>
+                </div>';
             }
 
             echo '</div></div>';
