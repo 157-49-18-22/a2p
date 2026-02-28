@@ -205,6 +205,16 @@ if ($current_page !== 'application_seating.php') {
                                         <div data-i18n="View Frontend">View Frontend</div>
                                     </a>
                                 </li>
+                                <li class="menu-item">
+                                    <a href="notifications.php" class="menu-link">
+                                        <div data-i18n="Push Notifications">Push Notifications</div>
+                                    </a>
+                                </li>
+                                <li class="menu-item">
+                                    <a href="subscribers.php" class="menu-link">
+                                        <div data-i18n="Subscribed Devices">Subscribed Devices</div>
+                                    </a>
+                                </li>
 
                             </ul>
                         </li>
