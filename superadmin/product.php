@@ -13,6 +13,11 @@ try {
     $pdo->exec("ALTER TABLE subproduct ADD COLUMN city VARCHAR(255) DEFAULT '' AFTER developer");
 } catch (Exception $e) {}
 
+try {
+    $pdo = getPDOObject();
+    $pdo->exec("ALTER TABLE subproduct ADD COLUMN related_blogs TEXT NULL");
+} catch (Exception $e) {}
+
 // ✅ Reusable upload function
 function handleFileUpload($fileKey, $prevFile = '')
 {
@@ -57,6 +62,12 @@ if (isset($_POST['addsubproduct'])) {
     $posted_data['photo2'] = handleFileUpload('photo2');
     $posted_data['photo3'] = handleFileUpload('photo3');
     $posted_data['photo4'] = handleFileUpload('photo4');
+
+    if (isset($posted_data['related_blogs']) && is_array($posted_data['related_blogs'])) {
+        $posted_data['related_blogs'] = implode(',', $posted_data['related_blogs']);
+    } else {
+        $posted_data['related_blogs'] = '';
+    }
 
     $affected_rows = insert('subproduct', $posted_data);
     if ($affected_rows) {
@@ -143,6 +154,12 @@ if (isset($_POST['editdone'])) {
     $posted_data['photo3'] = handleFileUpload('photo3', $prevphoto3);
     $posted_data['photo4'] = handleFileUpload('photo4', $prevphoto4);
 
+    if (isset($posted_data['related_blogs']) && is_array($posted_data['related_blogs'])) {
+        $posted_data['related_blogs'] = implode(',', $posted_data['related_blogs']);
+    } else {
+        $posted_data['related_blogs'] = '';
+    }
+
     $affected_rows = update('subproduct', $posted_data, ['id' => $pid]);
     if ($affected_rows) {
         $umessage = '<div class="alert alert-success" role="alert">
@@ -179,6 +196,7 @@ function subproduct_form(
     $meta_keyword = '',
     $meta_description = '',
     $actstat = '',
+    $related_blogs = '',
     $formname = 'addsubproduct'
 ) { ?>
 
@@ -479,16 +497,61 @@ function subproduct_form(
                     </div>
                 </div>
 
-                <div class="col-lg-12  mt-4">
-                    <div class="input-group input-group-merge">
 
-                        <div class="form-floating form-floating-outline">
-                            <label for="basic-addon11">Amenities</label>
-                            <br><br>
-                            <textarea class="page_data editor"  name="des" cols="60" rows="10"><?php echo $des; ?></textarea>
+                <div class="col-lg-12 mt-4">
+                    <div class="form-floating form-floating-outline">
+                        <label for="basic-addon11">Amenities</label>
+                        <br><br>
+                        <textarea class="page_data editor" name="des" cols="60" rows="10"><?php echo $des; ?></textarea>
+                    </div>
+                </div>
+
+                <div class="col-lg-12 mt-4">
+                    <div class="card border">
+                        <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+                            <h5 class="mb-0">Select Related Blogs</h5>
+                            <div class="search-box">
+                                <input type="text" id="blogSearch" class="form-control form-control-sm" placeholder="Search blogs..." style="width: 250px;">
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row" id="blogList">
+                                <?php
+                                $all_blogs = sqlfetch("SELECT id, name FROM `offer` WHERE actstat=1 ORDER BY name ASC");
+                                $selected_blogs = explode(',', $related_blogs);
+                                $item_count = 0;
+                                foreach ($all_blogs as $blog) {
+                                    $is_checked = in_array($blog['id'], $selected_blogs) ? 'checked' : '';
+                                    // Initially hide items after the first 10, unless they are checked
+                                    $item_class = ($item_count < 10 || $is_checked) ? 'blog-item' : 'blog-item d-none-extra';
+                                    ?>
+                                    <div class="col-md-4 col-sm-6 mb-2 <?php echo $item_class; ?>" data-name="<?php echo strtolower(htmlspecialchars($blog['name'])); ?>">
+                                        <div class="form-check">
+                                            <input class="form-check-input blog-checkbox" type="checkbox" name="related_blogs[]" value="<?php echo $blog['id']; ?>" id="blog_<?php echo $blog['id']; ?>" <?php echo $is_checked; ?>>
+                                            <label class="form-check-label" for="blog_<?php echo $blog['id']; ?>">
+                                                <?php echo htmlspecialchars($blog['name']); ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <?php
+                                    $item_count++;
+                                }
+                                ?>
+                            </div>
+                            <?php if ($item_count > 10): ?>
+                            <div class="text-center mt-3" id="loadMoreContainer">
+                                <button type="button" class="btn btn-sm btn-outline-primary" id="btnLoadMore">Read More</button>
+                            </div>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
+
+                <style>
+                    .d-none-extra { display: none !important; }
+                    .blog-item.filtered-out { display: none !important; }
+                </style>
+
                 <div class="col-lg-12  mt-5">
                     <div class="input-group input-group-merge">
                         <button class="btn btn-primary waves-effect  waves-light" type="submit" value="Submit" name="<?php echo $formname; ?>">
@@ -555,33 +618,33 @@ function subproduct_form(
                                 $pid = $_GET['pid'];
                                 $productdata = sqlfetch("SELECT * FROM `subproduct` where id='$pid' ");
                                 foreach ($productdata as $product) {
-                                    extract($product);
                                     subproduct_form(
-                                        $pid,
-                                        $name,
-                                        $photo,
-                                        $des,
-                                        $photo2,
-                                        $photo3,
-                                        $photo4,
-                                        $pro_lable,
-                                        $city,
-                                        $developer,
-                                        $pro_specification,
-                                        $pro_mainprice,
-                                        $pro_discountprice,
-                                        $pro_shortdes,
-                                        $pro_additionalinfo,
-                                        $code,
-                                        $subcat2,
-                                        $select_option1,
-                                        $fld_order,
-                                        $subcat,
-                                        $meta_title,
-                                        $meta_keyword,
-                                        $meta_description,
-                                        $actstat,
-                                        $formname = 'editdone'
+                                        $product['id'] ?? '0',
+                                        $product['name'] ?? '',
+                                        $product['photo'] ?? '',
+                                        $product['des'] ?? '',
+                                        $product['photo2'] ?? '',
+                                        $product['photo3'] ?? '',
+                                        $product['photo4'] ?? '',
+                                        $product['pro_lable'] ?? '',
+                                        $product['city'] ?? '',
+                                        $product['developer'] ?? '',
+                                        $product['pro_specification'] ?? '',
+                                        $product['pro_mainprice'] ?? '',
+                                        $product['pro_discountprice'] ?? '',
+                                        $product['pro_shortdes'] ?? '',
+                                        $product['pro_additionalinfo'] ?? '',
+                                        $product['code'] ?? '',
+                                        $product['subcat2'] ?? 0,
+                                        $product['select_option1'] ?? '',
+                                        $product['fld_order'] ?? '0',
+                                        $product['subcat'] ?? 0,
+                                        $product['meta_title'] ?? '',
+                                        $product['meta_keyword'] ?? '',
+                                        $product['meta_description'] ?? '',
+                                        $product['actstat'] ?? '',
+                                        $product['related_blogs'] ?? '',
+                                        'editdone'
                                     );
                                 } ?>
                             </div>
@@ -752,6 +815,54 @@ function subproduct_form(
                         });
                     });
             }
+
+            // --- Blog Selection Logic ---
+            document.addEventListener('DOMContentLoaded', function() {
+                const searchInput = document.getElementById('blogSearch');
+                const btnLoadMore = document.getElementById('btnLoadMore');
+                const blogItems = document.querySelectorAll('.blog-item');
+                let showingAll = false;
+
+                if (searchInput) {
+                    searchInput.addEventListener('input', function() {
+                        const query = this.value.toLowerCase().trim();
+                        blogItems.forEach(item => {
+                            const name = item.getAttribute('data-name');
+                            if (name.includes(query)) {
+                                item.classList.remove('filtered-out');
+                                // If searching, remove pagination restriction for matches
+                                if(query !== "") {
+                                    item.classList.remove('d-none-extra');
+                                } else if(!showingAll) {
+                                    // Reset to pagination if search is cleared
+                                    const index = Array.from(blogItems).indexOf(item);
+                                    const isChecked = item.querySelector('.blog-checkbox').checked;
+                                    if(index >= 10 && !isChecked) {
+                                        item.classList.add('d-none-extra');
+                                    }
+                                }
+                            } else {
+                                item.classList.add('filtered-out');
+                            }
+                        });
+                        
+                        // Hide Load More during search
+                        if(btnLoadMore) {
+                            btnLoadMore.parentElement.style.display = query === "" && !showingAll ? "block" : "none";
+                        }
+                    });
+                }
+
+                if (btnLoadMore) {
+                    btnLoadMore.addEventListener('click', function() {
+                        blogItems.forEach(item => {
+                            item.classList.remove('d-none-extra');
+                        });
+                        this.parentElement.style.display = 'none';
+                        showingAll = true;
+                    });
+                }
+            });
         </script>
 
         <?php require('include/footer.php'); ?>

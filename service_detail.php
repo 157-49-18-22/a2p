@@ -842,25 +842,50 @@ $currentPageUrl = urlencode("http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_UR
 
 
                             <div class="sidebar__single sidebar__post">
-                                <h3 class="sidebar__title">Latest Posts</h3>
+                                <h3 class="sidebar__title">Related Blogs</h3>
                                 <ul class="sidebar__post-list list-unstyled">
-                                    <?php $result = sqlfetch("select * from offer  ");
+                                    <?php 
+                                    $blog_query = "SELECT * FROM offer WHERE actstat=1";
+                                    if (!empty($subproductss['related_blogs'])) {
+                                        $related_ids = $subproductss['related_blogs'];
+                                        $blog_query .= " AND id IN ($related_ids)";
+                                    }
+                                    $blog_query .= " ORDER BY id DESC LIMIT 5";
+                                    
+                                    $result = sqlfetch($blog_query);
                                     if (count($result)) {
+                                        $placeholders = [
+                                            "060225101609Luxury_Homes_on_Dwarka_Expressway_A2P_Realtech.webp",
+                                            "060225101329Dream_House_With_A2P_Realtech.webp",
+                                            "060225100954M3M_Mansion_113_A2P_Realtech.webp",
+                                            "060225100526Dwarka_Expressway_Luxury_Projects_with_A2P_Realtech.webp",
+                                            "060225100348Hero_Homes_Top_Choice_A2P_Realtech.webp",
+                                            "060225101913Dwarka_Expressway_Projects_A2P_Realtech_Gurgaon.webp"
+                                        ];
                                         foreach ($result as $offer) {
+                                            $imagePath = "upload/" . $offer['photo'];
+                                            if (file_exists($imagePath) && !empty($offer['photo'])) {
+                                                $displayImg = SITE_URL . $imagePath;
+                                            } else {
+                                                $placeholderIndex = $offer['id'] % count($placeholders);
+                                                $displayImg = SITE_URL . "upload/" . $placeholders[$placeholderIndex];
+                                            }
                                     ?>
                                             <li>
                                                 <div class="sidebar__post-image">
-                                                    <img src="<?= SITE_URL; ?>upload/<?php echo $offer['photo']; ?>" alt="<?php echo $subproductss['name']; ?>" style="height: 80px;">
+                                                    <img src="<?php echo $displayImg; ?>" alt="<?php echo htmlspecialchars($offer['name']); ?>" style="height: 80px;">
                                                 </div>
                                                 <div class="sidebar__post-content">
                                                     <h3>
                                                         <span class="sidebar__post-content-meta"><i
-                                                                class="far fa-user-circle"></i> by A2P Realtech</span>
+                                                                class="far fa-user-circle"></i> by <?php echo !empty($offer['by_blog']) ? htmlspecialchars($offer['by_blog']) : 'A2P Realtech'; ?></span>
                                                         <a href="<?= SITE_URL; ?>blog_detail/<?php echo makeurlnamebynameCategory($offer['name']); ?>.php"><?php custom_echo($offer['name'], 30); ?></a>
                                                     </h3>
                                                 </div>
                                             </li>
                                     <?php }
+                                    } else {
+                                        echo "<li>No related blogs found.</li>";
                                     } ?>
                                 </ul>
                             </div>
