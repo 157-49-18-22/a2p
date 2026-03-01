@@ -1,6 +1,10 @@
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     include "function/function.php";
+    if (!isset($_SESSION['otp_verified']) || $_SESSION['otp_verified'] !== true) {
+        echo "error: otp not verified";
+        exit;
+    }
     include "function/mailer.php";
 
     $name     = htmlspecialchars($_POST['name'] ?? '');
@@ -44,6 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Send BOTH in one go
     sendAllMails($email, $name, $adminSubject, $adminBody);
 
+    unset($_SESSION['otp_verified']);
     echo "success";
 }
 ?>

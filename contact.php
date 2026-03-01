@@ -334,8 +334,20 @@ if (count($sql_add))
       <label for="message">Message</label>
       <textarea id="message" name="message" rows="4" placeholder="Tell us about your requirements..."></textarea>
 
-      <button type="submit">Submit Inquiry</button>
+      <!-- OTP Section -->
+      <div id="otp-section" style="display: none; margin-bottom: 15px; border-top: 1px solid #ddd; padding-top: 15px;">
+          <label for="otp" style="color: #c00415;">Enter 6-Digit OTP *</label>
+          <div style="display: flex; gap: 10px;">
+              <input type="text" id="otp_code" placeholder="Enter code" maxlength="6" style="flex: 1;">
+              <button type="button" id="verify-otp-btn" style="width: auto; background: #28a745; font-size: 16px; padding: 10px 20px;">Verify</button>
+          </div>
+          <p id="otp-status-msg" style="font-size: 14px; margin-top: 5px; font-weight: 500;"></p>
+      </div>
+
+      <button type="button" id="send-otp-btn">Send Verification Code</button>
+      <button type="submit" id="main-submit-btn" style="display: none;">Submit Inquiry</button>
     </form>
+    <p id="form-error" style="color: red; font-size: 14px; margin-top: 10px; display: none; text-align: center; font-weight: bold;"></p>
   </div>
 </div>
 
@@ -349,41 +361,154 @@ if (count($sql_add))
 </div>
 
 <script>
-  const form = document.getElementById('leadForm');
-const popup = document.getElementById('popup');
+  const leadForm = document.getElementById('leadForm');
+  const sendOtpBtn = document.getElementById('send-otp-btn');
+  const verifyOtpBtn = document.getElementById('verify-otp-btn');
+  const mainSubmitBtn = document.getElementById('main-submit-btn');
+  const otpSection = document.getElementById('otp-section');
+  const otpStatusMsg = document.getElementById('otp-status-msg');
+  const formError = document.getElementById('form-error');
+  const popup = document.getElementById('popup');
 
-form.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  
-  const submitBtn = form.querySelector('button[type="submit"]');
-  const originalBtnText = submitBtn.innerHTML;
-  submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Getting Location...';
-  submitBtn.disabled = true;
+  let isOtpVerified = false;
 
-  const locData = await getCityName(); // defined in include/footer.php
-  
-  const formData = new FormData(form);
-  formData.append('city', locData.city);
-  formData.append('lat_long', locData.lat_long);
-  
-  const response = await fetch(form.action, {
-    method: 'POST',
-    body: formData,
-    headers: { 'Accept': 'application/json' }
+  // 1. Send OTP
+  sendOtpBtn.addEventListener('click', async () => {
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const phone = document.getElementById('phone').value;
+
+    if (!name || !email || !phone) {
+      alert('Please fill Name, Email, and Phone first.');
+      return;
+    }
+
+    sendOtpBtn.disabled = true;
+    sendOtpBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending OTP...';
+
+    const formData = new FormData();
+    formData.append('email', email);
+    formData.append('name', name);
+
+    try {
+      const response = await fetch('function/send_otp.php', {
+        method: 'POST',
+        body: formData
+      });
+      const data = await response.json();
+
+      if (data.status === 'success') {
+        otpSection.style.display = 'block';
+        sendOtpBtn.innerHTML = 'Resend OTP';
+        sendOtpBtn.style.background = '#666'; // muted color
+        otpStatusMsg.style.color = 'green';
+        otpStatusMsg.innerText = data.message;
+        alert('OTP has been sent to ' + email);
+      } else {
+        alert(data.message);
+        sendOtpBtn.disabled = false;
+        sendOtpBtn.innerHTML = 'Send Verification Code';
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Error sending OTP. Please try again.');
+      sendOtpBtn.disabled = false;
+      sendOtpBtn.innerHTML = 'Send Verification Code';
+    }
   });
 
-    // send form data to backend for DB storage
-    fetch('lead-submit.php', {
-      method: 'POST',
-      body: formData
-    })
-    .then(res => res.text())
-    .then(data => console.log('DB Save Status:', data));
+  // 2. Verify OTP
+  verifyOtpBtn.addEventListener('click', async () => {
+    const otp = document.getElementById('otp_code').value;
+    const email = document.getElementById('email').value;
 
-    popup.style.display = 'flex';
-    form.reset();
-    submitBtn.innerHTML = originalBtnText;
-    submitBtn.disabled = false;
+    if (!otp) {
+      alert('Please enter the 6-digit OTP code.');
+      return;
+    }
+
+    verifyOtpBtn.disabled = true;
+    verifyOtpBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+    const formData = new FormData();
+    formData.append('otp', otp);
+    formData.append('email', email);
+
+    try {
+      const response = await fetch('function/verify_otp.php', {
+        method: 'POST',
+        body: formData
+      });
+      const data = await response.json();
+
+      if (data.status === 'success') {
+        isOtpVerified = true;
+        otpStatusMsg.style.color = 'green';
+        otpStatusMsg.innerHTML = '<i class="fas fa-check-circle"></i> OTP Verified Successfully!';
+        verifyOtpBtn.style.display = 'none';
+        document.getElementById('otp_code').disabled = true;
+        sendOtpBtn.style.display = 'none';
+        mainSubmitBtn.style.display = 'block';
+      } else {
+        otpStatusMsg.style.color = 'red';
+        otpStatusMsg.innerText = data.message;
+        verifyOtpBtn.disabled = false;
+        verifyOtpBtn.innerHTML = 'Verify';
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Error verifying OTP.');
+      verifyOtpBtn.disabled = false;
+      verifyOtpBtn.innerHTML = 'Verify';
+    }
+  });
+
+  // 3. Final Form Submission
+  leadForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    if (!isOtpVerified) {
+      alert('Please verify your email with the OTP first.');
+      return;
+    }
+
+    mainSubmitBtn.disabled = true;
+    mainSubmitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+
+    const locData = await getCityName(); // defined in include/footer.php or globally
+    
+    const formData = new FormData(leadForm);
+    formData.append('city', locData.city || 'Not Shared');
+    formData.append('lat_long', locData.lat_long || '');
+
+    try {
+      // Send to Formspree
+      await fetch(leadForm.action, {
+        method: 'POST',
+        body: formData,
+        headers: { 'Accept': 'application/json' }
+      });
+
+      // Send to local DB
+      await fetch('lead-submit.php', {
+        method: 'POST',
+        body: formData
+      });
+
+      popup.style.display = 'flex';
+      leadForm.reset();
+      isOtpVerified = false;
+      otpSection.style.display = 'none';
+      mainSubmitBtn.style.display = 'none';
+      sendOtpBtn.style.display = 'block';
+      sendOtpBtn.disabled = false;
+      sendOtpBtn.innerHTML = 'Send Verification Code';
+    } catch (err) {
+      console.error(err);
+      alert('Submission failed, but we have your contact info. Our team will contact you.');
+      mainSubmitBtn.disabled = false;
+      mainSubmitBtn.innerHTML = 'Submit Inquiry';
+    }
   });
 
   function closePopup() {
