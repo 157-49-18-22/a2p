@@ -29,13 +29,26 @@ class FCMHelper {
         $signature = '';
         $privateKey = $this->serviceAccount['private_key'];
         
-        // Robust cleaning of the private key
-        $privateKey = str_replace('\n', "\n", $privateKey);
-        $privateKey = str_replace('\\n', "\n", $privateKey);
+        // Step 1: Normalize all possible newline variations
+        $privateKey = str_replace(["\\n", "\r", "\n"], "\n", $privateKey);
         
-        if (!openssl_sign($base64UrlHeader . "." . $base64UrlPayload, $signature, $privateKey, 'SHA256')) {
-            throw new Exception("OpenSSL sign failed: " . openssl_error_string() . " (Check if your private key is valid)");
+        // Step 2: Ensure the key has proper header/footer and no extra spaces
+        if (strpos($privateKey, 'BEGIN PRIVATE KEY') === false) {
+             throw new Exception("Private key format is invalid. Header missing.");
         }
+
+        // Step 3: Validate key with OpenSSL
+        $keyRes = openssl_pkey_get_private($privateKey);
+        if (!$keyRes) {
+            throw new Exception("OpenSSL could not read your private key: " . openssl_error_string());
+        }
+        
+        if (!openssl_sign($base64UrlHeader . "." . $base64UrlPayload, $signature, $keyRes, 'SHA256')) {
+            openssl_pkey_free($keyRes);
+            throw new Exception("OpenSSL sign failed: " . openssl_error_string());
+        }
+        openssl_pkey_free($keyRes);
+        
         $base64UrlSignature = $this->base64UrlEncode($signature);
 
         $jwt = $base64UrlHeader . "." . $base64UrlPayload . "." . $base64UrlSignature;
