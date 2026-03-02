@@ -29,6 +29,9 @@ class FCMHelper {
         $signature = '';
         $privateKey = $this->serviceAccount['private_key'];
         
+        // Ensure the private key is properly formatted with actual newlines
+        $privateKey = str_replace('\n', "\n", $privateKey);
+        
         if (!openssl_sign($base64UrlHeader . "." . $base64UrlPayload, $signature, $privateKey, 'SHA256')) {
             throw new Exception("OpenSSL sign failed: " . openssl_error_string());
         }

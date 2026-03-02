@@ -40,10 +40,15 @@ $service_account_path = 'firebase-service-account.json';
 if (isset($_POST['send_notif'])) {
     extract($_POST);
 
-    // 1. Build tracking URL if link provided
-    $site_base = ($_SERVER['HTTP_HOST'] == 'localhost' || $_SERVER['HTTP_HOST'] == '127.0.0.1')
-        ? 'http://localhost/cms/superadmin'
-        : 'https://a2prealtech.com/superadmin';
+    // 1. Build tracking URL dynamically
+    $protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? "https" : "http";
+    $host = $_SERVER['HTTP_HOST'];
+    $site_base = "$protocol://$host/superadmin";
+    
+    // Adjust for subdirectories like /cms/
+    if (strpos($_SERVER['REQUEST_URI'], '/cms/') !== false) {
+        $site_base = "$protocol://$host/cms/superadmin";
+    }
 
     // 2. Save to Database first to get ID
     $q = $pdo->prepare("INSERT INTO notifications (title, message, link) VALUES (:title, :message, :link)");
