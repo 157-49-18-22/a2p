@@ -11,10 +11,110 @@ $admin_name = isset($_SESSION['admin_name']) ? $_SESSION['admin_name'] : 'Admin'
 $admin_id = isset($_SESSION['admin_id']) ? $_SESSION['admin_id'] : 0;
 ?>
 <!DOCTYPE html>
+<html lang="en" class="light-style layout-navbar-fixed layout-menu-fixed layout-compact " dir="ltr" data-theme="theme-semi-dark" data-assets-path="assets/" data-template="vertical-menu-template-semi-dark">
+<head>
+    <!-- Firebase Cloud Messaging Push Notifications -->
+    <script type="module">
+        import { firebaseConfig, vapidKey } from '../firebase_config.js?v=<?php echo time(); ?>';
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging.js";
 
-    <html lang="en" class="light-style layout-navbar-fixed layout-menu-fixed layout-compact " dir="ltr" data-theme="theme-semi-dark" data-assets-path="assets/" data-template="vertical-menu-template-semi-dark">
+        console.log("FCM VAPID Key Loaded (Admin):", vapidKey);
+        console.log("FCM Config Check:", firebaseConfig); // Check if apiKey/appId matches screenshot
 
-    <head>
+        const app = initializeApp(firebaseConfig);
+        const messaging = getMessaging(app);
+
+        const saveDevice = (fcmToken) => {
+            if (!fcmToken) return;
+            const ua = navigator.userAgent;
+            let deviceType = /Mobi|Android/i.test(ua) ? 'Mobile' : 'Desktop';
+            let browser = 'Unknown';
+            let os = 'Unknown';
+            let model = 'Unknown';
+
+            if (ua.includes("Chrome")) browser = "Chrome";
+            else if (ua.includes("Safari")) browser = "Safari";
+            else if (ua.includes("Firefox")) browser = "Firefox";
+            else if (ua.includes("MSIE") || ua.includes("Trident")) browser = "IE";
+
+            if (ua.includes("Win")) os = "Windows";
+            else if (ua.includes("Mac")) os = "MacOS";
+            else if (ua.includes("X11") || ua.includes("Linux")) os = "Linux";
+            else if (ua.includes("Android")) os = "Android";
+            else if (ua.includes("iPhone")) os = "iOS";
+
+            if (ua.includes("iPhone")) model = "iPhone";
+            else if (ua.includes("iPad")) model = "iPad";
+            else if (ua.includes("Android")) {
+                const match = ua.match(/Android \d+; ([^;)]+)/);
+                if (match) model = match[1];
+            } else if (ua.includes("MacBook")) model = "MacBook";
+
+            fetch('../save_subscription.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    fcm_token: fcmToken,
+                    device_type: deviceType,
+                    browser: browser,
+                    os: os,
+                    device_model: model
+                })
+            }).catch(err => console.error("Save Error:", err));
+        };
+
+        // Foreground listener
+        onMessage(messaging, (payload) => {
+            console.log('FCM Message received in admin bar: ', payload);
+            alert(payload.notification.title + ": " + payload.notification.body);
+        });
+
+        // Master reset and registration
+        async function triggerFCM() {
+            if (Notification.permission === 'denied') return;
+            
+            console.log('Admin FCM: Initializing registration...');
+            try {
+                const permission = await Notification.requestPermission();
+                if (permission === 'granted') {
+                    // 1. Clear old SW to reset status
+                    const regs = await navigator.serviceWorker.getRegistrations();
+                    for (let reg of regs) { 
+                        if (reg.active && reg.active.scriptURL.includes('firebase-messaging-sw.js')) {
+                            await reg.unregister(); 
+                        }
+                    }
+
+                    // 2. Register Fresh SW
+                    const registration = await navigator.serviceWorker.register('../firebase-messaging-sw.js?v=<?php echo time(); ?>');
+                    
+                    // 3. Get Token with Exact Screenshot VAPID Key
+                    const currentToken = await getToken(messaging, { 
+                        vapidKey: 'BFCCWlRqcOGi-HK033FmGjuJAL_On1bgvaPozAjc2DBpiZ-eRirAYgWNOlbmfqYzLbpEgPB6F1p8mxq950bGPsk',
+                        serviceWorkerRegistration: registration
+                    });
+
+                    if (currentToken) {
+                        console.log('ADMIN SUCCESS: Token Generated!');
+                        saveDevice(currentToken);
+                    }
+                }
+            } catch (err) {
+                console.error("ADMIN FCM MASTER ERROR:", err);
+                // Log the full error object for deep debugging
+                console.log("Full Error Object:", JSON.stringify(err, null, 2));
+            }
+        }
+        
+
+        // Auto-run if already granted or ask after delay
+        if (Notification.permission === 'granted') {
+            triggerFCM();
+        } else if (Notification.permission !== 'denied') {
+            setTimeout(triggerFCM, 3000); 
+        }
+    </script>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
@@ -72,16 +172,8 @@ $admin_id = isset($_SESSION['admin_id']) ? $_SESSION['admin_id'] : 0;
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js">
     </script>
 
-    <!-- Vendors CSS -->
-    <link rel="stylesheet" href="assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
-    <link rel="stylesheet" href="assets/vendor/libs/typeahead-js/typeahead.css" />
-    <link rel="stylesheet" href="assets/vendor/libs/quill/typography.css" />
-    <link rel="stylesheet" href="assets/vendor/libs/quill/katex.css" />
     <link rel="stylesheet" href="assets/vendor/libs/quill/editor.css" />
    <link rel="stylesheet" href="assets/vendor/libs/select2/select2.css" />
-    <script src="assets/vendor/js/helpers.js"></script>
-    <script src="assets/vendor/js/template-customizer.js"></script>
-    <script src="assets/js/config.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 

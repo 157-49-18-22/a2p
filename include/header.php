@@ -1,18 +1,16 @@
-    <!-- OneSignal Desktop & Mobile Push Notifications -->
-    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
-    <script>
-    window.OneSignalDeferred = window.OneSignalDeferred || [];
-    OneSignalDeferred.push(async function(OneSignal) {
-        await OneSignal.init({
-            appId: "d672c804-fe64-41c5-b321-44e92cf74cc9",
-            safari_web_id: "web.onesignal.auto.1f3ad53c-7ee3-4ee3-a0d3-0c5a0025b1d8",
-            notifyButton: {
-                enable: true,
-            },
-        });
+    <!-- Firebase Cloud Messaging Push Notifications -->
+    <script type="module">
+        import { firebaseConfig, vapidKey } from '<?php echo SITE_URL; ?>firebase_config.js?v=<?php echo time(); ?>';
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging.js";
 
-        const saveDevice = (pushId) => {
-            if (!pushId) return;
+        console.log("FCM VAPID Key Loaded:", vapidKey);
+
+        const app = initializeApp(firebaseConfig);
+        const messaging = getMessaging(app);
+
+        const saveDevice = (fcmToken) => {
+            if (!fcmToken) return;
             const ua = navigator.userAgent;
             let deviceType = /Mobi|Android/i.test(ua) ? 'Mobile' : 'Desktop';
             let browser = 'Unknown';
@@ -30,7 +28,6 @@
             else if (ua.includes("Android")) os = "Android";
             else if (ua.includes("iPhone")) os = "iOS";
 
-            // Basic Model Guessing
             if (ua.includes("iPhone")) model = "iPhone";
             else if (ua.includes("iPad")) model = "iPad";
             else if (ua.includes("Android")) {
@@ -42,7 +39,7 @@
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    onesignal_id: pushId,
+                    fcm_token: fcmToken,
                     device_type: deviceType,
                     browser: browser,
                     os: os,
@@ -51,16 +48,50 @@
             }).catch(err => console.error("Save Error:", err));
         };
 
-        // Listen for subscription changes
-        OneSignal.User.PushSubscription.addEventListener("change", (e) => {
-            if (e.current.id) saveDevice(e.current.id);
+        // Handle incoming messages while in foreground
+        onMessage(messaging, (payload) => {
+            console.log('Message received. ', payload);
+            // Optionally show a custom toast or notification
+            alert(payload.notification.title + ": " + payload.notification.body);
         });
 
-        // Trigger on initial load if already subscribed
-        if (OneSignal.Notifications.permission && OneSignal.User.PushSubscription.id) {
-            saveDevice(OneSignal.User.PushSubscription.id);
+        // Request Permission and Get Token
+        async function requestPermission() {
+            console.log('FCM: Initializing fresh registration...');
+            try {
+                const permission = await Notification.requestPermission();
+                if (permission === 'granted') {
+                    // 1. Unregister existing SW to clear 401 state
+                    const regs = await navigator.serviceWorker.getRegistrations();
+                    for (let reg of regs) { if (reg.active && reg.active.scriptURL.includes('firebase-messaging-sw.js')) await reg.unregister(); }
+
+                    // 2. Register Fresh SW
+                    const registration = await navigator.serviceWorker.register('<?php echo SITE_URL; ?>firebase-messaging-sw.js?v=<?php echo time(); ?>');
+                    
+                    // 3. Get Token with Exact Screenshot VAPID Key
+                    const currentToken = await getToken(messaging, { 
+                        vapidKey: 'BFCCWlRqcOGi-HK033FmGjuJAL_On1bgvaPozAjc2DBpiZ-eRirAYgWNOlbmfqYzLbpEgPB6F1p8mxq950bGPsk',
+                        serviceWorkerRegistration: registration
+                    });
+
+                    if (currentToken) {
+                        console.log('FCM SUCCESS: Token Generated ->', currentToken.substring(0, 20) + '...');
+                        saveDevice(currentToken);
+                    }
+                }
+            } catch (err) {
+                console.error("FCM MASTER ERROR:", err.message);
+            }
         }
-    });
+
+        // Initialize
+        if (Notification.permission === 'granted') {
+            requestPermission();
+        } else if (Notification.permission !== 'denied') {
+            // You might want to trigger this based on a user action (like a bell click)
+            // For now, let's try to request on load or keep the OneSignal behavior
+            requestPermission();
+        }
     </script>
 <body class="custom-cursor">
 

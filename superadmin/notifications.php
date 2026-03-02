@@ -11,13 +11,13 @@ $pdo->exec("CREATE TABLE IF NOT EXISTS notifications (
     title VARCHAR(255) NOT NULL,
     message TEXT NOT NULL,
     link VARCHAR(255),
-    onesignal_notification_id VARCHAR(255) DEFAULT NULL,
+    fcm_message_id VARCHAR(255) DEFAULT NULL,
     recipients INT DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )");
 
 // Ensure new columns exist (for existing installations)
-try { $pdo->exec("ALTER TABLE notifications ADD COLUMN onesignal_notification_id VARCHAR(255) DEFAULT NULL"); } catch(Exception $e) {}
+try { $pdo->exec("ALTER TABLE notifications ADD COLUMN fcm_message_id VARCHAR(255) DEFAULT NULL"); } catch(Exception $e) {}
 try { $pdo->exec("ALTER TABLE notifications ADD COLUMN recipients INT DEFAULT 0"); } catch(Exception $e) {}
 
 // Ensure click tracking table exists
@@ -30,9 +30,11 @@ $pdo->exec("CREATE TABLE IF NOT EXISTS notification_clicks (
     INDEX idx_notification_id (notification_id)
 )");
 
-// OneSignal keys
-$app_id      = "d672c804-fe64-41c5-b321-44e92cf74cc9";
-$rest_api_key = "os_v2_app_2zzmqbh6mra4lmzbitusz52mzh2srdmqcqke2je6x2lltzfz6umhi5r2s4sl5ipdvspr7h3unk6mzitwg2bjq3lwqa5af7agwvq7nfa";
+// FCM Helper include
+require_once('./function/fcm_helper.php');
+
+// Service Account JSON Path (User should place their firebase-service-account.json here)
+$service_account_path = 'firebase-service-account.json';
 
 // Handle Form Submission
 if (isset($_POST['send_notif'])) {
@@ -58,53 +60,49 @@ if (isset($_POST['send_notif'])) {
         $tracking_link = $site_base . '/track_click.php?notif_id=' . $notif_db_id . '&redirect=' . urlencode($link);
     }
 
-    // 4. Send via OneSignal
-    $content  = ["en" => $message];
-    $headings = ["en" => $title];
+    // 4. Send via FCM
+    $success_count = 0;
+    $fail_count = 0;
+    try {
+        if (!file_exists($service_account_path)) {
+            throw new Exception("Service Account JSON file not found! Please place 'firebase-service-account.json' in the superadmin directory.");
+        }
+        $fcm = new FCMHelper($service_account_path);
 
-    $fields = [
-        'app_id'             => $app_id,
-        'target_channel'     => 'push',
-        'included_segments'  => ['Subscribed Users'],
-        'contents'           => $content,
-        'headings'           => $headings,
-        'url'                => $tracking_link ?: $link
-    ];
+        // Fetch all tokens
+        $tokens = $pdo->query("SELECT fcm_token FROM subscriber_devices WHERE fcm_token IS NOT NULL")->fetchAll(PDO::FETCH_COLUMN);
+        
+        $last_err = '';
+        foreach ($tokens as $token) {
+            $sender = $fcm->sendNotification($token, $title, $message, $tracking_link ?: $link);
+            file_put_contents('fcm_debug.txt', "Token: " . $token . "\nResponse: " . json_encode($sender['response']) . "\n\n", FILE_APPEND);
+            if ($sender['success']) {
+                $success_count++;
+            } else {
+                $fail_count++;
+                $last_err = $sender['response']['error']['message'] ?? json_encode($sender['response']);
+            }
+        }
 
-    $fields_json = json_encode($fields);
+        // Update notification with FCM stats
+        $pdo->prepare("UPDATE notifications SET fcm_message_id = :fcmid, recipients = :rcpt WHERE id = :id")
+            ->execute([
+                ':fcmid' => 'FCM_SENT_' . $notif_db_id, 
+                ':rcpt' => $success_count, 
+                ':id' => $notif_db_id
+            ]);
 
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, "https://api.onesignal.com/notifications");
-    curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        "Content-Type: application/json",
-        "Authorization: Key $rest_api_key"
-    ]);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-    curl_setopt($ch, CURLOPT_HEADER, FALSE);
-    curl_setopt($ch, CURLOPT_POST, TRUE);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $fields_json);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-
-    $response = curl_exec($ch);
-    $res_json = json_decode($response, true);
-    curl_close($ch);
-
-    // 5. Update notification with OneSignal ID
-    if (isset($res_json['id'])) {
-        $pdo->prepare("UPDATE notifications SET onesignal_notification_id = :osid, recipients = :rcpt WHERE id = :id")
-            ->execute([':osid' => $res_json['id'], ':rcpt' => $res_json['recipients'] ?? 0, ':id' => $notif_db_id]);
         $umessage = '<div class="alert alert-success alert-dismissible fade show" role="alert">
             <i class="mdi mdi-check-circle me-2"></i>
-            <strong>Success!</strong> Notification sent to <strong>' . number_format($res_json['recipients'] ?? 0) . '</strong> device(s).
+            <strong>Success!</strong> Notification sent to <strong>' . number_format($success_count) . '</strong> device(s). ' . ($fail_count > 0 ? '(Failed: ' . $fail_count . ' - Reason: ' . $last_err . ')' : '') . '
             <a href="notification_analytics.php?id=' . $notif_db_id . '" class="btn btn-sm btn-light ms-3">View Analytics</a>
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>';
-    } else {
-        $err_msg = isset($res_json['errors'][0]) ? $res_json['errors'][0] : 'Push failed';
-        $umessage = '<div class="alert alert-warning alert-dismissible fade show" role="alert">
+
+    } catch (Exception $e) {
+        $umessage = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
             <i class="mdi mdi-alert me-2"></i>
-            Notification saved to DB, but device push failed: <strong>' . htmlspecialchars($err_msg) . '</strong>
-            <br><small class="text-muted">OneSignal Response: ' . htmlspecialchars($response) . '</small>
+            Error sending via FCM: <strong>' . htmlspecialchars($e->getMessage()) . '</strong>
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>';
     }
@@ -267,7 +265,7 @@ require('include/header.php');
                                 <?php echo htmlspecialchars($n['message']); ?>
                             </td>
                             <td>
-                                <?php if ($n['onesignal_notification_id']): ?>
+                                <?php if ($n['fcm_message_id']): ?>
                                 <span class="metric-pill" style="background:#e8f5e9;color:#2e7d32;">
                                     <i class="mdi mdi-send-check-outline"></i>
                                     <?php echo number_format($n['recipients'] ?? 0); ?>

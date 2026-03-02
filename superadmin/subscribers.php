@@ -8,7 +8,7 @@ $pdo = getPDOObject();
 // Create table if it doesn't exist yet (runs before any SELECT)
 $pdo->exec("CREATE TABLE IF NOT EXISTS subscriber_devices (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    onesignal_id VARCHAR(100) UNIQUE,
+    fcm_token VARCHAR(255) UNIQUE,
     device_type VARCHAR(50),
     browser VARCHAR(50),
     os VARCHAR(50),
@@ -21,7 +21,8 @@ $pdo->exec("CREATE TABLE IF NOT EXISTS subscriber_devices (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )");
 
-// Ensure city/country columns exist (for older installations that already have the table)
+// Ensure column rename and extra columns (for existing installations)
+try { $pdo->exec("ALTER TABLE subscriber_devices CHANGE COLUMN onesignal_id fcm_token VARCHAR(255)"); } catch(Exception $e) {}
 try { $pdo->exec("ALTER TABLE subscriber_devices ADD COLUMN city VARCHAR(100) DEFAULT NULL"); } catch(Exception $e) {}
 try { $pdo->exec("ALTER TABLE subscriber_devices ADD COLUMN country VARCHAR(100) DEFAULT NULL"); } catch(Exception $e) {}
 

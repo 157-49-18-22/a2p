@@ -5,14 +5,14 @@ check_session();
 
 $pdo = getPDOObject();
 
-// Ensure the onesignal_notification_id column exists
-try { $pdo->exec("ALTER TABLE notifications ADD COLUMN onesignal_notification_id VARCHAR(255) DEFAULT NULL"); } catch(Exception $e) {}
+// Ensure the fcm_message_id column exists
+try { $pdo->exec("ALTER TABLE notifications ADD COLUMN fcm_message_id VARCHAR(255) DEFAULT NULL"); } catch(Exception $e) {}
 try { $pdo->exec("ALTER TABLE notifications ADD COLUMN recipients INT DEFAULT 0"); } catch(Exception $e) {}
 
 // Ensure subscriber_devices table exists
 $pdo->exec("CREATE TABLE IF NOT EXISTS subscriber_devices (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    onesignal_id VARCHAR(100) UNIQUE,
+    fcm_token VARCHAR(255) UNIQUE,
     device_type VARCHAR(50),
     browser VARCHAR(50),
     os VARCHAR(50),
@@ -46,36 +46,18 @@ if (!$notif) {
     echo "<script>window.location.href='notifications.php';</script>"; exit;
 }
 
-// OneSignal API call to get delivery stats
-$onesignal_notif_id = $notif['onesignal_notification_id'] ?? null;
-$app_id     = "d672c804-fe64-41c5-b321-44e92cf74cc9";
-$rest_key   = "os_v2_app_2zzmqbh6mra4lmzbitusz52mzgns5dpyvwru5u45emdcaf7e34cuoncvcvxhbaxtl74p7ux767dj52nej3kmesajs36wiobb6kwtk7q";
+// FCM stats (Note: v1 API doesn't provide real-time delivery confirmation per recipient in the same way, we rely on our record)
+$fcm_msg_id = $notif['fcm_message_id'] ?? null;
 
-$onesignal_data = null;
-$api_reached    = 0;
+$api_reached    = $notif['recipients'] ?? 0;
 $api_converted  = 0;
 $api_errored    = 0;
 $api_remaining  = 0;
 
-if ($onesignal_notif_id) {
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, "https://api.onesignal.com/notifications/{$onesignal_notif_id}?app_id={$app_id}");
-    curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        "Content-Type: application/json",
-        "Authorization: Key os_v2_app_2zzmqbh6mra4lmzbitusz52mzh2srdmqcqke2je6x2lltzfz6umhi5r2s4sl5ipdvspr7h3unk6mzitwg2bjq3lwqa5af7agwvq7nfa"
-    ]);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-    $response = curl_exec($ch);
-    curl_close($ch);
-    $onesignal_data = json_decode($response, true);
-
-    if ($onesignal_data && !isset($onesignal_data['errors'])) {
-        $api_reached   = $onesignal_data['successful'] ?? 0;
-        $api_converted = $onesignal_data['converted']  ?? 0;
-        $api_errored   = $onesignal_data['errored']    ?? 0;
-        $api_remaining = $onesignal_data['remaining']  ?? 0;
-    }
+// (OneSignal API code removed here as we are now using FCM)
+$onesignal_data = null;
+if (false && $fcm_msg_id) {
+    // Hidden OneSignal logic
 }
 
 // Local click tracking stats
@@ -224,10 +206,10 @@ canvas { max-height: 220px !important; }
                         <?php if ($notif['link']): ?>
                         <span><i class="mdi mdi-link me-1"></i><?php echo htmlspecialchars(parse_url($notif['link'], PHP_URL_HOST) ?: $notif['link']); ?></span>
                         <?php endif; ?>
-                        <?php if ($onesignal_notif_id): ?>
-                        <span><i class="mdi mdi-check-circle me-1"></i>OneSignal ID: <?php echo htmlspecialchars($onesignal_notif_id); ?></span>
+                        <?php if ($fcm_msg_id): ?>
+                        <span><i class="mdi mdi-check-circle me-1"></i>FCM Status: Sent</span>
                         <?php else: ?>
-                        <span style="background:rgba(255,200,0,0.2);"><i class="mdi mdi-alert-outline me-1"></i>No OneSignal ID saved</span>
+                        <span style="background:rgba(255,200,0,0.2);"><i class="mdi mdi-alert-outline me-1"></i>Notification ID: <?php echo htmlspecialchars($notif['fcm_message_id'] ?: 'Not Found'); ?></span>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -239,13 +221,11 @@ canvas { max-height: 220px !important; }
             </div>
         </div>
 
-        <?php if (!$onesignal_notif_id): ?>
+        <?php if (!$fcm_msg_id): ?>
         <div class="no-onesignal-banner">
             <i class="mdi mdi-information-outline" style="font-size:1.4rem;color:#6c63ff;"></i>
             <div>
-                <strong>OneSignal delivery stats not available</strong> for this notification. 
-                This happens when the notification was sent before the system saved OneSignal IDs. 
-                New notifications will have full delivery analytics. Local click stats are shown below.
+                <strong>FCM delivery stats</strong> are summarized below. Multi-device click tracking is active.
             </div>
         </div>
         <?php endif; ?>
@@ -277,15 +257,15 @@ canvas { max-height: 220px !important; }
                             <div class="kpi-icon" style="background:rgba(255,255,255,0.2);">
                                 <i class="mdi mdi-send-check-outline"></i>
                             </div>
-                            <?php if ($onesignal_notif_id): ?>
-                            <div class="badge" style="background:rgba(255,255,255,0.15);font-size:0.75rem;">OneSignal Live</div>
+                            <?php if ($fcm_msg_id): ?>
+                            <div class="badge" style="background:rgba(255,255,255,0.15);font-size:0.75rem;">FCM Broadcast</div>
                             <?php else: ?>
-                            <div class="badge" style="background:rgba(255,200,0,0.3);font-size:0.75rem;">No API Data</div>
+                            <div class="badge" style="background:rgba(255,200,0,0.3);font-size:0.75rem;">No ID</div>
                             <?php endif; ?>
                         </div>
-                        <div class="kpi-number"><?php echo $onesignal_notif_id ? number_format($api_reached) : '—'; ?></div>
+                        <div class="kpi-number"><?php echo $fcm_msg_id ? number_format($api_reached) : '—'; ?></div>
                         <div class="kpi-label">Devices Reached</div>
-                        <?php if ($onesignal_notif_id && $total_subs > 0): ?>
+                        <?php if ($fcm_msg_id && $total_subs > 0): ?>
                         <div class="mt-2">
                             <div class="progress progress-thin" style="background:rgba(255,255,255,0.3);">
                                 <div class="progress-bar bg-white" style="width:<?php echo $delivery_rate; ?>%"></div>
@@ -329,11 +309,11 @@ canvas { max-height: 220px !important; }
                             <div class="kpi-icon" style="background:rgba(255,255,255,0.2);">
                                 <i class="mdi mdi-alert-circle-outline"></i>
                             </div>
-                            <div class="badge" style="background:rgba(255,255,255,0.15);font-size:0.75rem;">OneSignal</div>
+                            <div class="badge" style="background:rgba(255,255,255,0.15);font-size:0.75rem;">FCM</div>
                         </div>
-                        <div class="kpi-number"><?php echo $onesignal_notif_id ? number_format($api_errored) : '—'; ?></div>
+                        <div class="kpi-number"><?php echo $fcm_msg_id ? number_format($api_errored) : '—'; ?></div>
                         <div class="kpi-label">Failed Deliveries</div>
-                        <?php if ($onesignal_notif_id): ?>
+                        <?php if ($fcm_msg_id): ?>
                         <small style="opacity:0.8;font-size:0.75rem;"><?php echo number_format($api_remaining); ?> pending</small>
                         <?php endif; ?>
                     </div>
@@ -390,32 +370,27 @@ canvas { max-height: 220px !important; }
         <!-- OneSignal Raw Data (if available) + Recent Clickers -->
         <div class="row g-4">
 
-            <!-- OneSignal Delivery Summary -->
-            <?php if ($onesignal_notif_id && $onesignal_data): ?>
+            <!-- FCM Delivery Summary -->
             <div class="col-lg-4">
                 <div class="card chart-card">
                     <div class="card-header d-flex align-items-center gap-2">
                         <i class="mdi mdi-signal text-warning"></i>
-                        OneSignal Delivery Details
+                        FCM Message Details
                     </div>
                     <div class="card-body p-0">
                         <table class="table table-sm mb-0">
                             <tbody>
-                                <tr><td class="text-muted">Sent</td><td class="fw-bold text-end"><?php echo number_format($onesignal_data['received'] ?? 0); ?></td></tr>
-                                <tr><td class="text-muted">Successful</td><td class="fw-bold text-success text-end"><?php echo number_format($api_reached); ?></td></tr>
-                                <tr><td class="text-muted">Clicked (OneSignal)</td><td class="fw-bold text-primary text-end"><?php echo number_format($api_converted); ?></td></tr>
-                                <tr><td class="text-muted">Failed</td><td class="fw-bold text-danger text-end"><?php echo number_format($api_errored); ?></td></tr>
-                                <tr><td class="text-muted">Pending</td><td class="fw-bold text-warning text-end"><?php echo number_format($api_remaining); ?></td></tr>
-                                <tr><td class="text-muted">Status</td><td class="text-end"><span class="badge bg-success"><?php echo htmlspecialchars($onesignal_data['canceled'] ? 'Canceled' : 'Delivered'); ?></span></td></tr>
+                                <tr><td class="text-muted">Total Recipients</td><td class="fw-bold text-end"><?php echo number_format($api_reached); ?></td></tr>
+                                <tr><td class="text-muted">Status</td><td class="text-end"><span class="badge bg-success">Completed</span></td></tr>
+                                <tr><td class="text-muted">Provider</td><td class="text-end">Firebase (FCM)</td></tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-            <?php endif; ?>
 
             <!-- Recent Clickers Table -->
-            <div class="col-lg-<?php echo ($onesignal_notif_id && $onesignal_data) ? '8' : '12'; ?>">
+            <div class="col-lg-12">
                 <div class="card chart-card">
                     <div class="card-header d-flex align-items-center justify-content-between gap-2">
                         <span><i class="mdi mdi-account-multiple-check-outline text-info me-1"></i> Recent Clickers</span>
