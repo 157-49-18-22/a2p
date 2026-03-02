@@ -359,11 +359,7 @@
         position: relative !important;
         overflow: hidden !important;
     }
-    /* Specific fix for the long "BOOK YOUR CONSTRUCTIONS" item */
-    .mobile-nav__container .main-menu__list > li > a:contains('BOOK YOUR CONSTRUCTIONS'),
-    .mobile-nav__container .main-menu__list > li > a:contains('Book Your Constructions') {
-        font-size: 12px !important;
-    }
+    /* Font size for long items is now handled automatically by JavaScript */
     .mobile-nav__container .main-menu__list > li:hover > a {
         background: rgba(255,255,255,0.1) !important;
     }
@@ -1308,27 +1304,39 @@ document.addEventListener('DOMContentLoaded', function() {
         const clone = desktopMenu.cloneNode(true);
         // Important: Keep main-menu__list as CSS depends on it for mobile styling overrides
         clone.classList.add('mobile-nav__list');
-        clone.style.display = 'block';
+        
+        // Ensure visibility even if desktop rules are !important hidden
+        clone.style.setProperty('display', 'block', 'important');
 
-        const items = clone.querySelectorAll('li.dropdown');
-        items.forEach(li => {
-            const link = li.querySelector('> a');
-            if (link && !link.querySelector('button')) {
-                const btn = document.createElement('button');
-                btn.type = 'button';
-                btn.className = 'dropdown-toggle-btn';
-                btn.innerHTML = '<i class="fa fa-angle-right"></i>';
-                link.appendChild(btn);
+        // Apply styles and logic to all menu items
+        const allItems = clone.querySelectorAll(':scope > li');
+        allItems.forEach(li => {
+            const link = li.querySelector(':scope > a');
+            if (!link) return;
+
+            // Auto-shrink font for long labels (like BOOK YOUR CONSTRUCTIONS)
+            if (link.textContent.trim().length > 20) {
+                link.style.setProperty('font-size', '12px', 'important');
             }
-            
-            // Submenu starts hidden
-            const sub = li.querySelector('> ul');
-            if (sub) {
-                sub.style.display = 'none';
-                sub.style.visibility = 'visible';
-                sub.style.opacity = '1';
-                sub.style.position = 'relative';
-                sub.style.transition = 'none';
+
+            // Dropdown specific logic
+            if (li.classList.contains('dropdown')) {
+                if (!link.querySelector('.dropdown-toggle-btn')) {
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = 'dropdown-toggle-btn';
+                    btn.innerHTML = '<i class="fa fa-angle-right"></i>';
+                    link.appendChild(btn);
+                }
+
+                const sub = li.querySelector(':scope > ul');
+                if (sub) {
+                    sub.style.display = 'none';
+                    sub.style.visibility = 'visible';
+                    sub.style.opacity = '1';
+                    sub.style.position = 'relative';
+                    sub.style.transition = 'none';
+                }
             }
         });
 
@@ -1337,9 +1345,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     setupMobileMenu();
-    setTimeout(setupMobileMenu, 500);
+    setTimeout(setupMobileMenu, 1000); // Increased delay for stability
 
-    // Toggle Logic - Trigger ONLY on icon/button click
+    // Toggle Logic - Trigger ONLY on icon/button click OR placeholder text
     $(document).off('click', '.mobile-nav__container li.dropdown > a').on('click', '.mobile-nav__container li.dropdown > a', function(e) {
         const $link = $(this);
         const $li = $link.parent();
@@ -1350,8 +1358,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const isBtnClick = $(e.target).closest('.dropdown-toggle-btn').length > 0;
         const isPlaceholder = !href || href === '#' || href === 'javascript:void(0)' || href === '';
 
-        // Trigger toggle ONLY if the button was clicked
-        if (isBtnClick) {
+        // Trigger toggle if the button was clicked OR if it's a placeholder link
+        if (isBtnClick || isPlaceholder) {
             e.preventDefault();
             e.stopPropagation();
 
@@ -1369,12 +1377,6 @@ document.addEventListener('DOMContentLoaded', function() {
             $li.toggleClass('expanded');
             $subMenu.stop().slideToggle(250);
             return false;
-        }
-        
-        // If text is clicked and it's a placeholder, prevent default but don't toggle
-        if (isPlaceholder) {
-            // Uncomment line below if you want placeholder text to also toggle
-            // $link.find('.dropdown-toggle-btn').click(); 
         }
     });
 });
@@ -1458,7 +1460,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                     </li>
 
 <?php 
-                                        $result = sqlfetch("SELECT * FROM category WHERE actstat=1 ORDER BY fld_order LIMIT 0,5");
+                                        $result = sqlfetch("SELECT * FROM category WHERE actstat=1 ORDER BY fld_order");
                                         if (count($result)) {
                                             foreach ($result as $category) {
                                         ?>
