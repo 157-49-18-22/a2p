@@ -18,6 +18,72 @@ try {
     $pdo->exec("ALTER TABLE subproduct ADD COLUMN related_blogs TEXT NULL");
 } catch (Exception $e) {}
 
+// Auto-create product_images table if not exists
+try {
+    $pdo_init = getPDOObject();
+    $pdo_init->exec("CREATE TABLE IF NOT EXISTS product_images (
+        id INT NOT NULL AUTO_INCREMENT,
+        product_id INT NOT NULL DEFAULT 0,
+        photo VARCHAR(255) NOT NULL DEFAULT '',
+        title VARCHAR(255) DEFAULT '',
+        caption TEXT,
+        fld_order INT DEFAULT 0,
+        PRIMARY KEY (id),
+        KEY product_id (product_id)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+} catch (Exception $e) {}
+
+function save_product_images_func($product_id) {
+    if (!$product_id) return;
+    $pdo = getPDOObject();
+
+    $uploadDir = "../upload/";
+    if (!is_dir($uploadDir)) {
+        @mkdir($uploadDir, 0775, true);
+    }
+
+    $extra_titles   = $_POST['extra_title'] ?? [];
+    $extra_captions = $_POST['extra_caption'] ?? [];
+    $extra_orders   = $_POST['extra_order'] ?? [];
+    $existing_imgs  = $_POST['existing_extra_photo'] ?? [];
+
+    $files = $_FILES['extra_photos'] ?? null;
+
+    // Clear existing ones and re-sync
+    $del = $pdo->prepare("DELETE FROM product_images WHERE product_id = ?");
+    $del->execute([$product_id]);
+
+    if (is_array($extra_titles)) {
+        foreach ($extra_titles as $i => $title) {
+            $fname = '';
+            
+            // New upload for this row
+            if (isset($files['name'][$i]) && $files['error'][$i] === UPLOAD_ERR_OK) {
+                $origName = basename($files['name'][$i]);
+                $safeName = preg_replace("/[^a-zA-Z0-9_\.-]/", "_", $origName);
+                $fname = date('YmdHis') . "_" . uniqid() . "_" . $safeName;
+                $target = $uploadDir . $fname;
+                move_uploaded_file($files['tmp_name'][$i], $target);
+            } 
+            // Reuse existing
+            elseif (!empty($existing_imgs[$i])) {
+                $fname = $existing_imgs[$i];
+            }
+
+            if ($fname) {
+                $pdo->prepare("INSERT INTO product_images (product_id, photo, title, caption, fld_order) VALUES (?, ?, ?, ?, ?)")
+                    ->execute([
+                        $product_id,
+                        $fname,
+                        $title,
+                        $extra_captions[$i] ?? '',
+                        $extra_orders[$i] ?? 0
+                    ]);
+            }
+        }
+    }
+}
+
 // ✅ Reusable upload function
 function handleFileUpload($fileKey, $prevFile = '')
 {
@@ -71,6 +137,8 @@ if (isset($_POST['addsubproduct'])) {
 
     $affected_rows = insert('subproduct', $posted_data);
     if ($affected_rows) {
+        $last_id = $pdo->lastInsertId();
+        save_product_images_func($last_id);
         $umessage = '<div class="alert alert-success" role="alert">
                         Added Successfully
                      </div>';
@@ -96,6 +164,16 @@ if ($_GET['action'] == 'delete') {
         }
     }
     sqlfetch("DELETE FROM subproduct WHERE id='" . $id . "'");
+
+    // Deleting extra photos from DB and File system
+    $extra_imgs = sqlfetch("SELECT photo FROM product_images WHERE product_id='$id'");
+    foreach ($extra_imgs as $ei) {
+        if ($ei['photo'] && file_exists('../upload/' . $ei['photo'])) {
+            @unlink('../upload/' . $ei['photo']);
+        }
+    }
+    sqlfetch("DELETE FROM product_images WHERE product_id='$id'");
+
     echo "<script>window.open('product.php','_self')</script>";
 }
 
@@ -117,6 +195,16 @@ if (isset($_POST['deleteall'])) {
         }
         $pdo = getPDOObject();
         $q = $pdo->query("DELETE FROM subproduct WHERE id IN ($ids)");
+        
+        // Handle extra images for bulk deletion
+        $extra_imgs = sqlfetch("SELECT photo FROM product_images WHERE product_id IN ($ids)");
+        foreach ($extra_imgs as $ei) {
+            if ($ei['photo'] && file_exists('../upload/' . $ei['photo'])) {
+                @unlink('../upload/' . $ei['photo']);
+            }
+        }
+        $pdo->query("DELETE FROM product_images WHERE product_id IN ($ids)");
+
         if ($q) {
             $umessage = '<div class="alert alert-success" role="alert">Deleted Successfully</div>';
         }
@@ -161,6 +249,9 @@ if (isset($_POST['editdone'])) {
     }
 
     $affected_rows = update('subproduct', $posted_data, ['id' => $pid]);
+    
+    save_product_images_func($pid);
+
     if ($affected_rows) {
         $umessage = '<div class="alert alert-success" role="alert">
                         Updated Successfully
@@ -326,48 +417,76 @@ function subproduct_form(
 
 
                     <div class="col-lg-12 mt-4">
-                        <div class="input-group input-group-merge">
-
-                            <span class="input-group-text">@</span>
-
-                            <div class="form-floating form-floating-outline">
-                                <input type="file" class="form-control" name="photo" aria-label="Upload" value="<?php echo $photo; ?>">
-                                <label for="basic-addon11"> Photo</label>
-
+                        <div class="d-flex align-items-<ctrl94> gap-3 flex-wrap">
+                            <div class="input-group input-group-merge" style="max-width:320px;">
+                                <span class="input-group-text">@</span>
+                                <div class="form-floating form-floating-outline" style="border: 2px solid #666cff66;border-radius: 8px;">
+                                    <input type="file" class="form-control" name="photo" aria-label="Upload" accept="image/*">
+                                    <label for="basic-addon11"> Main Photo</label>
+                                </div>
                             </div>
-                            <img class="grayscale img-responsive" alt="" src="../upload/<?php echo $photo; ?>" style="    width: 50px;margin-right: 16px;border-radius: 16px;">
+                            <?php if ($photo): ?>
+                            <div>
+                                <img src="../upload/<?php echo $photo; ?>" style="height:50px;width:50px;border-radius:8px;object-fit:cover;">
+                            </div>
+                            <?php endif; ?>
+                            <div>
+                                <button type="button" class="btn btn-outline-primary waves-effect" onclick="addMorePhoto()" style="padding: 13px;">
+                                    <i class="fa-solid fa-plus"></i> ADD MORE PHOTOS
+                                </button>
+                            </div>
                         </div>
 
-                    </div>
-                    <div class="col-lg-12 mt-4 d-none">
-                        <div class="input-group input-group-merge">
-
-                            <span class="input-group-text">@</span>
-
-                            <div class="form-floating form-floating-outline">
-                                <input type="file" class="form-control" name="photo2" aria-label="Upload" value="<?php echo $photo2; ?>">
-                                <label for="basic-addon11">Floor Plan Photo 2</label>
-
-                            </div>
-                            <img class="grayscale img-responsive" alt="" src="../upload/<?php echo $photo2; ?>" style="    width: 50px;margin-right: 16px;border-radius: 16px;">
+                        <!-- Extra Photos Items -->
+                        <div id="extra-photos-container" class="mt-3">
+                            <?php
+                            if ($pid != '0') {
+                                $extra_imgs = sqlfetch("SELECT * FROM product_images WHERE product_id='$pid' ORDER BY fld_order ASC");
+                                foreach ($extra_imgs as $idx => $ei) {
+                                    ?>
+                                    <div class="extra-photo-item card p-3 mb-2 border" style="background:#f8f9ff;">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <strong class="text-primary">📷 Photo <?php echo $idx + 1; ?></strong>
+                                            <button type="button" class="btn btn-sm btn-danger" onclick="removeExtraPhoto(this)">
+                                                <i class="fa-solid fa-trash"></i> Remove
+                                            </button>
+                                        </div>
+                                        <div class="row g-2">
+                                            <div class="col-md-4">
+                                                <div class="text-center mb-2">
+                                                    <img src="../upload/<?php echo $ei['photo']; ?>" style="height:80px;width:80px;object-fit:cover;border-radius:8px;">
+                                                </div>
+                                                <input type="file" class="form-control form-control-sm" name="extra_photos[]" accept="image/*">
+                                                <input type="hidden" name="existing_extra_photo[]" value="<?php echo $ei['photo']; ?>">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-floating form-floating-outline mb-2">
+                                                    <input type="text" class="form-control form-control-sm" name="extra_title[]" 
+                                                           placeholder="Title" value="<?php echo htmlspecialchars($ei['title']); ?>">
+                                                    <label>Title</label>
+                                                </div>
+                                                <div class="form-floating form-floating-outline">
+                                                    <textarea class="form-control form-control-sm" name="extra_caption[]" 
+                                                              placeholder="Caption" rows="2"><?php echo htmlspecialchars($ei['caption']); ?></textarea>
+                                                    <label>Caption</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-floating form-floating-outline">
+                                                    <input type="number" class="form-control form-control-sm" name="extra_order[]" 
+                                                           placeholder="Order" value="<?php echo $ei['fld_order']; ?>">
+                                                    <label>Sort Order</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?php
+                                }
+                            }
+                            ?>
                         </div>
-
                     </div>
-                    <div class="col-lg-12 mt-4 d-none">
-                        <div class="input-group input-group-merge">
 
-                            <span class="input-group-text">@</span>
-
-                            <div class="form-floating form-floating-outline">
-                                <input type="file" class="form-control" name="photo3" aria-label="Upload" value="<?php echo $photo3; ?>">
-                                <label for="basic-addon11">Floor Plan Photo 3</label>
-
-
-                            </div>
-                            <img class="grayscale img-responsive" alt="" src="../upload/<?php echo $photo3; ?>" style="    width: 50px;margin-right: 16px;border-radius: 16px;">
-                        </div>
-
-                    </div>
                     <div class="col-lg-12 mt-4">
                         <div class="input-group input-group-merge">
 
@@ -379,11 +498,9 @@ function subproduct_form(
 
 
                             </div>
+                            <a href="../upload/<?php echo $photo4; ?>" target="_blank" class="text-danger ms-2 mt-2" style="font-size:12px;">View File</a>
                 
                         </div>
-                        
-                            <a href="../upload/<?php echo $photo4; ?>" target="_blank" class="text-danger">View File</a>
-
                     </div>
 
 
@@ -571,6 +688,75 @@ function subproduct_form(
         </div>
     </form>
 
+    <!-- Extra Photo Template (hidden) -->
+    <div id="extra-photo-template" style="display:none;">
+        <div class="extra-photo-item card p-3 mb-2 border" style="background:#f8f9ff;">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <strong class="text-primary">📷 New Photo</strong>
+                <button type="button" class="btn btn-sm btn-danger" onclick="removeExtraPhoto(this)">
+                    <i class="fa-solid fa-trash"></i> Remove
+                </button>
+            </div>
+            <div class="row g-2">
+                <div class="col-md-4">
+                    <div class="extra-preview-wrap text-center mb-2" style="display:none;">
+                        <img class="extra-preview" style="height:80px;width:80px;object-fit:cover;border-radius:8px;">
+                    </div>
+                    <input type="file" class="form-control form-control-sm" name="extra_photos[]" accept="image/*" onchange="previewExtraPhoto(this)">
+                    <input type="hidden" name="existing_extra_photo[]" value="">
+                </div>
+                <div class="col-md-4">
+                    <div class="form-floating form-floating-outline mb-2">
+                        <input type="text" class="form-control form-control-sm" name="extra_title[]" placeholder="Title" value="">
+                        <label>Title</label>
+                    </div>
+                    <div class="form-floating form-floating-outline">
+                        <textarea class="form-control form-control-sm" name="extra_caption[]" placeholder="Caption" rows="2"></textarea>
+                        <label>Caption</label>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-floating form-floating-outline">
+                        <input type="number" class="form-control form-control-sm" name="extra_order[]" placeholder="Order" value="0">
+                        <label>Sort Order</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    function addMorePhoto() {
+        var template = document.getElementById('extra-photo-template').innerHTML;
+        var container = document.getElementById('extra-photos-container');
+        var div = document.createElement('div');
+        div.innerHTML = template;
+        var count = container.querySelectorAll('.extra-photo-item').length + 1;
+        div.querySelector('strong').textContent = '📷 Photo ' + count;
+        container.appendChild(div.firstElementChild);
+    }
+
+    function removeExtraPhoto(btn) {
+        var item = btn.closest('.extra-photo-item');
+        item.remove();
+        var items = document.querySelectorAll('#extra-photos-container .extra-photo-item strong');
+        items.forEach(function(el, i) { el.textContent = '📷 Photo ' + (i + 1); });
+    }
+
+    function previewExtraPhoto(input) {
+        var wrap = input.previousElementSibling;
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                wrap.style.display = 'block';
+                wrap.querySelector('img').src = e.target.result;
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    </script>
+
+
 
 
 <?php
@@ -688,6 +874,7 @@ function subproduct_form(
                                 <th>S. No.</th>
                                 <th>Name</th>
                                 <th>Photo</th>
+                                <th>Extra Photos</th>
                                 <th>Subcategory Name</th>
                                 <th>Category Name</th>
 
@@ -732,6 +919,14 @@ function subproduct_form(
                                     <td><?php echo $count++; ?></td>
                                     <td><?php echo $menu['name']; ?></td>
                                     <td><img style="height: 32px;width: 32px;" src="../upload/<?php echo $menu['photo']; ?>" class="img-responsive"></td>
+                                    <td>
+                                        <?php 
+                                        $ex_photos = sqlfetch("SELECT COUNT(*) as count FROM product_images WHERE product_id='".$menu['id']."'");
+                                        $count_p = $ex_photos[0]['count'] ?? 0;
+                                        if($count_p > 0) echo '<span class="badge bg-primary">'.$count_p.' photos</span>';
+                                        else echo '<span class="text-muted">—</span>';
+                                        ?>
+                                    </td>
 
                                     <!-- Separate columns for subcat and subcat2 -->
                                     <td><?php echo $subcatName; ?></td>
