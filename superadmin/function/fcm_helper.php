@@ -29,23 +29,28 @@ class FCMHelper {
         $signature = '';
         $privateKey = $this->serviceAccount['private_key'];
         
-        // Step 1: Normalize all possible newline variations
-        $privateKey = str_replace(["\\n", "\r", "\n"], "\n", $privateKey);
+        // Final ultimate cleaning: Replace literal \n and real newlines
+        $privateKey = str_replace(['\n', '\\n', "\r", "\n"], "\n", $privateKey);
         
-        // Step 2: Ensure the key has proper header/footer and no extra spaces
-        if (strpos($privateKey, 'BEGIN PRIVATE KEY') === false) {
-             throw new Exception("Private key format is invalid. Header missing.");
+        // Remove any whitespace at beginning/end of each line
+        $lines = explode("\n", $privateKey);
+        $cleanLines = [];
+        foreach($lines as $line) {
+            $line = trim($line);
+            if(!empty($line)) $cleanLines[] = $line;
         }
+        $privateKey = implode("\n", $cleanLines);
 
-        // Step 3: Validate key with OpenSSL
+        // Validate key with OpenSSL
         $keyRes = openssl_pkey_get_private($privateKey);
         if (!$keyRes) {
-            throw new Exception("OpenSSL could not read your private key: " . openssl_error_string());
+            throw new Exception("OpenSSL could not read your private key. Check if the format in the JSON is correct (starts with -----BEGIN PRIVATE KEY-----)");
         }
         
         if (!openssl_sign($base64UrlHeader . "." . $base64UrlPayload, $signature, $keyRes, 'SHA256')) {
+            $err = openssl_error_string();
             openssl_pkey_free($keyRes);
-            throw new Exception("OpenSSL sign failed: " . openssl_error_string());
+            throw new Exception("OpenSSL sign failed: " . $err);
         }
         openssl_pkey_free($keyRes);
         
