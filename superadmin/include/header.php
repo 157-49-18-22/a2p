@@ -104,15 +104,37 @@ if ($current_page !== 'application_seating.php') {
             selector: '.editor',
             plugins: [
                 'autolink', 'lists', 'link', 'image', 'preview', 'anchor', 'searchreplace', 'visualblocks',
-                'fullscreen', 'insertdatetime', 'media', 'table', 'wordcount', 'code'
+                'fullscreen', 'insertdatetime', 'media', 'table', 'wordcount', 'code', 'advlist', 'charmap', 'emoticons', 'quickbars'
             ],
-            toolbar: 'undo redo | blocks | bold italic forecolor | alignleft aligncenter alignright alignjustify |' +
-                'bullist numlist outdent indent | removeformat | image link table code fullscreen',
+            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic forecolor backcolor | alignleft aligncenter alignright alignjustify |' +
+                'bullist numlist outdent indent | table | removeformat | code fullscreen',
+            table_toolbar: 'tableprops tabledelete | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol | tablemergecells tablesplitcells | tablecellprops tablerowprops',
+            quickbars_insert_toolbar: 'quicktable',
+            quickbars_selection_toolbar: 'bold italic | quicklink h2 h3 blockquote | forecolor backcolor',
+            font_family_formats: 'Andale Mono=andale mono,times; Arial=arial,helvetica,sans-serif; Arial Black=arial black,avant garde; Calibri=calibri,candara,segoe,segoe ui,optima,arial,sans-serif; Comic Sans MS=comic sans ms,sans-serif; Courier New=courier new,courier; Georgia=georgia,palatino; Helvetica=helvetica; Impact=impact,chicago; Tahoma=tahoma,arial,helvetica,sans-serif; Times New Roman=times new roman,times; Trebuchet MS=trebuchet ms,geneva; Verdana=verdana,geneva;',
+            fontsize_formats: '8pt 10pt 12pt 14pt 18pt 24pt 36pt',
+            table_appearance_options: true,
+            table_advtab: true,
+            table_cell_advtab: true,
+            table_row_advtab: true,
+            table_default_attributes: {
+                border: '1'
+            },
+            table_default_styles: {
+                'border-collapse': 'collapse',
+                'width': '100%'
+            },
+            table_class_list: [
+                {title: 'None', value: ''},
+                {title: 'Table Bordered', value: 'table table-bordered'},
+                {title: 'Table Striped', value: 'table table-striped'},
+                {title: 'Table Hover', value: 'table table-hover'}
+            ],
             image_title: true,
             automatic_uploads: true,
             images_upload_url: 'tiny_upload.php',
             file_picker_types: 'image',
-            relative_urls: false, // ensures paths stay as we return them
+            relative_urls: false,
             remove_script_host: false,
             convert_urls: true,
             file_picker_callback: function (cb, value, meta) {
@@ -124,7 +146,6 @@ if ($current_page !== 'application_seating.php') {
                     var file = this.files[0];
                     var reader = new FileReader();
                     reader.onload = function () {
-                        // TinyMCE will automatically upload the file to 'tiny_upload.php'
                         var id = 'blobid' + (new Date()).getTime();
                         var blobCache =  tinymce.activeEditor.editorUpload.blobCache;
                         var base64 = reader.result.split(',')[1];
