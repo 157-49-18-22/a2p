@@ -21,7 +21,7 @@ class FCMHelper {
             'aud' => 'https://oauth2.googleapis.com/token',
             'exp' => $now + 3600,
             'iat' => $now
-        ]);
+        ], JSON_UNESCAPED_SLASHES);
 
         $base64UrlHeader = $this->base64UrlEncode($header);
         $base64UrlPayload = $this->base64UrlEncode($payload);
@@ -29,11 +29,12 @@ class FCMHelper {
         $signature = '';
         $privateKey = $this->serviceAccount['private_key'];
         
-        // Ensure the private key is properly formatted with actual newlines
+        // Robust cleaning of the private key
         $privateKey = str_replace('\n', "\n", $privateKey);
+        $privateKey = str_replace('\\n', "\n", $privateKey);
         
         if (!openssl_sign($base64UrlHeader . "." . $base64UrlPayload, $signature, $privateKey, 'SHA256')) {
-            throw new Exception("OpenSSL sign failed: " . openssl_error_string());
+            throw new Exception("OpenSSL sign failed: " . openssl_error_string() . " (Check if your private key is valid)");
         }
         $base64UrlSignature = $this->base64UrlEncode($signature);
 
