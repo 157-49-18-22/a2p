@@ -9,3 +9,8 @@ node_modules/
 vendor/
 .DS_Store
 Thumbs.db
+
+# Firebase & Security
+superadmin/firebase-service-account.json
+fcm_debug.txt
+save_log.txt
