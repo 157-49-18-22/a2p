@@ -13,50 +13,31 @@ class FCMHelper {
     private function getAccessToken() {
         if ($this->accessToken) return $this->accessToken;
 
-        $header = json_encode(['alg' => 'RS256', 'typ' => 'JWT']);
+        // Header: RS256 algorithm
+        $header = $this->base64UrlEncode(json_encode(['alg' => 'RS256', 'typ' => 'JWT']));
+
+        // Payload: iss (email), scope, aud (token endpoint), exp/iat
         $now = time();
-        $payload = json_encode([
+        $payload = $this->base64UrlEncode(json_encode([
             'iss' => $this->serviceAccount['client_email'],
             'scope' => 'https://www.googleapis.com/auth/cloud-platform',
             'aud' => 'https://oauth2.googleapis.com/token',
             'exp' => $now + 3600,
-            'iat' => $now
-        ], JSON_UNESCAPED_SLASHES);
+            'iat' => $now - 30 // 30 seconds clock skew adjustment
+        ]));
 
-        $base64UrlHeader = $this->base64UrlEncode($header);
-        $base64UrlPayload = $this->base64UrlEncode($payload);
-
+        $signatureString = $header . "." . $payload;
         $signature = '';
+        
         $privateKey = $this->serviceAccount['private_key'];
+        // Advanced cleaning: handle both literal \n and real newlines
+        $privateKey = str_replace(['\n', '\\n'], "\n", $privateKey);
         
-        // Final ultimate cleaning: Replace literal \n and real newlines
-        $privateKey = str_replace(['\n', '\\n', "\r", "\n"], "\n", $privateKey);
-        
-        // Remove any whitespace at beginning/end of each line
-        $lines = explode("\n", $privateKey);
-        $cleanLines = [];
-        foreach($lines as $line) {
-            $line = trim($line);
-            if(!empty($line)) $cleanLines[] = $line;
+        if (!openssl_sign($signatureString, $signature, $privateKey, 'SHA256')) {
+            throw new Exception("OpenSSL signing failed: " . openssl_error_string());
         }
-        $privateKey = implode("\n", $cleanLines);
 
-        // Validate key with OpenSSL
-        $keyRes = openssl_pkey_get_private($privateKey);
-        if (!$keyRes) {
-            throw new Exception("OpenSSL could not read your private key. Check if the format in the JSON is correct (starts with -----BEGIN PRIVATE KEY-----)");
-        }
-        
-        if (!openssl_sign($base64UrlHeader . "." . $base64UrlPayload, $signature, $keyRes, 'SHA256')) {
-            $err = openssl_error_string();
-            openssl_pkey_free($keyRes);
-            throw new Exception("OpenSSL sign failed: " . $err);
-        }
-        openssl_pkey_free($keyRes);
-        
-        $base64UrlSignature = $this->base64UrlEncode($signature);
-
-        $jwt = $base64UrlHeader . "." . $base64UrlPayload . "." . $base64UrlSignature;
+        $jwt = $signatureString . "." . $this->base64UrlEncode($signature);
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, 'https://oauth2.googleapis.com/token');
@@ -77,7 +58,7 @@ class FCMHelper {
             return $this->accessToken;
         }
 
-        throw new Exception("Failed to get access token: " . $result);
+        throw new Exception("Google Auth Failed: " . $result);
     }
 
     private function base64UrlEncode($data) {
