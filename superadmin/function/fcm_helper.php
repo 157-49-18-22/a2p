@@ -81,6 +81,9 @@ class FCMHelper {
             $accessToken = $this->getAccessToken();
             $projectId = $this->serviceAccount['project_id'];
 
+            $siteUrl = defined('SITE_URL') ? SITE_URL : 'https://pink-sheep-796549.hostingersite.com/';
+            $logoUrl  = $siteUrl . 'assets/images/favicons/android-chrome-192x192.png';
+
             $message = [
                 'message' => [
                     'token' => $token,
@@ -91,6 +94,14 @@ class FCMHelper {
                         'image' => (string)$image
                     ],
                     'webpush' => [
+                        'notification' => [
+                            'title' => (string)$title,
+                            'body'  => (string)$body,
+                            'icon'  => $logoUrl,
+                            'badge' => $logoUrl,
+                            'requireInteraction' => true,
+                            'tag'   => 'a2p-notif'
+                        ],
                         'fcm_options' => [
                             'link' => (string)$link
                         ]
