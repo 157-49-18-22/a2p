@@ -51,45 +51,44 @@
         // Handle incoming messages while in foreground
         onMessage(messaging, (payload) => {
             console.log('FCM Message received in foreground:', payload);
-            // We can add a custom UI toast here later if needed
+            // Auto update the notification badge / list if panel is open
+            if(window.location.reload) {
+                // For now, let's keep it simple. Real-time update can be added with JS.
+            }
         });
 
         // Request Permission and Get Token
-        async function requestPermission() {
-            if (Notification.permission === 'denied') return;
+        window.triggerFCMRequest = async function() {
+            if (Notification.permission === 'denied') {
+                alert("Notifications are blocked. Please enable them in browser settings.");
+                return;
+            }
             
             try {
                 const permission = await Notification.requestPermission();
                 if (permission === 'granted') {
-                    // Register Fresh SW with cache busting
                     const registration = await navigator.serviceWorker.register('<?php echo SITE_URL; ?>firebase-messaging-sw.js?v=' + Date.now());
-                    
-                    // Essential: Wait for SW active status
                     await navigator.serviceWorker.ready;
 
-                    // Fetch Token using exported vapidKey
                     const currentToken = await getToken(messaging, { 
                         vapidKey: vapidKey,
                         serviceWorkerRegistration: registration
                     });
 
                     if (currentToken) {
-                        console.log('FCM SUCCESS: Token Generated');
                         saveDevice(currentToken);
+                        return true;
                     }
                 }
             } catch (err) {
                 console.error("FCM Setup Failed:", err);
             }
-        }
+            return false;
+        };
 
-        // Initialize
+        // Initialize on load
         if (Notification.permission === 'granted') {
-            requestPermission();
-        } else if (Notification.permission !== 'denied') {
-            // You might want to trigger this based on a user action (like a bell click)
-            // For now, let's try to request on load or keep the OneSignal behavior
-            requestPermission();
+            triggerFCMRequest();
         }
     </script>
 <body class="custom-cursor">
@@ -1699,15 +1698,15 @@ document.addEventListener('DOMContentLoaded', function() {
                                     <li><a href="<?= SITE_URL; ?>contact.php">Contact Us </a></li>
                                 </ul>
                             </div>
-                    <!-- Custom Notification Bell Section -->
-                    <div class="notif-wrapper">
+                    <!-- Universal Notification Center -->
+                    <div class="notif-wrapper" id="notifCenter">
                         <?php
+                        // Standard DB fetch for any user
                         $pdo_notif = getPDOObject();
-                        // Get last 10 notifications
-                        $recent_notifs = $pdo_notif->query("SELECT * FROM notifications ORDER BY created_at DESC LIMIT 10")->fetchAll(PDO::FETCH_ASSOC);
+                        $recent_notifs = $pdo_notif->query("SELECT * FROM notifications ORDER BY created_at DESC LIMIT 8")->fetchAll(PDO::FETCH_ASSOC);
                         $notif_count = count($recent_notifs);
                         ?>
-                        <div class="notif-bell">
+                        <div class="notif-bell" onclick="document.getElementById('notifCenter').classList.toggle('active')">
                             <i class="fas fa-bell"></i>
                             <?php if($notif_count > 0): ?>
                                 <span class="notif-badge"><?= $notif_count ?></span>
@@ -1715,40 +1714,56 @@ document.addEventListener('DOMContentLoaded', function() {
                         </div>
                         <div class="notif-dropdown">
                             <div class="notif-header">
-                                <span>Notifications</span>
-                                <span style="font-size:10px; opacity:0.6"><?= $notif_count ?> New</span>
+                                <span>Updates & News</span>
+                                <button onclick="triggerFCMRequest()" class="btn-subscribe-mini">
+                                    <i class="fas fa-plus"></i> Enable Push
+                                </button>
                             </div>
                             <div class="notif-body">
                                 <?php if($notif_count > 0): ?>
                                     <?php foreach($recent_notifs as $n): ?>
                                         <a href="<?= !empty($n['link']) ? $n['link'] : 'javascript:void(0)' ?>" class="notif-item">
                                             <div class="notif-icon-box">
-                                                <i class="fas fa-bullhorn"></i>
+                                                <i class="fas fa-bolt"></i>
                                             </div>
                                             <div class="notif-content">
                                                 <span class="notif-title"><?= htmlspecialchars($n['title']) ?></span>
                                                 <span class="notif-text"><?= htmlspecialchars($n['message']) ?></span>
-                                                <span class="notif-time">
-                                                    <?php 
-                                                    $time = strtotime($n['created_at']);
-                                                    echo date('d M, h:i A', $time);
-                                                    ?>
-                                                </span>
+                                                <span class="notif-time"><?= date('h:i A, d M', strtotime($n['created_at'])) ?></span>
                                             </div>
                                         </a>
                                     <?php endforeach; ?>
                                 <?php else: ?>
-                                    <div style="padding:40px 20px; text-align:center; color:#999;">
-                                        <i class="fas fa-bell-slash" style="font-size:30px; margin-bottom:10px; display:block; opacity:0.3;"></i>
-                                        <span style="font-size:13px;">No new notifications</span>
+                                    <div class="notif-empty">
+                                        <i class="fas fa-envelope-open"></i>
+                                        <p>No new updates at the moment.</p>
                                     </div>
                                 <?php endif; ?>
                             </div>
                             <div class="notif-footer">
-                                <a href="javascript:void(0)">Check all updates</a>
+                                <a href="javascript:void(0)">Check all notifications</a>
                             </div>
                         </div>
                     </div>
+
+                    <style>
+                    /* Premium Center UI Tweaks */
+                    .notif-dropdown { top: 60px !important; z-index: 100000 !important; }
+                    .notif-wrapper.active .notif-dropdown { display: flex !important; }
+                    .btn-subscribe-mini {
+                        background: #c00415;
+                        color: #fff;
+                        border: none;
+                        padding: 4px 8px;
+                        border-radius: 4px;
+                        font-size: 10px;
+                        font-weight: 700;
+                        cursor: pointer;
+                    }
+                    .notif-empty { padding: 30px; text-align: center; color: #ccc; }
+                    .notif-empty i { font-size: 24px; margin-bottom: 5px; display: block; }
+                    .notif-empty p { font-size: 12px; margin: 0; }
+                    </style>
 
                     <div class="main-menu-two__right">
 
