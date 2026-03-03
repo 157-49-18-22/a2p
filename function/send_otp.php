@@ -4,19 +4,12 @@ require_once 'mailer.php';
 
 header('Content-Type: application/json');
 
-function debugLog($msg) {
-    file_put_contents(__DIR__ . '/otp_debug.log', date('Y-m-d H:i:s') . ': ' . $msg . "\n", FILE_APPEND);
-}
-
 try {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        debugLog("Request received: " . print_r($_POST, true));
-        
         $email = filter_var($_POST['email'] ?? '', FILTER_SANITIZE_EMAIL);
         $name = isset($_POST['name']) ? htmlspecialchars($_POST['name']) : 'User';
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            debugLog("Invalid email: " . $email);
             echo json_encode(['status' => 'error', 'message' => 'Invalid email address.']);
             exit;
         }
@@ -25,8 +18,6 @@ try {
         $_SESSION['contact_otp'] = $otp;
         $_SESSION['contact_email'] = $email;
         $_SESSION['otp_time'] = time();
-
-        debugLog("OTP generated: " . $otp . " for " . $email);
 
         $subject = "OTP for Contact Verification - A2P Realtech";
         $body = "
@@ -40,7 +31,6 @@ try {
         </div>";
 
         $mail = new PHPMailer\PHPMailer\PHPMailer(true);
-        debugLog("PHPMailer initialized");
 
         $mail->isSMTP();
         $mail->Host       = SMTP_HOST;
@@ -57,18 +47,14 @@ try {
         $mail->Subject = $subject;
         $mail->Body    = $body;
 
-        debugLog("Attempting to send mail...");
         if($mail->send()) {
-            debugLog("Mail sent successfully!");
             echo json_encode(['status' => 'success', 'message' => 'OTP sent successfully to ' . $email]);
         } else {
-            debugLog("Mail send() returned false");
             echo json_encode(['status' => 'error', 'message' => 'Failed to send OTP.']);
         }
     } else {
         echo json_encode(['status' => 'error', 'message' => 'Invalid request method.']);
     }
 } catch (Throwable $t) {
-    debugLog("FATAL ERROR: " . $t->getMessage() . " in " . $t->getFile() . " on line " . $t->getLine());
     echo json_encode(['status' => 'error', 'message' => 'System error: ' . $t->getMessage()]);
 }
