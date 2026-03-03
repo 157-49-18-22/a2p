@@ -640,35 +640,47 @@
         margin-left: 10px;
     }
     .main-menu-two__wrapper {
-        padding: 0 15px !important;
+        padding: 0 10px !important;
         height: 70px !important;
         display: flex !important;
+        flex-direction: row !important;
         align-items: center !important;
         justify-content: space-between !important;
         position: relative !important;
         background: #fff !important;
         box-sizing: border-box !important;
+        width: 100% !important;
     }
-    /* Hamburger - LEFT */
+    /* Hamburger - LEFT SLOT (25%) */
     .main-menu-two__main-menu-two-box {
         order: 1 !important;
-        flex: 1 !important;
+        flex: 0 0 25% !important;
+        max-width: 25% !important;
         display: flex !important;
         justify-content: flex-start !important;
         align-items: center !important;
         z-index: 10 !important;
-        position: relative !important;
     }
-    /* Logo - CENTER */
+    /* Logo - CENTER SLOT (50%) */
     .main-menu-two__left {
         order: 2 !important;
-        flex: 2 !important;
+        flex: 0 0 50% !important;
+        max-width: 50% !important;
         display: flex !important;
         justify-content: center !important;
         align-items: center !important;
-        position: relative !important;
-        z-index: 5 !important;
         margin: 0 !important;
+        z-index: 5 !important;
+    }
+    /* Search - RIGHT SLOT (25%) */
+    .main-menu-two__right {
+        order: 3 !important;
+        flex: 0 0 25% !important;
+        max-width: 25% !important;
+        display: flex !important;
+        justify-content: flex-end !important;
+        align-items: center !important;
+        z-index: 10 !important;
     }
     .main-menu-two__logo {
         display: flex !important;
@@ -679,24 +691,15 @@
     .main-menu-two__logo img {
         height: 48px !important;
         width: auto !important;
-        display: block !important;
-        filter: none !important;
         max-width: 100% !important;
-    }
-    /* Search - RIGHT */
-    .main-menu-two__right {
-        order: 3 !important;
-        flex: 1 !important;
-        display: flex !important;
-        justify-content: flex-end !important;
-        align-items: center !important;
-        z-index: 10 !important;
-        position: relative !important;
+        display: block !important;
+        object-fit: contain !important;
     }
     .main-menu-two__call-search,
     .main-menu-two__call {
         display: flex !important;
         align-items: center !important;
+        justify-content: flex-end !important;
     }
     .mobile-nav__toggler {
         margin: 0 !important;
