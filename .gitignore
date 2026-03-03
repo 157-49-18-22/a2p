@@ -7,6 +7,7 @@ upload/*.pdf
 *.7z
 node_modules/
 vendor/
+!admin/vendor/phpmailer/
 .DS_Store
 Thumbs.db
 
