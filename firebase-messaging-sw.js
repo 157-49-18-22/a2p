@@ -14,40 +14,29 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
-// Ultimate background handler
+// Aggressive Background Handler (Always show notification)
 messaging.onBackgroundMessage((payload) => {
-    console.log('SW received message:', payload);
+    console.log('[SW] Recieved background message ', payload);
 
-    // Fallback values if notification object is missing
-    const title = payload.notification?.title || payload.data?.title || "New Notification";
-    const body = payload.notification?.body || payload.data?.body || "Click to view details";
-    const image = payload.notification?.image || payload.data?.image || null;
-
+    const notificationTitle = payload.notification?.title || payload.data?.title || "RealTech Update";
     const notificationOptions = {
-        body: body,
-        icon: 'https://cdn-icons-png.flaticon.com/512/3119/3119338.png', // Fallback icon
-        image: image,
+        body: payload.notification?.body || payload.data?.body || "Click to view full details",
+        icon: 'https://cdn-icons-png.flaticon.com/512/3119/3119338.png',
+        image: payload.notification?.image || payload.data?.image || null, // For YouTube-like banner images
         badge: 'https://cdn-icons-png.flaticon.com/512/3119/3119338.png',
         data: {
-            url: payload.data?.link || payload.notification?.click_action || '/'
+            url: payload.data?.link || '/'
         },
-        tag: 'fcm-notification-' + Date.now(), // Unique tag to prevent grouping
-        requireInteraction: true // Keeps notification visible until clicked
+        requireInteraction: true, // Key for persistent pop-up
+        vibrate: [200, 100, 200] // Makes the phone buzz
     };
 
-    return self.registration.showNotification(title, notificationOptions);
+    return self.registration.showNotification(notificationTitle, notificationOptions);
 });
 
 self.addEventListener('notificationclick', function (event) {
     event.notification.close();
-    const urlToOpen = event.notification.data.url;
-
     event.waitUntil(
-        clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function (clientList) {
-            for (let client of clientList) {
-                if (client.url === urlToOpen && 'focus' in client) return client.focus();
-            }
-            if (clients.openWindow) return clients.openWindow(urlToOpen);
-        })
+        clients.openWindow(event.notification.data.url)
     );
 });

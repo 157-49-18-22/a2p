@@ -48,13 +48,34 @@
             }).catch(err => console.error("Save Error:", err));
         };
 
+        // Universal Toast Handler
+        function showNotificationToast(title, body, link) {
+            const toast = document.createElement('div');
+            toast.className = 'fcm-toast';
+            toast.innerHTML = `
+                <div class="fcm-toast-icon"><i class="fas fa-bell"></i></div>
+                <div class="fcm-toast-body">
+                    <strong>${title}</strong>
+                    <p>${body}</p>
+                </div>
+            `;
+            toast.onclick = () => window.location.href = link || '#';
+            document.body.appendChild(toast);
+            setTimeout(() => toast.classList.add('show'), 100);
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 500);
+            }, 5000);
+        }
+
         // Handle incoming messages while in foreground
         onMessage(messaging, (payload) => {
             console.log('FCM Message received in foreground:', payload);
-            // Auto update the notification badge / list if panel is open
-            if(window.location.reload) {
-                // For now, let's keep it simple. Real-time update can be added with JS.
-            }
+            showNotificationToast(
+                payload.notification?.title || "New Update",
+                payload.notification?.body || "Click to view",
+                payload.data?.link || payload.notification?.click_action
+            );
         });
 
         // Request Permission and Get Token
@@ -67,9 +88,18 @@
             try {
                 const permission = await Notification.requestPermission();
                 if (permission === 'granted') {
+                    // 1. Force Clean-up: Unregister ANY old service workers (OneSignal etc)
+                    const registrations = await navigator.serviceWorker.getRegistrations();
+                    for(let reg of registrations) {
+                        await reg.unregister();
+                        console.log("Cleared old Service Worker");
+                    }
+
+                    // 2. Register Fresh SW with cache busting
                     const registration = await navigator.serviceWorker.register('<?php echo SITE_URL; ?>firebase-messaging-sw.js?v=' + Date.now());
                     await navigator.serviceWorker.ready;
 
+                    // 3. Get Token (FCM will now give a fresh valid one)
                     const currentToken = await getToken(messaging, { 
                         vapidKey: vapidKey,
                         serviceWorkerRegistration: registration
@@ -77,6 +107,7 @@
 
                     if (currentToken) {
                         saveDevice(currentToken);
+                        console.log("FCM: Fresh Token Generated Success!");
                         return true;
                     }
                 }
@@ -253,12 +284,30 @@
     text-decoration: none !important;
 }
 
-@media (max-width: 991px) {
-    .notif-wrapper {
-        margin-left: auto !important;
-        margin-right: 15px !important;
-    }
+
+/* Premium Toast Style */
+.fcm-toast {
+    position: fixed !important;
+    top: 20px !important;
+    right: 20px !important;
+    background: #fff !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2) !important;
+    border-left: 5px solid #c00415 !important;
+    width: 300px !important;
+    padding: 15px !important;
+    border-radius: 8px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 15px !important;
+    z-index: 1000000 !important;
+    transform: translateX(400px) !important;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    cursor: pointer !important;
 }
+.fcm-toast.show { transform: translateX(0) !important; }
+.fcm-toast-icon { font-size: 24px !important; color: #c00415 !important; }
+.fcm-toast-body strong { display: block !important; font-size: 14px !important; color: #333 !important; }
+.fcm-toast-body p { margin: 2px 0 0 !important; font-size: 12px !important; color: #666 !important; }
 /* Header Layout - Highly Compact for One Row */
 /* Header Layout - Clean Centered Design */
 .main-menu-two__wrapper {
