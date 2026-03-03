@@ -48,54 +48,27 @@
             }).catch(err => console.error("Save Error:", err));
         };
 
-        // Universal Foreground Notification (System Tray mein dikhane ke liye)
+        // Universal Foreground Notification (System Tray Force)
         onMessage(messaging, (payload) => {
-            console.log('FCM: Message received', payload);
-            
-            // System panel mein dikhane ke liye Service Worker ka sahara lenge
-            if (Notification.permission === "granted") {
-                navigator.serviceWorker.ready.then(registration => {
-                    const title = payload.notification?.title || payload.data?.title || "New Message";
-                    const options = {
-                        body: payload.notification?.body || payload.data?.body || "",
-                        icon: 'https://cdn-icons-png.flaticon.com/512/3119/3119338.png',
-                        badge: 'https://cdn-icons-png.flaticon.com/512/3119/3119338.png',
-                        data: payload.data,
-                        tag: 'fcm-push-' + Date.now(),
-                        requireInteraction: true 
-                    };
-                    registration.showNotification(title, options);
-                });
-            }
+            console.log('FCM: Received in tab', payload);
+            window.testNativeNotification(payload.notification?.title || "Update", payload.notification?.body || "");
         });
 
-        // Request Permission and Get Token
-        window.triggerFCMRequest = async function() {
-            if (Notification.permission === 'denied') {
-                alert("Notifications are blocked. Please enable them in browser settings.");
-                return;
-            }
-            
-            try {
-                const permission = await Notification.requestPermission();
-                if (permission === 'granted') {
-                    const registration = await navigator.serviceWorker.register('<?php echo SITE_URL; ?>firebase-messaging-sw.js?v=' + Date.now());
-                    await navigator.serviceWorker.ready;
-
-                    const currentToken = await getToken(messaging, { 
-                        vapidKey: vapidKey,
-                        serviceWorkerRegistration: registration
+        // Manual Test Function (Action Center check karne ke liye)
+        window.testNativeNotification = function(title, body) {
+            if (!("Notification" in window)) return;
+            if (Notification.permission === "granted") {
+                navigator.serviceWorker.ready.then(registration => {
+                    registration.showNotification(title || "Test Notification", {
+                        body: body || "If you see this, native push is working!",
+                        icon: 'https://cdn-icons-png.flaticon.com/512/3119/3119338.png',
+                        requireInteraction: true,
+                        tag: 'test-' + Date.now()
                     });
-
-                    if (currentToken) {
-                        saveDevice(currentToken);
-                        return true;
-                    }
-                }
-            } catch (err) {
-                console.error("FCM Setup Failed:", err);
+                });
+            } else {
+                window.triggerFCMRequest();
             }
-            return false;
         };
 
         // Initialize on load
