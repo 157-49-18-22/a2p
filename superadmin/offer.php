@@ -19,6 +19,11 @@ try {
     // silent
 }
 
+try {
+    $pdo = getPDOObject();
+    $pdo->exec("ALTER TABLE offer ADD COLUMN related_blogs TEXT NULL");
+} catch (Exception $e) {}
+
 function handleFileUpload($prevphoto = '')
 {
     $Filename = $prevphoto; // default to previous photo if editing
@@ -134,10 +139,16 @@ if (isset($_POST['addclient'])) {
     if (!$num) {
         $Filename = handleFileUpload();
 
+        if (isset($related_blogs) && is_array($related_blogs)) {
+            $related_blogs_str = implode(',', $related_blogs);
+        } else {
+            $related_blogs_str = '';
+        }
+
         // Insert data into database
         $q = $pdo->prepare("INSERT INTO `offer` 
-            (id, name, photo, des, des1, meta_title, meta_keyword, meta_description, by_blog, fld_order, actstat) 
-            VALUES (:id,:name, :photo,:des,:des1,:meta_title,:meta_keyword,:meta_description, :by_blog, :fld_order, :actstat)");
+            (id, name, photo, des, des1, meta_title, meta_keyword, meta_description, by_blog, related_blogs, fld_order, actstat) 
+            VALUES (:id,:name, :photo,:des,:des1,:meta_title,:meta_keyword,:meta_description, :by_blog, :related_blogs, :fld_order, :actstat)");
         $q->execute([
             ':id'               => $id,
             ':name'             => $name,
@@ -148,6 +159,7 @@ if (isset($_POST['addclient'])) {
             ':meta_keyword'     => $meta_keyword,
             ':meta_description' => $meta_description,
             ':by_blog'          => $by_blog,
+            ':related_blogs'    => $related_blogs_str,
             ':fld_order'        => $fld_order,
             ':actstat'          => $actstat
         ]);
@@ -257,6 +269,12 @@ if (isset($_POST['editdone'])) {
 
     $Filename = handleFileUpload($prevphoto);
 
+    if (isset($related_blogs) && is_array($related_blogs)) {
+        $related_blogs_str = implode(',', $related_blogs);
+    } else {
+        $related_blogs_str = '';
+    }
+
     $pdo = getPDOObject();
     $q = $pdo->prepare("UPDATE `offer` SET 
             name=?,
@@ -267,10 +285,11 @@ if (isset($_POST['editdone'])) {
             meta_keyword=?,
             meta_description=?,
             by_blog=?,
+            related_blogs=?,
             fld_order=?,
             actstat=?
             WHERE id=?");
-    $q->execute([$name, $Filename, $des, $des1, $meta_title, $meta_keyword, $meta_description, $by_blog, $fld_order, $actstat, $pid]);
+    $q->execute([$name, $Filename, $des, $des1, $meta_title, $meta_keyword, $meta_description, $by_blog, $related_blogs_str, $fld_order, $actstat, $pid]);
 
     save_extra_images_func($pid);
 
@@ -283,7 +302,7 @@ if (isset($_POST['editdone'])) {
 }
 
 // Function to display client form
-function client_form($pid = '0', $name = '', $photo = '', $des = '', $des1 = '', $meta_title = '', $meta_keyword = '', $meta_description = '',   $by_blog = '',   $fld_order = '0', $actstat = '', $formname = 'addclient')
+function client_form($pid = '0', $name = '', $photo = '', $des = '', $des1 = '', $meta_title = '', $meta_keyword = '', $meta_description = '',   $by_blog = '', $related_blogs = '',  $fld_order = '0', $actstat = '', $formname = 'addclient')
 { ?>
     <form action="offer.php" method="post" enctype="multipart/form-data">
         <div class="form theme-form">
@@ -467,8 +486,57 @@ function client_form($pid = '0', $name = '', $photo = '', $des = '', $des1 = '',
                 </div>
 
 
+                <div class="col-lg-12 mt-4">
+                    <div class="card border">
+                        <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+                            <h5 class="mb-0">Select Related Blogs</h5>
+                            <div class="search-box">
+                                <input type="text" id="blogSearch" class="form-control form-control-sm" placeholder="Search blogs..." style="width: 250px;">
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row" id="blogList">
+                                <?php
+                                $all_blogs = sqlfetch("SELECT id, name FROM `offer` WHERE actstat=1 ORDER BY name ASC");
+                                $selected_blogs = explode(',', $related_blogs);
+                                $item_count = 0;
+                                foreach ($all_blogs as $blog) {
+                                    // Don't show current blog in selection
+                                    if($blog['id'] == $pid) continue;
 
-                <div class="col-lg-12  mt-5">
+                                    $is_checked = in_array($blog['id'], $selected_blogs) ? 'checked' : '';
+                                    // Initially hide items after the first 10, unless they are checked
+                                    $item_class = ($item_count < 10 || $is_checked) ? 'blog-item' : 'blog-item d-none-extra';
+                                    ?>
+                                    <div class="col-md-4 col-sm-6 mb-2 <?php echo $item_class; ?>" data-name="<?php echo strtolower(htmlspecialchars($blog['name'])); ?>">
+                                        <div class="form-check">
+                                            <input class="form-check-input blog-checkbox" type="checkbox" name="related_blogs[]" value="<?php echo $blog['id']; ?>" id="blog_<?php echo $blog['id']; ?>" <?php echo $is_checked; ?>>
+                                            <label class="form-check-label" for="blog_<?php echo $blog['id']; ?>">
+                                                <?php echo htmlspecialchars($blog['name']); ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <?php
+                                    $item_count++;
+                                }
+                                ?>
+                            </div>
+                            <?php if ($item_count > 10): ?>
+                            <div class="text-center mt-3" id="loadMoreContainer">
+                                <button type="button" class="btn btn-sm btn-outline-primary" id="btnLoadMore">Read More</button>
+                            </div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+
+                <style>
+                    .d-none-extra { display: none !important; }
+                    .blog-item.filtered-out { display: none !important; }
+                </style>
+
+
+                <div class="col-lg-12 mt-5">
                     <div class="input-group input-group-merge">
                         <button class="btn btn-primary waves-effect  waves-light" type="submit" value="Submit" name="<?php echo $formname; ?>">
                             <span class=" align-middle">Submit</span>
@@ -584,7 +652,7 @@ function previewExtraPhoto(input) {
                                 $productdata = sqlfetch("SELECT * FROM `offer` where id='$pid' ");
                                 foreach ($productdata as $product) {
                                     extract($product);
-                                    client_form($pid, $name, $photo, $des, $des1, $meta_title, $meta_keyword, $meta_description, $by_blog, $fld_order, $actstat, $formname = 'editdone');
+                                    client_form($pid, $name, $photo, $des, $des1, $meta_title, $meta_keyword, $meta_description, $by_blog, $related_blogs, $fld_order, $actstat, $formname = 'editdone');
                                 } ?>
                             </div>
                         </div>
@@ -674,5 +742,55 @@ function previewExtraPhoto(input) {
 
         <?php } ?>
 
+
+        <script>
+            // --- Blog Selection Logic ---
+            document.addEventListener('DOMContentLoaded', function() {
+                const searchInput = document.getElementById('blogSearch');
+                const btnLoadMore = document.getElementById('btnLoadMore');
+                const blogItems = document.querySelectorAll('.blog-item');
+                let showingAll = false;
+
+                if (searchInput) {
+                    searchInput.addEventListener('input', function() {
+                        const query = this.value.toLowerCase().trim();
+                        blogItems.forEach(item => {
+                            const name = item.getAttribute('data-name');
+                            if (name.includes(query)) {
+                                item.classList.remove('filtered-out');
+                                // If searching, remove pagination restriction for matches
+                                if(query !== "") {
+                                    item.classList.remove('d-none-extra');
+                                } else if(!showingAll) {
+                                    // Reset to pagination if search is cleared
+                                    const index = Array.from(blogItems).indexOf(item);
+                                    const isChecked = item.querySelector('.blog-checkbox').checked;
+                                    if(index >= 10 && !isChecked) {
+                                        item.classList.add('d-none-extra');
+                                    }
+                                }
+                            } else {
+                                item.classList.add('filtered-out');
+                            }
+                        });
+                        
+                        // Hide Load More during search
+                        if(btnLoadMore) {
+                            btnLoadMore.parentElement.style.display = query === "" && !showingAll ? "block" : "none";
+                        }
+                    });
+                }
+
+                if (btnLoadMore) {
+                    btnLoadMore.addEventListener('click', function() {
+                        blogItems.forEach(item => {
+                            item.classList.remove('d-none-extra');
+                        });
+                        this.parentElement.style.display = 'none';
+                        showingAll = true;
+                    });
+                }
+            });
+        </script>
 
         <?php require('include/footer.php'); ?>
