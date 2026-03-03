@@ -14,9 +14,9 @@ require_once $phpmailerBase . 'PHPMailer.php';
 require_once $phpmailerBase . 'SMTP.php';
 
 define('SMTP_HOST',     'smtp.gmail.com');
-define('SMTP_PORT',     465); 
+define('SMTP_PORT',     587); 
 define('SMTP_USER',     'team@a2prealtech.com');
-define('SMTP_PASS',     'fuvgyfhiteriofph');
+define('SMTP_PASS',     'birmzzseuxxhatl');
 define('SMTP_FROM',     'team@a2prealtech.com');
 define('SMTP_FROM_NAME','A2P Realtech');
 define('ADMIN_EMAIL',   'team@a2prealtech.com');
@@ -39,7 +39,7 @@ function sendAllMails($userEmail, $userName, $adminSubject, $adminBody) {
         $mail->SMTPAuth   = true;
         $mail->Username   = SMTP_USER;
         $mail->Password   = SMTP_PASS;
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port       = SMTP_PORT;
         $mail->CharSet    = 'UTF-8';
 
