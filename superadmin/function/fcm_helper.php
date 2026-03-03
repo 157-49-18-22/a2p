@@ -88,7 +88,17 @@ class FCMHelper {
                         'title' => (string)$title,
                         'body'  => (string)$body
                     ],
+                    'data' => [
+                        'link' => (string)$link
+                    ],
                     'webpush' => [
+                        'headers' => [
+                            'Urgency' => 'high'
+                        ],
+                        'notification' => [
+                            'requireInteraction' => true,
+                            'icon' => 'https://cdn-icons-png.flaticon.com/512/3119/3119338.png'
+                        ],
                         'fcm_options' => [
                             'link' => (string)$link
                         ]
@@ -98,6 +108,7 @@ class FCMHelper {
 
             if ($image) {
                 $message['message']['notification']['image'] = (string)$image;
+                $message['message']['webpush']['notification']['image'] = (string)$image;
             }
 
             $ch = curl_init("https://fcm.googleapis.com/v1/projects/$projectId/messages:send");

@@ -64,9 +64,22 @@ $admin_id = isset($_SESSION['admin_id']) ? $_SESSION['admin_id'] : 0;
             }).catch(err => console.error("Save Error:", err));
         };
 
-        // Foreground listener
+        // Universal Foreground Notification (System Tray mein dikhane ke liye)
         onMessage(messaging, (payload) => {
-            console.log('FCM Message received in admin foreground:', payload);
+            console.log('FCM: Message received', payload);
+            if (Notification.permission === "granted") {
+                navigator.serviceWorker.ready.then(registration => {
+                    const title = payload.notification?.title || payload.data?.title || "New Message";
+                    const options = {
+                        body: payload.notification?.body || payload.data?.body || "",
+                        icon: 'https://cdn-icons-png.flaticon.com/512/3119/3119338.png',
+                        data: payload.data,
+                        tag: 'fcm-push-' + Date.now(),
+                        requireInteraction: true 
+                    };
+                    registration.showNotification(title, options);
+                });
+            }
         });
 
         // Master registration
