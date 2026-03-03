@@ -7,9 +7,7 @@ upload/*.pdf
 *.7z
 node_modules/
 vendor/
-!admin/vendor/
-admin/vendor/*
-!admin/vendor/phpmailer/
+!admin/vendor/phpmailer/phpmailer/src/
 .DS_Store
 Thumbs.db
 
