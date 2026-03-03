@@ -640,10 +640,9 @@
         margin-left: 10px;
     }
     .main-menu-two__wrapper {
-        padding: 0 10px !important;
+        padding: 0 15px !important;
         height: 70px !important;
         display: flex !important;
-        flex-direction: row !important;
         align-items: center !important;
         justify-content: space-between !important;
         position: relative !important;
@@ -651,49 +650,42 @@
         box-sizing: border-box !important;
         width: 100% !important;
     }
-    /* Hamburger - LEFT SLOT (25%) */
+    /* Logo - CENTER (order 2, flex 1) */
+    .main-menu-two__left {
+        order: 2 !important;
+        flex: 1 !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        position: relative !important;
+        z-index: 10 !important;
+        margin: 0 !important;
+    }
+    .main-menu-two__logo img {
+        height: 48px !important;
+        width: auto !important;
+        display: block !important;
+        filter: none !important;
+    }
+    /* Hamburger - LEFT (order 1) */
     .main-menu-two__main-menu-two-box {
         order: 1 !important;
-        flex: 0 0 25% !important;
-        max-width: 25% !important;
+        flex: 0 0 auto !important;
+        min-width: 50px !important;
         display: flex !important;
         justify-content: flex-start !important;
         align-items: center !important;
         z-index: 10 !important;
     }
-    /* Logo - CENTER SLOT (50%) */
-    .main-menu-two__left {
-        order: 2 !important;
-        flex: 0 0 50% !important;
-        max-width: 50% !important;
-        display: flex !important;
-        justify-content: center !important;
-        align-items: center !important;
-        margin: 0 !important;
-        z-index: 5 !important;
-    }
-    /* Search - RIGHT SLOT (25%) */
+    /* Search - RIGHT (order 3) */
     .main-menu-two__right {
         order: 3 !important;
-        flex: 0 0 25% !important;
-        max-width: 25% !important;
+        flex: 0 0 auto !important;
+        min-width: 50px !important;
         display: flex !important;
         justify-content: flex-end !important;
         align-items: center !important;
         z-index: 10 !important;
-    }
-    .main-menu-two__logo {
-        display: flex !important;
-        justify-content: center !important;
-        align-items: center !important;
-        width: 100% !important;
-    }
-    .main-menu-two__logo img {
-        height: 48px !important;
-        width: auto !important;
-        max-width: 100% !important;
-        display: block !important;
-        object-fit: contain !important;
     }
     .main-menu-two__call-search,
     .main-menu-two__call {
