@@ -15,101 +15,90 @@ $admin_id = isset($_SESSION['admin_id']) ? $_SESSION['admin_id'] : 0;
 <head>
     <!-- Firebase Cloud Messaging Push Notifications -->
     <script type="module">
-        import { firebaseConfig, vapidKey } from '../firebase_config.js?v=<?php echo time(); ?>';
+        const firebaseConfig = {
+            apiKey: "AIzaSyCUpT22o_EQV4uuyOn84zawWemlWqzmsOA",
+            authDomain: "a2p-realtech-29ced.firebaseapp.com",
+            projectId: "a2p-realtech-29ced",
+            storageBucket: "a2p-realtech-29ced.firebasestorage.app",
+            messagingSenderId: "796136362818",
+            appId: "1:796136362818:web:37d0a918debf7ce7a5aedb",
+            measurementId: "G-DYGC70ZNSK"
+        };
+        const vapidKey = 'BFCCWlRqcOGi-HK033FmGjuJAL_On1bgvaPozAjc2DBpiZ-eRirAYgWNOlbmfqYzLbpEgPB6F1p8mxq950bGPsk';
+
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging.js";
-
-        console.log("FCM VAPID Key Loaded (Admin):", vapidKey);
-        console.log("FCM Config Check:", firebaseConfig); // Check if apiKey/appId matches screenshot
 
         const app = initializeApp(firebaseConfig);
         const messaging = getMessaging(app);
 
         const saveDevice = (fcmToken) => {
             if (!fcmToken) return;
-            const ua = navigator.userAgent;
-            let deviceType = /Mobi|Android/i.test(ua) ? 'Mobile' : 'Desktop';
-            let browser = 'Unknown';
-            let os = 'Unknown';
-            let model = 'Unknown';
-
-            if (ua.includes("Chrome")) browser = "Chrome";
-            else if (ua.includes("Safari")) browser = "Safari";
-            else if (ua.includes("Firefox")) browser = "Firefox";
-            else if (ua.includes("MSIE") || ua.includes("Trident")) browser = "IE";
-
-            if (ua.includes("Win")) os = "Windows";
-            else if (ua.includes("Mac")) os = "MacOS";
-            else if (ua.includes("X11") || ua.includes("Linux")) os = "Linux";
-            else if (ua.includes("Android")) os = "Android";
-            else if (ua.includes("iPhone")) os = "iOS";
-
-            if (ua.includes("iPhone")) model = "iPhone";
-            else if (ua.includes("iPad")) model = "iPad";
-            else if (ua.includes("Android")) {
-                const match = ua.match(/Android \d+; ([^;)]+)/);
-                if (match) model = match[1];
-            } else if (ua.includes("MacBook")) model = "MacBook";
-
             fetch('../save_subscription.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    fcm_token: fcmToken,
-                    device_type: deviceType,
-                    browser: browser,
-                    os: os,
-                    device_model: model
-                })
+                body: JSON.stringify({ fcm_token: fcmToken, device_type: 'Desktop/Admin' })
             }).catch(err => console.error("Save Error:", err));
         };
 
-        // Universal Foreground Notification (System Tray mein dikhane ke liye)
+        // Universal Foreground Notification (System Tray Force)
         onMessage(messaging, (payload) => {
-            console.log('FCM: Message received', payload);
-            if (Notification.permission === "granted") {
-                navigator.serviceWorker.ready.then(registration => {
-                    const title = payload.notification?.title || payload.data?.title || "New Message";
-                    const options = {
-                        body: payload.notification?.body || payload.data?.body || "",
-                        icon: 'https://cdn-icons-png.flaticon.com/512/3119/3119338.png',
-                        data: payload.data,
-                        tag: 'fcm-push-' + Date.now(),
-                        requireInteraction: true 
-                    };
-                    registration.showNotification(title, options);
-                });
-            }
+            console.log('FCM: Received in tab', payload);
+            window.testNativeNotification(payload.notification?.title || "Update", payload.notification?.body || "");
         });
 
+        // Action Center Test / Trigger
+        window.testNativeNotification = function(title, body) {
+            console.log("Triggering Local Test Notification...");
+            if (Notification.permission === "granted") {
+                navigator.serviceWorker.ready.then(registration => {
+                    registration.showNotification(title || "Test Notification", {
+                        body: body || "System Tray connectivity confirmed!",
+                        icon: 'https://cdn-icons-png.flaticon.com/512/3119/3119338.png',
+                        requireInteraction: true,
+                        tag: 'test-' + Date.now()
+                    });
+                });
+            } else {
+                window.triggerFCM();
+            }
+        };
+
         // Master registration
-        async function triggerFCM() {
-            if (Notification.permission === 'denied') return;
+        window.triggerFCM = async function() {
+            if (Notification.permission === 'denied') {
+                alert("Please enable notifications in browser settings.");
+                return;
+            }
             
             try {
                 const permission = await Notification.requestPermission();
                 if (permission === 'granted') {
-                    // Cache busting SW registration
                     const registration = await navigator.serviceWorker.register('../firebase-messaging-sw.js?v=' + Date.now());
-                    
-                    // Essential: Wait for SW active status
                     await navigator.serviceWorker.ready;
 
-                    // Fetch Token using EXACT exported key
+                    // Fetch Token mit SAFE VAPID Key
                     const currentToken = await getToken(messaging, { 
                         vapidKey: vapidKey,
                         serviceWorkerRegistration: registration
                     });
 
                     if (currentToken) {
-                        console.log('FCM: Token Refresh Success!', currentToken);
+                        console.log('FCM: Token Generated ->', currentToken.substring(0, 10) + '...');
                         saveDevice(currentToken);
+                        alert("Push Notifications Enabled Successfully!");
                     }
                 }
             } catch (err) {
                 console.error("FCM: Setup Failed", err);
             }
+        };
+
+        // Initialize on load
+        if (Notification.permission === 'granted') {
+            window.triggerFCM();
         }
+    </script>
         
 
         // Auto-run if already granted or ask after delay
