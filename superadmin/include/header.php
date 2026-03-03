@@ -78,9 +78,9 @@ $admin_id = isset($_SESSION['admin_id']) ? $_SESSION['admin_id'] : 0;
                 const permission = await Notification.requestPermission();
                 if (permission === 'granted') {
                     // Register Fresh SW
-                    const registration = await navigator.serviceWorker.register('../firebase-messaging-sw.js?v=<?php echo time(); ?>');
+                    const registration = await navigator.serviceWorker.register('../firebase-messaging-sw.js?v=' + Date.now());
                     
-                    // Wait for SW to be ready
+                    // Wait for Service Worker to be fully ready
                     await navigator.serviceWorker.ready;
 
                     // Get Token

@@ -5,12 +5,13 @@ class FCMHelper {
 
     public function __construct($serviceAccountPath) {
         if (!file_exists($serviceAccountPath)) {
-            throw new Exception("Service Account JSON file not found at: " . $serviceAccountPath);
+            throw new Exception("Service Account JSON file not found.");
         }
         $this->serviceAccount = json_decode(file_get_contents($serviceAccountPath), true);
-        if (!$this->serviceAccount) {
-            throw new Exception("Invalid JSON in service account file.");
-        }
+    }
+
+    private function base64UrlEncode($data) {
+        return rtrim(str_replace(['+', '/'], ['-', '_'], base64_encode($data)), '=');
     }
 
     private function getAccessToken() {
@@ -22,27 +23,25 @@ class FCMHelper {
             'scope' => 'https://www.googleapis.com/auth/cloud-platform',
             'aud' => 'https://oauth2.googleapis.com/token',
             'exp' => $now + 3600,
-            'iat' => $now - 60 // 60s cushion
+            'iat' => $now - 30 
         ];
 
-        $header = ['alg' => 'RS256', 'typ' => 'JWT'];
-        
-        $headerEncoded = $this->base64UrlEncode(json_encode($header));
-        $payloadEncoded = $this->base64UrlEncode(json_encode($payload));
-        
-        $assertion = $headerEncoded . "." . $payloadEncoded;
-        $signature = '';
-        
+        $headerStr = $this->base64UrlEncode(json_encode(['alg' => 'RS256', 'typ' => 'JWT']));
+        $payloadStr = $this->base64UrlEncode(json_encode($payload));
+        $signatureInput = $headerStr . "." . $payloadStr;
+
         $privateKey = $this->serviceAccount['private_key'];
         $privateKey = str_replace(['\n', '\\n'], "\n", $privateKey);
         
-        if (!openssl_sign($assertion, $signature, $privateKey, 'SHA256')) {
+        $signature = '';
+        if (!openssl_sign($signatureInput, $signature, $privateKey, 'SHA256')) {
             throw new Exception("Signing failed: " . openssl_error_string());
         }
 
-        $jwt = $assertion . "." . $this->base64UrlEncode($signature);
+        $jwt = $signatureInput . "." . $this->base64UrlEncode($signature);
 
         $ch = curl_init('https://oauth2.googleapis.com/token');
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/x-www-form-urlencoded']);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -60,11 +59,7 @@ class FCMHelper {
             return $this->accessToken;
         }
 
-        throw new Exception("Google Token Error: " . ($data['error_description'] ?? $result));
-    }
-
-    private function base64UrlEncode($data) {
-        return rtrim(str_replace(['+', '/'], ['-', '_'], base64_encode($data)), '=');
+        throw new Exception("Google Auth Error: " . ($data['error_description'] ?? $result));
     }
 
     public function sendNotification($token, $title, $body, $link = '', $image = '') {
@@ -117,3 +112,4 @@ class FCMHelper {
         }
     }
 }
+?>
