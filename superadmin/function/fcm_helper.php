@@ -27,7 +27,7 @@ class FCMHelper {
             'scope' => 'https://www.googleapis.com/auth/firebase.messaging',
             'aud' => 'https://oauth2.googleapis.com/token',
             'exp' => $now + 3600,
-            'iat' => $now - 30
+            'iat' => $now - 120 // 2 minute buffer for time sync
         ];
 
         $header = ['alg' => 'RS256', 'typ' => 'JWT'];
@@ -37,16 +37,12 @@ class FCMHelper {
         
         $signatureInput = $headerEncoded . "." . $payloadEncoded;
         
-        // --- VERY STRICT KEY CLEANING ---
-        $rawKey = $this->serviceAccount['private_key'];
-        // Replace literal \n occurrences with real newlines
-        $privateKey = str_replace('\n', "\n", $rawKey);
-        // Remove surplus quotes or backslashes if any
-        $privateKey = trim($privateKey, '"');
+        $privateKey = $this->serviceAccount['private_key'];
+        $privateKey = str_replace('\n', "\n", $privateKey);
         
         $signature = '';
         if (!openssl_sign($signatureInput, $signature, $privateKey, 'SHA256')) {
-            throw new Exception("JWT Sign Failed: " . openssl_error_string());
+            throw new Exception("Signing failed: " . openssl_error_string());
         }
 
         $jwt = $signatureInput . "." . $this->base64UrlEncode($signature);
@@ -70,7 +66,10 @@ class FCMHelper {
             return $this->accessToken;
         }
 
-        throw new Exception("Google Auth Error: " . ($data['error_description'] ?? $result));
+        // Expanded error log to help us see EXACTLY what Google says
+        $errorMsg = $data['error_description'] ?? ($data['error'] ?? $result);
+        file_put_contents('fcm_error_details.txt', "Time: ".date('Y-m-d H:i:s')."\nResponse: ".$result."\n", FILE_APPEND);
+        throw new Exception("Google Token Error: " . $errorMsg);
     }
 
     public function sendNotification($token, $title, $body, $link = '', $image = '') {
@@ -109,11 +108,12 @@ class FCMHelper {
 
             $result = curl_exec($ch);
             $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            $resData = json_decode($result, true);
             curl_close($ch);
 
             return [
                 'success' => $httpCode === 200,
-                'response' => json_decode($result, true)
+                'response' => $resData
             ];
         } catch (Exception $e) {
             return [
