@@ -9,6 +9,9 @@ class FCMHelper {
         }
         $json = file_get_contents($serviceAccountPath);
         $this->serviceAccount = json_decode($json, true);
+        if (!$this->serviceAccount) {
+            throw new Exception("Invalid JSON format in Service Account file.");
+        }
     }
 
     private function base64UrlEncode($data) {
@@ -19,45 +22,47 @@ class FCMHelper {
         if ($this->accessToken) return $this->accessToken;
 
         $now = time();
-        $header = ['alg' => 'RS256', 'typ' => 'JWT', 'kid' => $this->serviceAccount['private_key_id']];
+        // BIG FIX: 5-minute cushion for Hostinger time sync
         $payload = [
             'iss'   => $this->serviceAccount['client_email'],
             'scope' => 'https://www.googleapis.com/auth/firebase.messaging',
             'aud'   => 'https://oauth2.googleapis.com/token',
             'exp'   => $now + 3600,
-            'iat'   => $now - 60
+            'iat'   => $now - 300 
         ];
 
-        // Format according to Google's strict requirements
-        $headerEncoded  = $this->base64UrlEncode(json_encode($header));
-        $payloadEncoded = $this->base64UrlEncode(json_encode($payload));
+        // Header MUST be compact
+        $header = ['alg' => 'RS256', 'typ' => 'JWT'];
         
-        $assertion = $headerEncoded . "." . $payloadEncoded;
+        // Use flags to ensure NO escaping that breaks signature
+        $headerJSON = json_encode($header, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        $payloadJSON = json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
         
-        // --- POWERFUL KEY CLEANER ---
+        $headerEncoded = $this->base64UrlEncode($headerJSON);
+        $payloadEncoded = $this->base64UrlEncode($payloadJSON);
+        
+        $signatureInput = $headerEncoded . "." . $payloadEncoded;
+        
         $privateKey = $this->serviceAccount['private_key'];
-        // Remove literal \n and fix actual newlines
-        $privateKey = str_replace(['\n', '\\n'], "\n", $privateKey);
-        // Ensure proper BEGIN/END format for OpenSSL
-        if (strpos($privateKey, '-----BEGIN PRIVATE KEY-----') === false) {
-            $privateKey = "-----BEGIN PRIVATE KEY-----\n" . $privateKey . "\n-----END PRIVATE KEY-----";
-        }
-
+        $privateKey = str_replace(["\\n", '\n'], "\n", $privateKey);
+        
         $signature = '';
-        if (!openssl_sign($assertion, $signature, $privateKey, 'SHA256')) {
+        if (!openssl_sign($signatureInput, $signature, $privateKey, OPENSSL_ALGO_SHA256)) {
             throw new Exception("Local Signing Failed: " . openssl_error_string());
         }
 
-        $jwt = $assertion . "." . $this->base64UrlEncode($signature);
+        $jwt = $signatureInput . "." . $this->base64UrlEncode($signature);
+
+        // --- MASTER CURL FIX: Manual Raw Body ---
+        $postData = 'grant_type=' . urlencode('urn:ietf:params:oauth:grant-type:jwt-bearer') . '&assertion=' . urlencode($jwt);
 
         $ch = curl_init('https://oauth2.googleapis.com/token');
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/x-www-form-urlencoded']);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, [
-            'grant_type' => 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-            'assertion'  => $jwt
-        ]);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
 
         $result = curl_exec($ch);
         $data = json_decode($result, true);
@@ -68,7 +73,7 @@ class FCMHelper {
             return $this->accessToken;
         }
 
-        throw new Exception("Google Auth Result: " . ($data['error_description'] ?? $result));
+        throw new Exception("Google Token Auth Error: " . ($data['error_description'] ?? $result));
     }
 
     public function sendNotification($token, $title, $body, $link = '', $image = '') {
@@ -91,21 +96,36 @@ class FCMHelper {
                 ]
             ];
 
-            if ($image) $message['message']['notification']['image'] = (string)$image;
+            if ($image) {
+                $message['message']['notification']['image'] = (string)$image;
+            }
 
             $ch = curl_init("https://fcm.googleapis.com/v1/projects/$projectId/messages:send");
-            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Bearer ' . $accessToken, 'Content-Type: application/json']);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                'Authorization: Bearer ' . $accessToken,
+                'Content-Type: application/json'
+            ]);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($message));
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($message));
 
             $result = curl_exec($ch);
             curl_close($ch);
             
-            return ['success' => (strpos($result, 'projects/') !== false), 'response' => json_decode($result, true)];
+            $resData = json_decode($result, true);
+            $success = isset($resData['name']);
+
+            return [
+                'success' => $success,
+                'response' => $resData
+            ];
         } catch (Exception $e) {
-            return ['success' => false, 'response' => ['error' => ['message' => $e->getMessage()]]];
+            return [
+                'success' => false,
+                'response' => ['error' => ['message' => $e->getMessage()]]
+            ];
         }
     }
 }
