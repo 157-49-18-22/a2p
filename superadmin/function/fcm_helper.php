@@ -20,25 +20,29 @@ class FCMHelper {
         $now = time();
         $payload = [
             'iss' => $this->serviceAccount['client_email'],
-            'scope' => 'https://www.googleapis.com/auth/cloud-platform',
+            'scope' => 'https://www.googleapis.com/auth/cloud-platform', // Full scope for safety
             'aud' => 'https://oauth2.googleapis.com/token',
             'exp' => $now + 3600,
-            'iat' => $now - 30 
+            'iat' => $now - 60 // 1 minute cushion for time sync
         ];
 
-        $headerStr = $this->base64UrlEncode(json_encode(['alg' => 'RS256', 'typ' => 'JWT']));
-        $payloadStr = $this->base64UrlEncode(json_encode($payload));
-        $signatureInput = $headerStr . "." . $payloadStr;
-
+        // Header MUST be exact
+        $header = ['alg' => 'RS256', 'typ' => 'JWT'];
+        
+        $headerEncoded = $this->base64UrlEncode(json_encode($header));
+        $payloadEncoded = $this->base64UrlEncode(json_encode($payload));
+        
+        $assertion = $headerEncoded . "." . $payloadEncoded;
+        $signature = '';
+        
         $privateKey = $this->serviceAccount['private_key'];
         $privateKey = str_replace(['\n', '\\n'], "\n", $privateKey);
         
-        $signature = '';
-        if (!openssl_sign($signatureInput, $signature, $privateKey, 'SHA256')) {
+        if (!openssl_sign($assertion, $signature, $privateKey, 'SHA256')) {
             throw new Exception("Signing failed: " . openssl_error_string());
         }
 
-        $jwt = $signatureInput . "." . $this->base64UrlEncode($signature);
+        $jwt = $assertion . "." . $this->base64UrlEncode($signature);
 
         $ch = curl_init('https://oauth2.googleapis.com/token');
         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/x-www-form-urlencoded']);
@@ -59,7 +63,7 @@ class FCMHelper {
             return $this->accessToken;
         }
 
-        throw new Exception("Google Auth Error: " . ($data['error_description'] ?? $result));
+        throw new Exception("Google Token Error: " . ($data['error_description'] ?? $result));
     }
 
     public function sendNotification($token, $title, $body, $link = '', $image = '') {
@@ -76,7 +80,7 @@ class FCMHelper {
                     ],
                     'webpush' => [
                         'fcm_options' => [
-                            'link' => $link
+                            'link' => (string)$link
                         ]
                     ]
                 ]
