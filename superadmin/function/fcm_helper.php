@@ -20,29 +20,31 @@ class FCMHelper {
         $now = time();
         $payload = [
             'iss' => $this->serviceAccount['client_email'],
-            'scope' => 'https://www.googleapis.com/auth/cloud-platform', // Full scope for safety
+            'scope' => 'https://www.googleapis.com/auth/cloud-platform',
             'aud' => 'https://oauth2.googleapis.com/token',
             'exp' => $now + 3600,
-            'iat' => $now - 60 // 1 minute cushion for time sync
+            'iat' => $now - 10 // Exact 10s cushion
         ];
 
-        // Header MUST be exact
-        $header = ['alg' => 'RS256', 'typ' => 'JWT'];
+        // Header and Payload using JSON_UNESCAPED_SLASHES is standard for Google JWT
+        $headerStr = json_encode(['alg' => 'RS256', 'typ' => 'JWT']);
+        $payloadStr = json_encode($payload, JSON_UNESCAPED_SLASHES);
+
+        $headerEncoded = $this->base64UrlEncode($headerStr);
+        $payloadEncoded = $this->base64UrlEncode($payloadStr);
         
-        $headerEncoded = $this->base64UrlEncode(json_encode($header));
-        $payloadEncoded = $this->base64UrlEncode(json_encode($payload));
-        
-        $assertion = $headerEncoded . "." . $payloadEncoded;
+        $signatureInput = $headerEncoded . "." . $payloadEncoded;
         $signature = '';
         
         $privateKey = $this->serviceAccount['private_key'];
+        // Force replace any escaped newlines
         $privateKey = str_replace(['\n', '\\n'], "\n", $privateKey);
         
-        if (!openssl_sign($assertion, $signature, $privateKey, 'SHA256')) {
+        if (!openssl_sign($signatureInput, $signature, $privateKey, OPENSSL_ALGO_SHA256)) {
             throw new Exception("Signing failed: " . openssl_error_string());
         }
 
-        $jwt = $assertion . "." . $this->base64UrlEncode($signature);
+        $jwt = $signatureInput . "." . $this->base64UrlEncode($signature);
 
         $ch = curl_init('https://oauth2.googleapis.com/token');
         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/x-www-form-urlencoded']);
@@ -75,8 +77,8 @@ class FCMHelper {
                 'message' => [
                     'token' => $token,
                     'notification' => [
-                        'title' => $title,
-                        'body' => $body
+                        'title' => (string)$title,
+                        'body' => (string)$body
                     ],
                     'webpush' => [
                         'fcm_options' => [
@@ -87,7 +89,7 @@ class FCMHelper {
             ];
 
             if ($image) {
-                $message['message']['notification']['image'] = $image;
+                $message['message']['notification']['image'] = (string)$image;
             }
 
             $ch = curl_init("https://fcm.googleapis.com/v1/projects/$projectId/messages:send");
@@ -98,7 +100,7 @@ class FCMHelper {
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($message));
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($message, JSON_UNESCAPED_SLASHES));
 
             $result = curl_exec($ch);
             $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
