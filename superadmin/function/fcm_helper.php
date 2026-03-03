@@ -21,32 +21,44 @@ class FCMHelper {
     private function getAccessToken() {
         if ($this->accessToken) return $this->accessToken;
 
+        // Use a 2-minute cushion to avoid "Token used too early"
         $now = time();
         $payload = [
-            'iss' => $this->serviceAccount['client_email'],
+            'iss'   => $this->serviceAccount['client_email'],
             'scope' => 'https://www.googleapis.com/auth/firebase.messaging',
-            'aud' => 'https://oauth2.googleapis.com/token',
-            'exp' => $now + 3600,
-            'iat' => $now - 120 // 2 minute buffer for time sync
+            'aud'   => 'https://oauth2.googleapis.com/token',
+            'exp'   => $now + 3600,
+            'iat'   => $now - 120 
         ];
 
-        $header = ['alg' => 'RS256', 'typ' => 'JWT'];
+        // Including 'kid' (Key ID) is standard for Service Accounts
+        $header = [
+            'alg' => 'RS256',
+            'typ' => 'JWT',
+            'kid' => $this->serviceAccount['private_key_id']
+        ];
         
-        $headerEncoded = $this->base64UrlEncode(json_encode($header));
-        $payloadEncoded = $this->base64UrlEncode(json_encode($payload));
+        // CRITICAL: json_encode without escaped slashes and extra spaces
+        $headerJSON = json_encode($header, JSON_UNESCAPED_SLASHES);
+        $payloadJSON = json_encode($payload, JSON_UNESCAPED_SLASHES);
         
-        $signatureInput = $headerEncoded . "." . $payloadEncoded;
+        $headerEncoded = $this->base64UrlEncode($headerJSON);
+        $payloadEncoded = $this->base64UrlEncode($payloadJSON);
+        
+        $assertion = $headerEncoded . "." . $payloadEncoded;
         
         $privateKey = $this->serviceAccount['private_key'];
-        $privateKey = str_replace('\n', "\n", $privateKey);
+        // Ensure literal \n in JSON string are real newlines for OpenSSL
+        $privateKey = str_replace(['\n', '\\n'], "\n", $privateKey);
         
         $signature = '';
-        if (!openssl_sign($signatureInput, $signature, $privateKey, 'SHA256')) {
-            throw new Exception("Signing failed: " . openssl_error_string());
+        if (!openssl_sign($assertion, $signature, $privateKey, 'SHA256')) {
+            throw new Exception("JWT Sign Failed on Server: " . openssl_error_string());
         }
 
-        $jwt = $signatureInput . "." . $this->base64UrlEncode($signature);
+        $jwt = $assertion . "." . $this->base64UrlEncode($signature);
 
+        // Request Access Token from Google
         $ch = curl_init('https://oauth2.googleapis.com/token');
         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/x-www-form-urlencoded']);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -66,10 +78,9 @@ class FCMHelper {
             return $this->accessToken;
         }
 
-        // Expanded error log to help us see EXACTLY what Google says
+        // Detailed error for debugging
         $errorMsg = $data['error_description'] ?? ($data['error'] ?? $result);
-        file_put_contents('fcm_error_details.txt', "Time: ".date('Y-m-d H:i:s')."\nResponse: ".$result."\n", FILE_APPEND);
-        throw new Exception("Google Token Error: " . $errorMsg);
+        throw new Exception("Google Token Auth Error: " . $errorMsg);
     }
 
     public function sendNotification($token, $title, $body, $link = '', $image = '') {
@@ -82,7 +93,7 @@ class FCMHelper {
                     'token' => $token,
                     'notification' => [
                         'title' => (string)$title,
-                        'body' => (string)$body
+                        'body'  => (string)$body
                     ],
                     'webpush' => [
                         'fcm_options' => [
@@ -107,12 +118,13 @@ class FCMHelper {
             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($message));
 
             $result = curl_exec($ch);
-            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            $resData = json_decode($result, true);
             curl_close($ch);
+            
+            $resData = json_decode($result, true);
+            $success = isset($resData['name']); // Standard FCM v1 success indicator
 
             return [
-                'success' => $httpCode === 200,
+                'success' => $success,
                 'response' => $resData
             ];
         } catch (Exception $e) {
