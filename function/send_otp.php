@@ -4,11 +4,18 @@ require_once 'mailer.php';
 
 header('Content-Type: application/json');
 
+function debugLog($msg) {
+    file_put_contents(__DIR__ . '/otp_debug.log', date('Y-m-d H:i:s') . ': ' . $msg . "\n", FILE_APPEND);
+}
+
+debugLog("Request received: " . print_r($_POST, true));
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    debugLog("Post request accepted");
     $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
     $name = isset($_POST['name']) ? htmlspecialchars($_POST['name']) : 'User';
 
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        debugLog("Invalid email: " . $email);
         echo json_encode(['status' => 'error', 'message' => 'Invalid email address.']);
         exit;
     }
@@ -17,6 +24,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $_SESSION['contact_otp'] = $otp;
     $_SESSION['contact_email'] = $email;
     $_SESSION['otp_time'] = time();
+
+    debugLog("OTP generated: " . $otp . " for " . $email);
 
     $subject = "OTP for Contact Verification - A2P Realtech";
     $body = "
@@ -32,6 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Reusing the mailer logic but with custom body for OTP
     $mail = new PHPMailer\PHPMailer\PHPMailer(true);
     try {
+        debugLog("PHPMailer initializing...");
         $mail->isSMTP();
         $mail->Host       = SMTP_HOST;
         $mail->SMTPAuth   = true;
@@ -46,12 +56,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $mail->isHTML(true);
         $mail->Subject = $subject;
         $mail->Body    = $body;
+        debugLog("Attempting to send mail to " . $email);
         $mail->send();
+        debugLog("Mail sent successfully!");
 
         echo json_encode(['status' => 'success', 'message' => 'OTP sent successfully to ' . $email]);
     } catch (Exception $e) {
+        debugLog("MAIL ERROR: " . $mail->ErrorInfo . " | Message: " . $e->getMessage());
         echo json_encode(['status' => 'error', 'message' => 'Failed to send OTP. ' . $mail->ErrorInfo]);
     }
 } else {
+    debugLog("Invalid request method: " . $_SERVER['REQUEST_METHOD']);
     echo json_encode(['status' => 'error', 'message' => 'Invalid request method.']);
 }
