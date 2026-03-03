@@ -14,32 +14,31 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
-// Ultimate background handler - THIS SHOWS THE WINDOWS/ANDROID TOAST
+// Ultimate background handler
 messaging.onBackgroundMessage((payload) => {
-    console.log('[SW] Background Message Received:', payload);
+    console.log('SW received message:', payload);
 
-    const title = payload.notification?.title || payload.data?.title || "Real Estate Update";
-    const body = payload.notification?.body || payload.data?.body || "New property or update available.";
+    // Fallback values if notification object is missing
+    const title = payload.notification?.title || payload.data?.title || "New Notification";
+    const body = payload.notification?.body || payload.data?.body || "Click to view details";
     const image = payload.notification?.image || payload.data?.image || null;
 
     const notificationOptions = {
         body: body,
-        icon: 'https://cdn-icons-png.flaticon.com/512/3119/3119338.png',
+        icon: 'https://cdn-icons-png.flaticon.com/512/3119/3119338.png', // Fallback icon
         image: image,
         badge: 'https://cdn-icons-png.flaticon.com/512/3119/3119338.png',
         data: {
             url: payload.data?.link || payload.notification?.click_action || '/'
         },
-        tag: 'property-update-' + Date.now(),
-        requireInteraction: true // This keeps it in the notification panel until dismissed
+        tag: 'fcm-notification-' + Date.now(), // Unique tag to prevent grouping
+        requireInteraction: true // Keeps notification visible until clicked
     };
 
     return self.registration.showNotification(title, notificationOptions);
 });
 
-// Click handler to open the link
 self.addEventListener('notificationclick', function (event) {
-    console.log('[SW] Notification Clicked:', event.notification.tag);
     event.notification.close();
     const urlToOpen = event.notification.data.url;
 

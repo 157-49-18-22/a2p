@@ -48,27 +48,42 @@
             }).catch(err => console.error("Save Error:", err));
         };
 
-        // Universal Foreground Notification (System Tray Force)
+        // Handle incoming messages while in foreground
         onMessage(messaging, (payload) => {
-            console.log('FCM: Received in tab', payload);
-            window.testNativeNotification(payload.notification?.title || "Update", payload.notification?.body || "");
+            console.log('FCM Message received in foreground:', payload);
+            // Auto update the notification badge / list if panel is open
+            if(window.location.reload) {
+                // For now, let's keep it simple. Real-time update can be added with JS.
+            }
         });
 
-        // Manual Test Function (Action Center check karne ke liye)
-        window.testNativeNotification = function(title, body) {
-            if (!("Notification" in window)) return;
-            if (Notification.permission === "granted") {
-                navigator.serviceWorker.ready.then(registration => {
-                    registration.showNotification(title || "Test Notification", {
-                        body: body || "If you see this, native push is working!",
-                        icon: 'https://cdn-icons-png.flaticon.com/512/3119/3119338.png',
-                        requireInteraction: true,
-                        tag: 'test-' + Date.now()
-                    });
-                });
-            } else {
-                window.triggerFCMRequest();
+        // Request Permission and Get Token
+        window.triggerFCMRequest = async function() {
+            if (Notification.permission === 'denied') {
+                alert("Notifications are blocked. Please enable them in browser settings.");
+                return;
             }
+            
+            try {
+                const permission = await Notification.requestPermission();
+                if (permission === 'granted') {
+                    const registration = await navigator.serviceWorker.register('<?php echo SITE_URL; ?>firebase-messaging-sw.js?v=' + Date.now());
+                    await navigator.serviceWorker.ready;
+
+                    const currentToken = await getToken(messaging, { 
+                        vapidKey: vapidKey,
+                        serviceWorkerRegistration: registration
+                    });
+
+                    if (currentToken) {
+                        saveDevice(currentToken);
+                        return true;
+                    }
+                }
+            } catch (err) {
+                console.error("FCM Setup Failed:", err);
+            }
+            return false;
         };
 
         // Initialize on load

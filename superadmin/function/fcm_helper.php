@@ -86,27 +86,19 @@ class FCMHelper {
                     'token' => $token,
                     'notification' => [
                         'title' => (string)$title,
-                        'body'  => (string)$body,
-                        'image' => (string)$image ?: ''
-                    ],
-                    'data' => [
-                        'link' => (string)$link,
-                        'click_action' => (string)$link // Android legacy support
+                        'body'  => (string)$body
                     ],
                     'webpush' => [
-                        'headers' => [
-                            'Urgency' => 'high'
-                        ],
-                        'notification' => [
-                            'icon' => 'https://cdn-icons-png.flaticon.com/512/3119/3119338.png',
-                            'requireInteraction' => true // Keeps it in Windows Action Center
-                        ],
                         'fcm_options' => [
                             'link' => (string)$link
                         ]
                     ]
                 ]
             ];
+
+            if ($image) {
+                $message['message']['notification']['image'] = (string)$image;
+            }
 
             $ch = curl_init("https://fcm.googleapis.com/v1/projects/$projectId/messages:send");
             curl_setopt($ch, CURLOPT_HTTPHEADER, [
