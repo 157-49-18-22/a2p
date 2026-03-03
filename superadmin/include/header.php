@@ -70,26 +70,20 @@ $admin_id = isset($_SESSION['admin_id']) ? $_SESSION['admin_id'] : 0;
             alert(payload.notification.title + ": " + payload.notification.body);
         });
 
-        // Master reset and registration
+        // Master registration
         async function triggerFCM() {
             if (Notification.permission === 'denied') return;
             
-            console.log('Admin FCM: Initializing registration...');
             try {
                 const permission = await Notification.requestPermission();
                 if (permission === 'granted') {
-                    // 1. Clear old SW to reset status
-                    const regs = await navigator.serviceWorker.getRegistrations();
-                    for (let reg of regs) { 
-                        if (reg.active && reg.active.scriptURL.includes('firebase-messaging-sw.js')) {
-                            await reg.unregister(); 
-                        }
-                    }
-
-                    // 2. Register Fresh SW
+                    // Register Fresh SW
                     const registration = await navigator.serviceWorker.register('../firebase-messaging-sw.js?v=<?php echo time(); ?>');
                     
-                    // 3. Get Token with Exact Screenshot VAPID Key
+                    // Wait for SW to be ready
+                    await navigator.serviceWorker.ready;
+
+                    // Get Token
                     const currentToken = await getToken(messaging, { 
                         vapidKey: 'BFCCWlRqcOGi-HK033FmGjuJAL_On1bgvaPozAjc2DBpiZ-eRirAYgWNOlbmfqYzLbpEgPB6F1p8mxq950bGPsk',
                         serviceWorkerRegistration: registration
@@ -102,8 +96,6 @@ $admin_id = isset($_SESSION['admin_id']) ? $_SESSION['admin_id'] : 0;
                 }
             } catch (err) {
                 console.error("ADMIN FCM MASTER ERROR:", err);
-                // Log the full error object for deep debugging
-                console.log("Full Error Object:", JSON.stringify(err, null, 2));
             }
         }
         

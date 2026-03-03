@@ -5,9 +5,12 @@ class FCMHelper {
 
     public function __construct($serviceAccountPath) {
         if (!file_exists($serviceAccountPath)) {
-            throw new Exception("Service account file not found at: " . $serviceAccountPath);
+            throw new Exception("Service Account JSON file not found at: " . $serviceAccountPath);
         }
         $this->serviceAccount = json_decode(file_get_contents($serviceAccountPath), true);
+        if (!$this->serviceAccount) {
+            throw new Exception("Invalid JSON in service account file.");
+        }
     }
 
     private function getAccessToken() {
@@ -17,32 +20,31 @@ class FCMHelper {
         $payload = [
             'iss' => $this->serviceAccount['client_email'],
             'scope' => 'https://www.googleapis.com/auth/cloud-platform',
-            'aud' => $this->serviceAccount['token_uri'],
+            'aud' => 'https://oauth2.googleapis.com/token',
             'exp' => $now + 3600,
-            'iat' => $now - 30 // Clock skew
+            'iat' => $now - 60 // 60s cushion
         ];
 
-        // Compact JSON without spaces for standard JWT
-        $header = $this->base64UrlEncode(json_encode(['alg' => 'RS256', 'typ' => 'JWT']));
-        $payload = $this->base64UrlEncode(json_encode($payload));
-
-        $signatureString = $header . "." . $payload;
+        $header = ['alg' => 'RS256', 'typ' => 'JWT'];
+        
+        $headerEncoded = $this->base64UrlEncode(json_encode($header));
+        $payloadEncoded = $this->base64UrlEncode(json_encode($payload));
+        
+        $assertion = $headerEncoded . "." . $payloadEncoded;
         $signature = '';
         
         $privateKey = $this->serviceAccount['private_key'];
-        // Strict PEM formatting for openssl_sign
         $privateKey = str_replace(['\n', '\\n'], "\n", $privateKey);
         
-        if (!openssl_sign($signatureString, $signature, $privateKey, 'SHA256')) {
-            throw new Exception("OpenSSL error: " . openssl_error_string());
+        if (!openssl_sign($assertion, $signature, $privateKey, 'SHA256')) {
+            throw new Exception("Signing failed: " . openssl_error_string());
         }
 
-        $jwt = $signatureString . "." . $this->base64UrlEncode($signature);
+        $jwt = $assertion . "." . $this->base64UrlEncode($signature);
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $this->serviceAccount['token_uri']);
-        curl_setopt($ch, CURLOPT_POST, true);
+        $ch = curl_init('https://oauth2.googleapis.com/token');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
             'grant_type' => 'urn:ietf:params:oauth:grant-type:jwt-bearer',
@@ -50,8 +52,8 @@ class FCMHelper {
         ]));
 
         $result = curl_exec($ch);
-        curl_close($ch);
         $data = json_decode($result, true);
+        curl_close($ch);
 
         if (isset($data['access_token'])) {
             $this->accessToken = $data['access_token'];
@@ -89,15 +91,14 @@ class FCMHelper {
                 $message['message']['notification']['image'] = $image;
             }
 
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, "https://fcm.googleapis.com/v1/projects/$projectId/messages:send");
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            $ch = curl_init("https://fcm.googleapis.com/v1/projects/$projectId/messages:send");
             curl_setopt($ch, CURLOPT_HTTPHEADER, [
                 'Authorization: Bearer ' . $accessToken,
                 'Content-Type: application/json'
             ]);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($message));
 
             $result = curl_exec($ch);
