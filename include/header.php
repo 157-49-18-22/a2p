@@ -95,7 +95,7 @@
                         await reg.unregister();
 
                     // 2. Register Fresh SW with cache busting
-                    const registration = await navigator.serviceWorker.register('<?php echo SITE_URL; ?>firebase-messaging-sw.js?v=' + Date.now());
+                    const registration = await navigator.serviceWorker.register('<?php echo SITE_URL; ?>firebase-messaging-sw-v2.js?v=' + Date.now());
                     await navigator.serviceWorker.ready;
 
                     // 3. Get Token (FCM will now give a fresh valid one)

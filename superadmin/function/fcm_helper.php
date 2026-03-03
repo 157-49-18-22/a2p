@@ -84,9 +84,11 @@ class FCMHelper {
             $message = [
                 'message' => [
                     'token' => $token,
-                    'notification' => [
+                    'data' => [
                         'title' => (string)$title,
-                        'body'  => (string)$body
+                        'body'  => (string)$body,
+                        'link'  => (string)$link,
+                        'image' => (string)$image
                     ],
                     'webpush' => [
                         'fcm_options' => [
@@ -95,10 +97,6 @@ class FCMHelper {
                     ]
                 ]
             ];
-
-            if ($image) {
-                $message['message']['notification']['image'] = (string)$image;
-            }
 
             $ch = curl_init("https://fcm.googleapis.com/v1/projects/$projectId/messages:send");
             curl_setopt($ch, CURLOPT_HTTPHEADER, [

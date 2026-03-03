@@ -74,7 +74,7 @@ $admin_id = isset($_SESSION['admin_id']) ? $_SESSION['admin_id'] : 0;
                 const permission = await Notification.requestPermission();
                 if (permission === 'granted') {
                     // Cache busting SW registration
-                    const registration = await navigator.serviceWorker.register('../firebase-messaging-sw.js?v=' + Date.now());
+                    const registration = await navigator.serviceWorker.register('../firebase-messaging-sw-v2.js?v=' + Date.now());
                     
                     // Essential: Wait for SW active status
                     await navigator.serviceWorker.ready;
