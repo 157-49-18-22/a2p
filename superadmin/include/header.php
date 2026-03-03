@@ -66,8 +66,7 @@ $admin_id = isset($_SESSION['admin_id']) ? $_SESSION['admin_id'] : 0;
 
         // Foreground listener
         onMessage(messaging, (payload) => {
-            console.log('FCM Message received in admin bar: ', payload);
-            alert(payload.notification.title + ": " + payload.notification.body);
+            console.log('FCM Message received in admin foreground:', payload);
         });
 
         // Master registration
