@@ -68,14 +68,26 @@
         }
 
         // Handle incoming messages while in foreground
-        onMessage(messaging, (payload) => {
-            // Only show toast if window is active/focused to avoid double-up with system
-            if (document.visibilityState === 'visible') {
-                showNotificationToast(
-                    payload.notification?.title || "New Update",
-                    payload.notification?.body || "Click to view",
-                    payload.data?.link || payload.notification?.click_action
-                );
+        // Use Service Worker to show REAL system notification (not in-app toast)
+        onMessage(messaging, async (payload) => {
+            const title = payload.data?.title || payload.notification?.title || "A2P RealTech";
+            const body  = payload.data?.body  || payload.notification?.body  || "New Update";
+            const link  = payload.data?.link  || '/';
+            const logo  = '<?php echo SITE_URL; ?>assets/images/favicons/android-chrome-192x192.png';
+
+            // Show real system notification even when app is open
+            if ('serviceWorker' in navigator && Notification.permission === 'granted') {
+                const reg = await navigator.serviceWorker.ready;
+                reg.showNotification(title, {
+                    body:               body,
+                    icon:               logo,
+                    badge:              logo,
+                    tag:                'a2p-notif',
+                    renotify:           true,
+                    requireInteraction: true,
+                    vibrate:            [200, 100, 200],
+                    data:               { url: link }
+                });
             }
         });
 
