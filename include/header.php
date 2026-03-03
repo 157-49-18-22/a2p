@@ -647,20 +647,32 @@
         justify-content: space-between !important;
         position: relative !important;
         background: #fff !important;
+        box-sizing: border-box !important;
     }
-    /* Logo - absolutely centered so it stays perfectly in the middle */
+    /* Hamburger - LEFT */
+    .main-menu-two__main-menu-two-box {
+        order: 1 !important;
+        flex: 0 0 50px !important;
+        width: 50px !important;
+        display: flex !important;
+        justify-content: flex-start !important;
+        align-items: center !important;
+        z-index: 10 !important;
+        position: relative !important;
+    }
+    /* Logo - CENTER */
     .main-menu-two__left {
-        position: absolute !important;
-        left: 50% !important;
-        top: 50% !important;
-        transform: translate(-50%, -50%) !important;
-        margin: 0 !important;
         order: 2 !important;
+        flex: 1 1 auto !important;
         display: flex !important;
         justify-content: center !important;
         align-items: center !important;
+        position: static !important;
+        left: auto !important;
+        top: auto !important;
+        transform: none !important;
+        margin: 0 !important;
         z-index: 5 !important;
-        pointer-events: auto !important;
     }
     .main-menu-two__logo img {
         height: 45px !important;
@@ -668,27 +680,15 @@
         display: block !important;
         filter: none !important;
     }
-    /* Hamburger - left side */
-    .main-menu-two__main-menu-two-box {
-        flex: 0 0 auto !important;
-        display: flex !important;
-        justify-content: flex-start !important;
-        align-items: center !important;
-        order: 1 !important;
-        z-index: 10 !important;
-        min-width: 50px !important;
-        position: relative !important;
-    }
-    /* Search button - right side */
+    /* Search - RIGHT */
     .main-menu-two__right {
-        flex: 0 0 auto !important;
+        order: 3 !important;
+        flex: 0 0 50px !important;
+        width: 50px !important;
         display: flex !important;
         justify-content: flex-end !important;
         align-items: center !important;
-        order: 3 !important;
         z-index: 10 !important;
-        min-width: 50px !important;
-        margin-left: auto !important;
         position: relative !important;
     }
     .main-menu-two__call-search,
