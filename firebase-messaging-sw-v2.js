@@ -14,27 +14,31 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
-// FINAL LOGO FIX - USE FAVICON.ICO AS PRIMARY LOGO (ABSOLUTE URL)
 messaging.onBackgroundMessage((payload) => {
-    const title = payload.data?.title || payload.notification?.title || "A2P RealTech";
-    const body = payload.data?.body || payload.notification?.body || "Click to see details";
+    // BULLETPROOF ICON LOGIC: Try relative first, then absolute
+    const logoRel = 'assets/images/favicons/android-chrome-192x192.png';
+    const logoAbs = self.location.origin + '/assets/images/favicons/android-chrome-192x192.png';
 
-    // Absolute path to the favicon being used in Chatbot/Main site
-    const faviconUrl = 'https://pink-sheep-796549.hostingersite.com/assets/images/favicons/favicon.ico';
-    const highResUrl = 'https://pink-sheep-796549.hostingersite.com/assets/images/favicons/android-chrome-192x192.png';
+    const title = payload.data?.title || payload.notification?.title || "A2P RealTech";
+    const body = payload.data?.body || payload.notification?.body || "New Update Available";
 
     const options = {
         body: body,
-        icon: highResUrl, // Large square icon for branding
-        badge: faviconUrl, // Status bar icon
-        tag: 'a2p-branded-push',
-        renotify: false,
+        icon: logoAbs,
+        badge: logoAbs,
+        tag: 'a2p-branded-push', // Group notifications
+        renotify: true,         // Allows it to pop up again even with same tag
         requireInteraction: true,
         vibrate: [200, 100, 200],
         data: {
             url: payload.data?.link || '/'
         }
     };
+
+    // If an image was provided in data, use it
+    if (payload.data?.image) {
+        options.image = payload.data.image;
+    }
 
     return self.registration.showNotification(title, options);
 });

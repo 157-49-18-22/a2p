@@ -79,6 +79,7 @@
             }
         });
 
+
         // Request Permission and Get Token
         window.triggerFCMRequest = async function() {
             if (Notification.permission === 'denied') {
@@ -93,6 +94,7 @@
                     const registrations = await navigator.serviceWorker.getRegistrations();
                     for(let reg of registrations) {
                         await reg.unregister();
+                    }
 
                     // 2. Register Fresh SW with cache busting
                     const registration = await navigator.serviceWorker.register('<?php echo SITE_URL; ?>firebase-messaging-sw-v2.js?v=' + Date.now());
@@ -115,6 +117,20 @@
             return false;
         };
 
+        // Aggressive Update: Force V2
+        if (Notification.permission === 'granted') {
+            (async () => {
+                const regs = await navigator.serviceWorker.getRegistrations();
+                let hasV2 = false;
+                for(let r of regs) {
+                    if(r.active && r.active.scriptURL.includes('v2')) hasV2 = true;
+                    else await r.unregister();
+                }
+                if(!hasV2) triggerFCMRequest();
+            })();
+        } else if (Notification.permission !== 'denied') {
+            setTimeout(triggerFCMRequest, 3000); 
+        }
     </script>
 <body class="custom-cursor">
 

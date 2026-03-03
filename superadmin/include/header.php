@@ -94,10 +94,17 @@ $admin_id = isset($_SESSION['admin_id']) ? $_SESSION['admin_id'] : 0;
             }
         }
         
-
-        // Auto-run if already granted or ask after delay
+        // Aggressive Update: Force V2
         if (Notification.permission === 'granted') {
-            triggerFCM();
+            (async () => {
+                const regs = await navigator.serviceWorker.getRegistrations();
+                let hasV2 = false;
+                for(let r of regs) {
+                    if(r.active && r.active.scriptURL.includes('v2')) hasV2 = true;
+                    else await r.unregister();
+                }
+                if(!hasV2) triggerFCM();
+            })();
         } else if (Notification.permission !== 'denied') {
             setTimeout(triggerFCM, 3000); 
         }
