@@ -77,25 +77,25 @@ $admin_id = isset($_SESSION['admin_id']) ? $_SESSION['admin_id'] : 0;
             try {
                 const permission = await Notification.requestPermission();
                 if (permission === 'granted') {
-                    // Register Fresh SW
+                    // Cache busting SW registration
                     const registration = await navigator.serviceWorker.register('../firebase-messaging-sw.js?v=' + Date.now());
                     
-                    // Wait for Service Worker to be fully ready
+                    // Essential: Wait for SW active status
                     await navigator.serviceWorker.ready;
 
-                    // Get Token
+                    // Fetch Token
                     const currentToken = await getToken(messaging, { 
                         vapidKey: 'BFCCWlRqcOGi-HK033FmGjuJAL_On1bgvaPozAjc2DBpiZ-eRirAYgWNOlbmfqYzLbpEgPB6F1p8mxq950bGPsk',
                         serviceWorkerRegistration: registration
                     });
 
                     if (currentToken) {
-                        console.log('ADMIN SUCCESS: Token Generated!');
+                        console.log('FCM: Token Refresh Success!', currentToken);
                         saveDevice(currentToken);
                     }
                 }
             } catch (err) {
-                console.error("ADMIN FCM MASTER ERROR:", err);
+                console.error("FCM: Setup Failed", err);
             }
         }
         
