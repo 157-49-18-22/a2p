@@ -14,18 +14,19 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
-// GURANTEED ONE NOTIFICATION LOGIC (A2P Branded)
+// FINAL LOGO FIX - USE FAVICON.ICO AS PRIMARY LOGO (ABSOLUTE URL)
 messaging.onBackgroundMessage((payload) => {
-    // USE HIGH-RES SQUARE LOGO FROM FAVICONS (BETTER FOR PUSH)
-    const absoluteLogo = 'https://pink-sheep-796549.hostingersite.com/assets/images/favicons/android-chrome-192x192.png';
-
     const title = payload.data?.title || payload.notification?.title || "A2P RealTech";
     const body = payload.data?.body || payload.notification?.body || "Click to see details";
 
+    // Absolute path to the favicon being used in Chatbot/Main site
+    const faviconUrl = 'https://pink-sheep-796549.hostingersite.com/assets/images/favicons/favicon.ico';
+    const highResUrl = 'https://pink-sheep-796549.hostingersite.com/assets/images/favicons/android-chrome-192x192.png';
+
     const options = {
         body: body,
-        icon: absoluteLogo, // This shows as the main image in small UI
-        badge: absoluteLogo, // This shows in the status bar on Android
+        icon: highResUrl, // Large square icon for branding
+        badge: faviconUrl, // Status bar icon
         tag: 'a2p-branded-push',
         renotify: false,
         requireInteraction: true,
