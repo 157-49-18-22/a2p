@@ -678,14 +678,13 @@
         z-index: 10 !important;
     }
     /* Search - RIGHT (order 3) */
-    .main-menu-two__right {
-        order: 3 !important;
+     .main-menu-two__right {
         flex: 0 0 auto !important;
-        min-width: 50px !important;
         display: flex !important;
         justify-content: flex-end !important;
-        align-items: center !important;
+        order: 3 !important;
         z-index: 10 !important;
+        min-width: 50px !important;
     }
     .main-menu-two__call-search,
     .main-menu-two__call {
@@ -1623,7 +1622,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                     <li><a href="<?= SITE_URL; ?>contact.php">Contact Us </a></li>
                                 </ul>
                             </div>
-
+                        </div>
                     <div class="main-menu-two__right">
 
 
