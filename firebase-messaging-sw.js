@@ -14,16 +14,19 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
-// Aggressive Background Handler (Always show notification)
+// Aggressive Background Handler
 messaging.onBackgroundMessage((payload) => {
+    // FORCE FULL URL FOR LOGO (Absolute Path)
+    const logoUrl = 'https://pink-sheep-796549.hostingersite.com/assets/images/resources/logo-1.png';
 
-    const notificationTitle = payload.notification?.title || payload.data?.title || "RealTech Update";
+    const notificationTitle = payload.notification?.title || payload.data?.title || "A2P RealTech";
     const notificationOptions = {
         body: payload.notification?.body || payload.data?.body || "Click to view full details",
-        icon: 'assets/images/resources/logo-1.png',
+        icon: logoUrl,
+        badge: logoUrl,
         image: payload.notification?.image || payload.data?.image || null,
-        badge: 'assets/images/resources/logo-1.png',
-        tag: 'a2p-realtech-notif', // THIS PREVENTS DUPLICATES
+        tag: 'a2p-unique-notif', // THIS PREVENTS DUPLICATES
+        renotify: false,        // If same tag, don't buzz again
         data: {
             url: payload.data?.link || '/'
         },
