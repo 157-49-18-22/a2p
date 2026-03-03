@@ -52,7 +52,7 @@
             const toast = document.createElement('div');
             toast.className = 'fcm-toast';
             toast.innerHTML = `
-                <div class="fcm-toast-icon"><i class="fas fa-bell"></i></div>
+                <div class="fcm-toast-icon"><img src="<?php echo SITE_URL; ?>assets/images/resources/logo-1.png" style="width: 40px; height: auto;"></div>
                 <div class="fcm-toast-body">
                     <strong>${title}</strong>
                     <p>${body}</p>

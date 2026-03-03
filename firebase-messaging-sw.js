@@ -20,9 +20,9 @@ messaging.onBackgroundMessage((payload) => {
     const notificationTitle = payload.notification?.title || payload.data?.title || "RealTech Update";
     const notificationOptions = {
         body: payload.notification?.body || payload.data?.body || "Click to view full details",
-        icon: 'https://cdn-icons-png.flaticon.com/512/3119/3119338.png',
+        icon: 'assets/images/resources/logo-1.png',
         image: payload.notification?.image || payload.data?.image || null, // For YouTube-like banner images
-        badge: 'https://cdn-icons-png.flaticon.com/512/3119/3119338.png',
+        badge: 'assets/images/resources/logo-1.png',
         data: {
             url: payload.data?.link || '/'
         },
