@@ -7,7 +7,11 @@ class FCMHelper {
         if (!file_exists($serviceAccountPath)) {
             throw new Exception("Service Account JSON file not found.");
         }
-        $this->serviceAccount = json_decode(file_get_contents($serviceAccountPath), true);
+        $json = file_get_contents($serviceAccountPath);
+        $this->serviceAccount = json_decode($json, true);
+        if (!$this->serviceAccount) {
+            throw new Exception("Invalid JSON formatting in service account file.");
+        }
     }
 
     private function base64UrlEncode($data) {
@@ -20,29 +24,32 @@ class FCMHelper {
         $now = time();
         $payload = [
             'iss' => $this->serviceAccount['client_email'],
-            'scope' => 'https://www.googleapis.com/auth/cloud-platform', // Full scope for safety
+            'scope' => 'https://www.googleapis.com/auth/firebase.messaging',
             'aud' => 'https://oauth2.googleapis.com/token',
             'exp' => $now + 3600,
-            'iat' => $now - 60 // 1 minute cushion for time sync
+            'iat' => $now - 30
         ];
 
-        // Header MUST be exact
         $header = ['alg' => 'RS256', 'typ' => 'JWT'];
         
         $headerEncoded = $this->base64UrlEncode(json_encode($header));
         $payloadEncoded = $this->base64UrlEncode(json_encode($payload));
         
-        $assertion = $headerEncoded . "." . $payloadEncoded;
+        $signatureInput = $headerEncoded . "." . $payloadEncoded;
+        
+        // --- VERY STRICT KEY CLEANING ---
+        $rawKey = $this->serviceAccount['private_key'];
+        // Replace literal \n occurrences with real newlines
+        $privateKey = str_replace('\n', "\n", $rawKey);
+        // Remove surplus quotes or backslashes if any
+        $privateKey = trim($privateKey, '"');
+        
         $signature = '';
-        
-        $privateKey = $this->serviceAccount['private_key'];
-        $privateKey = str_replace(['\n', '\\n'], "\n", $privateKey);
-        
-        if (!openssl_sign($assertion, $signature, $privateKey, 'SHA256')) {
-            throw new Exception("Signing failed: " . openssl_error_string());
+        if (!openssl_sign($signatureInput, $signature, $privateKey, 'SHA256')) {
+            throw new Exception("JWT Sign Failed: " . openssl_error_string());
         }
 
-        $jwt = $assertion . "." . $this->base64UrlEncode($signature);
+        $jwt = $signatureInput . "." . $this->base64UrlEncode($signature);
 
         $ch = curl_init('https://oauth2.googleapis.com/token');
         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/x-www-form-urlencoded']);
@@ -63,7 +70,7 @@ class FCMHelper {
             return $this->accessToken;
         }
 
-        throw new Exception("Google Token Error: " . ($data['error_description'] ?? $result));
+        throw new Exception("Google Auth Error: " . ($data['error_description'] ?? $result));
     }
 
     public function sendNotification($token, $title, $body, $link = '', $image = '') {
@@ -75,8 +82,8 @@ class FCMHelper {
                 'message' => [
                     'token' => $token,
                     'notification' => [
-                        'title' => $title,
-                        'body' => $body
+                        'title' => (string)$title,
+                        'body' => (string)$body
                     ],
                     'webpush' => [
                         'fcm_options' => [
@@ -87,7 +94,7 @@ class FCMHelper {
             ];
 
             if ($image) {
-                $message['message']['notification']['image'] = $image;
+                $message['message']['notification']['image'] = (string)$image;
             }
 
             $ch = curl_init("https://fcm.googleapis.com/v1/projects/$projectId/messages:send");
