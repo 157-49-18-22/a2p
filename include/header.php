@@ -648,39 +648,53 @@
         position: relative !important;
         background: #fff !important;
     }
+    /* Logo - absolutely centered so it stays perfectly in the middle */
     .main-menu-two__left {
-        position: relative !important;
-        left: auto !important;
-        top: auto !important;
-        transform: none !important;
+        position: absolute !important;
+        left: 50% !important;
+        top: 50% !important;
+        transform: translate(-50%, -50%) !important;
         margin: 0 !important;
         order: 2 !important;
-        flex: 1 !important;
         display: flex !important;
         justify-content: center !important;
-        z-index: 10 !important;
+        align-items: center !important;
+        z-index: 5 !important;
+        pointer-events: auto !important;
     }
     .main-menu-two__logo img {
-        height: 48px !important;
+        height: 45px !important;
         width: auto !important;
         display: block !important;
         filter: none !important;
     }
+    /* Hamburger - left side */
     .main-menu-two__main-menu-two-box {
         flex: 0 0 auto !important;
         display: flex !important;
         justify-content: flex-start !important;
+        align-items: center !important;
         order: 1 !important;
         z-index: 10 !important;
         min-width: 50px !important;
+        position: relative !important;
     }
+    /* Search button - right side */
     .main-menu-two__right {
         flex: 0 0 auto !important;
         display: flex !important;
         justify-content: flex-end !important;
+        align-items: center !important;
         order: 3 !important;
         z-index: 10 !important;
         min-width: 50px !important;
+        margin-left: auto !important;
+        position: relative !important;
+    }
+    .main-menu-two__call-search,
+    .main-menu-two__call {
+        display: flex !important;
+        align-items: center !important;
     }
     .mobile-nav__toggler {
         margin: 0 !important;
@@ -703,6 +717,9 @@
         align-items: center !important;
         justify-content: center !important;
         padding: 0 !important;
+        background: linear-gradient(145deg, #c00415 0%, #a00311 100%) !important;
+        color: #fff !important;
+        box-shadow: 0 4px 15px rgba(192,4,21,0.3) !important;
     }
     .main-menu-two__call .thm-btn i {
         font-size: 18px !important;
