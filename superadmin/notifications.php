@@ -74,34 +74,37 @@ if (isset($_POST['send_notif'])) {
         }
         $fcm = new FCMHelper($service_account_path);
 
-        // Fetch all tokens
-        $tokens = $pdo->query("SELECT fcm_token FROM subscriber_devices WHERE fcm_token IS NOT NULL")->fetchAll(PDO::FETCH_COLUMN);
+        // Fetch all UNIQUE tokens (to prevent double-sending to same browser)
+        $tokens = $pdo->query("SELECT DISTINCT fcm_token FROM subscriber_devices WHERE fcm_token IS NOT NULL")->fetchAll(PDO::FETCH_COLUMN);
         
-        $last_err = '';
         foreach ($tokens as $token) {
+            if(strlen($token) < 20) continue; // Skip invalid tokens
+            
             $sender = $fcm->sendNotification($token, $title, $message, $tracking_link ?: $link);
-            file_put_contents('fcm_debug.txt', "Token: " . $token . "\nResponse: " . json_encode($sender['response']) . "\n\n", FILE_APPEND);
+            
             if ($sender['success']) {
                 $success_count++;
             } else {
                 $fail_count++;
-                $last_err = $sender['response']['error']['message'] ?? json_encode($sender['response']);
+                // If token is invalid (NotRegistered), delete it from DB to keep it clean
+                $err = $sender['response']['error']['message'] ?? '';
+                if(strpos($err, 'NOT_FOUND') !== false || strpos($err, 'UNREGISTERED') !== false) {
+                    $pdo->prepare("DELETE FROM subscriber_devices WHERE fcm_token = ?")->execute([$token]);
+                }
             }
         }
 
-        // Update notification with FCM stats
+        // Update notification with final stats
         $pdo->prepare("UPDATE notifications SET fcm_message_id = :fcmid, recipients = :rcpt WHERE id = :id")
             ->execute([
-                ':fcmid' => 'FCM_SENT_' . $notif_db_id, 
+                ':fcmid' => 'FCM_BATCH_' . time(), 
                 ':rcpt' => $success_count, 
                 ':id' => $notif_db_id
             ]);
 
         $umessage = '<div class="alert alert-success alert-dismissible fade show" role="alert">
-            <i class="mdi mdi-check-circle me-2"></i>
-            <strong>Success!</strong> Notification sent to <strong>' . number_format($success_count) . '</strong> device(s). ' . ($fail_count > 0 ? '(Failed: ' . $fail_count . ' - Reason: ' . $last_err . ')' : '') . '
-            <a href="notification_analytics.php?id=' . $notif_db_id . '" class="btn btn-sm btn-light ms-3">View Analytics</a>
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <strong><i class="mdi mdi-check-circle me-1"></i> Success!</strong> Notification sent to ' . $success_count . ' device(s). (Failed: ' . $fail_count . ')
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>';
 
     } catch (Exception $e) {
