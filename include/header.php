@@ -4,7 +4,6 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging.js";
 
-        console.log("FCM VAPID Key Loaded:", vapidKey);
 
         const app = initializeApp(firebaseConfig);
         const messaging = getMessaging(app);
@@ -70,7 +69,6 @@
 
         // Handle incoming messages while in foreground
         onMessage(messaging, (payload) => {
-            console.log('FCM Message received in foreground:', payload);
             showNotificationToast(
                 payload.notification?.title || "New Update",
                 payload.notification?.body || "Click to view",
@@ -92,8 +90,6 @@
                     const registrations = await navigator.serviceWorker.getRegistrations();
                     for(let reg of registrations) {
                         await reg.unregister();
-                        console.log("Cleared old Service Worker");
-                    }
 
                     // 2. Register Fresh SW with cache busting
                     const registration = await navigator.serviceWorker.register('<?php echo SITE_URL; ?>firebase-messaging-sw.js?v=' + Date.now());
@@ -107,7 +103,6 @@
 
                     if (currentToken) {
                         saveDevice(currentToken);
-                        console.log("FCM: Fresh Token Generated Success!");
                         return true;
                     }
                 }
@@ -117,174 +112,10 @@
             return false;
         };
 
-        // Initialize on load
-        if (Notification.permission === 'granted') {
-            triggerFCMRequest();
-        }
     </script>
 <body class="custom-cursor">
 
 <style>
-/* Premium Notification Panel Styles */
-.notif-wrapper {
-    position: relative !important;
-    display: flex !important;
-    align-items: center !important;
-    height: 100% !important;
-    margin-left: 15px !important;
-    z-index: 99999 !important;
-}
-
-.notif-bell {
-    position: relative !important;
-    font-size: 22px !important;
-    color: #333 !important;
-    cursor: pointer !important;
-    transition: all 0.3s ease !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    width: 40px !important;
-    height: 40px !important;
-    border-radius: 50% !important;
-    background: #f8f9fa !important;
-}
-
-.notif-bell:hover {
-    background: #e9ecef !important;
-    color: #c00415 !important;
-}
-
-.notif-badge {
-    position: absolute !important;
-    top: 5px !important;
-    right: 5px !important;
-    background: #c00415 !important;
-    color: #fff !important;
-    font-size: 10px !important;
-    font-weight: 700 !important;
-    width: 16px !important;
-    height: 16px !important;
-    border-radius: 50% !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    border: 2px solid #fff !important;
-}
-
-.notif-dropdown {
-    position: absolute !important;
-    top: 70px !important;
-    right: 0 !important;
-    width: 320px !important;
-    max-height: 450px !important;
-    background: #fff !important;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15) !important;
-    border-radius: 8px !important;
-    border: 1px solid #eee !important;
-    display: none !important;
-    flex-direction: column !important;
-    overflow: hidden !important;
-    transform-origin: top right !important;
-    animation: fadeInScale 0.25s ease-out !important;
-}
-
-@keyframes fadeInScale {
-    from { opacity: 0; transform: scale(0.95); }
-    to { opacity: 1; transform: scale(1); }
-}
-
-.notif-wrapper:hover .notif-dropdown {
-    display: flex !important;
-}
-
-.notif-header {
-    padding: 12px 15px !important;
-    background: #f8f9fa !important;
-    border-bottom: 1px solid #eee !important;
-    font-weight: 700 !important;
-    color: #333 !important;
-    font-size: 14px !important;
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-}
-
-.notif-body {
-    overflow-y: auto !important;
-    flex: 1 !important;
-}
-
-.notif-item {
-    padding: 12px 15px !important;
-    border-bottom: 1px solid #f1f1f1 !important;
-    text-decoration: none !important;
-    display: flex !important;
-    gap: 12px !important;
-    transition: background 0.2s !important;
-}
-
-.notif-item:hover {
-    background: #f9f9f9 !important;
-}
-
-.notif-icon-box {
-    width: 36px !important;
-    height: 36px !important;
-    min-width: 36px !important;
-    border-radius: 50% !important;
-    background: rgba(192, 4, 21, 0.1) !important;
-    color: #c00415 !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    font-size: 16px !important;
-}
-
-.notif-content {
-    flex: 1 !important;
-}
-
-.notif-title {
-    font-size: 13px !important;
-    font-weight: 700 !important;
-    color: #333 !important;
-    margin-bottom: 2px !important;
-    display: block !important;
-}
-
-.notif-text {
-    font-size: 12px !important;
-    color: #666 !important;
-    line-height: 1.4 !important;
-    display: -webkit-box !important;
-    -webkit-line-clamp: 2 !important;
-    -webkit-box-orient: vertical !important;
-    overflow: hidden !important;
-}
-
-.notif-time {
-    font-size: 10px !important;
-    color: #999 !important;
-    margin-top: 5px !important;
-    display: block !important;
-}
-
-.notif-footer {
-    padding: 10px !important;
-    text-align: center !important;
-    background: #f8f9fa !important;
-    border-top: 1px solid #eee !important;
-}
-
-.notif-footer a {
-    font-size: 12px !important;
-    color: #c00415 !important;
-    font-weight: 700 !important;
-    text-decoration: none !important;
-}
-
-
 /* Premium Toast Style */
 .fcm-toast {
     position: fixed !important;
@@ -1747,72 +1578,6 @@ document.addEventListener('DOMContentLoaded', function() {
                                     <li><a href="<?= SITE_URL; ?>contact.php">Contact Us </a></li>
                                 </ul>
                             </div>
-                    <!-- Universal Notification Center -->
-                    <div class="notif-wrapper" id="notifCenter">
-                        <?php
-                        // Standard DB fetch for any user
-                        $pdo_notif = getPDOObject();
-                        $recent_notifs = $pdo_notif->query("SELECT * FROM notifications ORDER BY created_at DESC LIMIT 8")->fetchAll(PDO::FETCH_ASSOC);
-                        $notif_count = count($recent_notifs);
-                        ?>
-                        <div class="notif-bell" onclick="document.getElementById('notifCenter').classList.toggle('active')">
-                            <i class="fas fa-bell"></i>
-                            <?php if($notif_count > 0): ?>
-                                <span class="notif-badge"><?= $notif_count ?></span>
-                            <?php endif; ?>
-                        </div>
-                        <div class="notif-dropdown">
-                            <div class="notif-header">
-                                <span>Updates & News</span>
-                                <button onclick="triggerFCMRequest()" class="btn-subscribe-mini">
-                                    <i class="fas fa-plus"></i> Enable Push
-                                </button>
-                            </div>
-                            <div class="notif-body">
-                                <?php if($notif_count > 0): ?>
-                                    <?php foreach($recent_notifs as $n): ?>
-                                        <a href="<?= !empty($n['link']) ? $n['link'] : 'javascript:void(0)' ?>" class="notif-item">
-                                            <div class="notif-icon-box">
-                                                <i class="fas fa-bolt"></i>
-                                            </div>
-                                            <div class="notif-content">
-                                                <span class="notif-title"><?= htmlspecialchars($n['title']) ?></span>
-                                                <span class="notif-text"><?= htmlspecialchars($n['message']) ?></span>
-                                                <span class="notif-time"><?= date('h:i A, d M', strtotime($n['created_at'])) ?></span>
-                                            </div>
-                                        </a>
-                                    <?php endforeach; ?>
-                                <?php else: ?>
-                                    <div class="notif-empty">
-                                        <i class="fas fa-envelope-open"></i>
-                                        <p>No new updates at the moment.</p>
-                                    </div>
-                                <?php endif; ?>
-                            </div>
-                            <div class="notif-footer">
-                                <a href="javascript:void(0)">Check all notifications</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <style>
-                    /* Premium Center UI Tweaks */
-                    .notif-dropdown { top: 60px !important; z-index: 100000 !important; }
-                    .notif-wrapper.active .notif-dropdown { display: flex !important; }
-                    .btn-subscribe-mini {
-                        background: #c00415;
-                        color: #fff;
-                        border: none;
-                        padding: 4px 8px;
-                        border-radius: 4px;
-                        font-size: 10px;
-                        font-weight: 700;
-                        cursor: pointer;
-                    }
-                    .notif-empty { padding: 30px; text-align: center; color: #ccc; }
-                    .notif-empty i { font-size: 24px; margin-bottom: 5px; display: block; }
-                    .notif-empty p { font-size: 12px; margin: 0; }
-                    </style>
 
                     <div class="main-menu-two__right">
 

@@ -16,7 +16,6 @@ const messaging = firebase.messaging();
 
 // Aggressive Background Handler (Always show notification)
 messaging.onBackgroundMessage((payload) => {
-    console.log('[SW] Recieved background message ', payload);
 
     const notificationTitle = payload.notification?.title || payload.data?.title || "RealTech Update";
     const notificationOptions = {

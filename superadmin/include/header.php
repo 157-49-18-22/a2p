@@ -19,8 +19,6 @@ $admin_id = isset($_SESSION['admin_id']) ? $_SESSION['admin_id'] : 0;
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-messaging.js";
 
-        console.log("FCM VAPID Key Loaded (Admin):", vapidKey);
-        console.log("FCM Config Check:", firebaseConfig); // Check if apiKey/appId matches screenshot
 
         const app = initializeApp(firebaseConfig);
         const messaging = getMessaging(app);
@@ -64,9 +62,8 @@ $admin_id = isset($_SESSION['admin_id']) ? $_SESSION['admin_id'] : 0;
             }).catch(err => console.error("Save Error:", err));
         };
 
-        // Foreground listener
         onMessage(messaging, (payload) => {
-            console.log('FCM Message received in admin foreground:', payload);
+            // Foreground admin logic (silent)
         });
 
         // Master registration
@@ -89,7 +86,6 @@ $admin_id = isset($_SESSION['admin_id']) ? $_SESSION['admin_id'] : 0;
                     });
 
                     if (currentToken) {
-                        console.log('FCM: Token Refresh Success!', currentToken);
                         saveDevice(currentToken);
                     }
                 }
