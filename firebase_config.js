@@ -8,5 +8,5 @@ export const firebaseConfig = {
     measurementId: "G-DYGC70ZNSK"
 };
 
-// YEH WALA SAHI HAI (Screenshot table se copy kiya hua)
-export const vapidKey = 'BFCCWlRqcOGi-HK033FmGjuJAL_0n1bgvaPozAjc2DBpiZ-eRirAYgWNOIbmfqYzLbpEgPB6F1p8mxq950bGPSk';
+// YEH WALA SAHI HAI (Fixed: 'l' instead of 'I')
+export const vapidKey = 'BFCCWlRqcOGi-HK033FmGjuJAL_On1bgvaPozAjc2DBpiZ-eRirAYgWNOlbmfqYzLbpEgPB6F1p8mxq950bGPsk';
