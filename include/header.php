@@ -652,8 +652,7 @@
     /* Hamburger - LEFT */
     .main-menu-two__main-menu-two-box {
         order: 1 !important;
-        flex: 0 0 50px !important;
-        width: 50px !important;
+        flex: 1 !important;
         display: flex !important;
         justify-content: flex-start !important;
         align-items: center !important;
@@ -663,28 +662,31 @@
     /* Logo - CENTER */
     .main-menu-two__left {
         order: 2 !important;
-        flex: 1 1 auto !important;
+        flex: 2 !important;
         display: flex !important;
         justify-content: center !important;
         align-items: center !important;
-        position: static !important;
-        left: auto !important;
-        top: auto !important;
-        transform: none !important;
-        margin: 0 !important;
+        position: relative !important;
         z-index: 5 !important;
+        margin: 0 !important;
+    }
+    .main-menu-two__logo {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        width: 100% !important;
     }
     .main-menu-two__logo img {
-        height: 45px !important;
+        height: 48px !important;
         width: auto !important;
         display: block !important;
         filter: none !important;
+        max-width: 100% !important;
     }
     /* Search - RIGHT */
     .main-menu-two__right {
         order: 3 !important;
-        flex: 0 0 50px !important;
-        width: 50px !important;
+        flex: 1 !important;
         display: flex !important;
         justify-content: flex-end !important;
         align-items: center !important;
