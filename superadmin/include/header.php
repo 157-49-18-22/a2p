@@ -83,9 +83,9 @@ $admin_id = isset($_SESSION['admin_id']) ? $_SESSION['admin_id'] : 0;
                     // Essential: Wait for SW active status
                     await navigator.serviceWorker.ready;
 
-                    // Fetch Token
+                    // Fetch Token using EXACT exported key
                     const currentToken = await getToken(messaging, { 
-                        vapidKey: 'BFCCWlRqcOGi-HK033FmGjuJAL_On1bgvaPozAjc2DBpiZ-eRirAYgWNOlbmfqYzLbpEgPB6F1p8mxq950bGPsk',
+                        vapidKey: vapidKey,
                         serviceWorkerRegistration: registration
                     });
 

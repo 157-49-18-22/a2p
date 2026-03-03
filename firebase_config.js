@@ -1,5 +1,4 @@
-// Firebase configuration
-const firebaseConfig = {
+export const firebaseConfig = {
     apiKey: "AIzaSyCUpT22o_EQV4uuyOn84zawWemlWqzmsOA",
     authDomain: "a2p-realtech-29ced.firebaseapp.com",
     projectId: "a2p-realtech-29ced",
@@ -9,7 +8,4 @@ const firebaseConfig = {
     measurementId: "G-DYGC70ZNSK"
 };
 
-// VAPID Key: Generate this in Cloud Messaging tab -> Web Push certificates
-const vapidKey = "BFCCWlRqcOGi-HK033FmGjuJAL_On1bgvaPozAjc2DBpiZ-eRirAYgWNOlbmfqYzLbpEgPB6F1p8mxq950bGPsk";
-
-export { firebaseConfig, vapidKey };
+export const vapidKey = 'BFCCWlRqcOGi-HK033FmGjuJAL_0n1bgvaPozAjc2DBpiZ-eRirAYgWNOIbmfqYzLbpEgPB6F1p8mxq950bGPSk';
