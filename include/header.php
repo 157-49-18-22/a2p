@@ -69,11 +69,14 @@
 
         // Handle incoming messages while in foreground
         onMessage(messaging, (payload) => {
-            showNotificationToast(
-                payload.notification?.title || "New Update",
-                payload.notification?.body || "Click to view",
-                payload.data?.link || payload.notification?.click_action
-            );
+            // Only show toast if window is active/focused to avoid double-up with system
+            if (document.visibilityState === 'visible') {
+                showNotificationToast(
+                    payload.notification?.title || "New Update",
+                    payload.notification?.body || "Click to view",
+                    payload.data?.link || payload.notification?.click_action
+                );
+            }
         });
 
         // Request Permission and Get Token

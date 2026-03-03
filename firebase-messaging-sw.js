@@ -21,13 +21,14 @@ messaging.onBackgroundMessage((payload) => {
     const notificationOptions = {
         body: payload.notification?.body || payload.data?.body || "Click to view full details",
         icon: 'assets/images/resources/logo-1.png',
-        image: payload.notification?.image || payload.data?.image || null, // For YouTube-like banner images
+        image: payload.notification?.image || payload.data?.image || null,
         badge: 'assets/images/resources/logo-1.png',
+        tag: 'a2p-realtech-notif', // THIS PREVENTS DUPLICATES
         data: {
             url: payload.data?.link || '/'
         },
-        requireInteraction: true, // Key for persistent pop-up
-        vibrate: [200, 100, 200] // Makes the phone buzz
+        requireInteraction: true,
+        vibrate: [200, 100, 200]
     };
 
     return self.registration.showNotification(notificationTitle, notificationOptions);
