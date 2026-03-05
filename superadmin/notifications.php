@@ -11,9 +11,6 @@ $pdo->exec("CREATE TABLE IF NOT EXISTS notifications (
     title VARCHAR(255) NOT NULL,
     message TEXT NOT NULL,
     link VARCHAR(255),
-    image VARCHAR(255) DEFAULT NULL,
-    schedule_time DATETIME DEFAULT NULL,
-    is_sent TINYINT(1) DEFAULT 1,
     fcm_message_id VARCHAR(255) DEFAULT NULL,
     recipients INT DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -22,9 +19,6 @@ $pdo->exec("CREATE TABLE IF NOT EXISTS notifications (
 // Ensure new columns exist (for existing installations)
 try { $pdo->exec("ALTER TABLE notifications ADD COLUMN fcm_message_id VARCHAR(255) DEFAULT NULL"); } catch(Exception $e) {}
 try { $pdo->exec("ALTER TABLE notifications ADD COLUMN recipients INT DEFAULT 0"); } catch(Exception $e) {}
-try { $pdo->exec("ALTER TABLE notifications ADD COLUMN image VARCHAR(255) DEFAULT NULL"); } catch(Exception $e) {}
-try { $pdo->exec("ALTER TABLE notifications ADD COLUMN schedule_time DATETIME DEFAULT NULL"); } catch(Exception $e) {}
-try { $pdo->exec("ALTER TABLE notifications ADD COLUMN is_sent TINYINT(1) DEFAULT 1"); } catch(Exception $e) {}
 
 // Ensure click tracking table exists
 $pdo->exec("CREATE TABLE IF NOT EXISTS notification_clicks (
@@ -45,101 +39,78 @@ $service_account_path = 'firebase-service-account.json';
 // Handle Form Submission
 if (isset($_POST['send_notif'])) {
     extract($_POST);
-    
-    // 0. Handle File Upload or URL
-    $image_url = !empty($image_url) ? trim($image_url) : null;
-    
-    if (!empty($_FILES['notif_file']['name'])) {
-        $upload_dir = '../upload/notifications/';
-        if (!is_dir($upload_dir)) {
-            mkdir($upload_dir, 0777, true);
-        }
-        
-        $file_ext = pathinfo($_FILES['notif_file']['name'], PATHINFO_EXTENSION);
-        $file_name = 'notif_' . time() . '.' . $file_ext;
-        $target_file = $upload_dir . $file_name;
-        
-        if (move_uploaded_file($_FILES['notif_file']['tmp_name'], $target_file)) {
-            $protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? "https" : "http";
-            $image_url = $protocol . '://' . $_SERVER['HTTP_HOST'] . '/upload/notifications/' . $file_name;
-            // Adjust for /cms/ if current site has it
-            if (strpos($_SERVER['REQUEST_URI'], '/cms/') !== false) {
-                 $image_url = $protocol . '://' . $_SERVER['HTTP_HOST'] . '/cms/upload/notifications/' . $file_name;
-            }
-        }
-    }
-    
-    $image = $image_url; // Map to database column
-    $schedule_time = !empty($schedule_time) ? $schedule_time : null;
-    $is_sent = $schedule_time ? 0 : 1;
 
     // 1. Build tracking URL dynamically
     $protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? "https" : "http";
     $host = $_SERVER['HTTP_HOST'];
     $site_base = "$protocol://$host/superadmin";
+    
+    // Adjust for subdirectories like /cms/
     if (strpos($_SERVER['REQUEST_URI'], '/cms/') !== false) {
         $site_base = "$protocol://$host/cms/superadmin";
     }
 
     // 2. Save to Database first to get ID
-    $q = $pdo->prepare("INSERT INTO notifications (title, message, link, image, schedule_time, is_sent) VALUES (:title, :message, :link, :image, :schedule_time, :is_sent)");
+    $q = $pdo->prepare("INSERT INTO notifications (title, message, link) VALUES (:title, :message, :link)");
     $q->execute([
-        ':title'         => $title,
-        ':message'       => $message,
-        ':link'          => $link,
-        ':image'         => $image,
-        ':schedule_time' => $schedule_time,
-        ':is_sent'       => $is_sent
+        ':title'   => $title,
+        ':message' => $message,
+        ':link'    => $link
     ]);
     $notif_db_id = $pdo->lastInsertId();
 
-    // 3. Build tracking link
+    // 3. Build tracking link for this notification
     $tracking_link = $link;
     if ($link && $notif_db_id) {
         $tracking_link = $site_base . '/track_click.php?notif_id=' . $notif_db_id . '&redirect=' . urlencode($link);
     }
 
-    // 4. Send via FCM ONLY IF not scheduled for later
-    if ($is_sent) {
-        $success_count = 0;
-        $fail_count = 0;
-        try {
-            if (!file_exists($service_account_path)) {
-                throw new Exception("Service Account JSON file not found!");
-            }
-            $fcm = new FCMHelper($service_account_path);
+    // 4. Send via FCM
+    $success_count = 0;
+    $fail_count = 0;
+    try {
+        if (!file_exists($service_account_path)) {
+            throw new Exception("Service Account JSON file not found! Please place 'firebase-service-account.json' in the superadmin directory.");
+        }
+        $fcm = new FCMHelper($service_account_path);
 
-            $tokens = $pdo->query("SELECT DISTINCT fcm_token FROM subscriber_devices WHERE fcm_token IS NOT NULL")->fetchAll(PDO::FETCH_COLUMN);
+        // Fetch all UNIQUE tokens (to prevent double-sending to same browser)
+        $tokens = $pdo->query("SELECT DISTINCT fcm_token FROM subscriber_devices WHERE fcm_token IS NOT NULL")->fetchAll(PDO::FETCH_COLUMN);
+        
+        foreach ($tokens as $token) {
+            if(strlen($token) < 20) continue; // Skip invalid tokens
             
-            $last_error = '';
-            foreach ($tokens as $token) {
-                if(strlen($token) < 20) continue;
-                $sender = $fcm->sendNotification($token, $title, $message, $tracking_link ?: $link, $image);
-                if ($sender['success']) { $success_count++; } 
-                else {
-                    $last_error = $sender['response']['error']['message'] ?? json_encode($sender['response']);
-                    $err = $sender['response']['error']['message'] ?? '';
-                    if(strpos($err, 'NOT_FOUND') !== false || strpos($err, 'UNREGISTERED') !== false) {
-                        $pdo->prepare("DELETE FROM subscriber_devices WHERE fcm_token = ?")->execute([$token]);
-                    }
-                    $fail_count++;
+            $sender = $fcm->sendNotification($token, $title, $message, $tracking_link ?: $link);
+            
+            if ($sender['success']) {
+                $success_count++;
+            } else {
+                $fail_count++;
+                // If token is invalid (NotRegistered), delete it from DB to keep it clean
+                $err = $sender['response']['error']['message'] ?? '';
+                if(strpos($err, 'NOT_FOUND') !== false || strpos($err, 'UNREGISTERED') !== false) {
+                    $pdo->prepare("DELETE FROM subscriber_devices WHERE fcm_token = ?")->execute([$token]);
                 }
             }
-
-            $pdo->prepare("UPDATE notifications SET fcm_message_id = :fcmid, recipients = :rcpt, is_sent = 1 WHERE id = :id")
-                ->execute([':fcmid' => 'FCM_BATCH_' . time(), ':rcpt' => $success_count, ':id' => $notif_db_id]);
-
-            $error_tag = $fail_count > 0 ? "<br><small class='text-danger'>Last Error: $last_error</small>" : "";
-            $umessage = '<div class="alert alert-success alert-dismissible fade show">
-                <strong><i class="mdi mdi-check-circle"></i> Result:</strong> Sent to ' . $success_count . ' devices. (Failed: ' . $fail_count . ') ' . $error_tag . '
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>';
-        } catch (Exception $e) {
-            $umessage = '<div class="alert alert-danger alert-dismissible fade show">Error: ' . htmlspecialchars($e->getMessage()) . '</div>';
         }
-    } else {
-        $umessage = '<div class="alert alert-info alert-dismissible fade show">
-            <strong><i class="mdi mdi-clock-outline"></i> Scheduled!</strong> Notification saved and scheduled for ' . date('d M, Y h:i A', strtotime($schedule_time)) . '.
+
+        // Update notification with final stats
+        $pdo->prepare("UPDATE notifications SET fcm_message_id = :fcmid, recipients = :rcpt WHERE id = :id")
+            ->execute([
+                ':fcmid' => 'FCM_BATCH_' . time(), 
+                ':rcpt' => $success_count, 
+                ':id' => $notif_db_id
+            ]);
+
+        $umessage = '<div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong><i class="mdi mdi-check-circle me-1"></i> Success!</strong> Notification sent to ' . $success_count . ' device(s). (Failed: ' . $fail_count . ')
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>';
+
+    } catch (Exception $e) {
+        $umessage = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="mdi mdi-alert me-2"></i>
+            Error sending via FCM: <strong>' . htmlspecialchars($e->getMessage()) . '</strong>
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>';
     }
@@ -249,31 +220,15 @@ require('include/header.php');
                 <i class="mdi mdi-bell-plus-outline me-2"></i> Create New Push Notification
             </div>
             <div class="card-body">
-                <form method="POST" enctype="multipart/form-data">
+                <form method="POST">
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Notification Title <span class="text-danger">*</span></label>
                             <input type="text" name="title" class="form-control" placeholder="e.g. New Property Launch!" required>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Target Link <small class="text-muted">(optional)</small></label>
+                            <label class="form-label">Target Link <small class="text-muted">(optional — click tracking auto-applied)</small></label>
                             <input type="url" name="link" class="form-control" placeholder="https://a2prealtech.com/product.php">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Image URL <small class="text-muted">(direct link)</small></label>
-                            <input type="url" name="image_url" id="imageInput" class="form-control" placeholder="https://example.com/promo.jpg" oninput="if(this.value){ document.getElementById('imgPreview').src = this.value; document.getElementById('previewContainer').style.display = 'block'; }">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">OR Upload Image <small class="text-muted">(from device)</small></label>
-                            <input type="file" name="notif_file" class="form-control" accept="image/*" onchange="const file = this.files[0]; if(file){ const reader = new FileReader(); reader.onload = (e) => { document.getElementById('imgPreview').src = e.target.result; document.getElementById('previewContainer').style.display = 'block'; }; reader.readAsDataURL(file); }">
-                        </div>
-                        <div id="previewContainer" class="col-12 mb-3 mt-1" style="display:none;">
-                            <label class="form-label d-block">Image Preview:</label>
-                            <img id="imgPreview" src="" style="max-height:120px; border-radius:8px; border:2px solid #696cff22; padding:4px;">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Schedule Time <small class="text-muted">(leave empty to send now)</small></label>
-                            <input type="datetime-local" name="schedule_time" class="form-control">
                         </div>
                         <div class="col-12 mb-3">
                             <label class="form-label">Message Content <span class="text-danger">*</span></label>
@@ -301,8 +256,8 @@ require('include/header.php');
                     <thead class="table-light">
                         <tr>
                             <th>#</th>
-                            <th>Status</th>
-                            <th>Title / Message</th>
+                            <th>Title</th>
+                            <th>Message</th>
                             <th>Recipients</th>
                             <th>Clicks</th>
                             <th>Date</th>
@@ -313,23 +268,9 @@ require('include/header.php');
                         <?php $count = 1; foreach ($notifs as $n): ?>
                         <tr>
                             <td><?php echo $count++; ?></td>
-                            <td>
-                                <?php if($n['is_sent']): ?>
-                                    <span class="badge bg-label-success">Sent</span>
-                                <?php else: ?>
-                                    <span class="badge bg-label-warning">Scheduled</span>
-                                <?php endif; ?>
-                            </td>
-                            <td style="max-width:300px;">
-                                <div class="d-flex align-items-center gap-2">
-                                    <?php if($n['image']): ?>
-                                        <img src="<?php echo $n['image']; ?>" style="width:40px;height:40px;border-radius:4px;object-fit:cover;" onerror="this.src='/assets/images/placeholder.png'">
-                                    <?php endif; ?>
-                                    <div style="overflow:hidden;">
-                                        <div class="text-truncate"><strong><?php echo htmlspecialchars($n['title']); ?></strong></div>
-                                        <div class="text-muted small text-truncate"><?php echo htmlspecialchars($n['message']); ?></div>
-                                    </div>
-                                </div>
+                            <td><strong><?php echo htmlspecialchars($n['title']); ?></strong></td>
+                            <td style="max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+                                <?php echo htmlspecialchars($n['message']); ?>
                             </td>
                             <td>
                                 <?php if ($n['fcm_message_id']): ?>
@@ -347,14 +288,7 @@ require('include/header.php');
                                     <?php echo number_format($n['click_count']); ?>
                                 </span>
                             </td>
-                            <td>
-                                <small>
-                                    Created: <?php echo date('d M, h:i A', strtotime($n['created_at'])); ?>
-                                    <?php if(!$n['is_sent'] && $n['schedule_time']): ?>
-                                        <div class="text-primary fw-bold">Send at: <?php echo date('d M, h:i A', strtotime($n['schedule_time'])); ?></div>
-                                    <?php endif; ?>
-                                </small>
-                            </td>
+                            <td><small><?php echo date('d M, Y h:i A', strtotime($n['created_at'])); ?></small></td>
                             <td>
                                 <div class="d-flex gap-2">
                                     <a href="notification_analytics.php?id=<?php echo $n['id']; ?>"

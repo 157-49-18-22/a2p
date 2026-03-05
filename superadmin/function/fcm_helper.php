@@ -84,44 +84,30 @@ class FCMHelper {
             $siteUrl = defined('SITE_URL') ? SITE_URL : 'https://pink-sheep-796549.hostingersite.com/';
             $logoUrl  = $siteUrl . 'assets/images/favicons/android-chrome-192x192.png';
 
-            $data = [
-                'title' => (string)$title,
-                'body'  => (string)$body
-            ];
-
-            if (!empty($link)) {
-                $data['link'] = (string)$link;
-            }
-            if (!empty($image)) {
-                $data['image'] = (string)$image;
-            }
-
-            $notification = [
-                'title' => (string)$title,
-                'body'  => (string)$body,
-                'icon'  => $logoUrl,
-                'badge' => $logoUrl,
-                'requireInteraction' => true,
-                'tag'   => 'a2p-notif'
-            ];
-
-            if (!empty($image)) {
-                $notification['image'] = (string)$image;
-            }
-
             $message = [
                 'message' => [
                     'token' => $token,
-                    'data' => $data,
+                    'data' => [
+                        'title' => (string)$title,
+                        'body'  => (string)$body,
+                        'link'  => (string)$link,
+                        'image' => (string)$image
+                    ],
                     'webpush' => [
-                        'notification' => $notification
+                        'notification' => [
+                            'title' => (string)$title,
+                            'body'  => (string)$body,
+                            'icon'  => $logoUrl,
+                            'badge' => $logoUrl,
+                            'requireInteraction' => true,
+                            'tag'   => 'a2p-notif'
+                        ],
+                        'fcm_options' => [
+                            'link' => (string)$link
+                        ]
                     ]
                 ]
             ];
-
-            if (!empty($link)) {
-                $message['message']['webpush']['fcm_options'] = ['link' => (string)$link];
-            }
 
             $ch = curl_init("https://fcm.googleapis.com/v1/projects/$projectId/messages:send");
             curl_setopt($ch, CURLOPT_HTTPHEADER, [
