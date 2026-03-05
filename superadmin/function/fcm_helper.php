@@ -27,38 +27,37 @@ class FCMHelper {
             'scope' => 'https://www.googleapis.com/auth/firebase.messaging',
             'aud'   => 'https://oauth2.googleapis.com/token',
             'exp'   => $now + 3600,
-            'iat'   => $now - 300 // 5-minute cushion for server time drift
+            'iat'   => $now - 60 
         ];
 
         $header = ['alg' => 'RS256', 'typ' => 'JWT'];
         
-        $headerJSON = json_encode($header, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-        $payloadJSON = json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        // Manual Base64Url to ensure NO padding or issues
+        $headerEncoded  = $this->base64UrlEncode(json_encode($header));
+        $payloadEncoded = $this->base64UrlEncode(json_encode($payload));
         
-        $headerEncoded = $this->base64UrlEncode($headerJSON);
-        $payloadEncoded = $this->base64UrlEncode($payloadJSON);
-        
-        $signatureInput = $headerEncoded . "." . $payloadEncoded;
+        $dataToSign = $headerEncoded . "." . $payloadEncoded;
         
         $privateKey = $this->serviceAccount['private_key'];
         $privateKey = str_replace("\\n", "\n", $privateKey);
         
         $signature = '';
-        if (!openssl_sign($signatureInput, $signature, $privateKey, OPENSSL_ALGO_SHA256)) {
+        if (!openssl_sign($dataToSign, $signature, $privateKey, "SHA256")) {
             throw new Exception("Local Signing Failed: " . openssl_error_string());
         }
 
-        $jwt = $signatureInput . "." . $this->base64UrlEncode($signature);
+        $jwt = $dataToSign . "." . $this->base64UrlEncode($signature);
 
-        // --- MASTER CURL FIX: Manual Raw Body ---
-        $postData = 'grant_type=' . urlencode('urn:ietf:params:oauth:grant-type:jwt-bearer') . '&assertion=' . urlencode($jwt);
+        $postData = http_build_query([
+            'grant_type' => 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+            'assertion'  => $jwt
+        ]);
 
         $ch = curl_init('https://oauth2.googleapis.com/token');
         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/x-www-form-urlencoded']);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
 
         $result = curl_exec($ch);
