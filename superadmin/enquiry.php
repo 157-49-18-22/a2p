@@ -22,7 +22,12 @@ require('include/header.php');
         <?php echo $umessage; ?>
 
         <div class="card">
-            <h5 class="card-header">Direct Contact Form Inquiries</h5>
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Direct Contact Form Inquiries</h5>
+                <a href="export_enquiry.php" class="btn btn-success btn-sm">
+                    <i class="fa fa-file-excel me-1"></i> Export Excel
+                </a>
+            </div>
             <div class="table-responsive text-nowrap">
                 <table class="table table-hover">
                     <thead>

@@ -760,9 +760,9 @@ $currentPageUrl = urlencode("http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_UR
                                     <div class="tab-pane fade" id="video" role="tabpanel" aria-labelledby="video-tab">
                                         <h3>Property Video</h3>
                                         <?php 
-                                        // Check if there's a video link in pro_additionalinfo or a manual check
                                         $video_found = false;
-                                        if (preg_match('/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com|youtu\.be)\/(?:watch\?v=)?([^\s&]+)/', $subproductss['pro_additionalinfo'], $matches)) {
+                                        // Robust Regex to extract 11-character YouTube ID from various formats (watch, youtu.be, shorts, embed)
+                                        if (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?|shorts)/|.*[?&]v=)|youtu\.be/)([^"&?/ <>]{11})%i', $subproductss['pro_additionalinfo'], $matches)) {
                                             $video_id = $matches[1];
                                             echo '<div class="video-container"><iframe src="https://www.youtube.com/embed/'.$video_id.'" allowfullscreen></iframe></div>';
                                             $video_found = true;
