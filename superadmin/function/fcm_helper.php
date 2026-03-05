@@ -24,17 +24,16 @@ class FCMHelper {
         $now = time();
         $payload = [
             'iss'   => $this->serviceAccount['client_email'],
-            'sub'   => $this->serviceAccount['client_email'],
             'scope' => 'https://www.googleapis.com/auth/firebase.messaging',
             'aud'   => 'https://oauth2.googleapis.com/token',
             'exp'   => $now + 3600,
-            'iat'   => $now - 60 
+            'iat'   => $now - 300 // 5-minute cushion for server time drift
         ];
 
         $header = ['alg' => 'RS256', 'typ' => 'JWT'];
         
-        $headerJSON = json_encode($header);
-        $payloadJSON = json_encode($payload);
+        $headerJSON = json_encode($header, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        $payloadJSON = json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
         
         $headerEncoded = $this->base64UrlEncode($headerJSON);
         $payloadEncoded = $this->base64UrlEncode($payloadJSON);
@@ -42,7 +41,6 @@ class FCMHelper {
         $signatureInput = $headerEncoded . "." . $payloadEncoded;
         
         $privateKey = $this->serviceAccount['private_key'];
-        // Robust key cleaning
         $privateKey = str_replace("\\n", "\n", $privateKey);
         
         $signature = '';
