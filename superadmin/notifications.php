@@ -111,11 +111,13 @@ if (isset($_POST['send_notif'])) {
 
             $tokens = $pdo->query("SELECT DISTINCT fcm_token FROM subscriber_devices WHERE fcm_token IS NOT NULL")->fetchAll(PDO::FETCH_COLUMN);
             
+            $last_error = '';
             foreach ($tokens as $token) {
                 if(strlen($token) < 20) continue;
                 $sender = $fcm->sendNotification($token, $title, $message, $tracking_link ?: $link, $image);
                 if ($sender['success']) { $success_count++; } 
                 else {
+                    $last_error = $sender['response']['error']['message'] ?? json_encode($sender['response']);
                     $err = $sender['response']['error']['message'] ?? '';
                     if(strpos($err, 'NOT_FOUND') !== false || strpos($err, 'UNREGISTERED') !== false) {
                         $pdo->prepare("DELETE FROM subscriber_devices WHERE fcm_token = ?")->execute([$token]);
@@ -127,8 +129,9 @@ if (isset($_POST['send_notif'])) {
             $pdo->prepare("UPDATE notifications SET fcm_message_id = :fcmid, recipients = :rcpt, is_sent = 1 WHERE id = :id")
                 ->execute([':fcmid' => 'FCM_BATCH_' . time(), ':rcpt' => $success_count, ':id' => $notif_db_id]);
 
+            $error_tag = $fail_count > 0 ? "<br><small class='text-danger'>Last Error: $last_error</small>" : "";
             $umessage = '<div class="alert alert-success alert-dismissible fade show">
-                <strong><i class="mdi mdi-check-circle"></i> Success!</strong> Sent to ' . $success_count . ' devices. (Failed: ' . $fail_count . ')
+                <strong><i class="mdi mdi-check-circle"></i> Result:</strong> Sent to ' . $success_count . ' devices. (Failed: ' . $fail_count . ') ' . $error_tag . '
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>';
         } catch (Exception $e) {

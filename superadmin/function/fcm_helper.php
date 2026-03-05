@@ -84,6 +84,18 @@ class FCMHelper {
             $siteUrl = defined('SITE_URL') ? SITE_URL : 'https://pink-sheep-796549.hostingersite.com/';
             $logoUrl  = $siteUrl . 'assets/images/favicons/android-chrome-192x192.png';
 
+            $data = [
+                'title' => (string)$title,
+                'body'  => (string)$body
+            ];
+
+            if (!empty($link)) {
+                $data['link'] = (string)$link;
+            }
+            if (!empty($image)) {
+                $data['image'] = (string)$image;
+            }
+
             $notification = [
                 'title' => (string)$title,
                 'body'  => (string)$body,
@@ -93,7 +105,6 @@ class FCMHelper {
                 'tag'   => 'a2p-notif'
             ];
 
-            // Only add image if it exists and is not empty
             if (!empty($image)) {
                 $notification['image'] = (string)$image;
             }
@@ -101,20 +112,16 @@ class FCMHelper {
             $message = [
                 'message' => [
                     'token' => $token,
-                    'data' => [
-                        'title' => (string)$title,
-                        'body'  => (string)$body,
-                        'link'  => (string)$link,
-                        'image' => (string)$image
-                    ],
+                    'data' => $data,
                     'webpush' => [
-                        'notification' => $notification,
-                        'fcm_options' => [
-                            'link' => (string)$link
-                        ]
+                        'notification' => $notification
                     ]
                 ]
             ];
+
+            if (!empty($link)) {
+                $message['message']['webpush']['fcm_options'] = ['link' => (string)$link];
+            }
 
             $ch = curl_init("https://fcm.googleapis.com/v1/projects/$projectId/messages:send");
             curl_setopt($ch, CURLOPT_HTTPHEADER, [
