@@ -176,7 +176,7 @@
     display: flex !important;
     align-items: center !important;
     justify-content: space-between !important;
-    padding: 0 40px !important; 
+    padding: 0 20px !important; /* Reduced from 40px to push things to edges */
     height: 80px !important; 
     position: relative !important;
     z-index: 100 !important;
@@ -195,8 +195,9 @@
 .main-menu-two__left {
     display: flex !important;
     align-items: center !important;
-    min-width: 140px !important; 
-    flex: 0 1 auto !important; /* Allow it to shrink slightly if needed */
+    min-width: 200px !important; /* Increased to give logo proper breathing room */
+    margin-right: 20px !important; /* Space between logo and menu */
+    flex: 0 0 auto !important; 
 }
 
 .main-menu-two__logo {
