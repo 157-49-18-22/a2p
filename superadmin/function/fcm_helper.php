@@ -22,21 +22,19 @@ class FCMHelper {
         if ($this->accessToken) return $this->accessToken;
 
         $now = time();
-        // BIG FIX: 5-minute cushion for Hostinger time sync
         $payload = [
             'iss'   => $this->serviceAccount['client_email'],
+            'sub'   => $this->serviceAccount['client_email'],
             'scope' => 'https://www.googleapis.com/auth/firebase.messaging',
             'aud'   => 'https://oauth2.googleapis.com/token',
             'exp'   => $now + 3600,
-            'iat'   => $now - 300 
+            'iat'   => $now - 60 
         ];
 
-        // Header MUST be compact
         $header = ['alg' => 'RS256', 'typ' => 'JWT'];
         
-        // Use flags to ensure NO escaping that breaks signature
-        $headerJSON = json_encode($header, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-        $payloadJSON = json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        $headerJSON = json_encode($header);
+        $payloadJSON = json_encode($payload);
         
         $headerEncoded = $this->base64UrlEncode($headerJSON);
         $payloadEncoded = $this->base64UrlEncode($payloadJSON);
@@ -44,7 +42,8 @@ class FCMHelper {
         $signatureInput = $headerEncoded . "." . $payloadEncoded;
         
         $privateKey = $this->serviceAccount['private_key'];
-        $privateKey = str_replace(["\\n", '\n'], "\n", $privateKey);
+        // Robust key cleaning
+        $privateKey = str_replace("\\n", "\n", $privateKey);
         
         $signature = '';
         if (!openssl_sign($signatureInput, $signature, $privateKey, OPENSSL_ALGO_SHA256)) {
