@@ -104,6 +104,7 @@ if (isset($_POST['send_notif'])) {
         // 4. Send via FCM
         $success_count = 0;
         $fail_count = 0;
+        $last_error = ''; // Initialize last error
         try {
             if (!file_exists($service_account_path)) {
                 throw new Exception("Service Account JSON file not found! Please place 'firebase-service-account.json' in the superadmin directory.");
@@ -122,7 +123,11 @@ if (isset($_POST['send_notif'])) {
                     $success_count++;
                 } else {
                     $fail_count++;
-                    $err = $sender['response']['error']['message'] ?? '';
+                    $err = $sender['response']['error']['message'] ?? json_encode($sender['response']);
+                    if (empty($last_error)) { // Capture the first error message
+                        $last_error = $err;
+                    }
+                    // If token is invalid (NotRegistered), delete it from DB to keep it clean
                     if(strpos($err, 'NOT_FOUND') !== false || strpos($err, 'UNREGISTERED') !== false) {
                         $pdo->prepare("DELETE FROM subscriber_devices WHERE fcm_token = ?")->execute([$token]);
                     }
@@ -139,6 +144,7 @@ if (isset($_POST['send_notif'])) {
 
             $umessage = '<div class="alert alert-success alert-dismissible fade show" role="alert">
                 <strong><i class="mdi mdi-check-circle me-1"></i> Success!</strong> Notification sent to ' . $success_count . ' device(s). (Failed: ' . $fail_count . ')
+                ' . ($success_count == 0 && $fail_count > 0 ? '<br><small class="text-danger">Last Error: ' . htmlspecialchars($last_error) . '</small>' : '') . '
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>';
 
