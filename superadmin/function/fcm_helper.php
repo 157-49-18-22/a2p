@@ -84,6 +84,20 @@ class FCMHelper {
             $siteUrl = defined('SITE_URL') ? SITE_URL : 'https://pink-sheep-796549.hostingersite.com/';
             $logoUrl  = $siteUrl . 'assets/images/favicons/android-chrome-192x192.png';
 
+            $notification = [
+                'title' => (string)$title,
+                'body'  => (string)$body,
+                'icon'  => $logoUrl,
+                'badge' => $logoUrl,
+                'requireInteraction' => true,
+                'tag'   => 'a2p-notif'
+            ];
+
+            // Only add image if it exists and is not empty
+            if (!empty($image)) {
+                $notification['image'] = (string)$image;
+            }
+
             $message = [
                 'message' => [
                     'token' => $token,
@@ -94,15 +108,7 @@ class FCMHelper {
                         'image' => (string)$image
                     ],
                     'webpush' => [
-                        'notification' => [
-                            'title' => (string)$title,
-                            'body'  => (string)$body,
-                            'icon'  => $logoUrl,
-                            'badge' => $logoUrl,
-                            'image' => (string)$image,
-                            'requireInteraction' => true,
-                            'tag'   => 'a2p-notif'
-                        ],
+                        'notification' => $notification,
                         'fcm_options' => [
                             'link' => (string)$link
                         ]
