@@ -50,10 +50,28 @@ if (isset($_POST['send_notif'])) {
     $protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? "https" : "http";
     $host = $_SERVER['HTTP_HOST'];
     $site_base = "$protocol://$host/superadmin";
+    $app_base = "$protocol://$host";
     
     // Adjust for subdirectories like /cms/
     if (strpos($_SERVER['REQUEST_URI'], '/cms/') !== false) {
         $site_base = "$protocol://$host/cms/superadmin";
+        $app_base = "$protocol://$host/cms";
+    }
+
+    // Handle Image Upload
+    if (isset($_FILES['notif_img']) && $_FILES['notif_img']['error'] == 0) {
+        $target_dir = "../upload/notifications/";
+        if (!file_exists($target_dir)) {
+            mkdir($target_dir, 0777, true);
+        }
+        
+        $file_ext = pathinfo($_FILES["notif_img"]["name"], PATHINFO_EXTENSION);
+        $file_name = "notif_" . time() . "_" . rand(1000, 9999) . "." . $file_ext;
+        $target_file = $target_dir . $file_name;
+        
+        if (move_uploaded_file($_FILES["notif_img"]["tmp_name"], $target_file)) {
+            $image_url = $app_base . "/upload/notifications/" . $file_name;
+        }
     }
 
     // 2. Save to Database first to get ID
@@ -238,7 +256,7 @@ require('include/header.php');
                 <i class="mdi mdi-bell-plus-outline me-2"></i> Create New Push Notification
             </div>
             <div class="card-body">
-                <form method="POST">
+                <form method="POST" enctype="multipart/form-data">
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Notification Title <span class="text-danger">*</span></label>
@@ -249,7 +267,11 @@ require('include/header.php');
                             <input type="url" name="link" class="form-control" placeholder="https://a2prealtech.com/product.php">
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Notification Image URL <small class="text-muted">(optional - jpg/png)</small></label>
+                            <label class="form-label">Upload Image <small class="text-muted">(Device se upload karein)</small></label>
+                            <input type="file" name="notif_img" class="form-control" accept="image/*">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">OR Image URL <small class="text-muted">(Agar link hai to)</small></label>
                             <input type="url" name="image_url" class="form-control" placeholder="https://example.com/image.jpg">
                         </div>
                         <div class="col-md-6 mb-3">
