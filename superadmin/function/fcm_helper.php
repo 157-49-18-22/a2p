@@ -99,6 +99,7 @@ class FCMHelper {
                             'body'  => (string)$body,
                             'icon'  => $logoUrl,
                             'badge' => $logoUrl,
+                            'image' => (string)$image,
                             'requireInteraction' => true,
                             'tag'   => 'a2p-notif'
                         ],
