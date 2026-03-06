@@ -219,33 +219,38 @@ function client_form($pid = '0', $name = '', $photo = '', $des = '', $des1 = '',
                             </div>
                         </div>
                         <div class="col-lg-12 mt-4">
-                            <div class="card p-3 border" style="background: #fdf0ff;">
-                                <div class="form-check form-switch mb-3">
-                                    <input class="form-check-input" type="checkbox" name="send_notif" id="sendNotifCareer" value="1">
-                                    <label class="form-check-label fw-bold text-primary" for="sendNotifCareer">
-                                        <i class="mdi mdi-bell-ring-outline me-1"></i> Send Push Notification to all users
-                                    </label>
-                                    <div class="form-text">If checked, candidates will receive a notification about this job opening.</div>
+                            <div class="card p-4 border shadow-none" style="background: #fdf5ff; border-radius: 12px; border: 1px dashed #666cff !important;">
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <div class="d-flex align-items-center">
+                                        <i class="mdi mdi-bell-ring-outline text-primary fs-3 me-2"></i>
+                                        <div>
+                                            <h6 class="mb-0 text-primary">Push Notification Alert</h6>
+                                            <p class="mb-0 text-muted small">Notify all job seekers about this opening</p>
+                                        </div>
+                                    </div>
+                                    <div class="form-check form-switch mb-0">
+                                        <input class="form-check-input ms-0" type="checkbox" name="send_notif" id="sendNotifCareer" value="1" style="cursor: pointer; width: 3em; height: 1.5em; margin-top: 0;">
+                                    </div>
                                 </div>
 
                                 <!-- Extra Notification Fields -->
-                                <div id="notifFields" style="display:none; border-top: 1px dashed #666cff44; padding-top: 15px;">
+                                <div id="notifFields" style="display:none; border-top: 1px dashed #666cff44; padding-top: 20px; margin-top: 15px;">
                                     <div class="row g-3">
                                         <div class="col-md-6">
                                             <div class="form-floating form-floating-outline">
-                                                <input type="text" class="form-control" name="notif_title" id="notif_title" placeholder="Notification Title">
+                                                <input type="text" class="form-control border-primary-subtle" name="notif_title" id="notif_title" placeholder="Notification Title">
                                                 <label>Notification Title</label>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-floating form-floating-outline">
-                                                <input type="text" class="form-control" name="notif_link" id="notif_link" placeholder="Custom Link (Optional)">
+                                                <input type="text" class="form-control border-primary-subtle" name="notif_link" id="notif_link" placeholder="Custom Link (Optional)">
                                                 <label>Custom Link (Optional)</label>
                                             </div>
                                         </div>
                                         <div class="col-12">
                                             <div class="form-floating form-floating-outline">
-                                                <textarea class="form-control" name="notif_msg" id="notif_msg" placeholder="Message Body" style="height: 80px"></textarea>
+                                                <textarea class="form-control border-primary-subtle" name="notif_msg" id="notif_msg" placeholder="Message Body" style="height: 80px"></textarea>
                                                 <label>Notification Message / Body</label>
                                             </div>
                                         </div>
