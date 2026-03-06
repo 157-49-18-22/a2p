@@ -152,77 +152,103 @@
         box-shadow: 0 5px 15px rgba(0,0,0,0.2) !important;
         opacity: 0.9 !important;
     }
+</style>
 
-    /* Global Location Permission Modal */
-    #location-modal {
-        position: fixed;
-        top: 0; left: 0;
+<!-- Location Permission Modal -->
+<div id="location-modal">
+    <div class="loc-modal-card">
+        <div class="loc-icon-pulse">
+            <i class="fas fa-map-marker-alt"></i>
+        </div>
+        <h3>Location Permission</h3>
+        <p>To provide you with the best real estate service in your city, please <strong>Allow Location Permission</strong> in the next step.</p>
+        <button id="give-loc-permission" class="loc-btn-primary">Allow Permission & Continue</button>
+    </div>
+</div>
+
+<!-- PWA Install Modal (Global) - Appears on Startup -->
+<div id="pwa-install-modal">
+    <div class="pwa-modal-card">
+        <div class="pwa-icon-box">
+            <img src="<?php echo SITE_URL; ?>assets/images/favicons/android-chrome-192x192.png" alt="App Logo">
+        </div>
+        <h3>Install Our App</h3>
+        <p>Stay updated with the latest property listings and real-time alerts. Install the A2P Realtech app on your home screen today!</p>
+        
+        <button id="pwa-main-btn" onclick="handlePwaInstallClick()" class="pwa-btn-install">
+            <i class="fas fa-download"></i> <span>INSTALL NOW</span>
+        </button>
+        
+        <a href="javascript:void(0)" onclick="closePwaModal()" class="pwa-close-link">Maybe Later</a>
+    </div>
+</div>
+
+<style>
+    /* Global Modals Base Styles */
+    #location-modal, #pwa-install-modal {
+        position: fixed; top: 0; left: 0;
         width: 100%; height: 100%;
         background: rgba(0,0,0,0.85);
-        display: none;
-        align-items: center;
-        justify-content: center;
-        z-index: 10000;
-        backdrop-filter: blur(8px);
+        display: none; align-items: center; justify-content: center;
+        z-index: 2000001; backdrop-filter: blur(10px);
         font-family: 'Poppins', sans-serif;
     }
-    .loc-modal-card {
-        background: #fff;
-        padding: 40px;
-        border-radius: 20px;
-        text-align: center;
-        max-width: 450px;
-        width: 90%;
-        box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-        animation: modalFadeIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+    /* Shared Modal Cards Style */
+    .loc-modal-card, .pwa-modal-card {
+        background: #fff; padding: 40px 30px;
+        border-radius: 24px; text-align: center;
+        max-width: 420px; width: 90%;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+        animation: pwaModalPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
-    @keyframes modalFadeIn {
-        from { opacity: 0; transform: scale(0.8) translateY(20px); }
+
+    @keyframes pwaModalPop {
+        from { opacity: 0; transform: scale(0.8) translateY(30px); }
         to { opacity: 1; transform: scale(1) translateY(0); }
     }
-    .loc-icon-pulse {
-        width: 80px; height: 80px;
-        background: #fdf2f2;
-        color: #c00415;
-        border-radius: 50%;
-        display: inline-flex;
-        align-items: center; justify-content: center;
-        font-size: 35px;
-        margin-bottom: 25px;
-        position: relative;
+
+    /* Icon Pulse Styles */
+    .loc-icon-pulse, .pwa-icon-box {
+        width: 90px; height: 90px;
+        background: #fdf2f2; border-radius: 22%;
+        display: inline-flex; align-items: center; justify-content: center;
+        margin-bottom: 25px; position: relative;
     }
-    .loc-icon-pulse::after {
-        content: '';
-        position: absolute;
-        width: 100%; height: 100%;
-        border: 2px solid #c00415;
-        border-radius: 50%;
-        animation: pulseLoc 2s linear infinite;
+    .loc-icon-pulse { color: #c00415; font-size: 35px; border-radius: 50%; }
+    .pwa-icon-box img { width: 60px; height: 60px; border-radius: 12px; }
+
+    .loc-icon-pulse::after, .pwa-icon-box::after {
+        content: ''; position: absolute;
+        top: -5px; left: -5px; right: -5px; bottom: -5px;
+        border: 2px solid #c00415; border-radius: 25%;
+        animation: pwaPulse 2s infinite;
     }
-    @keyframes pulseLoc {
-        0% { transform: scale(1); opacity: 0.8; }
-        100% { transform: scale(1.6); opacity: 0; }
+    .loc-icon-pulse::after { border-radius: 50%; }
+
+    @keyframes pwaPulse {
+        0% { transform: scale(1); opacity: 1; }
+        100% { transform: scale(1.3); opacity: 0; }
     }
-    .loc-modal-card h3 { color: #222; font-weight: 800; margin-bottom: 15px; font-size: 24px; }
-    .loc-modal-card p { color: #666; font-size: 15px; margin-bottom: 30px; line-height: 1.6; }
-    .loc-btn-primary {
-        background: #c00415;
-        color: #fff;
-        border: none;
-        padding: 16px 35px;
-        border-radius: 50px;
-        font-weight: 700;
-        cursor: pointer;
-        width: 100%;
-        font-size: 16px;
-        transition: all 0.3s;
-        box-shadow: 0 5px 20px rgba(192,4,21,0.3);
+
+    .loc-modal-card h3, .pwa-modal-card h3 { color: #222; font-weight: 800; font-size: 24px; margin-bottom: 12px; }
+    .loc-modal-card p, .pwa-modal-card p { color: #666; font-size: 15px; line-height: 1.6; margin-bottom: 30px; }
+
+    .loc-btn-primary, .pwa-btn-install {
+        background: #c00415; color: #fff; border: none;
+        padding: 16px 30px; border-radius: 50px;
+        font-weight: 700; cursor: pointer; width: 100%;
+        font-size: 16px; transition: all 0.3s;
+        box-shadow: 0 8px 20px rgba(192,4,21,0.3);
     }
-    .loc-btn-primary:hover {
-        background: #000;
-        transform: translateY(-3px);
-        box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    .loc-btn-primary:hover, .pwa-btn-install:hover { background: #000; transform: translateY(-3px); }
+
+    .pwa-close-link {
+        display: block; margin-top: 20px; color: #999;
+        text-decoration: none; font-size: 13px; font-weight: 600;
+        transition: color 0.3s;
     }
+    .pwa-close-link:hover { color: #c00415; }
 </style>
 
 <footer class="site-footer site-footer-two">

@@ -194,11 +194,52 @@
             // Only auto-trigger if NOT iOS or if already on home screen
             if (!isIOS || isStandalone) {
                 setTimeout(triggerFCMRequest, 3000); 
-            } else if (isIOS && isSafari && !isStandalone) {
-                // Show hint to iOS users that they need to install first
-                setTimeout(showIOSPrompt, 5000);
             }
         }
+
+        // Global PWA Modal Logic
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            // Only show modal if NOT in standalone mode
+            if (!isStandalone) {
+                setTimeout(showPwaModal, 2000); 
+            }
+        });
+
+        // For iOS, show modal manually as there is no beforeinstallprompt
+        if (isIOS && !isStandalone) {
+            setTimeout(showPwaModal, 3000);
+        }
+
+        window.showPwaModal = function() {
+            if (sessionStorage.getItem('pwa_modal_dismissed')) return;
+            const modal = document.getElementById('pwa-install-modal');
+            if (modal) modal.style.display = 'flex';
+        };
+
+        window.closePwaModal = function() {
+            const modal = document.getElementById('pwa-install-modal');
+            if (modal) modal.style.display = 'none';
+            sessionStorage.setItem('pwa_modal_dismissed', 'true');
+        };
+
+        window.handlePwaInstallClick = async function() {
+            const modal = document.getElementById('pwa-install-modal');
+            if (modal) modal.style.display = 'none';
+
+            if (isIOS) {
+                showIOSPrompt();
+            } else if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                deferredPrompt = null;
+            } else {
+                // Fallback for browsers that don't support beforeinstallprompt but are not iOS
+                alert("Please use the 'Install App' option in your browser menu to continue.");
+            }
+        };
     </script>
     
     <!-- iOS PWA Meta Tags -->
