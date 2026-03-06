@@ -405,63 +405,7 @@ function client_form($pid = '0', $name = '', $photo = '', $des = '', $des1 = '',
                             <img src="../upload/<?php echo $photo; ?>" style="height:50px;width:50px;border-radius:8px;object-fit:cover;" title="Current main photo">
                         </div>
                         <?php endif; ?>
-                        <!-- Add More Photos Button -->
-                        <div>
-                            <button type="button" class="btn btn-outline-primary waves-effect" onclick="addMorePhoto()">
-                                <i class="fa-solid fa-plus"></i> Add More Photos
-                            </button>
-                        </div>
-                    </div>
 
-                    <!-- Extra Photos Container -->
-                    <div id="extra-photos-container" class="mt-3">
-                        <?php
-                        // If editing, load existing extra images
-                        if ($pid != '0') {
-                            $extra_imgs = sqlfetch("SELECT * FROM offer_images WHERE offer_id='$pid' ORDER BY fld_order ASC");
-                            foreach ($extra_imgs as $idx => $ei) {
-                                ?>
-                                <div class="extra-photo-item card p-3 mb-2 border" style="background:#f8f9ff;">
-                                    <div class="d-flex justify-content-between align-items-center mb-2">
-                                        <strong class="text-primary">📷 Photo <?php echo $idx + 1; ?></strong>
-                                        <button type="button" class="btn btn-sm btn-danger" onclick="removeExtraPhoto(this)">
-                                            <i class="fa-solid fa-trash"></i> Remove
-                                        </button>
-                                    </div>
-                                    <div class="row g-2">
-                                        <div class="col-md-4">
-                                            <div class="text-center mb-2">
-                                                <img src="../upload/<?php echo $ei['photo']; ?>" style="height:80px;width:80px;object-fit:cover;border-radius:8px;">
-                                            </div>
-                                            <input type="file" class="form-control form-control-sm" name="extra_photos[]" accept="image/*">
-                                            <input type="hidden" name="existing_extra_photo[]" value="<?php echo $ei['photo']; ?>">
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-floating form-floating-outline mb-2">
-                                                <input type="text" class="form-control form-control-sm" name="extra_title[]" 
-                                                       placeholder="Title" value="<?php echo htmlspecialchars($ei['title']); ?>">
-                                                <label>Title</label>
-                                            </div>
-                                            <div class="form-floating form-floating-outline">
-                                                <textarea class="form-control form-control-sm" name="extra_caption[]" 
-                                                          placeholder="Caption" rows="2"><?php echo htmlspecialchars($ei['caption']); ?></textarea>
-                                                <label>Caption</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-floating form-floating-outline">
-                                                <input type="number" class="form-control form-control-sm" name="extra_order[]" 
-                                                       placeholder="Order" value="<?php echo $ei['fld_order']; ?>">
-                                                <label>Sort Order</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <?php
-                            }
-                        }
-                        ?>
-                    </div>
                 </div>
 
                 <div class="col-lg-4  mt-3">
@@ -677,77 +621,7 @@ function client_form($pid = '0', $name = '', $photo = '', $des = '', $des1 = '',
         </div>
     </form>
 
-    <!-- Extra Photo Template (hidden, used by JS) -->
-    <div id="extra-photo-template" style="display:none;">
-        <div class="extra-photo-item card p-3 mb-2 border" style="background:#f8f9ff;">
-            <div class="d-flex justify-content-between align-items-center mb-2">
-                <strong class="text-primary">📷 New Photo</strong>
-                <button type="button" class="btn btn-sm btn-danger" onclick="removeExtraPhoto(this)">
-                    <i class="fa-solid fa-trash"></i> Remove
-                </button>
-            </div>
-            <div class="row g-2">
-                <div class="col-md-4">
-                    <div class="extra-preview-wrap text-center mb-2" style="display:none;">
-                        <img class="extra-preview" style="height:80px;width:80px;object-fit:cover;border-radius:8px;">
-                    </div>
-                    <input type="file" class="form-control form-control-sm" name="extra_photos[]" accept="image/*" onchange="previewExtraPhoto(this)">
-                    <input type="hidden" name="existing_extra_photo[]" value="">
-                </div>
-                <div class="col-md-4">
-                    <div class="form-floating form-floating-outline mb-2">
-                        <input type="text" class="form-control form-control-sm" name="extra_title[]" placeholder="Title" value="">
-                        <label>Title</label>
-                    </div>
-                    <div class="form-floating form-floating-outline">
-                        <textarea class="form-control form-control-sm" name="extra_caption[]" placeholder="Caption" rows="2"></textarea>
-                        <label>Caption</label>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-floating form-floating-outline">
-                        <input type="number" class="form-control form-control-sm" name="extra_order[]" placeholder="Order" value="0">
-                        <label>Sort Order</label>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
-<script>
-function addMorePhoto() {
-    var template = document.getElementById('extra-photo-template').innerHTML;
-    var container = document.getElementById('extra-photos-container');
-    var div = document.createElement('div');
-    div.innerHTML = template;
-    // Update photo number label
-    var count = container.querySelectorAll('.extra-photo-item').length + 1;
-    div.querySelector('strong').textContent = '📷 Photo ' + count;
-    container.appendChild(div.firstElementChild);
-}
-
-function removeExtraPhoto(btn) {
-    var item = btn.closest('.extra-photo-item');
-    item.remove();
-    // Re-number
-    var items = document.querySelectorAll('#extra-photos-container .extra-photo-item strong');
-    items.forEach(function(el, i) {
-        el.textContent = '📷 Photo ' + (i + 1);
-    });
-}
-
-function previewExtraPhoto(input) {
-    var wrap = input.previousElementSibling;
-    if (input.files && input.files[0]) {
-        var reader = new FileReader();
-        reader.onload = function(e) {
-            wrap.style.display = 'block';
-            wrap.querySelector('img').src = e.target.result;
-        };
-        reader.readAsDataURL(input.files[0]);
-    }
-}
-</script>
 <?php
 }
 ?>

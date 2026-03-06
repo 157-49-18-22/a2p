@@ -170,6 +170,7 @@
         max-width: 420px; width: 90%;
         box-shadow: 0 20px 60px rgba(0,0,0,0.4);
         animation: modalPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        position: relative;
     }
 
     @keyframes modalPop {
@@ -1342,7 +1343,7 @@ function handleKeyPress(e) {
     <script>
     // ===== iOS NOTIFICATION FALLBACK LOGIC =====
 
-    function showNotifPermissionModal() {
+    window.showNotifPermissionModal = function() {
         const modal = document.getElementById('notif-permission-modal');
         if (modal && !localStorage.getItem('a2p_notif_dismissed')) {
             setTimeout(() => {
@@ -1351,13 +1352,15 @@ function handleKeyPress(e) {
         }
     }
 
-    function dismissNotifBanner() {
+    window.dismissNotifBanner = function() {
+        console.log("Dismissing Notif Banner");
         const modal = document.getElementById('notif-permission-modal');
         if (modal) modal.style.display = 'none';
         localStorage.setItem('a2p_notif_dismissed', 'true');
     }
 
-    function acceptNotifBanner() {
+    window.acceptNotifBanner = function() {
+        console.log("Accepting Notif Banner");
         const modal = document.getElementById('notif-permission-modal');
         if (modal) modal.style.display = 'none';
 
@@ -1376,6 +1379,10 @@ function handleKeyPress(e) {
                 Notification.requestPermission().then(permission => {
                     if (permission === 'granted') {
                         localStorage.setItem('a2p_notif_granted', 'true');
+                        // Call native Firebase logic defined in header
+                        if (typeof window.triggerFCMRequest === 'function') {
+                            window.triggerFCMRequest();
+                        }
                         alert('Thank you! You will now receive notifications.');
                     }
                 });
@@ -1388,12 +1395,13 @@ function handleKeyPress(e) {
         localStorage.setItem('a2p_notif_dismissed', 'true');
     }
 
-    function closeEmailSubModal() {
+    window.closeEmailSubModal = function() {
+        console.log("Closing Email Modal");
         const modal = document.getElementById('email-sub-modal');
         if (modal) modal.style.display = 'none';
     }
 
-    async function handleEmailSub(event) {
+    window.handleEmailSub = async function(event) {
         event.preventDefault();
         const email = document.getElementById('sub-email-input').value;
         const submitBtn = document.getElementById('email-sub-submit-btn');
@@ -1401,10 +1409,10 @@ function handleKeyPress(e) {
         const errorMsg = document.getElementById('email-error-msg');
 
         if (!email || !email.includes('@')) {
-            errorMsg.style.display = 'block';
+            if(errorMsg) errorMsg.style.display = 'block';
             return;
         }
-        errorMsg.style.display = 'none';
+        if(errorMsg) errorMsg.style.display = 'none';
 
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Subscribing...';
@@ -1414,7 +1422,6 @@ function handleKeyPress(e) {
         formData.append('source', 'iOS Notification Fallback');
 
         try {
-            // reuse chatbot-submit or create a simple one
             await fetch('<?= SITE_URL; ?>chatbot-submit.php', {
                 method: 'POST',
                 body: formData
@@ -1423,6 +1430,9 @@ function handleKeyPress(e) {
             submitBtn.style.display = 'none';
             document.getElementById('sub-email-input').style.display = 'none';
             successMsg.style.display = 'block';
+            
+            // Mark as finished so it doesn't pop up again
+            localStorage.setItem('a2p_notif_dismissed', 'true');
             
             setTimeout(() => {
                 closeEmailSubModal();
