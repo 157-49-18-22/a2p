@@ -92,11 +92,45 @@
         });
 
 
+        // iOS PWA Detection
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
+        // Inject iOS Meta Tags dynamically if missing
+        if (isIOS) {
+            const metaTags = [
+                { name: 'apple-mobile-web-app-capable', content: 'yes' },
+                { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' },
+                { name: 'apple-mobile-web-app-title', content: 'A2P Realtech' }
+            ];
+            metaTags.forEach(tag => {
+                if (!document.querySelector(`meta[name="${tag.name}"]`)) {
+                    const m = document.createElement('meta');
+                    m.name = tag.name;
+                    m.content = tag.content;
+                    document.head.appendChild(m);
+                }
+            });
+            if (!document.querySelector('link[rel="apple-touch-icon"]')) {
+                const l = document.createElement('link');
+                l.rel = 'apple-touch-icon';
+                l.href = '<?php echo SITE_URL; ?>assets/images/favicons/apple-touch-icon.png';
+                document.head.appendChild(l);
+            }
+        }
+
         // Request Permission and Get Token
         window.triggerFCMRequest = async function() {
             if (Notification.permission === 'denied') {
                 alert("Notifications are blocked. Please enable them in browser settings.");
                 return;
+            }
+            
+            // On iOS, we MUST be in standalone mode to request notifications
+            if (isIOS && !isStandalone) {
+                showIOSPrompt();
+                return false;
             }
             
             try {
@@ -129,6 +163,22 @@
             return false;
         };
 
+        function showIOSPrompt() {
+            const prompt = document.getElementById('ios-pwa-prompt');
+            if (prompt) {
+                prompt.style.display = 'flex';
+                setTimeout(() => prompt.classList.add('show'), 100);
+            }
+        }
+        
+        window.closeIOSPrompt = function() {
+            const prompt = document.getElementById('ios-pwa-prompt');
+            if (prompt) {
+                prompt.classList.remove('show');
+                setTimeout(() => prompt.style.display = 'none', 500);
+            }
+        };
+
         // Aggressive Update: Force V2
         if (Notification.permission === 'granted') {
             (async () => {
@@ -141,9 +191,23 @@
                 if(!hasV2) triggerFCMRequest();
             })();
         } else if (Notification.permission !== 'denied') {
-            setTimeout(triggerFCMRequest, 3000); 
+            // Only auto-trigger if NOT iOS or if already on home screen
+            if (!isIOS || isStandalone) {
+                setTimeout(triggerFCMRequest, 3000); 
+            } else if (isIOS && isSafari && !isStandalone) {
+                // Show hint to iOS users that they need to install first
+                setTimeout(showIOSPrompt, 5000);
+            }
         }
     </script>
+    
+    <!-- iOS PWA Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="A2P Realtech">
+    <link rel="apple-touch-icon" href="<?php echo SITE_URL; ?>assets/images/favicons/apple-touch-icon.png">
+    <!-- Splash screens (Optional but premium) -->
+    <link rel="apple-touch-startup-image" href="<?php echo SITE_URL; ?>assets/images/favicons/android-chrome-512x512.png">
 <body class="custom-cursor">
 
 <style>
@@ -832,6 +896,35 @@
     animation: slideUp 0.3s ease-out;
 }
 
+/* iOS PWA Prompt Styles */
+#ios-pwa-prompt {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #fff;
+    z-index: 2000000;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 20px 40px;
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0 -10px 40px rgba(0,0,0,0.15);
+    transform: translateY(100%);
+    transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+    text-align: center;
+}
+#ios-pwa-prompt.show { transform: translateY(0); }
+.ios-icon { width: 60px; height: 60px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+.ios-title { font-size: 20px; font-weight: 800; color: #333; margin-bottom: 10px; }
+.ios-text { font-size: 15px; color: #666; margin-bottom: 25px; line-height: 1.5; }
+.ios-steps { background: #f8f8f8; border-radius: 12px; padding: 15px; width: 100%; margin-bottom: 20px; text-align: left; }
+.ios-step { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; font-size: 14px; font-weight: 600; color: #444; }
+.ios-step:last-child { margin-bottom: 0; }
+.ios-step i { width: 24px; height: 24px; background: #fff; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+.ios-close { position: absolute; top: 15px; right: 15px; background: #eee; border: none; width: 30px; height: 30px; border-radius: 50%; font-size: 12px; color: #888; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+.ios-share-icon { color: #007aff; }
+
     /* Global Image Fix for Uploaded Content */
     .project-card-v2__img, 
     .blog-card-v2__img, 
@@ -1400,8 +1493,33 @@ $notif_count = count($notif_data);
         } else { ?>
             <div class="notif-item"><p>No new notifications</p></div>
         <?php } ?>
+        
+        <!-- Subscription guidance -->
+        <div id="push-guide" style="padding: 15px; background: #fff5f5; border-top: 2px solid #c00415; margin-top: 10px; display: none;">
+             <p style="font-size: 13px; color: #333; margin-bottom: 10px; font-weight: 600;">Get alerts for new properties!</p>
+             <button id="guide-btn" onclick="triggerFCMRequest()" style="width: 100%; padding: 10px; background: #c00415; color: #fff; border: none; border-radius: 6px; font-weight: 700; font-size: 12px; cursor: pointer;">ENABLE NOTIFICATIONS</button>
+        </div>
     </div>
 </div>
+
+<script>
+    // Logic to show/hide the guide in UI
+    document.addEventListener('DOMContentLoaded', () => {
+        const guide = document.getElementById('push-guide');
+        const guideBtn = document.getElementById('guide-btn');
+        if (Notification.permission === 'default' && guide) {
+            guide.style.display = 'block';
+            
+            // Check for iOS
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+            
+            if (isIOS && !isStandalone) {
+                guideBtn.innerHTML = '<i class="fa fa-plus-circle"></i> INSTALL APP FOR NOTIFICATIONS';
+            }
+        }
+    });
+</script>
 
 <script>
 function toggleNotifPanel() {

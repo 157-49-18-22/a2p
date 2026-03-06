@@ -1255,6 +1255,24 @@ function handleKeyPress(e) {
 <script src="<?= SITE_URL; ?>assets/vendors/toolbar/js/jQuery.style.switcher.min.js"></script>
 <script src="<?= SITE_URL; ?>assets/vendors/toolbar/js/toolbar.js"></script>
 
+    <!-- iOS PWA Prompt UI -->
+    <div id="ios-pwa-prompt">
+        <button class="ios-close" onclick="closeIOSPrompt()"><i class="fa fa-times" style="font-size: 14px;"></i></button>
+        <img src="<?php echo SITE_URL; ?>assets/images/favicons/android-chrome-192x192.png" class="ios-icon" alt="Logo">
+        <div class="ios-title">Install A2P Realtech App</div>
+        <p class="ios-text">Install our app on your home screen to receive real-time push notifications and latest updates.</p>
+        <div class="ios-steps">
+            <div class="ios-step">
+                <i>1</i> <span>Tap on the <strong class="ios-share-icon"><i class="fa-regular fa-square-caret-up" style="transform: translateY(-2px);"></i> share</strong> button at the bottom of Safari.</span>
+            </div>
+            <div class="ios-step">
+                <i>2</i> <span>Select <strong>"Add to Home Screen"</strong> from the menu.</span>
+            </div>
+            <div class="ios-step">
+                <i>3</i> <span>Open the app from your home screen and <strong>Enable Notifications</strong>.</span>
+            </div>
+        </div>
+    </div>
 </body>
 
 
