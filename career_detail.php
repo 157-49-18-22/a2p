@@ -167,9 +167,23 @@ if (count($sql_ser)) {
                                                 <label for="message" class="form-label fw-bold">Short Introduction</label>
                                                 <textarea id="message" name="message" class="form-control" placeholder="Tell us why you are a good fit..." style="border-radius: 8px; padding: 12px; border: 1px solid #ddd; height: 150px;"></textarea>
                                             </div>
+
+                                            <!-- OTP Section -->
+                                            <div id="job-otp-section" style="display: none; margin-bottom: 20px; border: 1px solid #eee; padding: 15px; border-radius: 8px; background: #fcfcfc;">
+                                                <label class="form-label fw-bold" style="color: #ed1c24;">Enter 6-Digit OTP *</label>
+                                                <div class="d-flex gap-2">
+                                                    <input type="text" id="job_otp_code" class="form-control" placeholder="Enter code" maxlength="6" style="flex: 1; border-radius: 8px; padding: 10px;">
+                                                    <button type="button" id="job-verify-otp-btn" class="btn btn-success" style="border-radius: 8px; padding: 0 20px;">Verify</button>
+                                                </div>
+                                                <p id="job-otp-status-msg" class="mt-2 small fw-bold"></p>
+                                            </div>
+
                                             <div class="form-result mt-3"></div>
                                             <div class="comment-form__btn-box mt-4">
-                                                <button type="submit" class="thm-btn comment-form__btn w-100" style="background: #ed1c24; color: white; border: none; padding: 15px; border-radius: 8px; font-weight: 600; text-transform: uppercase; transition: all 0.3s ease;">
+                                                <button type="button" id="job-send-otp-btn" class="thm-btn comment-form__btn w-100" style="background: #000; color: white; border: none; padding: 15px; border-radius: 8px; font-weight: 600; text-transform: uppercase; transition: all 0.3s ease;">
+                                                    Send Verification Code
+                                                </button>
+                                                <button type="submit" id="job-main-submit-btn" class="thm-btn comment-form__btn w-100" style="display: none; background: #ed1c24; color: white; border: none; padding: 15px; border-radius: 8px; font-weight: 600; text-transform: uppercase; transition: all 0.3s ease;">
                                                     <i class="fas fa-paper-plane me-2"></i> Send Application
                                                 </button>
                                             </div>
@@ -183,6 +197,13 @@ if (count($sql_ser)) {
                                 const form = document.querySelector('.apply-job-form');
                                 const resumeInput = document.getElementById('resume');
                                 const resumePreview = document.getElementById('resume-preview');
+                                const jobSendOtpBtn = document.getElementById('job-send-otp-btn');
+                                const jobVerifyOtpBtn = document.getElementById('job-verify-otp-btn');
+                                const jobMainSubmitBtn = document.getElementById('job-main-submit-btn');
+                                const jobOtpSection = document.getElementById('job-otp-section');
+                                const jobOtpStatusMsg = document.getElementById('job-otp-status-msg');
+
+                                let isJobOtpVerified = false;
 
                                 resumeInput.addEventListener('change', function() {
                                     if (this.files && this.files[0]) {
@@ -194,16 +215,114 @@ if (count($sql_ser)) {
                                     }
                                 });
 
+                                // 1. Send OTP
+                                jobSendOtpBtn.addEventListener('click', async () => {
+                                    const name = document.getElementById('name').value;
+                                    const email = document.getElementById('email').value;
+                                    const phone = document.getElementById('phone').value;
+
+                                    if (!name || !email || !phone) {
+                                        alert('Please fill Name, Email, and Phone first.');
+                                        return;
+                                    }
+
+                                    jobSendOtpBtn.disabled = true;
+                                    jobSendOtpBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending OTP...';
+
+                                    const formData = new FormData();
+                                    formData.append('email', email);
+                                    formData.append('name', name);
+
+                                    try {
+                                        const response = await fetch('<?= SITE_URL; ?>function/send_otp.php', {
+                                            method: 'POST',
+                                            body: formData
+                                        });
+                                        const data = await response.json();
+
+                                        if (data.status === 'success') {
+                                            jobOtpSection.style.display = 'block';
+                                            jobSendOtpBtn.innerHTML = 'Resend Code';
+                                            jobSendOtpBtn.style.background = '#666';
+                                            jobOtpStatusMsg.style.color = 'green';
+                                            jobOtpStatusMsg.innerText = data.message;
+                                            alert('OTP has been sent to ' + email);
+                                        } else {
+                                            alert(data.message);
+                                            jobSendOtpBtn.disabled = false;
+                                            jobSendOtpBtn.innerHTML = 'Send Verification Code';
+                                        }
+                                    } catch (err) {
+                                        console.error(err);
+                                        alert('Error sending OTP. Please try again.');
+                                        jobSendOtpBtn.disabled = false;
+                                        jobSendOtpBtn.innerHTML = 'Send Verification Code';
+                                    }
+                                });
+
+                                // 2. Verify OTP
+                                jobVerifyOtpBtn.addEventListener('click', async () => {
+                                    const otp = document.getElementById('job_otp_code').value;
+                                    const email = document.getElementById('email').value;
+
+                                    if (!otp) {
+                                        alert('Please enter the 6-digit OTP code.');
+                                        return;
+                                    }
+
+                                    jobVerifyOtpBtn.disabled = true;
+                                    jobVerifyOtpBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+                                    const formData = new FormData();
+                                    formData.append('otp', otp);
+                                    formData.append('email', email);
+
+                                    try {
+                                        const response = await fetch('<?= SITE_URL; ?>function/verify_otp.php', {
+                                            method: 'POST',
+                                            body: formData
+                                        });
+                                        const data = await response.json();
+
+                                        if (data.status === 'success') {
+                                            isJobOtpVerified = true;
+                                            jobOtpStatusMsg.style.color = 'green';
+                                            jobOtpStatusMsg.innerHTML = '<i class="fas fa-check-circle"></i> OTP Verified Successfully!';
+                                            jobVerifyOtpBtn.style.display = 'none';
+                                            document.getElementById('job_otp_code').disabled = true;
+                                            jobSendOtpBtn.style.display = 'none';
+                                            jobMainSubmitBtn.style.display = 'block';
+                                        } else {
+                                            jobOtpStatusMsg.style.color = 'red';
+                                            jobOtpStatusMsg.innerText = data.message;
+                                            jobVerifyOtpBtn.disabled = false;
+                                            jobVerifyOtpBtn.innerHTML = 'Verify';
+                                        }
+                                    } catch (err) {
+                                        console.error(err);
+                                        alert('Error verifying OTP.');
+                                        jobVerifyOtpBtn.disabled = false;
+                                        jobVerifyOtpBtn.innerHTML = 'Verify';
+                                    }
+                                });
+
+                                // 3. Final Submit
                                 form.addEventListener('submit', async function(e) {
                                     e.preventDefault();
-                                    const submitBtn = form.querySelector('button[type="submit"]');
+                                    
+                                    if(!isJobOtpVerified) {
+                                        alert('Please verify your email with OTP first.');
+                                        return;
+                                    }
+
+                                    const submitBtn = jobMainSubmitBtn;
                                     const resultDiv = form.querySelector('.form-result');
                                     
                                     const originalBtnText = submitBtn.innerHTML;
                                     submitBtn.disabled = true;
                                     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Detecting City...';
                                     
-                                    const locData = await getCityName(); // defined in include/footer.php
+                                    const locData = await getCityName(); 
                                     
                                     const formData = new FormData(this);
                                     formData.append('city', locData.city);
@@ -221,6 +340,12 @@ if (count($sql_ser)) {
                                             </div>`;
                                             form.reset();
                                             resumePreview.innerHTML = '';
+                                            isJobOtpVerified = false;
+                                            jobOtpSection.style.display = 'none';
+                                            jobMainSubmitBtn.style.display = 'none';
+                                            jobSendOtpBtn.style.display = 'block';
+                                            jobSendOtpBtn.disabled = false;
+                                            jobSendOtpBtn.innerHTML = 'Send Verification Code';
                                         } else {
                                             resultDiv.innerHTML = `<div class="alert alert-danger mt-3" style="border-radius: 8px; border-left: 5px solid #dc3545;">
                                                 <i class="fas fa-exclamation-triangle me-2"></i> ${data.message}

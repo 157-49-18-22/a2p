@@ -1017,27 +1017,42 @@ $currentPageUrl = urlencode("http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_UR
             <h3>Request Brochure</h3>
             <p>Please fill in your details to get more information.</p>
             
-            <form id="enquiryForm" method="post" action="<?= SITE_URL; ?>mail2.php" onsubmit="handleSubmit(event)">
+            <form id="enquiryForm" method="post" action="<?= SITE_URL; ?>mail2.php">
               <div class="form-group-custom">
                 <label>Your Name *</label>
-                <input type="text" class="form-control-custom" name="name" placeholder="Enter your full name" required>
+                <input type="text" id="brochure_name" class="form-control-custom" name="name" placeholder="Enter your full name" required>
               </div>
               <div class="form-group-custom">
                 <label>Your Phone *</label>
-                <input type="tel" class="form-control-custom" name="phone" placeholder="Enter 10-digit number" pattern="[0-9]{10}" required>
+                <input type="tel" id="brochure_phone" class="form-control-custom" name="phone" placeholder="Enter 10-digit number" pattern="[0-9]{10}" required>
               </div>
               <div class="form-group-custom">
                 <label>Your Email *</label>
-                <input type="email" class="form-control-custom" name="email" placeholder="Enter your email address" required>
+                <input type="email" id="brochure_email" class="form-control-custom" name="email" placeholder="Enter your email address" required>
               </div>
               <div class="form-group-custom">
                 <label>Message</label>
                 <textarea class="form-control-custom" name="message" rows="3" placeholder="Any specific requirements?"></textarea>
               </div>
+
+              <!-- OTP Section -->
+              <div id="brochure-otp-section" style="display: none; margin-bottom: 15px; border-top: 1px solid #ddd; padding-top: 15px;">
+                  <label style="color: #c00415; font-weight: 600; font-size: 13px; margin-bottom: 5px; display: block;">Enter 6-Digit OTP *</label>
+                  <div style="display: flex; gap: 10px;">
+                      <input type="text" id="brochure_otp_code" class="form-control-custom" placeholder="Enter code" maxlength="6" style="flex: 1;">
+                      <button type="button" id="brochure-verify-otp-btn" style="width: auto; background: #28a745; color: #fff; border: none; border-radius: 6px; padding: 5px 15px; font-size: 14px; font-weight: 600;">Verify</button>
+                  </div>
+                  <p id="brochure-otp-status-msg" style="font-size: 12px; margin-top: 5px; font-weight: 500;"></p>
+              </div>
+
               <input type="hidden" name="page" value="<?php echo $subproductss['name']; ?>">
               <input type="hidden" name="destination" value="Brochure Enquiry">
               <input type="hidden" name="brochure_file" value="<?php echo $subproductss['photo4']; ?>">
-              <button type="submit" class="btn-submit-custom">Submit Enquiry</button>
+              <input type="hidden" name="city" id="brochure_city">
+              <input type="hidden" name="lat_long" id="brochure_lat_long">
+
+              <button type="button" id="brochure-send-otp-btn" class="btn-submit-custom">Send Verification Code</button>
+              <button type="submit" id="brochure-main-submit-btn" class="btn-submit-custom" style="display: none;">Submit Enquiry</button>
             </form>
           </div>
         </div>
@@ -1062,11 +1077,124 @@ $currentPageUrl = urlencode("http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_UR
 </div>
 
 <script>
-  function handleSubmit(event) {
-    // Let the form submit normally to mail2.php
-    // The PHP script handles database insertion and redirection to thank-you.php
+  const enquiryForm = document.getElementById('enquiryForm');
+  const brochureSendOtpBtn = document.getElementById('brochure-send-otp-btn');
+  const brochureVerifyOtpBtn = document.getElementById('brochure-verify-otp-btn');
+  const brochureMainSubmitBtn = document.getElementById('brochure-main-submit-btn');
+  const brochureOtpSection = document.getElementById('brochure-otp-section');
+  const brochureOtpStatusMsg = document.getElementById('brochure-otp-status-msg');
+
+  let isBrochureOtpVerified = false;
+
+  // 1. Send OTP
+  brochureSendOtpBtn.addEventListener('click', async () => {
+    const name = document.getElementById('brochure_name').value;
+    const email = document.getElementById('brochure_email').value;
+    const phone = document.getElementById('brochure_phone').value;
+
+    if (!name || !email || !phone) {
+      alert('Please fill Name, Email, and Phone first.');
+      return;
+    }
+
+    brochureSendOtpBtn.disabled = true;
+    brochureSendOtpBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending OTP...';
+
+    const formData = new FormData();
+    formData.append('email', email);
+    formData.append('name', name);
+
+    try {
+      const response = await fetch('<?= SITE_URL; ?>function/send_otp.php', {
+        method: 'POST',
+        body: formData
+      });
+      const data = await response.json();
+
+      if (data.status === 'success') {
+        brochureOtpSection.style.display = 'block';
+        brochureSendOtpBtn.innerHTML = 'Resend OTP';
+        brochureSendOtpBtn.style.background = '#666'; // muted color
+        brochureOtpStatusMsg.style.color = 'green';
+        brochureOtpStatusMsg.innerText = data.message;
+        alert('OTP has been sent to ' + email);
+      } else {
+        alert(data.message);
+        brochureSendOtpBtn.disabled = false;
+        brochureSendOtpBtn.innerHTML = 'Send Verification Code';
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Error sending OTP. Please try again.');
+      brochureSendOtpBtn.disabled = false;
+      brochureSendOtpBtn.innerHTML = 'Send Verification Code';
+    }
+  });
+
+  // 2. Verify OTP
+  brochureVerifyOtpBtn.addEventListener('click', async () => {
+    const otp = document.getElementById('brochure_otp_code').value;
+    const email = document.getElementById('brochure_email').value;
+
+    if (!otp) {
+      alert('Please enter the 6-digit OTP code.');
+      return;
+    }
+
+    brochureVerifyOtpBtn.disabled = true;
+    brochureVerifyOtpBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+    const formData = new FormData();
+    formData.append('otp', otp);
+    formData.append('email', email);
+
+    try {
+      const response = await fetch('<?= SITE_URL; ?>function/verify_otp.php', {
+        method: 'POST',
+        body: formData
+      });
+      const data = await response.json();
+
+      if (data.status === 'success') {
+        isBrochureOtpVerified = true;
+        brochureOtpStatusMsg.style.color = 'green';
+        brochureOtpStatusMsg.innerHTML = '<i class="fas fa-check-circle"></i> OTP Verified Successfully!';
+        brochureVerifyOtpBtn.style.display = 'none';
+        document.getElementById('brochure_otp_code').disabled = true;
+        brochureSendOtpBtn.style.display = 'none';
+        brochureMainSubmitBtn.style.display = 'block';
+      } else {
+        brochureOtpStatusMsg.style.color = 'red';
+        brochureOtpStatusMsg.innerText = data.message;
+        brochureVerifyOtpBtn.disabled = false;
+        brochureVerifyOtpBtn.innerHTML = 'Verify';
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Error verifying OTP.');
+      brochureVerifyOtpBtn.disabled = false;
+      brochureVerifyOtpBtn.innerHTML = 'Verify';
+    }
+  });
+
+  // 3. Final Form Submission
+  enquiryForm.addEventListener('submit', async (e) => {
+    if (!isBrochureOtpVerified) {
+      e.preventDefault();
+      alert('Please verify your email with the OTP first.');
+      return;
+    }
+
+    brochureMainSubmitBtn.disabled = true;
+    brochureMainSubmitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+
+    const locData = await getCityName(); 
+    document.getElementById('brochure_city').value = locData.city || 'Not Shared';
+    document.getElementById('brochure_lat_long').value = locData.lat_long || '';
+
+    // Let the form submit normally after setting location
     return true; 
-  }
+  });
 
   // Define brochure availability for JS
   const isBrochureAvailable = <?php echo !empty($subproductss['photo4']) ? 'true' : 'false'; ?>;

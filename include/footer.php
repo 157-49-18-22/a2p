@@ -1141,20 +1141,60 @@ function processChatInput(text) {
         chatbotState.data.email = text;
         chatbotState.step = 4;
         
+        // Send OTP
+        sendChatbotOtp(chatbotState.data.email, chatbotState.data.name);
+
         setTimeout(() => {
-            addMessage("One last thing! Please <strong>Allow Location Permission</strong> to help us tailor the best properties for your area.", 'bot');
-            
-            // Show custom permission button in chatbot ui
-            const chatBody = document.getElementById('chat-messages');
-            const div = document.createElement('div');
-            div.className = 'bot-options';
-            div.style.marginTop = '10px';
-            div.id = 'location-permission-btn';
-            div.innerHTML = `<button onclick="handleLocationPermission()" class="permission-btn"><i class="fas fa-map-marker-alt"></i> Share My City & Finish</button>`;
-            chatBody.appendChild(div);
-            chatBody.scrollTop = chatBody.scrollHeight;
+            addMessage("To verify your email, I've sent a <strong>6-digit OTP</strong> to " + text + ". Please enter the code below to continue.", 'bot');
         }, 800);
+    } else if(chatbotState.step === 4) {
+        // Verify OTP
+        verifyChatbotOtp(text);
     }
+}
+
+async function sendChatbotOtp(email, name) {
+    const formData = new FormData();
+    formData.append('email', email);
+    formData.append('name', name);
+    try {
+        await fetch('<?= SITE_URL; ?>function/send_otp.php', { method: 'POST', body: formData });
+    } catch (e) { console.error("OTP Send Error:", e); }
+}
+
+async function verifyChatbotOtp(otp) {
+    const formData = new FormData();
+    formData.append('otp', otp);
+    formData.append('email', chatbotState.data.email);
+    
+    try {
+        const resp = await fetch('<?= SITE_URL; ?>function/verify_otp.php', { method: 'POST', body: formData });
+        const data = await resp.json();
+        
+        if(data.status === 'success') {
+            addMessage('<i class="fas fa-check-circle"></i> OTP Verified Successfully!', 'bot');
+            chatbotState.step = 5;
+            setTimeout(() => {
+                addMessage("Perfect! One last thing! Please <strong>Allow Location Permission</strong> to help us tailor the best properties for your area.", 'bot');
+                
+                // Show custom permission button in chatbot ui
+                const chatBody = document.getElementById('chat-messages');
+                const div = document.createElement('div');
+                div.className = 'bot-options';
+                div.style.marginTop = '10px';
+                div.id = 'location-permission-btn';
+                div.innerHTML = `<button onclick="handleLocationPermission()" class="permission-btn"><i class="fas fa-map-marker-alt"></i> Share My City & Finish</button>`;
+                chatBody.appendChild(div);
+                chatBody.scrollTop = chatBody.scrollHeight;
+            }, 800);
+        } else {
+            addMessage('<i class="fas fa-exclamation-triangle"></i> Invalid OTP. Please enter the correct 6-digit code sent to your email.', 'bot');
+        }
+    } catch (e) { 
+        console.error("OTP Verify Error:", e);
+        addMessage("Error verifying OTP. Please try again.", 'bot');
+    }
+}
 }
 
 async function handleLocationPermission() {
@@ -1166,8 +1206,8 @@ async function handleLocationPermission() {
     submitChatbotLead();
     
     setTimeout(() => {
-        addMessage(`Thank you! Detected City: <strong>${locData.city}</strong>. Coordinates: ${locData.lat_long}. Your details have been securely saved.`, 'bot');
-        chatbotState.step = 5;
+        addMessage(`Thank you! Detected City: <strong>${locData.city}</strong>. Your details have been securely saved.`, 'bot');
+        chatbotState.step = 6;
         document.querySelector('.chat-footer').style.display = 'none';
         const btnDiv = document.getElementById('location-permission-btn');
         if(btnDiv) btnDiv.remove();
