@@ -465,6 +465,11 @@ if ($current_page !== 'application_seating.php') {
                                         <div data-i18n="Subscriber Analytics">Subscriber Analytics</div>
                                     </a>
                                 </li>
+                                <li class="menu-item">
+                                    <a href="email_subscribers.php" class="menu-link">
+                                        <div data-i18n="Email Subscriptions">Email Subscriptions</div>
+                                    </a>
+                                </li>
 
 
 

@@ -42,7 +42,7 @@ if (!function_exists('sendGlobalPushNotification')) {
             $tracking_link = $superadmin_url . '/track_click.php?notif_id=' . $notif_db_id . '&redirect=' . urlencode($link);
         }
 
-        // 3. Send via FCM
+        // 3. Send via FCM (Android/Desktop)
         try {
             $fcm = new FCMHelper($service_account_path);
             
@@ -69,17 +69,66 @@ if (!function_exists('sendGlobalPushNotification')) {
                 }
             }
 
-            // Update stats in DB
+            // 4. Send via Email (Specifically for iOS subscribers)
+            try {
+                // Fetch all email subscribers
+                $email_subs = $pdo->query("SELECT DISTINCT email FROM email_subscriptions")->fetchAll(PDO::FETCH_COLUMN);
+                
+                if (!empty($email_subs)) {
+                    require_once __DIR__ . '/../../function/mailer.php'; // Load SMTP settings
+                    
+                    foreach ($email_subs as $email) {
+                        $mail = new PHPMailer\PHPMailer\PHPMailer(true);
+                        try {
+                            $mail->isSMTP();
+                            $mail->Host       = SMTP_HOST;
+                            $mail->SMTPAuth   = true;
+                            $mail->Username   = SMTP_USER;
+                            $mail->Password   = SMTP_PASS;
+                            $mail->SMTPSecure = PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS;
+                            $mail->Port       = SMTP_PORT;
+                            $mail->CharSet    = 'UTF-8';
+
+                            $mail->setFrom(SMTP_FROM, SMTP_FROM_NAME);
+                            $mail->addAddress($email);
+                            $mail->isHTML(true);
+                            $mail->Subject = "New Update: " . $title;
+                            
+                            $btn_html = $tracking_link ? '<div style="margin-top:20px;"><a href="'.$tracking_link.'" style="background:#c00415; color:#fff; padding:12px 25px; text-decoration:none; border-radius:5px; font-weight:bold;">View Update</a></div>' : '';
+                            $img_html = $image_url ? '<div style="margin-top:20px;"><img src="'.$image_url.'" style="max-width:100%; border-radius:10px;"></div>' : '';
+
+                            $mail->Body = "
+                            <div style='font-family: Arial, sans-serif; padding: 25px; border: 1px solid #eee; border-radius: 15px; color:#333; max-width:600px; margin:0 auto;'>
+                                <h2 style='color:#c00415; margin-bottom:15px;'>$title</h2>
+                                <p style='font-size:16px; line-height:1.6;'>$message</p>
+                                $img_html
+                                $btn_html
+                                <div style='margin-top:30px; padding-top:20px; border-top:1px solid #eee; font-size:12px; color:#999;'>
+                                    You are receiving this because you subscribed to notifications on A2P Realtech.
+                                </div>
+                            </div>";
+
+                            $mail->send();
+                        } catch (Exception $e) {
+                            error_log("Email Notification Error for $email: " . $e->getMessage());
+                        }
+                    }
+                }
+            } catch (Exception $e) {
+                error_log("Email Sending Loop Error: " . $e->getMessage());
+            }
+
+            // Update stats in DB (FCM only count for now in stats, or total if preferred)
             if ($notif_db_id) {
                 $pdo->prepare("UPDATE notifications SET fcm_message_id = :fcmid, recipients = :rcpt WHERE id = :id")
                     ->execute([
                         ':fcmid' => 'AUTO_' . date('Ymd_His'), 
-                        ':rcpt' => $success_count, 
+                        ':rcpt' => $success_count + count($email_subs), 
                         ':id' => $notif_db_id
                     ]);
             }
 
-            return $success_count;
+            return $success_count + count($email_subs);
         } catch (Exception $e) {
             error_log("Push Helper FCM Error: " . $e->getMessage());
             return false;

@@ -92,33 +92,9 @@
         });
 
 
-        // iOS PWA Detection
+        // Basic Browser Info
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
         const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-
-        // Inject iOS Meta Tags dynamically if missing
-        if (isIOS) {
-            const metaTags = [
-                { name: 'apple-mobile-web-app-capable', content: 'yes' },
-                { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' },
-                { name: 'apple-mobile-web-app-title', content: 'A2P Realtech' }
-            ];
-            metaTags.forEach(tag => {
-                if (!document.querySelector(`meta[name="${tag.name}"]`)) {
-                    const m = document.createElement('meta');
-                    m.name = tag.name;
-                    m.content = tag.content;
-                    document.head.appendChild(m);
-                }
-            });
-            if (!document.querySelector('link[rel="apple-touch-icon"]')) {
-                const l = document.createElement('link');
-                l.rel = 'apple-touch-icon';
-                l.href = '<?php echo SITE_URL; ?>assets/images/favicons/apple-touch-icon.png';
-                document.head.appendChild(l);
-            }
-        }
 
         // Request Permission and Get Token
         window.triggerFCMRequest = async function() {
@@ -127,11 +103,7 @@
                 return;
             }
             
-            // On iOS, we MUST be in standalone mode to request notifications
-            if (isIOS && !isStandalone) {
-                showIOSPrompt();
-                return false;
-            }
+            // Notification logic simple
             
             try {
                 const permission = await Notification.requestPermission();
@@ -163,21 +135,6 @@
             return false;
         };
 
-        function showIOSPrompt() {
-            const prompt = document.getElementById('ios-pwa-prompt');
-            if (prompt) {
-                prompt.style.display = 'flex';
-                setTimeout(() => prompt.classList.add('show'), 100);
-            }
-        }
-        
-        window.closeIOSPrompt = function() {
-            const prompt = document.getElementById('ios-pwa-prompt');
-            if (prompt) {
-                prompt.classList.remove('show');
-                setTimeout(() => prompt.style.display = 'none', 500);
-            }
-        };
 
         // Aggressive Update: Force V2
         if (Notification.permission === 'granted') {
@@ -191,16 +148,24 @@
                 if(!hasV2) triggerFCMRequest();
             })();
         } else if (Notification.permission !== 'denied') {
-            // Show stylish banner first instead of triggering directly
-            if (!isIOS || isStandalone) {
-                if (!sessionStorage.getItem('notif_banner_dismissed')) {
-                    setTimeout(showNotifBanner, 2500);
-                }
+            // Show stylish banner only if user is on iOS as requested
+            if (isIOS && !sessionStorage.getItem('notif_banner_dismissed')) {
+                setTimeout(showNotifBanner, 2500);
             }
         }
 
         window.showNotifBanner = function() {
             const banner = document.getElementById('notif-permission-banner');
+            const titleEl = document.getElementById('notif-banner-title');
+            const textEl = document.getElementById('notif-banner-text');
+            const btnEl = document.getElementById('notif-banner-btn-main');
+
+            if (isIOS) {
+                if (titleEl) titleEl.innerText = "Super Excited Notifications!";
+                if (textEl) textEl.innerText = "Subscribe to our notification for updates and offers.";
+                if (btnEl) btnEl.innerHTML = '<i class="fa fa-envelope"></i> Subscribe';
+            }
+
             if (banner) {
                 banner.style.display = 'flex';
                 setTimeout(() => banner.classList.add('show'), 50);
@@ -217,52 +182,79 @@
         };
 
         window.acceptNotifBanner = async function() {
-            dismissNotifBanner();
-            await triggerFCMRequest();
-        };
-
-        // Global PWA Install Logic
-        let deferredPrompt;
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            // Store for later use when user clicks install
-        });
-
-        window.showPwaModal = function() {
-            if (sessionStorage.getItem('pwa_modal_dismissed')) return;
-            const modal = document.getElementById('pwa-install-modal');
-            if (modal) modal.style.display = 'flex';
-        };
-
-        window.closePwaModal = function() {
-            const modal = document.getElementById('pwa-install-modal');
-            if (modal) modal.style.display = 'none';
-            sessionStorage.setItem('pwa_modal_dismissed', 'true');
-        };
-
-        window.handlePwaInstallClick = async function() {
-            closePwaModal();
             if (isIOS) {
-                showIOSPrompt();
-            } else if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                deferredPrompt = null;
+                // On iOS, we don't trigger FCM directly, we ask for email
+                dismissNotifBanner();
+                showEmailSubModal();
             } else {
-                // Fallback: show iOS-style guide for unsupported browsers
-                showIOSPrompt();
+                dismissNotifBanner();
+                await triggerFCMRequest();
             }
         };
+
+        // iOS Email Subscription Modal Handlers
+        window.showEmailSubModal = function() {
+            const modal = document.getElementById('email-sub-modal');
+            if (modal) {
+                modal.style.display = 'flex';
+                document.body.style.overflow = 'hidden'; // Prevent scroll
+            }
+        };
+
+        window.closeEmailSubModal = function() {
+            const modal = document.getElementById('email-sub-modal');
+            if (modal) {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        };
+
+        window.handleEmailSub = async function(e) {
+            e.preventDefault();
+            const email = document.getElementById('sub-email-input').value;
+            const btn = document.getElementById('email-sub-submit-btn');
+            const error = document.getElementById('email-error-msg');
+            const success = document.getElementById('email-success-msg');
+            const form = e.target;
+
+            if (!email || !email.includes('@')) {
+                error.style.display = 'block';
+                return;
+            }
+            error.style.display = 'none';
+
+            btn.disabled = true;
+            btn.innerText = "Subscribing...";
+
+            try {
+                const response = await fetch('<?php echo SITE_URL; ?>save_email_subscription.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email, source: 'iOS Banner' })
+                });
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    form.style.display = 'none';
+                    success.style.display = 'block';
+                    setTimeout(() => {
+                        closeEmailSubModal();
+                    }, 3000);
+                } else {
+                    alert("Something went wrong. Please try again.");
+                    btn.disabled = false;
+                    btn.innerText = "SUBSCRIBE NOW";
+                }
+            } catch (err) {
+                console.error("Sub Error:", err);
+                alert("Connection error. Please try again.");
+                btn.disabled = false;
+                btn.innerText = "SUBSCRIBE NOW";
+            }
+        };
+
     </script>
     
-    <!-- iOS PWA Meta Tags -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="A2P Realtech">
-    <link rel="apple-touch-icon" href="<?php echo SITE_URL; ?>assets/images/favicons/apple-touch-icon.png">
-    <!-- Splash screens (Optional but premium) -->
-    <link rel="apple-touch-startup-image" href="<?php echo SITE_URL; ?>assets/images/favicons/android-chrome-512x512.png">
 <body class="custom-cursor">
 
 <style>

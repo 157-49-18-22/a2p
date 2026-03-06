@@ -166,179 +166,62 @@
     </div>
 </div>
 
-<!-- NEXT LEVEL PWA Install Modal -->
-<div id="pwa-install-modal">
-    <div class="pwa-glass-card">
-        <button onclick="closePwaModal()" class="pwa-x-close" title="Close">×</button>
-        
-        <div class="pwa-header">
-            <div class="pwa-icon-wrapper">
-                <img src="<?php echo SITE_URL; ?>assets/images/favicons/android-chrome-192x192.png" alt="App Logo" class="pwa-main-icon">
-                <div class="pwa-verified-badge"><i class="fas fa-check-circle"></i></div>
-            </div>
-            <div class="pwa-badge-trust">OFFICIAL APP</div>
-        </div>
-
-        <h3 class="pwa-modal-title">Experience A2P Realtech</h3>
-        <p class="pwa-modal-subtitle">Fast • Secure • Real-time Updates</p>
-
-        <!-- Premium Timeline Steps -->
-        <div class="pwa-timeline">
-            <div class="pwa-time-item">
-                <div class="pwa-time-icon"><i class="fas fa-cloud-download-alt"></i></div>
-                <div class="pwa-time-content">
-                    <strong>Instant Install</strong>
-                    <span>No PlayStore needed, installs directly.</span>
-                </div>
-            </div>
-            <div class="pwa-time-item">
-                <div class="pwa-time-icon"><i class="fas fa-mobile-alt"></i></div>
-                <div class="pwa-time-content">
-                    <strong>Home Screen Access</strong>
-                    <span>Quick access like a native app.</span>
-                </div>
-            </div>
-            <div class="pwa-time-item">
-                <div class="pwa-time-icon"><i class="fas fa-bell"></i></div>
-                <div class="pwa-time-content">
-                    <strong>Real-time Alerts</strong>
-                    <span>Never miss a new property or offer.</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="pwa-benefits-tag">
-            <i class="fas fa-shield-alt"></i> 100% Safe & Secure • Secure Connection
-        </div>
-
-        <button id="pwa-main-btn" onclick="handlePwaInstallClick()" class="pwa-btn-premium">
-            <span>INSTALL THE APP NOW</span>
-            <i class="fas fa-arrow-right"></i>
-        </button>
-
-        <div class="pwa-footer-links">
-            <span onclick="closePwaModal()">Maybe Later</span>
-            <span class="dot-sep">•</span>
-            <span>Learn More</span>
-        </div>
-    </div>
-</div>
-
-<style>
-    /* ===== NEXT LEVEL PWA STYLES ===== */
-    #pwa-install-modal {
-        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(15, 15, 15, 0.7);
-        backdrop-filter: blur(8px);
+    /* Global Modals Base Styles */
+    #location-modal {
+        position: fixed; top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(0,0,0,0.85);
         display: none; align-items: center; justify-content: center;
-        z-index: 2147483647; 
-        padding: 20px;
+        z-index: 2000001; backdrop-filter: blur(10px);
+        font-family: 'Poppins', sans-serif;
     }
 
-    .pwa-glass-card {
-        background: rgba(255, 255, 255, 0.95);
-        max-width: 400px; width: 100%;
-        border-radius: 32px;
-        padding: 40px 24px 30px;
-        text-align: center;
-        position: relative;
-        box-shadow: 0 30px 60px rgba(0,0,0,0.3);
-        animation: pwaSlideUp 0.6s cubic-bezier(0.19, 1, 0.22, 1);
-        border: 1px solid rgba(255,255,255,0.3);
-    }
-    @keyframes pwaSlideUp {
-        from { opacity: 0; transform: translateY(40px) scale(0.95); }
-        to { opacity: 1; transform: translateY(0) scale(1); }
+    /* Shared Modal Cards Style */
+    .loc-modal-card {
+        background: #fff; padding: 40px 30px;
+        border-radius: 24px; text-align: center;
+        max-width: 420px; width: 90%;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+        animation: modalPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
-    .pwa-header {
-        position: relative; margin-bottom: 20px;
-        display: flex; flex-direction: column; align-items: center;
-    }
-    .pwa-icon-wrapper {
-        position: relative; width: 90px; height: 90px;
-    }
-    .pwa-main-icon {
-        width: 100%; height: 100%; border-radius: 20px;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-    }
-    .pwa-verified-badge {
-        position: absolute; bottom: -5px; right: -5px;
-        background: #fff; border-radius: 50%;
-        color: #007aff; font-size: 22px;
-        line-height: 1; display: flex; align-items: center; justify-content: center;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
-    .pwa-badge-trust {
-        background: #f0f0f0; color: #666; font-size: 10px;
-        font-weight: 800; padding: 4px 12px; border-radius: 50px;
-        margin-top: 15px; letter-spacing: 1px;
+    @keyframes modalPop {
+        from { opacity: 0; transform: scale(0.8) translateY(30px); }
+        to { opacity: 1; transform: scale(1) translateY(0); }
     }
 
-    .pwa-modal-title { font-size: 24px; font-weight: 800; color: #1a1a1a; margin-bottom: 5px; }
-    .pwa-modal-subtitle { font-size: 14px; color: #888; margin-bottom: 25px; font-weight: 500; }
-
-    /* Timeline Steps */
-    .pwa-timeline {
-        text-align: left; background: #f8f9fa; border-radius: 20px;
-        padding: 20px 15px; margin-bottom: 25px;
-    }
-    .pwa-time-item {
-        display: flex; gap: 15px; margin-bottom: 18px; position: relative;
-    }
-    .pwa-time-item:last-child { margin-bottom: 0; }
-    .pwa-time-icon {
-        width: 32px; height: 32px; background: #fff;
-        border-radius: 10px; display: flex; align-items: center; justify-content: center;
-        color: #c00415; font-size: 14px; flex-shrink: 0;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    }
-    .pwa-time-content strong { display: block; font-size: 14px; color: #333; }
-    .pwa-time-content span { font-size: 12px; color: #777; line-height: 1.3; display: block; }
-
-    .pwa-benefits-tag {
-        font-size: 11px; color: #34c759; font-weight: 700;
-        margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 6px;
+    /* Icon Pulse Styles */
+    .loc-icon-pulse {
+        width: 90px; height: 90px;
+        background: #fdf2f2; border-radius: 50%;
+        display: inline-flex; align-items: center; justify-content: center;
+        margin-bottom: 25px; position: relative;
+        color: #c00415; font-size: 35px;
     }
 
-    .pwa-btn-premium {
-        background: linear-gradient(135deg, #c00415, #8b0010);
-        color: #fff; border: none; width: 100%;
-        padding: 16px; border-radius: 16px; font-weight: 800;
-        font-size: 15px; cursor: pointer; display: flex;
-        align-items: center; justify-content: center; gap: 12px;
-        box-shadow: 0 15px 30px rgba(192,4,21,0.3);
-        transition: all 0.3s;
+    .loc-icon-pulse::after {
+        content: ''; position: absolute;
+        top: -5px; left: -5px; right: -5px; bottom: -5px;
+        border: 2px solid #c00415; border-radius: 50%;
+        animation: pulse 2s infinite;
     }
-    .pwa-btn-premium:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 20px 40px rgba(192,4,21,0.45);
-    }
-    .pwa-btn-premium i {
-        font-size: 14px; transition: transform 0.3s;
-    }
-    .pwa-btn-premium:hover i { transform: translateX(5px); }
 
-    .pwa-footer-links {
-        margin-top: 20px; font-size: 13px; color: #aaa;
+    @keyframes pulse {
+        0% { transform: scale(1); opacity: 1; }
+        100% { transform: scale(1.3); opacity: 0; }
     }
-    .pwa-footer-links span { cursor: pointer; transition: color 0.2s; }
-    .pwa-footer-links span:hover { color: #666; }
-    .dot-sep { margin: 0 10px; color: #eee; }
 
-    .pwa-x-close {
-        position: absolute; top: 15px; right: 15px;
-        background: #eee; border: none; width: 32px; height: 32px;
-        border-radius: 50%; color: #888; font-size: 18px;
-        cursor: pointer; display: flex; align-items: center; justify-content: center;
-        transition: all 0.2s;
-    }
-    .pwa-x-close:hover { background: #ddd; color: #333; }
+    .loc-modal-card h3 { color: #222; font-weight: 800; font-size: 24px; margin-bottom: 12px; }
+    .loc-modal-card p { color: #666; font-size: 15px; line-height: 1.6; margin-bottom: 30px; }
 
-    @media (max-width: 480px) {
-        .pwa-glass-card { padding: 30px 20px 25px; }
-        .pwa-modal-title { font-size: 20px; }
+    .loc-btn-primary {
+        background: #c00415; color: #fff; border: none;
+        padding: 16px 30px; border-radius: 50px;
+        font-weight: 700; cursor: pointer; width: 100%;
+        font-size: 16px; transition: all 0.3s;
+        box-shadow: 0 8px 20px rgba(192,4,21,0.3);
     }
+    .loc-btn-primary:hover { background: #000; transform: translateY(-3px); }
 </style>
 
 <footer class="site-footer site-footer-two">
@@ -1371,17 +1254,6 @@ function handleKeyPress(e) {
     if (e.key === 'Enter') sendMessage();
 }
 
-// Smart PWA Modal Trigger
-document.addEventListener('DOMContentLoaded', () => {
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-    if (!isStandalone) {
-        setTimeout(() => {
-            if (typeof window.showPwaModal === 'function') {
-                window.showPwaModal();
-            }
-        }, 4000); 
-    }
-});
 </script>
 
 
@@ -1429,11 +1301,11 @@ document.addEventListener('DOMContentLoaded', () => {
             <span class="npb-bell-pulse">🔔</span>
         </div>
         <div class="npb-content">
-            <div class="npb-title">Stay Updated with A2P Realtech</div>
-            <div class="npb-text">Get instant alerts on new properties, exclusive offers & news.</div>
+            <div class="npb-title" id="notif-banner-title">Stay Updated with A2P Realtech</div>
+            <div class="npb-text" id="notif-banner-text">Get instant alerts on new properties, exclusive offers & news.</div>
         </div>
         <div class="npb-actions">
-            <button class="npb-btn-allow" onclick="acceptNotifBanner()">
+            <button class="npb-btn-allow" id="notif-banner-btn-main" onclick="acceptNotifBanner()">
                 <i class="fa fa-bell"></i> Allow
             </button>
             <button class="npb-btn-deny" onclick="dismissNotifBanner()">
@@ -1441,6 +1313,29 @@ document.addEventListener('DOMContentLoaded', () => {
             </button>
         </div>
         <button class="npb-close" onclick="dismissNotifBanner()" title="Close">×</button>
+    </div>
+
+    <!-- Email Subscription Modal (Specifically for iOS) -->
+    <div id="email-sub-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.75); z-index:99999999; align-items:center; justify-content:center; padding:20px; backdrop-filter:blur(10px);">
+        <div style="background:#fff; padding:35px 30px; border-radius:30px; width:100%; max-width:400px; text-align:center; position:relative; box-shadow: 0 15px 50px rgba(0,0,0,0.3); animation:modalPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
+            <button onclick="closeEmailSubModal()" style="position:absolute; top:15px; right:20px; background:none; border:none; font-size:24px; color:#aaa; cursor:pointer;">&times;</button>
+            <div style="width:80px; height:80px; background:#fdf2f2; border-radius:24px; display:inline-flex; align-items:center; justify-content:center; margin-bottom:20px; color:#c00415; font-size:32px;">
+                <i class="fa fa-envelope-open-text"></i>
+            </div>
+            <h3 style="font-size:24px; font-weight:800; color:#1a1a1a; margin-bottom:8px;">Super Excited! 🚀</h3>
+            <p style="font-size:14px; color:#666; margin-bottom:25px; line-height:1.6;">Subscribe to our notification for updates and offers.</p>
+            
+            <div id="email-error-msg" style="display:none; color:#c00415; font-size:12px; margin-bottom:10px; font-weight:600;">Please enter a valid email.</div>
+            
+            <form onsubmit="handleEmailSub(event)">
+                <input type="email" id="sub-email-input" placeholder="Your Email Address" required style="width:100%; padding:15px 20px; border-radius:15px; border:2px solid #eee; margin-bottom:15px; font-size:15px; outline:none; transition:border-color 0.3s;" onfocus="this.style.borderColor='#c00415'">
+                <button type="submit" id="email-sub-submit-btn" style="width:100%; padding:16px; border-radius:15px; border:none; background:linear-gradient(135deg, #c00415, #8b0010); color:#fff; font-size:16px; font-weight:700; cursor:pointer; box-shadow:0 10px 25px rgba(192,4,21,0.3); transition:transform 0.2s;">SUBSCRIBE NOW</button>
+            </form>
+            <div id="email-success-msg" style="display:none; margin-top:20px;">
+                <div style="color:#34c759; font-weight:700; font-size:15px;">Awesome! You're subscribed. 🚀</div>
+                <p style="font-size:13px; color:#888; margin-top:5px;">We'll keep you updated with the latest offers.</p>
+            </div>
+        </div>
     </div>
 
     <style>
@@ -1578,211 +1473,6 @@ document.addEventListener('DOMContentLoaded', () => {
     </style>
     <!-- ===== END NOTIFICATION BANNER ===== -->
 
-    <!-- iOS PWA Step-by-Step Guide -->
-    <div id="ios-pwa-prompt">
-        <button class="ios-close" onclick="closeIOSPrompt()"><i class="fa fa-times"></i></button>
-
-        <!-- Step 0: Main screen (before tapping steps) -->
-        <div id="ios-guide-step-0" class="ios-guide-screen active">
-            <img src="<?php echo SITE_URL; ?>assets/images/favicons/android-chrome-192x192.png" class="ios-icon" alt="A2P App">
-            <div class="ios-title">Install A2P Realtech App</div>
-            <p class="ios-text">Follow these 3 quick steps to install the app on your iPhone & get instant notifications!</p>
-            <div class="ios-steps-preview">
-                <div class="ios-step-preview">
-                    <div class="ios-step-num">1</div>
-                    <div>Tap <strong>Share</strong> <span style="color:#007aff;">⬆</span> button in Safari</div>
-                </div>
-                <div class="ios-step-preview">
-                    <div class="ios-step-num">2</div>
-                    <div>Select <strong>"Add to Home Screen"</strong></div>
-                </div>
-                <div class="ios-step-preview">
-                    <div class="ios-step-num">3</div>
-                    <div>Open the App → Tap <strong>"Allow"</strong> for notifications</div>
-                </div>
-            </div>
-            <button class="ios-start-btn" onclick="showIOSStep(1)">
-                <i class="fa fa-play-circle me-1"></i> Show Me How
-            </button>
-            <div class="ios-skip" onclick="closeIOSPrompt()">Maybe Later</div>
-        </div>
-
-        <!-- Step 1: Tap Share button -->
-        <div id="ios-guide-step-1" class="ios-guide-screen">
-            <div class="ios-step-badge">Step 1 of 3</div>
-            <div class="ios-step-title">Tap the <span style="color:#007aff;">Share</span> Button</div>
-            <div class="ios-phone-preview">
-                <div class="ios-safari-bar">
-                    <div class="ios-url-bar">pink-sheep-796549.hostingersite.com</div>
-                </div>
-                <div class="ios-page-content">
-                    <div style="height:120px;background:linear-gradient(135deg,#c00415,#7b0010);border-radius:8px;display:flex;align-items:center;justify-content:center;">
-                        <img src="<?php echo SITE_URL; ?>assets/images/favicons/android-chrome-192x192.png" style="height:60px;border-radius:10px;">
-                    </div>
-                    <div style="height:8px;background:#eee;border-radius:4px;margin-top:12px;"></div>
-                    <div style="height:8px;background:#eee;border-radius:4px;margin-top:8px;width:70%;"></div>
-                </div>
-                <div class="ios-safari-bottom">
-                    <span>◁</span>
-                    <span>▷</span>
-                    <div class="ios-share-btn-highlight">
-                        <span class="ios-share-svg">⬆</span>
-                        <div class="ios-tap-ring"></div>
-                        <div class="ios-arrow-bounce">👆</div>
-                    </div>
-                    <span>⊟</span>
-                    <span>⊞</span>
-                </div>
-            </div>
-            <p class="ios-instruction">Look at the <strong>bottom bar</strong> of Safari and tap the <strong style="color:#007aff;">Share ⬆</strong> icon</p>
-            <button class="ios-next-btn" onclick="showIOSStep(2)">Next →</button>
-            <div class="ios-dots">
-                <span class="dot active"></span><span class="dot"></span><span class="dot"></span>
-            </div>
-        </div>
-
-        <!-- Step 2: Add to Home Screen -->
-        <div id="ios-guide-step-2" class="ios-guide-screen">
-            <div class="ios-step-badge">Step 2 of 3</div>
-            <div class="ios-step-title">Tap <span style="color:#007aff;">"Add to Home Screen"</span></div>
-            <div class="ios-sheet-preview">
-                <div class="ios-sheet-item" style="border-bottom:1px solid #eee;">
-                    <span>📤</span> AirDrop
-                </div>
-                <div class="ios-sheet-item ios-sheet-highlight">
-                    <span>➕</span> Add to Home Screen
-                    <div class="ios-tap-ring" style="right:-5px;left:auto;"></div>
-                    <div class="ios-arrow-point">← Tap This!</div>
-                </div>
-                <div class="ios-sheet-item" style="border-bottom:1px solid #eee;">
-                    <span>📋</span> Copy
-                </div>
-                <div class="ios-sheet-item">
-                    <span>🔖</span> Add Bookmark
-                </div>
-            </div>
-            <p class="ios-instruction">In the share menu, scroll down and tap <strong>"Add to Home Screen"</strong></p>
-            <button class="ios-next-btn" onclick="showIOSStep(3)">Next →</button>
-            <div class="ios-dots">
-                <span class="dot"></span><span class="dot active"></span><span class="dot"></span>
-            </div>
-        </div>
-
-        <!-- Step 3: Open App & Allow Notifications -->
-        <div id="ios-guide-step-3" class="ios-guide-screen">
-            <div class="ios-step-badge">Step 3 of 3</div>
-            <div class="ios-step-title">Open App → Allow <span style="color:#007aff;">Notifications</span></div>
-            <div class="ios-notif-preview">
-                <div class="ios-homescreen-icon">
-                    <img src="<?php echo SITE_URL; ?>assets/images/favicons/android-chrome-192x192.png" style="width:100%;height:100%;object-fit:cover;">
-                    <div class="ios-icon-label">A2P Realtech</div>
-                </div>
-                <div style="font-size:28px;margin:10px 0;">👇</div>
-                <div class="ios-notif-popup">
-                    <div class="ios-notif-popup-header">
-                        <img src="<?php echo SITE_URL; ?>assets/images/favicons/android-chrome-192x192.png" style="width:22px;height:22px;border-radius:5px;">
-                        <strong style="font-size:13px;margin-left:6px;">A2P Realtech</strong>
-                        <span style="font-size:11px;color:#999;margin-left:auto;">Now</span>
-                    </div>
-                    <div style="font-size:12px;color:#555;margin-top:4px;">Would like to send you notifications</div>
-                    <div class="ios-allow-btns">
-                        <div class="ios-allow-deny">Don't Allow</div>
-                        <div class="ios-allow-allow" style="position:relative;">
-                            Allow
-                            <div class="ios-tap-ring" style="width:50px;height:30px;border-radius:8px;top:50%;transform:translateY(-50%);left:-5px;"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <p class="ios-instruction">Open <strong>A2P Realtech</strong> from your home screen, then tap <strong style="color:#007aff;">"Allow"</strong> when asked for notifications.</p>
-            <button class="ios-done-btn" onclick="closeIOSPrompt()">
-                <i class="fa fa-check-circle me-1"></i> Got it! Done
-            </button>
-            <div class="ios-dots">
-                <span class="dot"></span><span class="dot"></span><span class="dot active"></span>
-            </div>
-        </div>
-    </div>
-
-    <style>
-    /* iOS Guide Styles */
-    #ios-pwa-prompt {
-        position: fixed; bottom: 0; left: 0; right: 0;
-        background: #fff; z-index: 2000001;
-        display: none; flex-direction: column; align-items: center;
-        padding: 30px 20px 40px; border-radius: 24px 24px 0 0;
-        box-shadow: 0 -10px 60px rgba(0,0,0,0.2);
-        transform: translateY(100%);
-        transition: transform 0.5s cubic-bezier(0.19,1,0.22,1);
-        text-align: center; max-height: 92vh; overflow-y: auto;
-    }
-    #ios-pwa-prompt.show { transform: translateY(0); }
-    .ios-guide-screen { display: none; width: 100%; flex-direction: column; align-items: center; }
-    .ios-guide-screen.active { display: flex; animation: fadeSlide 0.35s ease; }
-    @keyframes fadeSlide { from { opacity:0; transform:translateX(30px); } to { opacity:1; transform:translateX(0); } }
-
-    .ios-icon { width: 68px; height: 68px; border-radius: 16px; margin-bottom: 16px; box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
-    .ios-title { font-size: 20px; font-weight: 800; color: #1a1a1a; margin-bottom: 10px; }
-    .ios-text { font-size: 14px; color: #666; line-height: 1.6; margin-bottom: 20px; }
-    .ios-close { position: absolute; top: 14px; right: 14px; background: #eee; border: none; width: 32px; height: 32px; border-radius: 50%; font-size: 13px; color: #888; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 10; }
-
-    .ios-steps-preview { background: #f7f7f7; border-radius: 14px; padding: 14px; width: 100%; margin-bottom: 22px; text-align: left; }
-    .ios-step-preview { display: flex; align-items: center; gap: 12px; padding: 8px 0; border-bottom: 1px solid #eee; font-size: 14px; color: #333; }
-    .ios-step-preview:last-child { border-bottom: none; padding-bottom: 0; }
-    .ios-step-num { width: 28px; height: 28px; border-radius: 50%; background: #c00415; color: #fff; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-
-    .ios-start-btn { background: #c00415; color: #fff; border: none; padding: 14px 32px; border-radius: 50px; font-size: 15px; font-weight: 700; cursor: pointer; width: 100%; margin-bottom: 12px; }
-    .ios-skip { font-size: 13px; color: #aaa; cursor: pointer; }
-
-    .ios-step-badge { background: #007aff22; color: #007aff; font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 50px; margin-bottom: 12px; }
-    .ios-step-title { font-size: 19px; font-weight: 800; color: #1a1a1a; margin-bottom: 16px; }
-    .ios-instruction { font-size: 13px; color: #666; line-height: 1.6; margin: 14px 0 16px; }
-
-    /* Phone Preview */
-    .ios-phone-preview { width: 100%; background: #f0f0f0; border-radius: 14px; overflow: hidden; border: 2px solid #ddd; }
-    .ios-safari-bar { background: #f8f8f8; padding: 8px 12px; border-bottom: 1px solid #ddd; }
-    .ios-url-bar { background: #fff; border-radius: 8px; padding: 5px 12px; font-size: 11px; color: #555; text-align: center; }
-    .ios-page-content { padding: 12px; background: #fff; }
-    .ios-safari-bottom { background: #f8f8f8; border-top: 1px solid #ddd; padding: 10px 20px; display: flex; align-items: center; justify-content: space-around; font-size: 20px; color: #555; }
-    .ios-share-btn-highlight { position: relative; display: flex; align-items: center; justify-content: center; }
-    .ios-share-svg { font-size: 22px; color: #007aff; font-weight: 700; }
-    .ios-tap-ring { position: absolute; width: 44px; height: 44px; border: 2.5px solid #007aff; border-radius: 50%; animation: tapPulse 1.2s ease-in-out infinite; top: 50%; left: 50%; transform: translate(-50%,-50%); }
-    .ios-arrow-bounce { position: absolute; bottom: -28px; font-size: 20px; animation: bounceUp 0.8s ease-in-out infinite alternate; }
-    @keyframes tapPulse { 0%,100%{opacity:1;transform:translate(-50%,-50%) scale(1);} 50%{opacity:0.3;transform:translate(-50%,-50%) scale(1.5);} }
-    @keyframes bounceUp { to { transform: translateY(-6px); } }
-
-    /* Sheet Preview */
-    .ios-sheet-preview { background: #fff; border: 1.5px solid #e5e5e5; border-radius: 14px; width: 100%; overflow: hidden; margin-bottom: 4px; }
-    .ios-sheet-item { padding: 13px 16px; font-size: 15px; color: #333; display: flex; align-items: center; gap: 10px; position: relative; }
-    .ios-sheet-highlight { background: #007aff11; font-weight: 700; color: #007aff; border-left: 4px solid #007aff; }
-    .ios-arrow-point { position: absolute; right: 14px; font-size: 12px; color: #c00415; font-weight: 700; animation: blink 1s ease-in-out infinite alternate; }
-    @keyframes blink { to { opacity: 0.3; } }
-
-    /* Notif Preview */
-    .ios-notif-preview { width: 100%; display: flex; flex-direction: column; align-items: center; margin-bottom: 4px; }
-    .ios-homescreen-icon { width: 70px; height: 70px; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.18); position: relative; }
-    .ios-icon-label { position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); font-size: 11px; white-space: nowrap; color: #333; font-weight: 600; }
-    .ios-notif-popup { background: #fff; border-radius: 14px; padding: 14px; box-shadow: 0 6px 30px rgba(0,0,0,0.15); width: 100%; margin-top: 24px; border: 1.5px solid #e5e5e5; }
-    .ios-notif-popup-header { display: flex; align-items: center; }
-    .ios-allow-btns { display: flex; margin-top: 12px; border-top: 1px solid #eee; padding-top: 10px; gap: 10px; }
-    .ios-allow-deny { flex: 1; text-align: center; padding: 8px; font-size: 14px; color: #999; cursor: pointer; }
-    .ios-allow-allow { flex: 1; text-align: center; padding: 8px; font-size: 14px; color: #007aff; font-weight: 700; cursor: pointer; background: #007aff11; border-radius: 8px; position: relative; }
-
-    .ios-next-btn { background: #007aff; color: #fff; border: none; padding: 13px 32px; border-radius: 50px; font-size: 15px; font-weight: 700; cursor: pointer; width: 100%; margin-bottom: 14px; }
-    .ios-done-btn { background: #34c759; color: #fff; border: none; padding: 14px 32px; border-radius: 50px; font-size: 15px; font-weight: 700; cursor: pointer; width: 100%; margin-bottom: 14px; }
-
-    .ios-dots { display: flex; gap: 7px; justify-content: center; }
-    .dot { width: 8px; height: 8px; background: #ddd; border-radius: 50%; transition: background 0.3s; }
-    .dot.active { background: #007aff; width: 22px; border-radius: 4px; }
-    </style>
-
-    <script>
-    window.showIOSStep = function(stepNum) {
-        document.querySelectorAll('.ios-guide-screen').forEach(s => s.classList.remove('active'));
-        const step = document.getElementById('ios-guide-step-' + stepNum);
-        if (step) step.classList.add('active');
-    };
-    </script>
 </body>
 
 
