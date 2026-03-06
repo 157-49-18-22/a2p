@@ -92,8 +92,9 @@
         });
 
 
-        // Basic Browser Info
-        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        // Enhanced iOS Detection (Covers new iPadOS too)
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+                     (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
         const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
 
         // Request Permission and Get Token
@@ -102,8 +103,6 @@
                 alert("Notifications are blocked. Please enable them in browser settings.");
                 return;
             }
-            
-            // Notification logic simple
             
             try {
                 const permission = await Notification.requestPermission();
@@ -149,13 +148,14 @@
             })();
         }
 
-        // Show stylish banner only if user is on iOS as requested
+        // Force Banner Appearance for Email Subscription (Fallback for iOS)
         if (isIOS && !sessionStorage.getItem('notif_banner_dismissed')) {
+            // We show this even if push is denied because it's for email updates
             setTimeout(() => {
                 if (typeof window.showNotifBanner === 'function') {
                     window.showNotifBanner();
                 }
-            }, 2500);
+            }, 3000); 
         }
 
         window.showNotifBanner = function() {
