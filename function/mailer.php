@@ -77,39 +77,73 @@ function getAutoReplyTemplate($toName) {
     return '
     <!DOCTYPE html>
     <html>
-    <body style="margin:0;padding:0;background:#f4f4f4;font-family:Arial,sans-serif;">
-    <table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f4;padding:30px 0;">
+    <body style="margin:0;padding:0;background:#f4f7f6;font-family:\'Segoe UI\', Tahoma, Geneva, Verdana, sans-serif;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f7f6;padding:30px 0;">
       <tr>
         <td align="center">
-          <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:10px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.08);">
+          <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,0.12); border: 1px solid #e0e0e0;">
+            <!-- Header Banner -->
             <tr>
-              <td style="background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);padding:40px 30px;text-align:center;">
-                <h1 style="color:#d4af37;margin:0;font-size:26px;letter-spacing:1px;">A2P REALTECH</h1>
-                <p style="color:#e0c97f;margin:8px 0 0;font-size:13px;letter-spacing:2px;">LUXURY PROPERTY ADVISORY</p>
+              <td style="background: #c00415; padding: 40px 30px; text-align: center; border-bottom: 6px solid #0f3460;">
+                <h1 style="color:#ffffff; margin:0; font-size: 30px; letter-spacing: 2.5px; font-weight: 800; text-transform: uppercase;">A2P REALTECH</h1>
+                <p style="color:#ffffff; margin:8px 0 0; font-size: 14px; letter-spacing: 4px; font-weight: 500; text-transform: uppercase;">Luxury Property Advisory</p>
               </td>
             </tr>
+            
+            <!-- Content Area -->
             <tr>
-              <td style="padding:35px 40px 20px;">
-                <p style="font-size:16px;color:#333;margin:0 0 12px;">Dear <strong>' . htmlspecialchars($toName) . '</strong>,</p>
-                <p style="font-size:15px;color:#555;line-height:1.7;margin:0;">Thank you for contacting <strong>A2P Realtech</strong> regarding premium real estate opportunities.</p>
+              <td style="padding: 40px 40px 30px;">
+                <p style="font-size: 18px; color: #1a1a2e; margin: 0 0 20px; font-weight: 600;">Dear ' . htmlspecialchars($toName) . ',</p>
+                <p style="font-size: 15px; color: #444; line-height: 1.8; margin: 0 0 20px;">Thank you for contacting <strong>A2P Realtech</strong> regarding premium real estate opportunities in:</p>
+                
+                <!-- Locations List -->
+                <div style="background: #f9f9f9; border-left: 4px solid #c00415; padding: 15px 25px; margin-bottom: 25px;">
+                  <ul style="color: #333; font-size: 15px; line-height: 1.8; margin: 0; padding: 0; list-style: none;">
+                    <li>• Dwarka Expressway</li>
+                    <li>• Gurgaon</li>
+                    <li>• Faridabad</li>
+                    <li>• Noida</li>
+                  </ul>
+                </div>
+
+                <p style="font-size: 15px; color: #444; line-height: 1.8; margin: 0 0 15px;">We specialize in curated luxury offerings including:</p>
+                
+                <!-- Specialties List -->
+                <table width="100%" cellpadding="0" cellspacing="0" style="background: #ffffff; border: 1px solid #0f3460; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+                  <tr>
+                    <td style="color: #1a1a2e; font-size: 14px; line-height: 2.2; font-weight: 500;">
+                      <span style="color: #c00415; font-weight: bold;">✔</span> Luxury Flats & Apartments<br>
+                      <span style="color: #c00415; font-weight: bold;">✔</span> Premium Villas<br>
+                      <span style="color: #c00415; font-weight: bold;">✔</span> Modern Duplex Homes<br>
+                      <span style="color: #c00415; font-weight: bold;">✔</span> SCO Plots & Commercial Investments
+                    </td>
+                  </tr>
+                </table>
+
+                <p style="font-size: 14px; color: #555; line-height: 1.7; margin: 0 0 25px;">Our senior property advisor will personally review your requirements and connect with you shortly to provide tailored options based on your preferred location, budget, and investment goals.</p>
+                
+                <!-- Call to Action / Urgent -->
+                <div style="background: #0f3460; border-radius: 8px; padding: 25px; text-align: center; margin-bottom: 30px; box-shadow: 0 4px 12px rgba(15, 52, 96, 0.2);">
+                  <p style="color: #ffffff; margin: 0 0 12px; font-size: 14px; opacity: 0.9;">If your inquiry is urgent, please feel free to contact us directly:</p>
+                  <p style="color: #ffffff; margin: 0; font-size: 17px; font-weight: 600; line-height: 1.6;">
+                    📞 +91-8130525001, +91-8130510678<br>
+                    📧 <a href="mailto:team@a2prealtech.com" style="color: #ffffff; text-decoration: underline;">team@a2prealtech.com</a>
+                  </p>
+                </div>
+
+                <p style="font-size: 14px; color: #555; line-height: 1.7; margin: 0;">We look forward to assisting you in securing a premium property in one of NCR’s most sought-after destinations.</p>
               </td>
             </tr>
+
+            <!-- Footer -->
             <tr>
-              <td style="padding:0 40px 20px;">
-                <ul style="color:#555;font-size:14px;line-height:2;">
-                  <li><strong>Dwarka Expressway</strong> | <strong>Gurgaon</strong></li>
-                  <li><strong>Faridabad</strong> | <strong>Noida</strong></li>
-                </ul>
-              </td>
-            </tr>
-            <tr>
-              <td style="padding:20px 40px;background:#f9f5ea;text-align:center;">
-                <p style="margin:0;color:#0f3460;font-size:15px;">Our senior advisor will connect with you shortly.</p>
-              </td>
-            </tr>
-            <tr>
-              <td style="padding:30px 40px;text-align:center;background:#1a1a2e;color:#888;font-size:11px;">
-                © 2025 A2P Realtech Private Limited
+              <td style="padding: 35px 40px; text-align: center; background: #ffffff; border-top: 1px solid #f0f0f0;">
+                <p style="margin: 0; color: #1a1a2e; font-size: 16px; font-weight: 700;">Warm regards,</p>
+                <p style="margin: 6px 0 0; color: #c00415; font-size: 18px; font-weight: 800;">Luxury Property Advisory Team</p>
+                <p style="margin: 4px 0 0; color: #0f3460; font-size: 15px; font-weight: 700; letter-spacing: 1px;">A2P Realtech</p>
+                <div style="margin-top: 25px; border-top: 1px solid #f0f0f0; padding-top: 20px;">
+                  <p style="color: #bbb; font-size: 10px; margin: 0; text-transform: uppercase; letter-spacing: 1px;">© 2025 A2P Realtech Private Limited. Luxury Lifestyle & Investments.</p>
+                </div>
               </td>
             </tr>
           </table>
