@@ -1295,183 +1295,152 @@ function handleKeyPress(e) {
 <script src="<?= SITE_URL; ?>assets/vendors/toolbar/js/jQuery.style.switcher.min.js"></script>
 <script src="<?= SITE_URL; ?>assets/vendors/toolbar/js/toolbar.js"></script>
 
-    <!-- ===== STYLISH NOTIFICATION PERMISSION BANNER ===== -->
-    <div id="notif-permission-banner">
-        <div class="npb-icon">
-            <img src="<?php echo SITE_URL; ?>assets/images/favicons/android-chrome-192x192.png" alt="A2P">
-            <span class="npb-bell-pulse">🔔</span>
+    <!-- ===== STYLISH NOTIFICATION PERMISSION MODAL (iOS Style Center) ===== -->
+    <div id="notif-permission-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 9999999; align-items: center; justify-content: center; backdrop-filter: blur(10px); font-family: 'Poppins', sans-serif;">
+        <div class="loc-modal-card">
+            <div class="loc-icon-pulse">
+                <i class="fa fa-bell"></i>
+            </div>
+            <h3 id="notif-banner-title">Stay Updated!</h3>
+            <p id="notif-banner-text">Get instant alerts on new properties, exclusive offers & real estate news directly on your device.</p>
+            
+            <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 10px;">
+                <button class="loc-btn-primary" id="notif-banner-btn-main" onclick="acceptNotifBanner()">
+                    <i class="fa fa-bell"></i> Allow Notifications
+                </button>
+                <button onclick="dismissNotifBanner()" style="background: none; border: none; color: #aaa; font-size: 14px; font-weight: 600; cursor: pointer; transition: color 0.3s;" onmouseover="this.style.color='#666'" onmouseout="this.style.color='#aaa'">
+                    Maybe Later
+                </button>
+            </div>
+            <button onclick="dismissNotifBanner()" style="position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 24px; color: #ccc; cursor: pointer;">&times;</button>
         </div>
-        <div class="npb-content">
-            <div class="npb-title" id="notif-banner-title">Stay Updated with A2P Realtech</div>
-            <div class="npb-text" id="notif-banner-text">Get instant alerts on new properties, exclusive offers & news.</div>
-        </div>
-        <div class="npb-actions">
-            <button class="npb-btn-allow" id="notif-banner-btn-main" onclick="acceptNotifBanner()">
-                <i class="fa fa-bell"></i> Allow
-            </button>
-            <button class="npb-btn-deny" onclick="dismissNotifBanner()">
-                Not Now
-            </button>
-        </div>
-        <button class="npb-close" onclick="dismissNotifBanner()" title="Close">×</button>
     </div>
 
     <!-- Email Subscription Modal (Specifically for iOS) -->
-    <div id="email-sub-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.75); z-index:99999999; align-items:center; justify-content:center; padding:20px; backdrop-filter:blur(10px);">
-        <div style="background:#fff; padding:35px 30px; border-radius:30px; width:100%; max-width:400px; text-align:center; position:relative; box-shadow: 0 15px 50px rgba(0,0,0,0.3); animation:modalPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
-            <button onclick="closeEmailSubModal()" style="position:absolute; top:15px; right:20px; background:none; border:none; font-size:24px; color:#aaa; cursor:pointer;">&times;</button>
-            <div style="width:80px; height:80px; background:#fdf2f2; border-radius:24px; display:inline-flex; align-items:center; justify-content:center; margin-bottom:20px; color:#c00415; font-size:32px;">
+    <div id="email-sub-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:99999999; align-items:center; justify-content:center; backdrop-filter:blur(10px); font-family: 'Poppins', sans-serif;">
+        <div class="loc-modal-card">
+            <button onclick="closeEmailSubModal()" style="position:absolute; top:15px; right:20px; background:none; border:none; font-size:24px; color:#ccc; cursor:pointer;">&times;</button>
+            <div class="loc-icon-pulse">
                 <i class="fa fa-envelope-open-text"></i>
             </div>
             <h3 style="font-size:24px; font-weight:800; color:#1a1a1a; margin-bottom:8px;">Super Excited! 🚀</h3>
             <p style="font-size:14px; color:#666; margin-bottom:25px; line-height:1.6;">Subscribe to our notification for updates and offers.</p>
             
-            <div id="email-error-msg" style="display:none; color:#c00415; font-size:12px; margin-bottom:10px; font-weight:600;">Please enter a valid email.</div>
+            <div id="email-error-msg" style="display:none; color:#c00415; font-size:12px; margin-bottom:10px; font-weight:600; text-align: center;">Please enter a valid email.</div>
             
             <form onsubmit="handleEmailSub(event)">
                 <input type="email" id="sub-email-input" placeholder="Your Email Address" required style="width:100%; padding:15px 20px; border-radius:15px; border:2px solid #eee; margin-bottom:15px; font-size:15px; outline:none; transition:border-color 0.3s;" onfocus="this.style.borderColor='#c00415'">
-                <button type="submit" id="email-sub-submit-btn" style="width:100%; padding:16px; border-radius:15px; border:none; background:linear-gradient(135deg, #c00415, #8b0010); color:#fff; font-size:16px; font-weight:700; cursor:pointer; box-shadow:0 10px 25px rgba(192,4,21,0.3); transition:transform 0.2s;">SUBSCRIBE NOW</button>
+                <button type="submit" id="email-sub-submit-btn" class="loc-btn-primary">SUBSCRIBE NOW</button>
             </form>
             <div id="email-success-msg" style="display:none; margin-top:20px;">
-                <div style="color:#34c759; font-weight:700; font-size:15px;">Awesome! You're subscribed. 🚀</div>
-                <p style="font-size:13px; color:#888; margin-top:5px;">We'll keep you updated with the latest offers.</p>
+                <div style="color:#34c759; font-weight:700; font-size:15px; text-align: center;">Awesome! You're subscribed. 🚀</div>
+                <p style="font-size:13px; color:#888; margin-top:5px; text-align: center;">We'll keep you updated with the latest offers.</p>
             </div>
         </div>
     </div>
 
-    <style>
-    /* ===== Notification Permission Banner ===== */
-    #notif-permission-banner {
-        position: fixed;
-        top: -120px;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 9999999;
-        background: #ffffff;
-        border-radius: 18px;
-        box-shadow: 0 8px 40px rgba(0,0,0,0.18), 0 2px 10px rgba(192,4,21,0.12);
-        padding: 14px 18px 14px 16px;
-        display: none;
-        align-items: center;
-        gap: 14px;
-        min-width: 320px;
-        max-width: 92vw;
-        border-left: 4px solid #c00415;
-        transition: top 0.55s cubic-bezier(0.19, 1, 0.22, 1);
-        font-family: 'Inter', 'Segoe UI', sans-serif;
-    }
-    #notif-permission-banner.show {
-        top: 18px;
-    }
+    <script>
+    // ===== iOS NOTIFICATION FALLBACK LOGIC =====
 
-    .npb-icon {
-        position: relative;
-        flex-shrink: 0;
-    }
-    .npb-icon img {
-        width: 46px;
-        height: 46px;
-        border-radius: 12px;
-        display: block;
-    }
-    .npb-bell-pulse {
-        position: absolute;
-        top: -6px;
-        right: -8px;
-        font-size: 16px;
-        animation: bellShake 1.5s ease-in-out infinite;
-        transform-origin: top center;
-    }
-    @keyframes bellShake {
-        0%, 100% { transform: rotate(0deg); }
-        15% { transform: rotate(18deg); }
-        30% { transform: rotate(-16deg); }
-        45% { transform: rotate(10deg); }
-        60% { transform: rotate(-8deg); }
-        75% { transform: rotate(4deg); }
-    }
-
-    .npb-content {
-        flex: 1;
-        min-width: 0;
-    }
-    .npb-title {
-        font-size: 13.5px;
-        font-weight: 700;
-        color: #1a1a1a;
-        line-height: 1.3;
-        margin-bottom: 2px;
-    }
-    .npb-text {
-        font-size: 11.5px;
-        color: #777;
-        line-height: 1.4;
-    }
-
-    .npb-actions {
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-        flex-shrink: 0;
-    }
-    .npb-btn-allow {
-        background: linear-gradient(135deg, #c00415, #8b0010);
-        color: #fff;
-        border: none;
-        border-radius: 50px;
-        padding: 7px 18px;
-        font-size: 12.5px;
-        font-weight: 700;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        white-space: nowrap;
-        transition: transform 0.15s, box-shadow 0.15s;
-        box-shadow: 0 3px 12px rgba(192,4,21,0.35);
-    }
-    .npb-btn-allow:hover {
-        transform: scale(1.04);
-        box-shadow: 0 5px 18px rgba(192,4,21,0.5);
-    }
-    .npb-btn-deny {
-        background: transparent;
-        color: #aaa;
-        border: none;
-        font-size: 11px;
-        cursor: pointer;
-        text-align: center;
-        padding: 2px 0;
-        transition: color 0.2s;
-    }
-    .npb-btn-deny:hover { color: #555; }
-
-    .npb-close {
-        position: absolute;
-        top: 8px;
-        right: 10px;
-        background: none;
-        border: none;
-        font-size: 18px;
-        color: #ccc;
-        cursor: pointer;
-        line-height: 1;
-        padding: 0;
-        transition: color 0.2s;
-    }
-    .npb-close:hover { color: #888; }
-
-    @media (max-width: 480px) {
-        #notif-permission-banner {
-            flex-wrap: wrap;
-            min-width: unset;
-            width: calc(100vw - 28px);
-            border-radius: 14px;
+    function showNotifPermissionModal() {
+        const modal = document.getElementById('notif-permission-modal');
+        if (modal && !localStorage.getItem('a2p_notif_dismissed')) {
+            setTimeout(() => {
+                modal.style.display = 'flex';
+            }, 3000); // Show after 3 seconds
         }
-        .npb-actions { flex-direction: row; }
-        .npb-content { width: 100%; }
     }
-    </style>
+
+    function dismissNotifBanner() {
+        const modal = document.getElementById('notif-permission-modal');
+        if (modal) modal.style.display = 'none';
+        localStorage.setItem('a2p_notif_dismissed', 'true');
+    }
+
+    function acceptNotifBanner() {
+        const modal = document.getElementById('notif-permission-modal');
+        if (modal) modal.style.display = 'none';
+
+        // Check for iOS (iPhone/iPad)
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        
+        if (isIOS) {
+            // Show email fallback for iOS
+            setTimeout(() => {
+                const subModal = document.getElementById('email-sub-modal');
+                if (subModal) subModal.style.display = 'flex';
+            }, 500);
+        } else {
+            // Native push logic for Chrome/Android
+            if ('Notification' in window) {
+                Notification.requestPermission().then(permission => {
+                    if (permission === 'granted') {
+                        localStorage.setItem('a2p_notif_granted', 'true');
+                        alert('Thank you! You will now receive notifications.');
+                    }
+                });
+            } else {
+                // Fallback for non-supported browsers
+                const subModal = document.getElementById('email-sub-modal');
+                if (subModal) subModal.style.display = 'flex';
+            }
+        }
+        localStorage.setItem('a2p_notif_dismissed', 'true');
+    }
+
+    function closeEmailSubModal() {
+        const modal = document.getElementById('email-sub-modal');
+        if (modal) modal.style.display = 'none';
+    }
+
+    async function handleEmailSub(event) {
+        event.preventDefault();
+        const email = document.getElementById('sub-email-input').value;
+        const submitBtn = document.getElementById('email-sub-submit-btn');
+        const successMsg = document.getElementById('email-success-msg');
+        const errorMsg = document.getElementById('email-error-msg');
+
+        if (!email || !email.includes('@')) {
+            errorMsg.style.display = 'block';
+            return;
+        }
+        errorMsg.style.display = 'none';
+
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Subscribing...';
+
+        const formData = new FormData();
+        formData.append('email', email);
+        formData.append('source', 'iOS Notification Fallback');
+
+        try {
+            // reuse chatbot-submit or create a simple one
+            await fetch('<?= SITE_URL; ?>chatbot-submit.php', {
+                method: 'POST',
+                body: formData
+            });
+
+            submitBtn.style.display = 'none';
+            document.getElementById('sub-email-input').style.display = 'none';
+            successMsg.style.display = 'block';
+            
+            setTimeout(() => {
+                closeEmailSubModal();
+            }, 3000);
+        } catch (err) {
+            console.error(err);
+            alert('Something went wrong. Please try again.');
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = 'SUBSCRIBE NOW';
+        }
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+        showNotifPermissionModal();
+    });
+    </script>
+
     <!-- ===== END NOTIFICATION BANNER ===== -->
 
 </body>
