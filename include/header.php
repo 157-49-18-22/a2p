@@ -937,34 +937,7 @@
     animation: slideUp 0.3s ease-out;
 }
 
-/* iOS PWA Prompt Styles */
-#ios-pwa-prompt {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background: #fff;
-    z-index: 2000000;
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    padding: 30px 20px 40px;
-    border-radius: 20px 20px 0 0;
-    box-shadow: 0 -10px 40px rgba(0,0,0,0.15);
-    transform: translateY(100%);
-    transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
-    text-align: center;
-}
-#ios-pwa-prompt.show { transform: translateY(0); }
-.ios-icon { width: 60px; height: 60px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-.ios-title { font-size: 20px; font-weight: 800; color: #333; margin-bottom: 10px; }
-.ios-text { font-size: 15px; color: #666; margin-bottom: 25px; line-height: 1.5; }
-.ios-steps { background: #f8f8f8; border-radius: 12px; padding: 15px; width: 100%; margin-bottom: 20px; text-align: left; }
-.ios-step { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; font-size: 14px; font-weight: 600; color: #444; }
-.ios-step:last-child { margin-bottom: 0; }
-.ios-step i { width: 24px; height: 24px; background: #fff; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-.ios-close { position: absolute; top: 15px; right: 15px; background: #eee; border: none; width: 30px; height: 30px; border-radius: 50%; font-size: 12px; color: #888; display: flex; align-items: center; justify-content: center; cursor: pointer; }
-.ios-share-icon { color: #007aff; }
+/* iOS PWA Guide styles are defined inline in footer.php */
 
     /* Global Image Fix for Uploaded Content */
     .project-card-v2__img, 

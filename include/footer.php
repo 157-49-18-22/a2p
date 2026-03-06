@@ -1332,24 +1332,211 @@ document.addEventListener('DOMContentLoaded', () => {
 <script src="<?= SITE_URL; ?>assets/vendors/toolbar/js/jQuery.style.switcher.min.js"></script>
 <script src="<?= SITE_URL; ?>assets/vendors/toolbar/js/toolbar.js"></script>
 
-    <!-- iOS PWA Prompt UI -->
+    <!-- iOS PWA Step-by-Step Guide -->
     <div id="ios-pwa-prompt">
-        <button class="ios-close" onclick="closeIOSPrompt()"><i class="fa fa-times" style="font-size: 14px;"></i></button>
-        <img src="<?php echo SITE_URL; ?>assets/images/favicons/android-chrome-192x192.png" class="ios-icon" alt="Logo">
-        <div class="ios-title">Install A2P Realtech App</div>
-        <p class="ios-text">Install our app on your home screen to receive real-time push notifications and latest updates.</p>
-        <div class="ios-steps">
-            <div class="ios-step">
-                <i>1</i> <span>Tap on the <strong class="ios-share-icon"><i class="fa-regular fa-square-caret-up" style="transform: translateY(-2px);"></i> share</strong> button at the bottom of Safari.</span>
+        <button class="ios-close" onclick="closeIOSPrompt()"><i class="fa fa-times"></i></button>
+
+        <!-- Step 0: Main screen (before tapping steps) -->
+        <div id="ios-guide-step-0" class="ios-guide-screen active">
+            <img src="<?php echo SITE_URL; ?>assets/images/favicons/android-chrome-192x192.png" class="ios-icon" alt="A2P App">
+            <div class="ios-title">Install A2P Realtech App</div>
+            <p class="ios-text">Follow these 3 quick steps to install the app on your iPhone & get instant notifications!</p>
+            <div class="ios-steps-preview">
+                <div class="ios-step-preview">
+                    <div class="ios-step-num">1</div>
+                    <div>Tap <strong>Share</strong> <span style="color:#007aff;">⬆</span> button in Safari</div>
+                </div>
+                <div class="ios-step-preview">
+                    <div class="ios-step-num">2</div>
+                    <div>Select <strong>"Add to Home Screen"</strong></div>
+                </div>
+                <div class="ios-step-preview">
+                    <div class="ios-step-num">3</div>
+                    <div>Open the App → Tap <strong>"Allow"</strong> for notifications</div>
+                </div>
             </div>
-            <div class="ios-step">
-                <i>2</i> <span>Select <strong>"Add to Home Screen"</strong> from the menu.</span>
+            <button class="ios-start-btn" onclick="showIOSStep(1)">
+                <i class="fa fa-play-circle me-1"></i> Show Me How
+            </button>
+            <div class="ios-skip" onclick="closeIOSPrompt()">Maybe Later</div>
+        </div>
+
+        <!-- Step 1: Tap Share button -->
+        <div id="ios-guide-step-1" class="ios-guide-screen">
+            <div class="ios-step-badge">Step 1 of 3</div>
+            <div class="ios-step-title">Tap the <span style="color:#007aff;">Share</span> Button</div>
+            <div class="ios-phone-preview">
+                <div class="ios-safari-bar">
+                    <div class="ios-url-bar">pink-sheep-796549.hostingersite.com</div>
+                </div>
+                <div class="ios-page-content">
+                    <div style="height:120px;background:linear-gradient(135deg,#c00415,#7b0010);border-radius:8px;display:flex;align-items:center;justify-content:center;">
+                        <img src="<?php echo SITE_URL; ?>assets/images/favicons/android-chrome-192x192.png" style="height:60px;border-radius:10px;">
+                    </div>
+                    <div style="height:8px;background:#eee;border-radius:4px;margin-top:12px;"></div>
+                    <div style="height:8px;background:#eee;border-radius:4px;margin-top:8px;width:70%;"></div>
+                </div>
+                <div class="ios-safari-bottom">
+                    <span>◁</span>
+                    <span>▷</span>
+                    <div class="ios-share-btn-highlight">
+                        <span class="ios-share-svg">⬆</span>
+                        <div class="ios-tap-ring"></div>
+                        <div class="ios-arrow-bounce">👆</div>
+                    </div>
+                    <span>⊟</span>
+                    <span>⊞</span>
+                </div>
             </div>
-            <div class="ios-step">
-                <i>3</i> <span>Open the app from your home screen and <strong>Enable Notifications</strong>.</span>
+            <p class="ios-instruction">Look at the <strong>bottom bar</strong> of Safari and tap the <strong style="color:#007aff;">Share ⬆</strong> icon</p>
+            <button class="ios-next-btn" onclick="showIOSStep(2)">Next →</button>
+            <div class="ios-dots">
+                <span class="dot active"></span><span class="dot"></span><span class="dot"></span>
+            </div>
+        </div>
+
+        <!-- Step 2: Add to Home Screen -->
+        <div id="ios-guide-step-2" class="ios-guide-screen">
+            <div class="ios-step-badge">Step 2 of 3</div>
+            <div class="ios-step-title">Tap <span style="color:#007aff;">"Add to Home Screen"</span></div>
+            <div class="ios-sheet-preview">
+                <div class="ios-sheet-item" style="border-bottom:1px solid #eee;">
+                    <span>📤</span> AirDrop
+                </div>
+                <div class="ios-sheet-item ios-sheet-highlight">
+                    <span>➕</span> Add to Home Screen
+                    <div class="ios-tap-ring" style="right:-5px;left:auto;"></div>
+                    <div class="ios-arrow-point">← Tap This!</div>
+                </div>
+                <div class="ios-sheet-item" style="border-bottom:1px solid #eee;">
+                    <span>📋</span> Copy
+                </div>
+                <div class="ios-sheet-item">
+                    <span>🔖</span> Add Bookmark
+                </div>
+            </div>
+            <p class="ios-instruction">In the share menu, scroll down and tap <strong>"Add to Home Screen"</strong></p>
+            <button class="ios-next-btn" onclick="showIOSStep(3)">Next →</button>
+            <div class="ios-dots">
+                <span class="dot"></span><span class="dot active"></span><span class="dot"></span>
+            </div>
+        </div>
+
+        <!-- Step 3: Open App & Allow Notifications -->
+        <div id="ios-guide-step-3" class="ios-guide-screen">
+            <div class="ios-step-badge">Step 3 of 3</div>
+            <div class="ios-step-title">Open App → Allow <span style="color:#007aff;">Notifications</span></div>
+            <div class="ios-notif-preview">
+                <div class="ios-homescreen-icon">
+                    <img src="<?php echo SITE_URL; ?>assets/images/favicons/android-chrome-192x192.png" style="width:100%;height:100%;object-fit:cover;">
+                    <div class="ios-icon-label">A2P Realtech</div>
+                </div>
+                <div style="font-size:28px;margin:10px 0;">👇</div>
+                <div class="ios-notif-popup">
+                    <div class="ios-notif-popup-header">
+                        <img src="<?php echo SITE_URL; ?>assets/images/favicons/android-chrome-192x192.png" style="width:22px;height:22px;border-radius:5px;">
+                        <strong style="font-size:13px;margin-left:6px;">A2P Realtech</strong>
+                        <span style="font-size:11px;color:#999;margin-left:auto;">Now</span>
+                    </div>
+                    <div style="font-size:12px;color:#555;margin-top:4px;">Would like to send you notifications</div>
+                    <div class="ios-allow-btns">
+                        <div class="ios-allow-deny">Don't Allow</div>
+                        <div class="ios-allow-allow" style="position:relative;">
+                            Allow
+                            <div class="ios-tap-ring" style="width:50px;height:30px;border-radius:8px;top:50%;transform:translateY(-50%);left:-5px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p class="ios-instruction">Open <strong>A2P Realtech</strong> from your home screen, then tap <strong style="color:#007aff;">"Allow"</strong> when asked for notifications.</p>
+            <button class="ios-done-btn" onclick="closeIOSPrompt()">
+                <i class="fa fa-check-circle me-1"></i> Got it! Done
+            </button>
+            <div class="ios-dots">
+                <span class="dot"></span><span class="dot"></span><span class="dot active"></span>
             </div>
         </div>
     </div>
+
+    <style>
+    /* iOS Guide Styles */
+    #ios-pwa-prompt {
+        position: fixed; bottom: 0; left: 0; right: 0;
+        background: #fff; z-index: 2000001;
+        display: none; flex-direction: column; align-items: center;
+        padding: 30px 20px 40px; border-radius: 24px 24px 0 0;
+        box-shadow: 0 -10px 60px rgba(0,0,0,0.2);
+        transform: translateY(100%);
+        transition: transform 0.5s cubic-bezier(0.19,1,0.22,1);
+        text-align: center; max-height: 92vh; overflow-y: auto;
+    }
+    #ios-pwa-prompt.show { transform: translateY(0); }
+    .ios-guide-screen { display: none; width: 100%; flex-direction: column; align-items: center; }
+    .ios-guide-screen.active { display: flex; animation: fadeSlide 0.35s ease; }
+    @keyframes fadeSlide { from { opacity:0; transform:translateX(30px); } to { opacity:1; transform:translateX(0); } }
+
+    .ios-icon { width: 68px; height: 68px; border-radius: 16px; margin-bottom: 16px; box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
+    .ios-title { font-size: 20px; font-weight: 800; color: #1a1a1a; margin-bottom: 10px; }
+    .ios-text { font-size: 14px; color: #666; line-height: 1.6; margin-bottom: 20px; }
+    .ios-close { position: absolute; top: 14px; right: 14px; background: #eee; border: none; width: 32px; height: 32px; border-radius: 50%; font-size: 13px; color: #888; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 10; }
+
+    .ios-steps-preview { background: #f7f7f7; border-radius: 14px; padding: 14px; width: 100%; margin-bottom: 22px; text-align: left; }
+    .ios-step-preview { display: flex; align-items: center; gap: 12px; padding: 8px 0; border-bottom: 1px solid #eee; font-size: 14px; color: #333; }
+    .ios-step-preview:last-child { border-bottom: none; padding-bottom: 0; }
+    .ios-step-num { width: 28px; height: 28px; border-radius: 50%; background: #c00415; color: #fff; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+    .ios-start-btn { background: #c00415; color: #fff; border: none; padding: 14px 32px; border-radius: 50px; font-size: 15px; font-weight: 700; cursor: pointer; width: 100%; margin-bottom: 12px; }
+    .ios-skip { font-size: 13px; color: #aaa; cursor: pointer; }
+
+    .ios-step-badge { background: #007aff22; color: #007aff; font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 50px; margin-bottom: 12px; }
+    .ios-step-title { font-size: 19px; font-weight: 800; color: #1a1a1a; margin-bottom: 16px; }
+    .ios-instruction { font-size: 13px; color: #666; line-height: 1.6; margin: 14px 0 16px; }
+
+    /* Phone Preview */
+    .ios-phone-preview { width: 100%; background: #f0f0f0; border-radius: 14px; overflow: hidden; border: 2px solid #ddd; }
+    .ios-safari-bar { background: #f8f8f8; padding: 8px 12px; border-bottom: 1px solid #ddd; }
+    .ios-url-bar { background: #fff; border-radius: 8px; padding: 5px 12px; font-size: 11px; color: #555; text-align: center; }
+    .ios-page-content { padding: 12px; background: #fff; }
+    .ios-safari-bottom { background: #f8f8f8; border-top: 1px solid #ddd; padding: 10px 20px; display: flex; align-items: center; justify-content: space-around; font-size: 20px; color: #555; }
+    .ios-share-btn-highlight { position: relative; display: flex; align-items: center; justify-content: center; }
+    .ios-share-svg { font-size: 22px; color: #007aff; font-weight: 700; }
+    .ios-tap-ring { position: absolute; width: 44px; height: 44px; border: 2.5px solid #007aff; border-radius: 50%; animation: tapPulse 1.2s ease-in-out infinite; top: 50%; left: 50%; transform: translate(-50%,-50%); }
+    .ios-arrow-bounce { position: absolute; bottom: -28px; font-size: 20px; animation: bounceUp 0.8s ease-in-out infinite alternate; }
+    @keyframes tapPulse { 0%,100%{opacity:1;transform:translate(-50%,-50%) scale(1);} 50%{opacity:0.3;transform:translate(-50%,-50%) scale(1.5);} }
+    @keyframes bounceUp { to { transform: translateY(-6px); } }
+
+    /* Sheet Preview */
+    .ios-sheet-preview { background: #fff; border: 1.5px solid #e5e5e5; border-radius: 14px; width: 100%; overflow: hidden; margin-bottom: 4px; }
+    .ios-sheet-item { padding: 13px 16px; font-size: 15px; color: #333; display: flex; align-items: center; gap: 10px; position: relative; }
+    .ios-sheet-highlight { background: #007aff11; font-weight: 700; color: #007aff; border-left: 4px solid #007aff; }
+    .ios-arrow-point { position: absolute; right: 14px; font-size: 12px; color: #c00415; font-weight: 700; animation: blink 1s ease-in-out infinite alternate; }
+    @keyframes blink { to { opacity: 0.3; } }
+
+    /* Notif Preview */
+    .ios-notif-preview { width: 100%; display: flex; flex-direction: column; align-items: center; margin-bottom: 4px; }
+    .ios-homescreen-icon { width: 70px; height: 70px; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.18); position: relative; }
+    .ios-icon-label { position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); font-size: 11px; white-space: nowrap; color: #333; font-weight: 600; }
+    .ios-notif-popup { background: #fff; border-radius: 14px; padding: 14px; box-shadow: 0 6px 30px rgba(0,0,0,0.15); width: 100%; margin-top: 24px; border: 1.5px solid #e5e5e5; }
+    .ios-notif-popup-header { display: flex; align-items: center; }
+    .ios-allow-btns { display: flex; margin-top: 12px; border-top: 1px solid #eee; padding-top: 10px; gap: 10px; }
+    .ios-allow-deny { flex: 1; text-align: center; padding: 8px; font-size: 14px; color: #999; cursor: pointer; }
+    .ios-allow-allow { flex: 1; text-align: center; padding: 8px; font-size: 14px; color: #007aff; font-weight: 700; cursor: pointer; background: #007aff11; border-radius: 8px; position: relative; }
+
+    .ios-next-btn { background: #007aff; color: #fff; border: none; padding: 13px 32px; border-radius: 50px; font-size: 15px; font-weight: 700; cursor: pointer; width: 100%; margin-bottom: 14px; }
+    .ios-done-btn { background: #34c759; color: #fff; border: none; padding: 14px 32px; border-radius: 50px; font-size: 15px; font-weight: 700; cursor: pointer; width: 100%; margin-bottom: 14px; }
+
+    .ios-dots { display: flex; gap: 7px; justify-content: center; }
+    .dot { width: 8px; height: 8px; background: #ddd; border-radius: 50%; transition: background 0.3s; }
+    .dot.active { background: #007aff; width: 22px; border-radius: 4px; }
+    </style>
+
+    <script>
+    window.showIOSStep = function(stepNum) {
+        document.querySelectorAll('.ios-guide-screen').forEach(s => s.classList.remove('active'));
+        const step = document.getElementById('ios-guide-step-' + stepNum);
+        if (step) step.classList.add('active');
+    };
+    </script>
 </body>
 
 
