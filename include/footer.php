@@ -166,139 +166,179 @@
     </div>
 </div>
 
-<!-- PWA Install Modal (Global) -->
+<!-- NEXT LEVEL PWA Install Modal -->
 <div id="pwa-install-modal">
-    <div class="pwa-modal-card">
-        <button onclick="closePwaModal()" class="pwa-x-close">×</button>
-        <div class="pwa-icon-box">
-            <img src="<?php echo SITE_URL; ?>assets/images/favicons/android-chrome-192x192.png" alt="App Logo">
-        </div>
-        <h3>Install Our App</h3>
-        <p>Get the full A2P Realtech experience — instant alerts, faster loading, and home screen access!</p>
-
-        <!-- Steps Preview -->
-        <div class="pwa-steps-list">
-            <div class="pwa-step-item">
-                <div class="pwa-step-circle">1</div>
-                <div class="pwa-step-desc">Tap <strong>"Install Now"</strong> below</div>
+    <div class="pwa-glass-card">
+        <button onclick="closePwaModal()" class="pwa-x-close" title="Close">×</button>
+        
+        <div class="pwa-header">
+            <div class="pwa-icon-wrapper">
+                <img src="<?php echo SITE_URL; ?>assets/images/favicons/android-chrome-192x192.png" alt="App Logo" class="pwa-main-icon">
+                <div class="pwa-verified-badge"><i class="fas fa-check-circle"></i></div>
             </div>
-            <div class="pwa-step-divider">↓</div>
-            <div class="pwa-step-item">
-                <div class="pwa-step-circle">2</div>
-                <div class="pwa-step-desc">Browser will ask to <strong>Install App</strong> — confirm</div>
-            </div>
-            <div class="pwa-step-divider">↓</div>
-            <div class="pwa-step-item">
-                <div class="pwa-step-circle">3</div>
-                <div class="pwa-step-desc">App opens → tap <strong>"Allow"</strong> for notifications</div>
-            </div>
+            <div class="pwa-badge-trust">OFFICIAL APP</div>
         </div>
 
-        <button id="pwa-main-btn" onclick="handlePwaInstallClick()" class="pwa-btn-install">
-            <i class="fas fa-download me-2"></i> Install Now — It's Free!
+        <h3 class="pwa-modal-title">Experience A2P Realtech</h3>
+        <p class="pwa-modal-subtitle">Fast • Secure • Real-time Updates</p>
+
+        <!-- Premium Timeline Steps -->
+        <div class="pwa-timeline">
+            <div class="pwa-time-item">
+                <div class="pwa-time-icon"><i class="fas fa-cloud-download-alt"></i></div>
+                <div class="pwa-time-content">
+                    <strong>Instant Install</strong>
+                    <span>No PlayStore needed, installs directly.</span>
+                </div>
+            </div>
+            <div class="pwa-time-item">
+                <div class="pwa-time-icon"><i class="fas fa-mobile-alt"></i></div>
+                <div class="pwa-time-content">
+                    <strong>Home Screen Access</strong>
+                    <span>Quick access like a native app.</span>
+                </div>
+            </div>
+            <div class="pwa-time-item">
+                <div class="pwa-time-icon"><i class="fas fa-bell"></i></div>
+                <div class="pwa-time-content">
+                    <strong>Real-time Alerts</strong>
+                    <span>Never miss a new property or offer.</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="pwa-benefits-tag">
+            <i class="fas fa-shield-alt"></i> 100% Safe & Secure • Secure Connection
+        </div>
+
+        <button id="pwa-main-btn" onclick="handlePwaInstallClick()" class="pwa-btn-premium">
+            <span>INSTALL THE APP NOW</span>
+            <i class="fas fa-arrow-right"></i>
         </button>
 
-        <a href="javascript:void(0)" onclick="closePwaModal()" class="pwa-close-link">Maybe Later</a>
+        <div class="pwa-footer-links">
+            <span onclick="closePwaModal()">Maybe Later</span>
+            <span class="dot-sep">•</span>
+            <span>Learn More</span>
+        </div>
     </div>
 </div>
 
 <style>
-    /* Global Modals Base Styles */
-    #location-modal, #pwa-install-modal {
-        position: fixed; top: 0; left: 0;
-        width: 100%; height: 100%;
-        background: rgba(0,0,0,0.85);
+    /* ===== NEXT LEVEL PWA STYLES ===== */
+    #pwa-install-modal {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(15, 15, 15, 0.7);
+        backdrop-filter: blur(8px);
         display: none; align-items: center; justify-content: center;
-        z-index: 2000001; backdrop-filter: blur(10px);
-        font-family: 'Poppins', sans-serif;
+        z-index: 2147483647; 
+        padding: 20px;
     }
 
-    /* Shared Modal Cards Style */
-    .loc-modal-card, .pwa-modal-card {
-        background: #fff; padding: 40px 30px;
-        border-radius: 24px; text-align: center;
-        max-width: 420px; width: 90%;
-        box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-        animation: pwaModalPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    .pwa-glass-card {
+        background: rgba(255, 255, 255, 0.95);
+        max-width: 400px; width: 100%;
+        border-radius: 32px;
+        padding: 40px 24px 30px;
+        text-align: center;
+        position: relative;
+        box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+        animation: pwaSlideUp 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+        border: 1px solid rgba(255,255,255,0.3);
+    }
+    @keyframes pwaSlideUp {
+        from { opacity: 0; transform: translateY(40px) scale(0.95); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
-    @keyframes pwaModalPop {
-        from { opacity: 0; transform: scale(0.8) translateY(30px); }
-        to { opacity: 1; transform: scale(1) translateY(0); }
+    .pwa-header {
+        position: relative; margin-bottom: 20px;
+        display: flex; flex-direction: column; align-items: center;
+    }
+    .pwa-icon-wrapper {
+        position: relative; width: 90px; height: 90px;
+    }
+    .pwa-main-icon {
+        width: 100%; height: 100%; border-radius: 20px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+    .pwa-verified-badge {
+        position: absolute; bottom: -5px; right: -5px;
+        background: #fff; border-radius: 50%;
+        color: #007aff; font-size: 22px;
+        line-height: 1; display: flex; align-items: center; justify-content: center;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .pwa-badge-trust {
+        background: #f0f0f0; color: #666; font-size: 10px;
+        font-weight: 800; padding: 4px 12px; border-radius: 50px;
+        margin-top: 15px; letter-spacing: 1px;
     }
 
-    /* Icon Pulse Styles */
-    .loc-icon-pulse, .pwa-icon-box {
-        width: 90px; height: 90px;
-        background: #fdf2f2; border-radius: 22%;
-        display: inline-flex; align-items: center; justify-content: center;
-        margin-bottom: 25px; position: relative;
-    }
-    .loc-icon-pulse { color: #c00415; font-size: 35px; border-radius: 50%; }
-    .pwa-icon-box img { width: 60px; height: 60px; border-radius: 12px; }
+    .pwa-modal-title { font-size: 24px; font-weight: 800; color: #1a1a1a; margin-bottom: 5px; }
+    .pwa-modal-subtitle { font-size: 14px; color: #888; margin-bottom: 25px; font-weight: 500; }
 
-    .loc-icon-pulse::after, .pwa-icon-box::after {
-        content: ''; position: absolute;
-        top: -5px; left: -5px; right: -5px; bottom: -5px;
-        border: 2px solid #c00415; border-radius: 25%;
-        animation: pwaPulse 2s infinite;
+    /* Timeline Steps */
+    .pwa-timeline {
+        text-align: left; background: #f8f9fa; border-radius: 20px;
+        padding: 20px 15px; margin-bottom: 25px;
     }
-    .loc-icon-pulse::after { border-radius: 50%; }
+    .pwa-time-item {
+        display: flex; gap: 15px; margin-bottom: 18px; position: relative;
+    }
+    .pwa-time-item:last-child { margin-bottom: 0; }
+    .pwa-time-icon {
+        width: 32px; height: 32px; background: #fff;
+        border-radius: 10px; display: flex; align-items: center; justify-content: center;
+        color: #c00415; font-size: 14px; flex-shrink: 0;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+    .pwa-time-content strong { display: block; font-size: 14px; color: #333; }
+    .pwa-time-content span { font-size: 12px; color: #777; line-height: 1.3; display: block; }
 
-    @keyframes pwaPulse {
-        0% { transform: scale(1); opacity: 1; }
-        100% { transform: scale(1.3); opacity: 0; }
+    .pwa-benefits-tag {
+        font-size: 11px; color: #34c759; font-weight: 700;
+        margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 6px;
     }
 
-    .loc-modal-card h3, .pwa-modal-card h3 { color: #222; font-weight: 800; font-size: 24px; margin-bottom: 12px; }
-    .loc-modal-card p, .pwa-modal-card p { color: #666; font-size: 15px; line-height: 1.6; margin-bottom: 30px; }
+    .pwa-btn-premium {
+        background: linear-gradient(135deg, #c00415, #8b0010);
+        color: #fff; border: none; width: 100%;
+        padding: 16px; border-radius: 16px; font-weight: 800;
+        font-size: 15px; cursor: pointer; display: flex;
+        align-items: center; justify-content: center; gap: 12px;
+        box-shadow: 0 15px 30px rgba(192,4,21,0.3);
+        transition: all 0.3s;
+    }
+    .pwa-btn-premium:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 20px 40px rgba(192,4,21,0.45);
+    }
+    .pwa-btn-premium i {
+        font-size: 14px; transition: transform 0.3s;
+    }
+    .pwa-btn-premium:hover i { transform: translateX(5px); }
 
-    .loc-btn-primary, .pwa-btn-install {
-        background: #c00415; color: #fff; border: none;
-        padding: 16px 30px; border-radius: 50px;
-        font-weight: 700; cursor: pointer; width: 100%;
-        font-size: 16px; transition: all 0.3s;
-        box-shadow: 0 8px 20px rgba(192,4,21,0.3);
+    .pwa-footer-links {
+        margin-top: 20px; font-size: 13px; color: #aaa;
     }
-    .loc-btn-primary:hover, .pwa-btn-install:hover { background: #000; transform: translateY(-3px); }
+    .pwa-footer-links span { cursor: pointer; transition: color 0.2s; }
+    .pwa-footer-links span:hover { color: #666; }
+    .dot-sep { margin: 0 10px; color: #eee; }
 
-    .pwa-close-link {
-        display: block; margin-top: 16px; color: #999;
-        text-decoration: none; font-size: 13px; font-weight: 600;
-        transition: color 0.3s;
-    }
-    .pwa-close-link:hover { color: #c00415; }
-
-    /* PWA steps */
-    .pwa-steps-list {
-        background: #f9f9f9; border-radius: 14px;
-        padding: 14px 16px; margin-bottom: 22px; text-align: left;
-    }
-    .pwa-step-item {
-        display: flex; align-items: center; gap: 12px;
-        padding: 6px 0;
-    }
-    .pwa-step-circle {
-        width: 28px; height: 28px; flex-shrink: 0;
-        border-radius: 50%; background: #c00415;
-        color: #fff; font-size: 13px; font-weight: 700;
-        display: flex; align-items: center; justify-content: center;
-    }
-    .pwa-step-desc { font-size: 13px; color: #444; line-height: 1.4; }
-    .pwa-step-divider {
-        text-align: center; color: #ccc; font-size: 14px;
-        padding: 2px 0 2px 14px;
-    }
     .pwa-x-close {
-        position: absolute; top: 12px; right: 14px;
-        background: #f0f0f0; border: none; width: 30px; height: 30px;
-        border-radius: 50%; font-size: 18px; color: #888;
-        cursor: pointer; line-height: 1; display: flex;
-        align-items: center; justify-content: center;
-        transition: background 0.2s, color 0.2s;
+        position: absolute; top: 15px; right: 15px;
+        background: #eee; border: none; width: 32px; height: 32px;
+        border-radius: 50%; color: #888; font-size: 18px;
+        cursor: pointer; display: flex; align-items: center; justify-content: center;
+        transition: all 0.2s;
     }
-    .pwa-x-close:hover { background: #e0e0e0; color: #333; }
-    .pwa-modal-card { position: relative; }
+    .pwa-x-close:hover { background: #ddd; color: #333; }
+
+    @media (max-width: 480px) {
+        .pwa-glass-card { padding: 30px 20px 25px; }
+        .pwa-modal-title { font-size: 20px; }
+    }
 </style>
 
 <footer class="site-footer site-footer-two">
