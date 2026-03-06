@@ -19,6 +19,11 @@ try {
     $pdo->exec("ALTER TABLE subproduct ADD COLUMN related_blogs TEXT NULL");
 } catch (Exception $e) {}
 
+try {
+    $pdo = getPDOObject();
+    $pdo->exec("ALTER TABLE subproduct ADD COLUMN related_products TEXT NULL");
+} catch (Exception $e) {}
+
 // Auto-create product_images table if not exists
 try {
     $pdo_init = getPDOObject();
@@ -134,6 +139,12 @@ if (isset($_POST['addsubproduct'])) {
         $posted_data['related_blogs'] = implode(',', $posted_data['related_blogs']);
     } else {
         $posted_data['related_blogs'] = '';
+    }
+
+    if (isset($posted_data['related_products']) && is_array($posted_data['related_products'])) {
+        $posted_data['related_products'] = implode(',', $posted_data['related_products']);
+    } else {
+        $posted_data['related_products'] = '';
     }
 
     $affected_rows = insert('subproduct', $posted_data);
@@ -259,6 +270,12 @@ if (isset($_POST['editdone'])) {
         $posted_data['related_blogs'] = '';
     }
 
+    if (isset($posted_data['related_products']) && is_array($posted_data['related_products'])) {
+        $posted_data['related_products'] = implode(',', $posted_data['related_products']);
+    } else {
+        $posted_data['related_products'] = '';
+    }
+
     $affected_rows = update('subproduct', $posted_data, ['id' => $pid]);
     
     save_product_images_func($pid);
@@ -309,6 +326,7 @@ function subproduct_form(
     $meta_description = '',
     $actstat = '',
     $related_blogs = '',
+    $related_products = '',
     $formname = 'addsubproduct'
 ) { ?>
 
@@ -675,7 +693,53 @@ function subproduct_form(
                 <style>
                     .d-none-extra { display: none !important; }
                     .blog-item.filtered-out { display: none !important; }
+                    .d-none-extra-prod { display: none !important; }
+                    .product-item.filtered-out-prod { display: none !important; }
                 </style>
+
+                <!-- Related Products Section -->
+                <div class="col-lg-12 mt-4">
+                    <div class="card border">
+                        <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+                            <h5 class="mb-0"><i class="mdi mdi-home-city-outline me-2 text-primary"></i>Select Related Products</h5>
+                            <div class="search-box">
+                                <input type="text" id="productSearch" class="form-control form-control-sm" placeholder="Search properties..." style="width: 250px;">
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row" id="productList">
+                                <?php
+                                $all_products = sqlfetch("SELECT id, name FROM `subproduct` WHERE actstat=1 ORDER BY name ASC");
+                                $selected_products = !empty($related_products) ? explode(',', $related_products) : [];
+                                $prod_count = 0;
+                                foreach ($all_products as $prod) {
+                                    // Don't show current product in selection
+                                    if($prod['id'] == $pid) continue;
+
+                                    $is_checked = in_array($prod['id'], $selected_products) ? 'checked' : '';
+                                    $item_class = ($prod_count < 10 || $is_checked) ? 'product-item' : 'product-item d-none-extra-prod';
+                                    ?>
+                                    <div class="col-md-4 col-sm-6 mb-2 <?php echo $item_class; ?>" data-name="<?php echo strtolower(htmlspecialchars($prod['name'])); ?>">
+                                        <div class="form-check">
+                                            <input class="form-check-input product-checkbox" type="checkbox" name="related_products[]" value="<?php echo $prod['id']; ?>" id="prod_<?php echo $prod['id']; ?>" <?php echo $is_checked; ?>>
+                                            <label class="form-check-label" for="prod_<?php echo $prod['id']; ?>">
+                                                <?php echo htmlspecialchars($prod['name']); ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <?php
+                                    $prod_count++;
+                                }
+                                ?>
+                            </div>
+                            <?php if ($prod_count > 10): ?>
+                            <div class="text-center mt-3" id="loadMoreProductsContainer">
+                                <button type="button" class="btn btn-sm btn-outline-primary" id="btnLoadMoreProducts">Load More</button>
+                            </div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="col-lg-12  mt-5">
                     <div class="input-group input-group-merge">
@@ -770,6 +834,7 @@ function subproduct_form(
                                         $product['meta_description'] ?? '',
                                         $product['actstat'] ?? '',
                                         $product['related_blogs'] ?? '',
+                                        $product['related_products'] ?? '',
                                         'editdone'
                                     );
                                 } ?>
@@ -1011,6 +1076,48 @@ function subproduct_form(
                                 document.getElementById('notif_msg').value = itemName ? "Check out our newest property: " + itemName : "Check out our newest property listing!";
                             }
                         }
+                    });
+                }
+
+                // --- Product Selection Logic ---
+                const productSearchInput = document.getElementById('productSearch');
+                const btnLoadMoreProducts = document.getElementById('btnLoadMoreProducts');
+                const productItems = document.querySelectorAll('.product-item');
+                let showingAllProducts = false;
+
+                if (productSearchInput) {
+                    productSearchInput.addEventListener('input', function() {
+                        const query = this.value.toLowerCase().trim();
+                        productItems.forEach(item => {
+                            const name = item.getAttribute('data-name');
+                            if (name.includes(query)) {
+                                item.classList.remove('filtered-out-prod');
+                                if (query !== "") {
+                                    item.classList.remove('d-none-extra-prod');
+                                } else if (!showingAllProducts) {
+                                    const index = Array.from(productItems).indexOf(item);
+                                    const isChecked = item.querySelector('.product-checkbox').checked;
+                                    if (index >= 10 && !isChecked) {
+                                        item.classList.add('d-none-extra-prod');
+                                    }
+                                }
+                            } else {
+                                item.classList.add('filtered-out-prod');
+                            }
+                        });
+                        if (btnLoadMoreProducts) {
+                            btnLoadMoreProducts.parentElement.style.display = query === "" && !showingAllProducts ? "block" : "none";
+                        }
+                    });
+                }
+
+                if (btnLoadMoreProducts) {
+                    btnLoadMoreProducts.addEventListener('click', function() {
+                        productItems.forEach(item => {
+                            item.classList.remove('d-none-extra-prod');
+                        });
+                        this.parentElement.style.display = 'none';
+                        showingAllProducts = true;
                     });
                 }
             });
