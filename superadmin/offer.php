@@ -175,9 +175,12 @@ if (isset($_POST['addclient'])) {
             
             // Send Push Notification if checked
             if (isset($_POST['send_notif']) && $_POST['send_notif'] == '1') {
-                $notif_link = SITE_URL . "blog_detail.php?id=" . urlencode($name);
+                $notif_title = !empty($_POST['notif_title']) ? $_POST['notif_title'] : "New Blog: " . $name;
+                $notif_msg = !empty($_POST['notif_msg']) ? $_POST['notif_msg'] : "Check out our latest blog post!";
+                $notif_custom_link = !empty($_POST['notif_link']) ? $_POST['notif_link'] : SITE_URL . "blog_detail.php?id=" . urlencode($name);
+
                 $notif_img = $Filename ? SITE_URL . "upload/" . $Filename : '';
-                sendGlobalPushNotification("New Blog: " . $name, "Check out our latest blog post!", $notif_link, $notif_img);
+                sendGlobalPushNotification($notif_title, $notif_msg, $notif_custom_link, $notif_img);
             }
         }
     } else {
@@ -311,9 +314,12 @@ if (isset($_POST['editdone'])) {
 
         // Send Push Notification if checked
         if (isset($_POST['send_notif']) && $_POST['send_notif'] == '1') {
-            $notif_link = SITE_URL . "blog_detail.php?id=" . urlencode($name);
+            $notif_title = !empty($_POST['notif_title']) ? $_POST['notif_title'] : "Updated Blog: " . $name;
+            $notif_msg = !empty($_POST['notif_msg']) ? $_POST['notif_msg'] : "We've updated one of our blog posts. Read it now!";
+            $notif_custom_link = !empty($_POST['notif_link']) ? $_POST['notif_link'] : SITE_URL . "blog_detail.php?id=" . urlencode($name);
+
             $notif_img = $Filename ? SITE_URL . "upload/" . $Filename : '';
-            sendGlobalPushNotification("Updated Blog: " . $name, "We've updated one of our blog posts. Read it now!", $notif_link, $notif_img);
+            sendGlobalPushNotification($notif_title, $notif_msg, $notif_custom_link, $notif_img);
         }
     }
 }
@@ -460,12 +466,38 @@ function client_form($pid = '0', $name = '', $photo = '', $des = '', $des1 = '',
                 </div>
 
                 <div class="col-lg-12 mt-4">
-                    <div class="form-check form-switch card p-3 border">
-                        <input class="form-check-input" type="checkbox" name="send_notif" id="sendNotifBlog" value="1">
-                        <label class="form-check-label fw-bold text-primary" for="sendNotifBlog">
-                            <i class="mdi mdi-bell-ring-outline me-1"></i> Send Push Notification to all users
-                        </label>
-                        <div class="form-text">If checked, customers will receive a notification about this blog post.</div>
+                    <div class="card p-3 border" style="background: #fff8f0;">
+                        <div class="form-check form-switch mb-3">
+                            <input class="form-check-input" type="checkbox" name="send_notif" id="sendNotifBlog" value="1">
+                            <label class="form-check-label fw-bold text-primary" for="sendNotifBlog">
+                                <i class="mdi mdi-bell-ring-outline me-1"></i> Send Push Notification to all users
+                            </label>
+                            <div class="form-text">If checked, customers will receive a notification about this blog post.</div>
+                        </div>
+
+                        <!-- Extra Notification Fields -->
+                        <div id="notifFields" style="display:none; border-top: 1px dashed #666cff44; padding-top: 15px;">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="form-floating form-floating-outline">
+                                        <input type="text" class="form-control" name="notif_title" id="notif_title" placeholder="Notification Title">
+                                        <label>Notification Title</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating form-floating-outline">
+                                        <input type="text" class="form-control" name="notif_link" id="notif_link" placeholder="Custom Link (Optional)">
+                                        <label>Custom Link (Optional)</label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-floating form-floating-outline">
+                                        <textarea class="form-control" name="notif_msg" id="notif_msg" placeholder="Message Body" style="height: 80px"></textarea>
+                                        <label>Notification Message / Body</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
@@ -815,6 +847,22 @@ function previewExtraPhoto(input) {
                         });
                         this.parentElement.style.display = 'none';
                         showingAll = true;
+                    });
+                }
+
+                // Push Notification Field Handling
+                const sendNotifCheck = document.getElementById('sendNotifBlog');
+                const notifFields = document.getElementById('notifFields');
+                if (sendNotifCheck) {
+                    sendNotifCheck.addEventListener('change', function() {
+                        notifFields.style.display = this.checked ? 'block' : 'none';
+                        if (this.checked) {
+                            const itemName = document.querySelector('input[name="name"]').value;
+                            document.getElementById('notif_title').value = itemName || "New Blog Post";
+                            if (!document.getElementById('notif_msg').value) {
+                                document.getElementById('notif_msg').value = itemName ? "New Blog: " + itemName + ". Read more now!" : "Check out our latest blog post!";
+                            }
+                        }
                     });
                 }
             });

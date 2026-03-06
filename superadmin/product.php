@@ -146,9 +146,12 @@ if (isset($_POST['addsubproduct'])) {
         
         // Send Push Notification if checked
         if (isset($_POST['send_notif']) && $_POST['send_notif'] == '1') {
-            $notif_link = SITE_URL . "service_detail.php?id=" . urlencode($posted_data['name']);
+            $notif_title = !empty($_POST['notif_title']) ? $_POST['notif_title'] : "New Property: " . $posted_data['name'];
+            $notif_msg = !empty($_POST['notif_msg']) ? $_POST['notif_msg'] : "Check out our newest property listing!";
+            $notif_custom_link = !empty($_POST['notif_link']) ? $_POST['notif_link'] : SITE_URL . "service_detail.php?id=" . urlencode($posted_data['name']);
+            
             $notif_img = $posted_data['photo'] ? SITE_URL . "upload/" . $posted_data['photo'] : '';
-            sendGlobalPushNotification("New Property: " . $posted_data['name'], "Check out our newest property listing!", $notif_link, $notif_img);
+            sendGlobalPushNotification($notif_title, $notif_msg, $notif_custom_link, $notif_img);
         }
     } else {
         $umessage = '<div class="alert alert-danger" role="alert">
@@ -267,9 +270,12 @@ if (isset($_POST['editdone'])) {
         
         // Send Push Notification if checked
         if (isset($_POST['send_notif']) && $_POST['send_notif'] == '1') {
-            $notif_link = SITE_URL . "service_detail.php?id=" . urlencode($posted_data['name']);
+            $notif_title = !empty($_POST['notif_title']) ? $_POST['notif_title'] : "Updated Property: " . $posted_data['name'];
+            $notif_msg = !empty($_POST['notif_msg']) ? $_POST['notif_msg'] : "We've updated details for " . $posted_data['name'] . ". View now!";
+            $notif_custom_link = !empty($_POST['notif_link']) ? $_POST['notif_link'] : SITE_URL . "service_detail.php?id=" . urlencode($posted_data['name']);
+
             $notif_img = $posted_data['photo'] ? SITE_URL . "upload/" . $posted_data['photo'] : ($prevphoto ? SITE_URL . "upload/" . $prevphoto : '');
-            sendGlobalPushNotification("Updated Property: " . $posted_data['name'], "We've updated details for " . $posted_data['name'] . ". View now!", $notif_link, $notif_img);
+            sendGlobalPushNotification($notif_title, $notif_msg, $notif_custom_link, $notif_img);
         }
     }
 }
@@ -569,12 +575,38 @@ function subproduct_form(
                 </div>
 
                 <div class="col-lg-12 mt-4">
-                    <div class="form-check form-switch card p-3 border">
-                        <input class="form-check-input" type="checkbox" name="send_notif" id="sendNotifProduct" value="1">
-                        <label class="form-check-label fw-bold text-primary" for="sendNotifProduct">
-                            <i class="mdi mdi-bell-ring-outline me-1"></i> Send Push Notification to all users
-                        </label>
-                        <div class="form-text">If checked, customers will receive a notification about this property listing on their devices.</div>
+                    <div class="card p-3 border" style="background: #f0f7ff;">
+                        <div class="form-check form-switch mb-3">
+                            <input class="form-check-input" type="checkbox" name="send_notif" id="sendNotifProduct" value="1">
+                            <label class="form-check-label fw-bold text-primary" for="sendNotifProduct">
+                                <i class="mdi mdi-bell-ring-outline me-1"></i> Send Push Notification to all users
+                            </label>
+                            <div class="form-text">If checked, customers will receive a notification about this property listing on their devices.</div>
+                        </div>
+
+                        <!-- Extra Notification Fields -->
+                        <div id="notifFields" style="display:none; border-top: 1px dashed #666cff44; padding-top: 15px;">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="form-floating form-floating-outline">
+                                        <input type="text" class="form-control" name="notif_title" id="notif_title" placeholder="Notification Title">
+                                        <label>Notification Title</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating form-floating-outline">
+                                        <input type="text" class="form-control" name="notif_link" id="notif_link" placeholder="Custom Link (Optional)">
+                                        <label>Custom Link (Optional)</label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-floating form-floating-outline">
+                                        <textarea class="form-control" name="notif_msg" id="notif_msg" placeholder="Message Body" style="height: 80px"></textarea>
+                                        <label>Notification Message / Body</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -1080,6 +1112,22 @@ function subproduct_form(
                         });
                         this.parentElement.style.display = 'none';
                         showingAll = true;
+                    });
+                }
+
+                // Push Notification Field Handling
+                const sendNotifCheck = document.getElementById('sendNotifProduct');
+                const notifFields = document.getElementById('notifFields');
+                if (sendNotifCheck) {
+                    sendNotifCheck.addEventListener('change', function() {
+                        notifFields.style.display = this.checked ? 'block' : 'none';
+                        if (this.checked) {
+                            const itemName = document.querySelector('input[name="name"]').value;
+                            document.getElementById('notif_title').value = itemName || "New Property Listing";
+                            if (!document.getElementById('notif_msg').value) {
+                                document.getElementById('notif_msg').value = itemName ? "Check out our newest property: " + itemName : "Check out our newest property listing!";
+                            }
+                        }
                     });
                 }
             });
