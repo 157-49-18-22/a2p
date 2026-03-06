@@ -15,17 +15,23 @@ firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage((payload) => {
-    // BULLETPROOF ICON LOGIC: Try relative first, then absolute
-    const logoRel = 'assets/images/favicons/android-chrome-192x192.png';
-    const logoAbs = self.location.origin + '/assets/images/favicons/android-chrome-192x192.png';
+    // If the message already has a notification payload, the browser will handle it automatically
+    // We only show a manual one if it's data-only.
+    if (payload.notification) {
+        console.log('Notification handled automatically by browser.');
+        return;
+    }
 
-    const title = payload.data?.title || payload.notification?.title || "A2P RealTech";
-    const body = payload.data?.body || payload.notification?.body || "New Update Available";
+    const logoAbs = self.location.origin + '/assets/images/favicons/android-chrome-192x192.png';
+    const notificationIcon = payload.data?.image || logoAbs;
+
+    const title = payload.data?.title || "A2P RealTech";
+    const body = payload.data?.body || "New Update Available";
 
     const options = {
         body: body,
-        icon: logoAbs,
-        badge: logoAbs,
+        icon: notificationIcon,
+        badge: notificationIcon,
         tag: 'a2p-branded-push', // Group notifications
         renotify: true,         // Allows it to pop up again even with same tag
         requireInteraction: true,

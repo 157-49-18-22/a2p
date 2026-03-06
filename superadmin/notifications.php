@@ -106,9 +106,6 @@ if (isset($_POST['send_notif'])) {
         $fail_count = 0;
         $last_error = ''; // Initialize last error
         try {
-            if (!file_exists($service_account_path)) {
-                throw new Exception("Service Account JSON file not found! Please place 'firebase-service-account.json' in the superadmin directory.");
-            }
             $fcm = new FCMHelper($service_account_path);
 
             // Fetch all UNIQUE tokens
@@ -262,7 +259,7 @@ require('include/header.php');
                 <i class="mdi mdi-bell-plus-outline me-2"></i> Create New Push Notification
             </div>
             <div class="card-body">
-                <form method="POST" enctype="multipart/form-data">
+                <form method="POST" enctype="multipart/form-data" onsubmit="this.send_notif.disabled=true; this.send_notif.innerHTML='<i class=\'mdi mdi-loading mdi-spin me-2\'></i> SENDING...'; return true;">
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Notification Title <span class="text-danger">*</span></label>
