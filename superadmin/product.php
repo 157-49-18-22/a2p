@@ -438,7 +438,7 @@ function subproduct_form(
 
 
                     <div class="col-lg-12 mt-4">
-                        <div class="d-flex align-items-<ctrl94> gap-3 flex-wrap">
+                        <div class="d-flex align-items-center gap-3 flex-wrap">
                             <div class="input-group input-group-merge" style="max-width:320px;">
                                 <span class="input-group-text">@</span>
                                 <div class="form-floating form-floating-outline" style="border: 2px solid #666cff66;border-radius: 8px;">
@@ -451,7 +451,7 @@ function subproduct_form(
                                 <img src="../upload/<?php echo $photo; ?>" style="height:50px;width:50px;border-radius:8px;object-fit:cover;">
                             </div>
                             <?php endif; ?>
-
+                        </div>
                     </div>
 
                     <div class="col-lg-12 mt-4">

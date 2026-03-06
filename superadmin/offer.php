@@ -405,7 +405,7 @@ function client_form($pid = '0', $name = '', $photo = '', $des = '', $des1 = '',
                             <img src="../upload/<?php echo $photo; ?>" style="height:50px;width:50px;border-radius:8px;object-fit:cover;" title="Current main photo">
                         </div>
                         <?php endif; ?>
-
+                    </div>
                 </div>
 
                 <div class="col-lg-4  mt-3">
