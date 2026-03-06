@@ -152,19 +152,6 @@
         box-shadow: 0 5px 15px rgba(0,0,0,0.2) !important;
         opacity: 0.9 !important;
     }
-</style>
-
-<!-- Location Permission Modal -->
-<div id="location-modal">
-    <div class="loc-modal-card">
-        <div class="loc-icon-pulse">
-            <i class="fas fa-map-marker-alt"></i>
-        </div>
-        <h3>Location Permission</h3>
-        <p>To provide you with the best real estate service in your city, please <strong>Allow Location Permission</strong> in the next step.</p>
-        <button id="give-loc-permission" class="loc-btn-primary">Allow Permission & Continue</button>
-    </div>
-</div>
 
     /* Global Modals Base Styles */
     #location-modal {
@@ -223,6 +210,7 @@
     }
     .loc-btn-primary:hover { background: #000; transform: translateY(-3px); }
 </style>
+
 
 <footer class="site-footer site-footer-two">
     <div class="site-footer-bg" style="background:white;">
@@ -650,14 +638,14 @@
 </div>
 
 <!-- Location Permission Modal -->
-<div id="location-modal">
+<div id="location-modal" style="display: none;">
     <div class="loc-modal-card">
         <div class="loc-icon-pulse">
             <i class="fas fa-map-marker-alt"></i>
         </div>
-        <h3>Permission Required</h3>
-        <p>To ensure we provide the best real estate service in your area, please <strong>Allow Location Permission</strong> in the next step.</p>
-        <button id="give-loc-permission" class="loc-btn-primary">Give Permission & Continue</button>
+        <h3>Location Permission</h3>
+        <p>To provide you with the best real estate service in your city, please <strong>Allow Location Permission</strong> in the next step.</p>
+        <button id="give-loc-permission" class="loc-btn-primary">Allow Permission & Continue</button>
     </div>
 </div>
 
@@ -1044,7 +1032,7 @@ let chatbotState = {
     data: { name: '', email: 'N/A', phone: '', interest: 'General Setup', budget: 'Not Specified', message: 'Chatbot User Inquiry', city: 'Not Shared', lat_long: '' }
 };
 
-async function getCityName() {
+async function getCityName(forceDetect = false) {
     return new Promise((resolve) => {
         const modal = document.getElementById('location-modal');
         const btn = document.getElementById('give-loc-permission');
@@ -1052,7 +1040,7 @@ async function getCityName() {
         const detectLocation = async () => {
             if ("geolocation" in navigator) {
                 navigator.geolocation.getCurrentPosition(async (position) => {
-                    modal.style.display = 'none';
+                    if(modal) modal.style.display = 'none';
                     try {
                         const lat = position.coords.latitude;
                         const lon = position.coords.longitude;
@@ -1067,23 +1055,32 @@ async function getCityName() {
                         resolve({ city: "Unknown", lat_long: "" });
                     }
                 }, async (error) => {
-                    // STRICT: If denied, we return empty/denied. No automatic IP fallback.
-                    modal.style.display = 'none';
+                    if(modal) modal.style.display = 'none';
                     resolve({ city: "Denied/Error", lat_long: "" });
                 }, { timeout: 10000 });
             } else {
-                modal.style.display = 'none';
+                if(modal) modal.style.display = 'none';
                 resolve({ city: "Not Supported", lat_long: "" });
             }
         };
 
-        // Always show our custom modal first to force user interaction
-        modal.style.display = 'flex';
-        btn.innerHTML = 'Give Permission & Continue';
-        btn.onclick = () => {
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Initializing...';
+        if(forceDetect) {
             detectLocation();
-        };
+        } else {
+            // Always show our custom modal first to force user interaction
+            if(modal) {
+                modal.style.display = 'flex';
+                if(btn) {
+                    btn.innerHTML = 'Allow Permission & Continue';
+                    btn.onclick = () => {
+                        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Initializing...';
+                        detectLocation();
+                    };
+                }
+            } else {
+                detectLocation();
+            }
+        }
     });
 }
 
@@ -1196,9 +1193,13 @@ async function verifyChatbotOtp(otp) {
 }
 
 async function handleLocationPermission() {
-    const locData = await getCityName(); // This will handle the modal now
+    const btn = document.querySelector('.permission-btn');
+    if(btn) btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Fetching City...';
+    
+    const locData = await getCityName(true); // Force detect immediately
     chatbotState.data.city = locData.city;
     chatbotState.data.lat_long = locData.lat_long;
+
     
     // Resume flow
     submitChatbotLead();
