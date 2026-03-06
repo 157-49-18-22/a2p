@@ -1,6 +1,7 @@
 <?php
 $umessage = '';
 include('./function/function.php');
+require_once('./function/push_helper.php');
 check_session();
 
 // Ensure developer column exists in subproduct
@@ -139,6 +140,16 @@ if (isset($_POST['addsubproduct'])) {
     if ($affected_rows) {
         $last_id = $pdo->lastInsertId();
         save_product_images_func($last_id);
+        
+        // Push notification if selected
+        if (isset($_POST['send_push']) && $_POST['send_push'] == '1') {
+            $notif_title = "New Property Added: " . $posted_data['name'];
+            $notif_desc  = strip_tags(substr($posted_data['pro_additionalinfo'], 0, 150));
+            $notif_link  = "service_detail.php?pid=" . $last_id;
+            $notif_img   = isset($posted_data['photo']) && $posted_data['photo'] ? "upload/" . $posted_data['photo'] : '';
+            sendGlobalPushNotification($notif_title, $notif_desc, $notif_link, $notif_img);
+        }
+
         $umessage = '<div class="alert alert-success" role="alert">
                         Added Successfully
                      </div>';
@@ -253,6 +264,15 @@ if (isset($_POST['editdone'])) {
     save_product_images_func($pid);
 
     if ($affected_rows) {
+        // Push notification if selected
+        if (isset($_POST['send_push']) && $_POST['send_push'] == '1') {
+            $notif_title = "Update: " . $posted_data['name'];
+            $notif_desc  = strip_tags(substr($posted_data['pro_additionalinfo'], 0, 150)) ?: "Property details updated. Check it out now!";
+            $notif_link  = "service_detail.php?pid=" . $pid;
+            $notif_img   = isset($posted_data['photo']) && $posted_data['photo'] ? "upload/" . $posted_data['photo'] : '';
+            sendGlobalPushNotification($notif_title, $notif_desc, $notif_link, $notif_img);
+        }
+
         $umessage = '<div class="alert alert-success" role="alert">
                         Updated Successfully
                      </div>';
@@ -668,6 +688,16 @@ function subproduct_form(
                     .d-none-extra { display: none !important; }
                     .blog-item.filtered-out { display: none !important; }
                 </style>
+
+                <div class="col-lg-12 mt-4">
+                   <div class="form-check form-switch card p-3 border shadow-none" style="background:#f8f9ff;">
+                        <input class="form-check-input" type="checkbox" name="send_push" id="send_push_check" value="1">
+                        <label class="form-check-label fw-bold text-primary" for="send_push_check">
+                            🚀 Send Push Notification to all subscribers
+                            <br><small class="text-muted fw-normal">This will send a real-time alert with product info and photo.</small>
+                        </label>
+                    </div>
+                </div>
 
                 <div class="col-lg-12  mt-5">
                     <div class="input-group input-group-merge">

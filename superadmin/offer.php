@@ -1,6 +1,7 @@
 <?php
 $umessage = '';
 include('./function/function.php');
+require_once('./function/push_helper.php');
 check_session();
 
 // Auto-create offer_images table if not exists
@@ -168,6 +169,16 @@ if (isset($_POST['addclient'])) {
         if ($affected_rows) {
             $last_id = $pdo->lastInsertId();
             save_extra_images_func($last_id);
+            
+            // Push Notification
+            if (isset($_POST['send_push']) && $_POST['send_push'] == '1') {
+                $notif_title = "New Blog: " . $_POST['name'];
+                $notif_desc  = strip_tags(substr($_POST['des'], 0, 150));
+                $notif_link  = "blog_detail.php?pid=" . $last_id;
+                $notif_img   = isset($Filename) && $Filename ? "upload/" . $Filename : '';
+                sendGlobalPushNotification($notif_title, $notif_desc, $notif_link, $notif_img);
+            }
+
             $umessage = '<div class="alert alert-success" role="alert">
                             <strong></strong> Added Successfully
                        </div>';
@@ -294,11 +305,21 @@ if (isset($_POST['editdone'])) {
     save_extra_images_func($pid);
 
     $affected_rows = $q->rowCount();
-    if ($affected_rows)
+    if ($affected_rows) {
+        // Push Notification
+        if (isset($_POST['send_push']) && $_POST['send_push'] == '1') {
+            $notif_title = "Blog Update: " . $_POST['name'];
+            $notif_desc  = strip_tags(substr($_POST['des'], 0, 150));
+            $notif_link  = "blog_detail.php?pid=" . $pid;
+            $notif_img   = isset($Filename) && $Filename ? "upload/" . $Filename : '';
+            sendGlobalPushNotification($notif_title, $notif_desc, $notif_link, $notif_img);
+        }
+
         $umessage = '<div class="alert alert-primary alert-dismissible" role="alert">
                        Updated Successfully!
           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>';
+    }
 }
 
 // Function to display client form
@@ -535,6 +556,16 @@ function client_form($pid = '0', $name = '', $photo = '', $des = '', $des1 = '',
                     .blog-item.filtered-out { display: none !important; }
                 </style>
 
+
+                <div class="col-lg-12 mt-4">
+                   <div class="form-check form-switch card p-3 border shadow-none" style="background:#f8f9ff;">
+                        <input class="form-check-input" type="checkbox" name="send_push" id="send_push_check" value="1">
+                        <label class="form-check-label fw-bold text-primary" for="send_push_check">
+                            🚀 Send Push Notification to all subscribers
+                            <br><small class="text-muted fw-normal">This will send a real-time alert with blog title and snippet.</small>
+                        </label>
+                    </div>
+                </div>
 
                 <div class="col-lg-12 mt-5">
                     <div class="input-group input-group-merge">
