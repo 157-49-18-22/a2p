@@ -1280,6 +1280,18 @@ function sendMessage() {
 function handleKeyPress(e) {
     if (e.key === 'Enter') sendMessage();
 }
+
+// Smart PWA Modal Trigger
+document.addEventListener('DOMContentLoaded', () => {
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+    if (!isStandalone) {
+        setTimeout(() => {
+            if (typeof window.showPwaModal === 'function') {
+                window.showPwaModal();
+            }
+        }, 4000); 
+    }
+});
 </script>
 
 
