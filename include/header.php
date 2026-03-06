@@ -147,6 +147,8 @@
                 }
                 if(!hasV2) triggerFCMRequest();
             })();
+        }
+
         // Debug Logs:
         console.log("Device Info Debug:", { isIOS, isStandalone, permission: Notification.permission });
 
