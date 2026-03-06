@@ -147,18 +147,23 @@
                 }
                 if(!hasV2) triggerFCMRequest();
             })();
-        } else if (Notification.permission !== 'denied') {
-            // Debug Logs:
-            console.log("Device Info:", { isIOS, isStandalone, permission: Notification.permission });
+        // Debug Logs:
+        console.log("Device Info Debug:", { isIOS, isStandalone, permission: Notification.permission });
 
-            // Temporarily allowing ALL devices to see it for TESTING
-            if (!sessionStorage.getItem('notif_banner_dismissed')) {
-                console.log("Triggering Notification Banner...");
-                setTimeout(showNotifBanner, 2500);
-            }
+        // FORCE TRIGGER FOR DEBUGGING
+        if (!sessionStorage.getItem('notif_banner_dismissed')) {
+            console.log("Forcing Notification Banner...");
+            setTimeout(() => {
+                if (typeof window.showNotifBanner === 'function') {
+                    window.showNotifBanner();
+                } else {
+                    console.error("showNotifBanner is not a function!");
+                }
+            }, 1000);
         }
 
         window.showNotifBanner = function() {
+            console.log("Execution of showNotifBanner started");
             const banner = document.getElementById('notif-permission-banner');
             const titleEl = document.getElementById('notif-banner-title');
             const textEl = document.getElementById('notif-banner-text');
