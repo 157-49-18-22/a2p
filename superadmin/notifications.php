@@ -21,7 +21,8 @@ $pdo->exec("CREATE TABLE IF NOT EXISTS notification_clicks (
 )");
 
 // Handle Form Submission
-if (isset($_POST['send_notif'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    echo "<!-- Debug: POST Request Detected -->";
     extract($_POST);
 
     $final_image_url = !empty($image_url) ? $image_url : '';
@@ -39,6 +40,7 @@ if (isset($_POST['send_notif'])) {
         
         if (move_uploaded_file($_FILES["notif_img"]["tmp_name"], $target_file)) {
             $final_image_url = SITE_URL . "upload/" . $file_name;
+            echo "<!-- Debug: Image Uploaded: $final_image_url -->";
         }
     }
 
@@ -61,6 +63,7 @@ if (isset($_POST['send_notif'])) {
         </div>';
     } else {
         try {
+            echo "<!-- Debug: Sending Global Push... -->";
             // Send Instantly using push_helper logic
             $sent_count = sendGlobalPushNotification($title, $message, $link, $final_image_url);
             
@@ -70,7 +73,7 @@ if (isset($_POST['send_notif'])) {
                 </div>';
             } else {
                  $umessage = '<div class="alert alert-danger" role="alert">
-                    <strong><i class="mdi mdi-alert-circle me-1"></i> Error!</strong> Failed to send notification. Check logs.
+                    <strong><i class="mdi mdi-alert-circle me-1"></i> Error!</strong> Push helper failed to send. Check PHP error logs.
                 </div>';
             }
         } catch (Exception $e) {
