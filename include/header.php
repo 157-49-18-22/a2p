@@ -191,11 +191,35 @@
                 if(!hasV2) triggerFCMRequest();
             })();
         } else if (Notification.permission !== 'denied') {
-            // Only auto-trigger if NOT iOS or if already on home screen
+            // Show stylish banner first instead of triggering directly
             if (!isIOS || isStandalone) {
-                setTimeout(triggerFCMRequest, 3000); 
+                if (!sessionStorage.getItem('notif_banner_dismissed')) {
+                    setTimeout(showNotifBanner, 2500);
+                }
             }
         }
+
+        window.showNotifBanner = function() {
+            const banner = document.getElementById('notif-permission-banner');
+            if (banner) {
+                banner.style.display = 'flex';
+                setTimeout(() => banner.classList.add('show'), 50);
+            }
+        };
+
+        window.dismissNotifBanner = function() {
+            const banner = document.getElementById('notif-permission-banner');
+            if (banner) {
+                banner.classList.remove('show');
+                setTimeout(() => banner.style.display = 'none', 500);
+            }
+            sessionStorage.setItem('notif_banner_dismissed', '1');
+        };
+
+        window.acceptNotifBanner = async function() {
+            dismissNotifBanner();
+            await triggerFCMRequest();
+        };
 
         // Global PWA Modal Logic
         let deferredPrompt;

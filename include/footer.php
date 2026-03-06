@@ -1332,6 +1332,162 @@ document.addEventListener('DOMContentLoaded', () => {
 <script src="<?= SITE_URL; ?>assets/vendors/toolbar/js/jQuery.style.switcher.min.js"></script>
 <script src="<?= SITE_URL; ?>assets/vendors/toolbar/js/toolbar.js"></script>
 
+    <!-- ===== STYLISH NOTIFICATION PERMISSION BANNER ===== -->
+    <div id="notif-permission-banner">
+        <div class="npb-icon">
+            <img src="<?php echo SITE_URL; ?>assets/images/favicons/android-chrome-192x192.png" alt="A2P">
+            <span class="npb-bell-pulse">🔔</span>
+        </div>
+        <div class="npb-content">
+            <div class="npb-title">Stay Updated with A2P Realtech</div>
+            <div class="npb-text">Get instant alerts on new properties, exclusive offers & news.</div>
+        </div>
+        <div class="npb-actions">
+            <button class="npb-btn-allow" onclick="acceptNotifBanner()">
+                <i class="fa fa-bell"></i> Allow
+            </button>
+            <button class="npb-btn-deny" onclick="dismissNotifBanner()">
+                Not Now
+            </button>
+        </div>
+        <button class="npb-close" onclick="dismissNotifBanner()" title="Close">×</button>
+    </div>
+
+    <style>
+    /* ===== Notification Permission Banner ===== */
+    #notif-permission-banner {
+        position: fixed;
+        top: -120px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 9999999;
+        background: #ffffff;
+        border-radius: 18px;
+        box-shadow: 0 8px 40px rgba(0,0,0,0.18), 0 2px 10px rgba(192,4,21,0.12);
+        padding: 14px 18px 14px 16px;
+        display: none;
+        align-items: center;
+        gap: 14px;
+        min-width: 320px;
+        max-width: 92vw;
+        border-left: 4px solid #c00415;
+        transition: top 0.55s cubic-bezier(0.19, 1, 0.22, 1);
+        font-family: 'Inter', 'Segoe UI', sans-serif;
+    }
+    #notif-permission-banner.show {
+        top: 18px;
+    }
+
+    .npb-icon {
+        position: relative;
+        flex-shrink: 0;
+    }
+    .npb-icon img {
+        width: 46px;
+        height: 46px;
+        border-radius: 12px;
+        display: block;
+    }
+    .npb-bell-pulse {
+        position: absolute;
+        top: -6px;
+        right: -8px;
+        font-size: 16px;
+        animation: bellShake 1.5s ease-in-out infinite;
+        transform-origin: top center;
+    }
+    @keyframes bellShake {
+        0%, 100% { transform: rotate(0deg); }
+        15% { transform: rotate(18deg); }
+        30% { transform: rotate(-16deg); }
+        45% { transform: rotate(10deg); }
+        60% { transform: rotate(-8deg); }
+        75% { transform: rotate(4deg); }
+    }
+
+    .npb-content {
+        flex: 1;
+        min-width: 0;
+    }
+    .npb-title {
+        font-size: 13.5px;
+        font-weight: 700;
+        color: #1a1a1a;
+        line-height: 1.3;
+        margin-bottom: 2px;
+    }
+    .npb-text {
+        font-size: 11.5px;
+        color: #777;
+        line-height: 1.4;
+    }
+
+    .npb-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        flex-shrink: 0;
+    }
+    .npb-btn-allow {
+        background: linear-gradient(135deg, #c00415, #8b0010);
+        color: #fff;
+        border: none;
+        border-radius: 50px;
+        padding: 7px 18px;
+        font-size: 12.5px;
+        font-weight: 700;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        white-space: nowrap;
+        transition: transform 0.15s, box-shadow 0.15s;
+        box-shadow: 0 3px 12px rgba(192,4,21,0.35);
+    }
+    .npb-btn-allow:hover {
+        transform: scale(1.04);
+        box-shadow: 0 5px 18px rgba(192,4,21,0.5);
+    }
+    .npb-btn-deny {
+        background: transparent;
+        color: #aaa;
+        border: none;
+        font-size: 11px;
+        cursor: pointer;
+        text-align: center;
+        padding: 2px 0;
+        transition: color 0.2s;
+    }
+    .npb-btn-deny:hover { color: #555; }
+
+    .npb-close {
+        position: absolute;
+        top: 8px;
+        right: 10px;
+        background: none;
+        border: none;
+        font-size: 18px;
+        color: #ccc;
+        cursor: pointer;
+        line-height: 1;
+        padding: 0;
+        transition: color 0.2s;
+    }
+    .npb-close:hover { color: #888; }
+
+    @media (max-width: 480px) {
+        #notif-permission-banner {
+            flex-wrap: wrap;
+            min-width: unset;
+            width: calc(100vw - 28px);
+            border-radius: 14px;
+        }
+        .npb-actions { flex-direction: row; }
+        .npb-content { width: 100%; }
+    }
+    </style>
+    <!-- ===== END NOTIFICATION BANNER ===== -->
+
     <!-- iOS PWA Step-by-Step Guide -->
     <div id="ios-pwa-prompt">
         <button class="ios-close" onclick="closeIOSPrompt()"><i class="fa fa-times"></i></button>
