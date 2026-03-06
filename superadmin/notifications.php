@@ -36,11 +36,11 @@ $pdo->exec("CREATE TABLE IF NOT EXISTS notification_clicks (
     INDEX idx_notification_id (notification_id)
 )");
 
-// FCM Helper include
-require_once('./function/fcm_helper.php');
+// FCM/Push Helper include
+include_once('./function/push_helper.php');
 
-// Service Account JSON Path (User should place their firebase-service-account.json here)
-$service_account_path = 'firebase-service-account.json';
+// Service Account JSON Path (rely on push_helper/fcm_helper to find it or use .env)
+$service_account_path = __DIR__ . '/firebase-service-account.json';
 
 // Handle Form Submission
 if (isset($_POST['send_notif'])) {
@@ -95,56 +95,23 @@ if (isset($_POST['send_notif'])) {
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>';
     } else {
-        // 3. Build tracking link for this notification
-        $tracking_link = $link;
-        if ($link && $notif_db_id) {
-            $tracking_link = $site_base . '/track_click.php?notif_id=' . $notif_db_id . '&redirect=' . urlencode($link);
-        }
-
-        // 4. Send via FCM
-        $success_count = 0;
-        $fail_count = 0;
-        $last_error = ''; // Initialize last error
+        // 3. Send via the Centralized Push Helper
         try {
-            $fcm = new FCMHelper($service_account_path);
-
-            // Fetch all UNIQUE tokens
-            $tokens = $pdo->query("SELECT DISTINCT fcm_token FROM subscriber_devices WHERE fcm_token IS NOT NULL")->fetchAll(PDO::FETCH_COLUMN);
+            // Already saved to DB at line 81, so we just call the logic
+            // push_helper will handle everything: tokens, FCM, and stats update
+            $success_count = sendGlobalPushNotification($title, $message, $link, $image_url);
             
-            foreach ($tokens as $token) {
-                if(strlen($token) < 20) continue;
-                
-                $sender = $fcm->sendNotification($token, $title, $message, $tracking_link ?: $link, $image_url);
-                
-                if ($sender['success']) {
-                    $success_count++;
-                } else {
-                    $fail_count++;
-                    $err = $sender['response']['error']['message'] ?? json_encode($sender['response']);
-                    if (empty($last_error)) { // Capture the first error message
-                        $last_error = $err;
-                    }
-                    // If token is invalid (NotRegistered), delete it from DB to keep it clean
-                    if(strpos($err, 'NOT_FOUND') !== false || strpos($err, 'UNREGISTERED') !== false) {
-                        $pdo->prepare("DELETE FROM subscriber_devices WHERE fcm_token = ?")->execute([$token]);
-                    }
-                }
+            if ($success_count !== false) {
+                $umessage = '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong><i class="mdi mdi-check-circle-outline me-1"></i> Success!</strong> Notification sent to ' . $success_count . ' device(s) successfully.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>';
+            } else {
+                $umessage = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong><i class="mdi mdi-alert-outline me-1"></i> Error!</strong> Could not send notification. Check your network or Firebase configuration.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>';
             }
-
-            // Update notification with final stats
-            $pdo->prepare("UPDATE notifications SET fcm_message_id = :fcmid, recipients = :rcpt WHERE id = :id")
-                ->execute([
-                    ':fcmid' => 'FCM_BATCH_' . time(), 
-                    ':rcpt' => $success_count, 
-                    ':id' => $notif_db_id
-                ]);
-
-            $umessage = '<div class="alert alert-success alert-dismissible fade show" role="alert">
-                <strong><i class="mdi mdi-check-circle me-1"></i> Success!</strong> Notification sent to ' . $success_count . ' device(s). (Failed: ' . $fail_count . ')
-                ' . ($success_count == 0 && $fail_count > 0 ? '<br><small class="text-danger">Last Error: ' . htmlspecialchars($last_error) . '</small>' : '') . '
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>';
-
         } catch (Exception $e) {
             $umessage = '<div class="alert alert-danger alert-dismissible fade show" role="alert">
                 <i class="mdi mdi-alert me-2"></i>
