@@ -1221,7 +1221,6 @@ async function verifyChatbotOtp(otp) {
         addMessage("Error verifying OTP. Please try again.", 'bot');
     }
 }
-}
 
 async function handleLocationPermission() {
     const locData = await getCityName(); // This will handle the modal now
