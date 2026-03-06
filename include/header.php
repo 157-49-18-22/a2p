@@ -99,25 +99,29 @@
 
         // Request Permission and Get Token
         window.triggerFCMRequest = async function() {
+            if (!window.Notification) {
+                console.log("Notifications not supported in this browser.");
+                return false;
+            }
             if (Notification.permission === 'denied') {
                 alert("Notifications are blocked. Please enable them in browser settings.");
-                return;
+                return false;
             }
             
             try {
                 const permission = await Notification.requestPermission();
                 if (permission === 'granted') {
-                    // 1. Force Clean-up: Unregister ANY old service workers (OneSignal etc)
+                    // 1. Force Clean-up
                     const registrations = await navigator.serviceWorker.getRegistrations();
                     for(let reg of registrations) {
                         await reg.unregister();
                     }
 
-                    // 2. Register Fresh SW with cache busting
+                    // 2. Register Fresh SW
                     const registration = await navigator.serviceWorker.register('<?php echo SITE_URL; ?>firebase-messaging-sw-v2.js?v=' + Date.now());
                     await navigator.serviceWorker.ready;
 
-                    // 3. Get Token (FCM will now give a fresh valid one)
+                    // 3. Get Token
                     const currentToken = await getToken(messaging, { 
                         vapidKey: vapidKey,
                         serviceWorkerRegistration: registration
@@ -136,7 +140,7 @@
 
 
         // Aggressive Update: Force V2
-        if (Notification.permission === 'granted') {
+        if (window.Notification && Notification.permission === 'granted') {
             (async () => {
                 const regs = await navigator.serviceWorker.getRegistrations();
                 let hasV2 = false;
@@ -150,7 +154,7 @@
 
         // Force Banner Appearance for Email Subscription (Fallback for iOS)
         if (isIOS && !sessionStorage.getItem('notif_banner_dismissed')) {
-            // We show this even if push is denied because it's for email updates
+            // We show this even if push is denied or NOT SUPPORTED
             setTimeout(() => {
                 if (typeof window.showNotifBanner === 'function') {
                     window.showNotifBanner();

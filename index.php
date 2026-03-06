@@ -149,15 +149,17 @@ if (count($sql_banner) > 0): // Check if there are any active team members
         // You can replace this condition with your own logic
         let condition = 'red'; // Change this to 'dark-blue', 'auto', or other conditions
 
-        switch (condition) {
-            case 'red':
-                modalContent.classList.add('modal-border-red');
-                break;
-            case 'dark-blue':
-                modalContent.classList.add('modal-border-dark-blue');
-                break;
-            default:
-                modalContent.classList.add('modal-border-auto');
+        if (modalContent) {
+            switch (condition) {
+                case 'red':
+                    modalContent.classList.add('modal-border-red');
+                    break;
+                case 'dark-blue':
+                    modalContent.classList.add('modal-border-dark-blue');
+                    break;
+                default:
+                    modalContent.classList.add('modal-border-auto');
+            }
         }
     });
 </script>
