@@ -10,34 +10,19 @@ class FCMHelper {
             $this->loadEnv($envPath);
         }
 
-        // 2. Prioritize environment variables (from .env or server)
-        $projectId = getenv('FIREBASE_PROJECT_ID') ?: ($_ENV['FIREBASE_PROJECT_ID'] ?? ($_SERVER['FIREBASE_PROJECT_ID'] ?? null));
-        $clientEmail = getenv('FIREBASE_CLIENT_EMAIL') ?: ($_ENV['FIREBASE_CLIENT_EMAIL'] ?? ($_SERVER['FIREBASE_CLIENT_EMAIL'] ?? null));
-        $privateKey = getenv('FIREBASE_PRIVATE_KEY') ?: ($_ENV['FIREBASE_PRIVATE_KEY'] ?? ($_SERVER['FIREBASE_PRIVATE_KEY'] ?? null));
-
-        if ($projectId && $clientEmail && $privateKey) {
+        if (getenv('FIREBASE_PROJECT_ID')) {
             $this->serviceAccount = [
-                'project_id'   => $projectId,
-                'client_email' => $clientEmail,
-                'private_key'  => $privateKey
+                'project_id'   => getenv('FIREBASE_PROJECT_ID'),
+                'client_email' => getenv('FIREBASE_CLIENT_EMAIL'),
+                'private_key'  => getenv('FIREBASE_PRIVATE_KEY')
             ];
-        } elseif ($serviceAccountPath) {
-            // Absolute path or relative to calling script
-            $finalPath = $serviceAccountPath;
-            if (!file_exists($finalPath)) {
-                // Try relative to superadmin folder if it's just a filename
-                $trial = __DIR__ . '/../' . basename($serviceAccountPath);
-                if (file_exists($trial)) $finalPath = $trial;
-            }
-
-            if (file_exists($finalPath)) {
-                $json = file_get_contents($finalPath);
-                $this->serviceAccount = json_decode($json, true);
-            }
+        } elseif ($serviceAccountPath && file_exists($serviceAccountPath)) {
+            $json = file_get_contents($serviceAccountPath);
+            $this->serviceAccount = json_decode($json, true);
         }
 
         if (!$this->serviceAccount) {
-            throw new Exception("Firebase credentials not found. Please setup .env or ensure your service-account.json is in the superadmin folder.");
+            throw new Exception("Firebase credentials not found. Please setup .env or provide service-account.json");
         }
     }
 
