@@ -1,6 +1,7 @@
 <?php
 // error_reporting(0);
 $siteTitle = 'Ssts';
+define('SITE_URL', 'https://pink-sheep-796549.hostingersite.com/');
 if (session_status() == PHP_SESSION_NONE) { session_start(); }
 function getPDOObject()
 {

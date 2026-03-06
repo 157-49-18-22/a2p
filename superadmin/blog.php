@@ -1,6 +1,7 @@
 <?php
 $umessage = '';
 include('./function/function.php');
+include('./function/push_helper.php');
 check_session();
 if (isset($_POST['addclient'])) {
     $id = 0;
@@ -32,10 +33,18 @@ if (isset($_POST['addclient'])) {
             ':actstat' => $actstat
         ));
         $affected_rows = $q->rowCount();
-        if ($affected_rows)
+        if ($affected_rows) {
             $umessage = '<div class="alert alert-success" role="alert">
 							<strong></strong>Added Successfully
 						   </div>';
+            
+            // Send Push Notification if checked
+            if (isset($_POST['send_notif']) && $_POST['send_notif'] == '1') {
+                $notif_link = SITE_URL . "career_detail.php?id=" . urlencode($name);
+                $notif_img = $Filename ? SITE_URL . "upload/" . $Filename : '';
+                sendGlobalPushNotification("New Job Opportunity: " . $name, "We have a new career opening! View details and apply now.", $notif_link, $notif_img);
+            }
+        }
     } else {
         $umessage = '<div class="alert alert-danger" role="alert">Duplicate Entry!!! Code Already Exists </div> ';
     }
@@ -139,12 +148,20 @@ if (isset($_POST['editdone'])) {
 		WHERE id=?");
     $q->execute(array($name, $Filename, $des,  $des1, $slug, $fld_order, $actstat, $pid));
     $affected_rows = $q->rowCount();
-    if ($affected_rows)
+    if ($affected_rows) {
         $umessage = '<div class="alert alert-primary alert-dismissible" role="alert">
                            Updated Successfully!
           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
           </button>
         </div>';
+
+        // Send Push Notification if checked
+        if (isset($_POST['send_notif']) && $_POST['send_notif'] == '1') {
+            $notif_link = SITE_URL . "career_detail.php?id=" . urlencode($name);
+            $notif_img = $Filename ? SITE_URL . "upload/" . $Filename : '';
+            sendGlobalPushNotification("Job Opening Updated: " . $name, "We've updated the details for the " . $name . " position. Check it out!", $notif_link, $notif_img);
+        }
+    }
 }
 
 function client_form($pid = '0', $name = '', $photo = '', $des = '', $des1 = '', $slug = '', $fld_order = '0', $actstat = '', $formname = 'addclient')
@@ -193,6 +210,15 @@ function client_form($pid = '0', $name = '', $photo = '', $des = '', $des1 = '',
                                     <option <?php if (($actstat) == '0') echo 'selected'; ?> value="0">Inactive</option>
                                 </select>
                                 <label for="floatingSelect">Status</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-12 mt-4">
+                            <div class="form-check form-switch card p-3 border">
+                                <input class="form-check-input" type="checkbox" name="send_notif" id="sendNotifCareer" value="1">
+                                <label class="form-check-label fw-bold text-primary" for="sendNotifCareer">
+                                    <i class="mdi mdi-bell-ring-outline me-1"></i> Send Push Notification to all users
+                                </label>
+                                <div class="form-text">If checked, candidates will receive a notification about this job opening.</div>
                             </div>
                         </div>
                         <div class="col-lg-6 mt-4">

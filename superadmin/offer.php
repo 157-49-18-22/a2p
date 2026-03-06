@@ -1,6 +1,7 @@
 <?php
 $umessage = '';
 include('./function/function.php');
+include('./function/push_helper.php');
 check_session();
 
 // Auto-create offer_images table if not exists
@@ -171,6 +172,13 @@ if (isset($_POST['addclient'])) {
             $umessage = '<div class="alert alert-success" role="alert">
                             <strong></strong> Added Successfully
                        </div>';
+            
+            // Send Push Notification if checked
+            if (isset($_POST['send_notif']) && $_POST['send_notif'] == '1') {
+                $notif_link = SITE_URL . "blog_detail.php?id=" . urlencode($name);
+                $notif_img = $Filename ? SITE_URL . "upload/" . $Filename : '';
+                sendGlobalPushNotification("New Blog: " . $name, "Check out our latest blog post!", $notif_link, $notif_img);
+            }
         }
     } else {
         $umessage = '<div class="alert alert-danger" role="alert">Duplicate Entry!!! Code Already Exists </div>';
@@ -294,11 +302,20 @@ if (isset($_POST['editdone'])) {
     save_extra_images_func($pid);
 
     $affected_rows = $q->rowCount();
-    if ($affected_rows)
+    if ($affected_rows) {
+        save_extra_images_func($pid);
         $umessage = '<div class="alert alert-primary alert-dismissible" role="alert">
                        Updated Successfully!
           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>';
+
+        // Send Push Notification if checked
+        if (isset($_POST['send_notif']) && $_POST['send_notif'] == '1') {
+            $notif_link = SITE_URL . "blog_detail.php?id=" . urlencode($name);
+            $notif_img = $Filename ? SITE_URL . "upload/" . $Filename : '';
+            sendGlobalPushNotification("Updated Blog: " . $name, "We've updated one of our blog posts. Read it now!", $notif_link, $notif_img);
+        }
+    }
 }
 
 // Function to display client form
@@ -439,6 +456,16 @@ function client_form($pid = '0', $name = '', $photo = '', $des = '', $des1 = '',
                             <option <?php if (($actstat) == '0') echo 'selected'; ?> value="0">Inactive</option>
                         </select>
                         <label for="floatingSelect">Status</label>
+                    </div>
+                </div>
+
+                <div class="col-lg-12 mt-4">
+                    <div class="form-check form-switch card p-3 border">
+                        <input class="form-check-input" type="checkbox" name="send_notif" id="sendNotifBlog" value="1">
+                        <label class="form-check-label fw-bold text-primary" for="sendNotifBlog">
+                            <i class="mdi mdi-bell-ring-outline me-1"></i> Send Push Notification to all users
+                        </label>
+                        <div class="form-text">If checked, customers will receive a notification about this blog post.</div>
                     </div>
                 </div>
                 

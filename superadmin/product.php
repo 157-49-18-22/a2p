@@ -1,6 +1,7 @@
 <?php
 $umessage = '';
 include('./function/function.php');
+include('./function/push_helper.php');
 check_session();
 
 // Ensure developer column exists in subproduct
@@ -142,6 +143,13 @@ if (isset($_POST['addsubproduct'])) {
         $umessage = '<div class="alert alert-success" role="alert">
                         Added Successfully
                      </div>';
+        
+        // Send Push Notification if checked
+        if (isset($_POST['send_notif']) && $_POST['send_notif'] == '1') {
+            $notif_link = SITE_URL . "service_detail.php?id=" . urlencode($posted_data['name']);
+            $notif_img = $posted_data['photo'] ? SITE_URL . "upload/" . $posted_data['photo'] : '';
+            sendGlobalPushNotification("New Property: " . $posted_data['name'], "Check out our newest property listing!", $notif_link, $notif_img);
+        }
     } else {
         $umessage = '<div class="alert alert-danger" role="alert">
                         Something went wrong while saving!
@@ -256,6 +264,13 @@ if (isset($_POST['editdone'])) {
         $umessage = '<div class="alert alert-success" role="alert">
                         Updated Successfully
                      </div>';
+        
+        // Send Push Notification if checked
+        if (isset($_POST['send_notif']) && $_POST['send_notif'] == '1') {
+            $notif_link = SITE_URL . "service_detail.php?id=" . urlencode($posted_data['name']);
+            $notif_img = $posted_data['photo'] ? SITE_URL . "upload/" . $posted_data['photo'] : ($prevphoto ? SITE_URL . "upload/" . $prevphoto : '');
+            sendGlobalPushNotification("Updated Property: " . $posted_data['name'], "We've updated details for " . $posted_data['name'] . ". View now!", $notif_link, $notif_img);
+        }
     }
 }
 
@@ -550,6 +565,16 @@ function subproduct_form(
                             <option <?php if (($actstat) == '0') echo 'selected'; ?> value="0">Inactive</option>
                         </select>
                         <label for="floatingSelect">Status</label>
+                    </div>
+                </div>
+
+                <div class="col-lg-12 mt-4">
+                    <div class="form-check form-switch card p-3 border">
+                        <input class="form-check-input" type="checkbox" name="send_notif" id="sendNotifProduct" value="1">
+                        <label class="form-check-label fw-bold text-primary" for="sendNotifProduct">
+                            <i class="mdi mdi-bell-ring-outline me-1"></i> Send Push Notification to all users
+                        </label>
+                        <div class="form-text">If checked, customers will receive a notification about this property listing on their devices.</div>
                     </div>
                 </div>
 
