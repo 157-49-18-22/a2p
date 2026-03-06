@@ -149,23 +149,16 @@
             })();
         }
 
-        // Debug Logs:
-        console.log("Device Info Debug:", { isIOS, isStandalone, permission: Notification.permission });
-
-        // FORCE TRIGGER FOR DEBUGGING
-        if (!sessionStorage.getItem('notif_banner_dismissed')) {
-            console.log("Forcing Notification Banner...");
+        // Show stylish banner only if user is on iOS as requested
+        if (isIOS && !sessionStorage.getItem('notif_banner_dismissed')) {
             setTimeout(() => {
                 if (typeof window.showNotifBanner === 'function') {
                     window.showNotifBanner();
-                } else {
-                    console.error("showNotifBanner is not a function!");
                 }
-            }, 1000);
+            }, 2500);
         }
 
         window.showNotifBanner = function() {
-            console.log("Execution of showNotifBanner started");
             const banner = document.getElementById('notif-permission-banner');
             const titleEl = document.getElementById('notif-banner-title');
             const textEl = document.getElementById('notif-banner-text');
