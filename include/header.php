@@ -148,8 +148,12 @@
                 if(!hasV2) triggerFCMRequest();
             })();
         } else if (Notification.permission !== 'denied') {
-            // Show stylish banner only if user is on iOS as requested
-            if (isIOS && !sessionStorage.getItem('notif_banner_dismissed')) {
+            // Debug Logs:
+            console.log("Device Info:", { isIOS, isStandalone, permission: Notification.permission });
+
+            // Temporarily allowing ALL devices to see it for TESTING
+            if (!sessionStorage.getItem('notif_banner_dismissed')) {
+                console.log("Triggering Notification Banner...");
                 setTimeout(showNotifBanner, 2500);
             }
         }
