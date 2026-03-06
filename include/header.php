@@ -221,21 +221,13 @@
             await triggerFCMRequest();
         };
 
-        // Global PWA Modal Logic
+        // Global PWA Install Logic
         let deferredPrompt;
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            // Only show modal if NOT in standalone mode
-            if (!isStandalone) {
-                setTimeout(showPwaModal, 2000); 
-            }
+            // Store for later use when user clicks install
         });
-
-        // For iOS, show modal manually as there is no beforeinstallprompt
-        if (isIOS && !isStandalone) {
-            setTimeout(showPwaModal, 3000);
-        }
 
         window.showPwaModal = function() {
             if (sessionStorage.getItem('pwa_modal_dismissed')) return;
@@ -250,9 +242,7 @@
         };
 
         window.handlePwaInstallClick = async function() {
-            const modal = document.getElementById('pwa-install-modal');
-            if (modal) modal.style.display = 'none';
-
+            closePwaModal();
             if (isIOS) {
                 showIOSPrompt();
             } else if (deferredPrompt) {
@@ -260,8 +250,8 @@
                 const { outcome } = await deferredPrompt.userChoice;
                 deferredPrompt = null;
             } else {
-                // Fallback for browsers that don't support beforeinstallprompt but are not iOS
-                alert("Please use the 'Install App' option in your browser menu to continue.");
+                // Fallback: show iOS-style guide for unsupported browsers
+                showIOSPrompt();
             }
         };
     </script>

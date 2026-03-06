@@ -166,19 +166,38 @@
     </div>
 </div>
 
-<!-- PWA Install Modal (Global) - Appears on Startup -->
+<!-- PWA Install Modal (Global) -->
 <div id="pwa-install-modal">
     <div class="pwa-modal-card">
+        <button onclick="closePwaModal()" class="pwa-x-close">×</button>
         <div class="pwa-icon-box">
             <img src="<?php echo SITE_URL; ?>assets/images/favicons/android-chrome-192x192.png" alt="App Logo">
         </div>
         <h3>Install Our App</h3>
-        <p>Stay updated with the latest property listings and real-time alerts. Install the A2P Realtech app on your home screen today!</p>
-        
+        <p>Get the full A2P Realtech experience — instant alerts, faster loading, and home screen access!</p>
+
+        <!-- Steps Preview -->
+        <div class="pwa-steps-list">
+            <div class="pwa-step-item">
+                <div class="pwa-step-circle">1</div>
+                <div class="pwa-step-desc">Tap <strong>"Install Now"</strong> below</div>
+            </div>
+            <div class="pwa-step-divider">↓</div>
+            <div class="pwa-step-item">
+                <div class="pwa-step-circle">2</div>
+                <div class="pwa-step-desc">Browser will ask to <strong>Install App</strong> — confirm</div>
+            </div>
+            <div class="pwa-step-divider">↓</div>
+            <div class="pwa-step-item">
+                <div class="pwa-step-circle">3</div>
+                <div class="pwa-step-desc">App opens → tap <strong>"Allow"</strong> for notifications</div>
+            </div>
+        </div>
+
         <button id="pwa-main-btn" onclick="handlePwaInstallClick()" class="pwa-btn-install">
-            <i class="fas fa-download"></i> <span>INSTALL NOW</span>
+            <i class="fas fa-download me-2"></i> Install Now — It's Free!
         </button>
-        
+
         <a href="javascript:void(0)" onclick="closePwaModal()" class="pwa-close-link">Maybe Later</a>
     </div>
 </div>
@@ -244,11 +263,42 @@
     .loc-btn-primary:hover, .pwa-btn-install:hover { background: #000; transform: translateY(-3px); }
 
     .pwa-close-link {
-        display: block; margin-top: 20px; color: #999;
+        display: block; margin-top: 16px; color: #999;
         text-decoration: none; font-size: 13px; font-weight: 600;
         transition: color 0.3s;
     }
     .pwa-close-link:hover { color: #c00415; }
+
+    /* PWA steps */
+    .pwa-steps-list {
+        background: #f9f9f9; border-radius: 14px;
+        padding: 14px 16px; margin-bottom: 22px; text-align: left;
+    }
+    .pwa-step-item {
+        display: flex; align-items: center; gap: 12px;
+        padding: 6px 0;
+    }
+    .pwa-step-circle {
+        width: 28px; height: 28px; flex-shrink: 0;
+        border-radius: 50%; background: #c00415;
+        color: #fff; font-size: 13px; font-weight: 700;
+        display: flex; align-items: center; justify-content: center;
+    }
+    .pwa-step-desc { font-size: 13px; color: #444; line-height: 1.4; }
+    .pwa-step-divider {
+        text-align: center; color: #ccc; font-size: 14px;
+        padding: 2px 0 2px 14px;
+    }
+    .pwa-x-close {
+        position: absolute; top: 12px; right: 14px;
+        background: #f0f0f0; border: none; width: 30px; height: 30px;
+        border-radius: 50%; font-size: 18px; color: #888;
+        cursor: pointer; line-height: 1; display: flex;
+        align-items: center; justify-content: center;
+        transition: background 0.2s, color 0.2s;
+    }
+    .pwa-x-close:hover { background: #e0e0e0; color: #333; }
+    .pwa-modal-card { position: relative; }
 </style>
 
 <footer class="site-footer site-footer-two">
