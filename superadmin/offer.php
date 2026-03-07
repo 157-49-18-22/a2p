@@ -635,7 +635,64 @@ function client_form($pid = '0', $name = '', $photo = '', $des = '', $des1 = '',
         <h4 class="py-3 mb-4"><span class="text-muted fw-light">Home/</span>Banner Settings</h4>
 
 
-        <?php echo $umessage; ?>
+        <?php if (!empty($umessage)): 
+            $is_success = strpos($umessage, 'alert-success') !== false || strpos($umessage, 'alert-primary') !== false;
+            $is_error   = strpos($umessage, 'alert-danger') !== false;
+            // Extract text content
+            $toast_text = strip_tags($umessage);
+            $toast_text = trim(preg_replace('/\s+/', ' ', $toast_text));
+        ?>
+        <!-- Toast Notification -->
+        <div id="submitToast" style="
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            z-index: 99999;
+            min-width: 300px;
+            max-width: 400px;
+            background: <?php echo $is_success ? '#ffffff' : '#fff5f5'; ?>;
+            border-left: 5px solid <?php echo $is_success ? '#28a745' : '#dc3545'; ?>;
+            border-radius: 10px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+            padding: 18px 20px 18px 18px;
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            animation: slideInToast 0.4s ease;
+        ">
+            <div style="font-size: 1.8rem; line-height:1;">
+                <?php echo $is_success ? '✅' : '❌'; ?>
+            </div>
+            <div style="flex:1;">
+                <div style="font-weight:700; font-size:0.95rem; color:#1a1a2e; margin-bottom:4px;">
+                    <?php echo $is_success ? 'Success!' : 'Error!'; ?>
+                </div>
+                <div style="font-size:0.85rem; color:#555;">
+                    <?php echo htmlspecialchars($toast_text); ?>
+                </div>
+            </div>
+            <button onclick="document.getElementById('submitToast').remove()" style="background:none;border:none;font-size:1.2rem;color:#aaa;cursor:pointer;line-height:1;padding:0;margin-top:-2px;">&times;</button>
+        </div>
+        <style>
+        @keyframes slideInToast {
+            from { opacity:0; transform: translateX(60px); }
+            to   { opacity:1; transform: translateX(0); }
+        }
+        </style>
+        <script>
+            setTimeout(function() {
+                var t = document.getElementById('submitToast');
+                if (t) {
+                    t.style.transition = 'opacity 0.5s';
+                    t.style.opacity = '0';
+                    setTimeout(function(){ t.remove(); }, 500);
+                }
+            }, 4000);
+            // Scroll to top so user sees the toast
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        </script>
+        <?php endif; ?>
+
 
 
         <?php

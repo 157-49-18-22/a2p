@@ -307,59 +307,31 @@ $currentPageUrl = urlencode("http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_UR
                                 <br><br>
                           </div>
 
-                            <div class="sidebar__single sidebar__post">
-                                <h3 class="sidebar__title">Latest Posts</h3>
-                                
-                                
-                                <ul class="sidebar__post-list list-unstyled">
-                                    <?php $result = sqlfetch("select * from offer order by des ");
-                                    if (count($result)) {
-                                        foreach ($result as $offer) {
-                                    ?>
-                                            <li>
-                                                <div class="sidebar__post-image">
-                                                    <img src="<?= SITE_URL; ?>upload/<?php echo $offer['photo']; ?>" alt="" style="height: 80px;">
-                                                </div>
-                                                <div class="sidebar__post-content">
-                                                    <h3>
-                                                        <span class="sidebar__post-content-meta"><i
-                                                                class="far fa-user-circle"></i> by A2P Realtech</span>
-                                                        <a href="<?= SITE_URL; ?>blog_detail/<?php echo makeurlnamebynameCategory($offer['name']); ?>.php"><?php custom_echo($offer['name'], 30); ?></a>
-                                                    </h3>
-                                                </div>
-                                            </li>
-                                    <?php }
-                                    } ?>
-                                </ul>
-                            </div>
-
                             <?php
                             // ── RELATED BLOGS ──────────────────────────────────────────
                             $related_blogs_raw = $sql_ser[0]['related_blogs'] ?? '';
                             $related_blog_ids  = array_filter(array_map('trim', explode(',', $related_blogs_raw)));
 
                             if (!empty($related_blog_ids)):
-                                $ids_safe     = implode(',', array_map('intval', $related_blog_ids));
-                                $related_blog_list = sqlfetch("SELECT id, name, photo FROM `offer` WHERE id IN ($ids_safe) AND actstat=1 ORDER BY fld_order ASC");
+                                $ids_safe          = implode(',', array_map('intval', $related_blog_ids));
+                                $related_blog_list = sqlfetch("SELECT id, name, photo, by_blog FROM `offer` WHERE id IN ($ids_safe) AND actstat=1 ORDER BY fld_order ASC");
                             else:
                                 $related_blog_list = [];
                             endif;
 
                             if (!empty($related_blog_list)): ?>
-                            <div class="sidebar__single sidebar__post" style="margin-top: 30px;">
-                                <h3 class="sidebar__title" style="display:flex;align-items:center;gap:8px;">
-                                    <i class="far fa-newspaper" style="color:#c00415;font-size:1rem;"></i> Related Blogs
-                                </h3>
+                            <div class="sidebar__single sidebar__post">
+                                <h3 class="sidebar__title">Related Blogs</h3>
                                 <ul class="sidebar__post-list list-unstyled">
                                     <?php foreach ($related_blog_list as $rb): ?>
                                     <li>
                                         <div class="sidebar__post-image">
-                                            <img src="<?= SITE_URL; ?>upload/<?php echo htmlspecialchars($rb['photo']); ?>" alt="<?php echo htmlspecialchars($rb['name']); ?>" style="height:80px;width:80px;object-fit:cover;border-radius:6px;">
+                                            <img src="<?= SITE_URL; ?>upload/<?php echo htmlspecialchars($rb['photo']); ?>" alt="<?php echo htmlspecialchars($rb['name']); ?>" style="height:80px;width:80px;object-fit:cover;">
                                         </div>
                                         <div class="sidebar__post-content">
                                             <h3>
                                                 <span class="sidebar__post-content-meta">
-                                                    <i class="far fa-user-circle"></i> by A2P Realtech
+                                                    <i class="far fa-user-circle"></i> by <?php echo htmlspecialchars($rb['by_blog'] ?: 'A2P Realtech'); ?>
                                                 </span>
                                                 <a href="<?= SITE_URL; ?>blog_detail/<?php echo makeurlnamebynameCategory($rb['name']); ?>.php">
                                                     <?php custom_echo($rb['name'], 30); ?>
@@ -385,29 +357,23 @@ $currentPageUrl = urlencode("http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_UR
                             endif;
 
                             if (!empty($related_prod_list)): ?>
-                            <div class="sidebar__single sidebar__post related-products-sidebar" style="margin-top: 30px;">
-                                <h3 class="sidebar__title" style="display:flex;align-items:center;gap:8px;">
-                                    <i class="fas fa-home" style="color:#c00415;font-size:1rem;"></i> Related Products
-                                </h3>
+                            <div class="sidebar__single sidebar__post" style="margin-top: 30px;">
+                                <h3 class="sidebar__title">Related Products</h3>
                                 <ul class="sidebar__post-list list-unstyled">
                                     <?php foreach ($related_prod_list as $rp): ?>
-                                    <li style="display:flex;gap:12px;align-items:flex-start;margin-bottom:16px;">
-                                        <div class="sidebar__post-image" style="flex-shrink:0;">
-                                            <img src="<?= SITE_URL; ?>upload/<?php echo htmlspecialchars($rp['photo']); ?>" alt="<?php echo htmlspecialchars($rp['name']); ?>" style="height:80px;width:80px;object-fit:cover;border-radius:6px;">
+                                    <li>
+                                        <div class="sidebar__post-image">
+                                            <img src="<?= SITE_URL; ?>upload/<?php echo htmlspecialchars($rp['photo']); ?>" alt="<?php echo htmlspecialchars($rp['name']); ?>" style="height:80px;width:80px;object-fit:cover;">
                                         </div>
                                         <div class="sidebar__post-content">
-                                            <h3 style="font-size:0.85rem;line-height:1.4;">
-                                                <span class="sidebar__post-content-meta" style="font-size:0.75rem;">
+                                            <h3>
+                                                <span class="sidebar__post-content-meta">
                                                     <i class="fas fa-building"></i> Property
                                                 </span>
-                                                <a href="<?= SITE_URL; ?>product/<?php echo makeurlnamebynameCategory($rp['name']); ?>.php" style="color:#1a1a2e;font-weight:600;">
+                                                <a href="<?= SITE_URL; ?>product/<?php echo makeurlnamebynameCategory($rp['name']); ?>.php">
                                                     <?php custom_echo($rp['name'], 30); ?>
                                                 </a>
                                             </h3>
-                                            <a href="<?= SITE_URL; ?>product/<?php echo makeurlnamebynameCategory($rp['name']); ?>.php"
-                                               style="display:inline-block;margin-top:4px;padding:3px 12px;background:#c00415;color:#fff;border-radius:4px;font-size:0.72rem;text-decoration:none;font-weight:600;letter-spacing:0.3px;">
-                                               View Details &rarr;
-                                            </a>
                                         </div>
                                     </li>
                                     <?php endforeach; ?>
