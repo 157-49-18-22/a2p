@@ -3,6 +3,9 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
+// ── IST Timezone (Indian Standard Time) ─────────────────────────
+date_default_timezone_set('Asia/Kolkata');
+
 $umessage = '';
 include('./function/function.php');
 include('./function/push_helper.php'); // Include helper for consistency
@@ -48,18 +51,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $is_scheduled = !empty($scheduled_at);
     
     if ($is_scheduled) {
-        // Save as scheduled in DB
+        // Normalize datetime-local format (browser sends "2026-03-07T09:03", MySQL needs "2026-03-07 09:03:00")
+        $scheduled_at_clean = date('Y-m-d H:i:s', strtotime($scheduled_at));
+        
+        // Save as scheduled in DB (IST time as entered by admin)
         $q = $pdo->prepare("INSERT INTO notifications (title, message, link, image_url, scheduled_at, status) VALUES (:title, :message, :link, :image_url, :scheduled_at, 'scheduled')");
         $q->execute([
-            ':title'   => $title,
-            ':message' => $message,
-            ':link'    => $link,
-            ':image_url' => $final_image_url ?: null,
-            ':scheduled_at' => $scheduled_at
+            ':title'      => $title,
+            ':message'    => $message,
+            ':link'       => $link,
+            ':image_url'  => $final_image_url ?: null,
+            ':scheduled_at' => $scheduled_at_clean
         ]);
         
         $umessage = '<div class="alert alert-info" role="alert">
-            <strong><i class="mdi mdi-clock-outline me-1"></i> Scheduled!</strong> Notification saved for ' . htmlspecialchars($scheduled_at) . '.
+            <strong><i class="mdi mdi-clock-outline me-1"></i> Scheduled!</strong> Notification saved for <strong>' . date('d M Y, h:i A', strtotime($scheduled_at_clean)) . '</strong> (IST).
         </div>';
     } else {
         try {
@@ -84,6 +90,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>';
         }
     }
+}
+
+// ── AUTO-PROCESS SCHEDULED NOTIFICATIONS (runs on every page load) ──────────
+// This eliminates the need for a cron job on shared hosting
+try {
+    $now_ist = date('Y-m-d H:i:s'); // IST time (timezone set above)
+    $due_stmt = $pdo->prepare("SELECT * FROM notifications WHERE status = 'scheduled' AND scheduled_at <= :now");
+    $due_stmt->execute([':now' => $now_ist]);
+    $due_notifs = $due_stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    foreach ($due_notifs as $due) {
+        // Build tracking link
+        $tracking_link = $due['link'];
+        if ($due['link'] && $due['id']) {
+            $site_base = defined('SITE_URL') ? rtrim(SITE_URL, '/') . '/cms/superadmin' : 'https://' . $_SERVER['HTTP_HOST'] . '/cms/superadmin';
+            $tracking_link = $site_base . '/track_click.php?notif_id=' . $due['id'] . '&redirect=' . urlencode($due['link']);
+        }
+
+        // Send via push_helper
+        $sent = sendGlobalPushNotification($due['title'], $due['message'], $tracking_link ?: $due['link'], $due['image_url']);
+        $sent_count = is_int($sent) ? $sent : 0;
+
+        // Mark as sent
+        $pdo->prepare("UPDATE notifications SET status='sent', fcm_message_id=:fid, recipients=:rcpt WHERE id=:id")
+            ->execute([
+                ':fid'  => 'AUTO_' . time(),
+                ':rcpt' => $sent_count,
+                ':id'   => $due['id']
+            ]);
+    }
+
+    if (!empty($due_notifs) && empty($umessage)) {
+        $cnt = count($due_notifs);
+        $umessage = '<div class="alert alert-success" role="alert">
+            <strong><i class="mdi mdi-send-clock me-1"></i> Auto-Sent!</strong> ' . $cnt . ' scheduled notification(s) were due and have been sent.
+        </div>';
+    }
+} catch (Exception $e) {
+    // silent — don't break page if auto-send fails
 }
 
 // Handle Delete
