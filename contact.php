@@ -495,7 +495,8 @@ if (count($sql_add))
         body: formData
       });
 
-      popup.style.display = 'flex';
+      // Redirect to Thank You page (contact version)
+      window.location.href = 'thank-you.php?source=contact';
       leadForm.reset();
       isOtpVerified = false;
       otpSection.style.display = 'none';

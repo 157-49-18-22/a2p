@@ -125,7 +125,59 @@ if (count($sql_add))
         <a href="mailto:team@a2prealtech.com">team@a2prealtech.com</a></p>
     </div>
 
-    <?php if (isset($_GET['brochure'])): ?>
+    <?php if (isset($_GET['source']) && $_GET['source'] === 'contact'): ?>
+        <!-- Contact Form Thank You Content -->
+        <p class="mt-3" style="color:#555; font-size:1.05rem;">
+            Our real estate expert will reach out to you shortly.<br>
+            In the meantime, feel free to connect with us:
+        </p>
+
+        <div style="display:flex; flex-wrap:wrap; gap:16px; justify-content:center; margin-top:28px;">
+
+            <!-- Call -->
+            <a href="tel:+918130525001" style="text-decoration:none;">
+                <div style="background:#fff; border:2px solid #c00415; border-radius:14px; padding:18px 24px; min-width:160px; text-align:center; transition:all 0.3s; box-shadow:0 4px 14px rgba(192,4,21,0.1);">
+                    <div style="font-size:2rem; color:#c00415;">📞</div>
+                    <div style="font-weight:700; color:#1a1a2e; margin-top:8px; font-size:0.9rem;">Call Us</div>
+                    <div style="color:#c00415; font-size:0.85rem; margin-top:4px;">+91-8130525001</div>
+                    <div style="color:#c00415; font-size:0.85rem;">+91-8130510678</div>
+                </div>
+            </a>
+
+            <!-- WhatsApp -->
+            <a href="https://api.whatsapp.com/send?phone=918130525001&text=Hello! I just submitted an enquiry on your website." target="_blank" style="text-decoration:none;">
+                <div style="background:#fff; border:2px solid #25D366; border-radius:14px; padding:18px 24px; min-width:160px; text-align:center; box-shadow:0 4px 14px rgba(37,211,102,0.1);">
+                    <div style="font-size:2rem; color:#25D366;">💬</div>
+                    <div style="font-weight:700; color:#1a1a2e; margin-top:8px; font-size:0.9rem;">WhatsApp</div>
+                    <div style="color:#25D366; font-size:0.85rem; margin-top:4px;">Chat Instantly</div>
+                </div>
+            </a>
+
+            <!-- Email -->
+            <a href="mailto:team@a2prealtech.com" style="text-decoration:none;">
+                <div style="background:#fff; border:2px solid #1565c0; border-radius:14px; padding:18px 24px; min-width:160px; text-align:center; box-shadow:0 4px 14px rgba(21,101,192,0.1);">
+                    <div style="font-size:2rem; color:#1565c0;">✉️</div>
+                    <div style="font-weight:700; color:#1a1a2e; margin-top:8px; font-size:0.9rem;">Email Us</div>
+                    <div style="color:#1565c0; font-size:0.82rem; margin-top:4px;">team@a2prealtech.com</div>
+                </div>
+            </a>
+
+            <!-- Office -->
+            <div style="background:#fff; border:2px solid #555; border-radius:14px; padding:18px 24px; min-width:160px; text-align:center; box-shadow:0 4px 14px rgba(0,0,0,0.07);">
+                <div style="font-size:2rem;">🏢</div>
+                <div style="font-weight:700; color:#1a1a2e; margin-top:8px; font-size:0.9rem;">Visit Us</div>
+                <div style="color:#555; font-size:0.78rem; margin-top:4px; line-height:1.5;">S-3, 2nd Floor, Malik Plaza,<br>Sector 4, Dwarka,<br>New Delhi – 110078</div>
+            </div>
+
+        </div>
+
+        <div style="margin-top:28px;">
+            <a href="<?= SITE_URL; ?>" style="display:inline-block; background:#c00415; color:#fff; padding:12px 32px; border-radius:8px; text-decoration:none; font-weight:700; font-size:1rem; letter-spacing:0.3px;">
+                🏠 Explore Properties
+            </a>
+        </div>
+
+    <?php elseif (isset($_GET['brochure'])): ?>
         <div class="mt-4">
             <a href="<?= SITE_URL; ?>upload/<?php echo htmlspecialchars($_GET['brochure']); ?>" class="btn btn-danger btn-lg" style="background-color: #c00415; border: none; padding: 15px 30px; border-radius: 10px;" download>
                 <i class="fas fa-file-download"></i> Download Brochure Again
@@ -134,7 +186,6 @@ if (count($sql_add))
         </div>
 
         <script>
-            // Try to open the brochure in a new tab automatically
             window.addEventListener('load', function() {
                 var brochureUrl = '<?= SITE_URL; ?>upload/<?php echo htmlspecialchars($_GET['brochure']); ?>';
                 window.open(brochureUrl, '_blank');
