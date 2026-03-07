@@ -890,6 +890,43 @@ $currentPageUrl = urlencode("http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_UR
                                 </ul>
                             </div>
 
+                            <?php
+                            // ── RELATED PRODUCTS ───────────────────────────────────────
+                            $rel_prod_raw = $subproductss['related_products'] ?? '';
+                            $rel_prod_ids = array_filter(array_map('trim', explode(',', $rel_prod_raw)));
+
+                            if (!empty($rel_prod_ids)):
+                                $rp_ids_safe   = implode(',', array_map('intval', $rel_prod_ids));
+                                $related_prods = sqlfetch("SELECT id, name, photo FROM `subproduct` WHERE id IN ($rp_ids_safe) AND actstat=1 ORDER BY fld_order ASC");
+                            else:
+                                $related_prods = [];
+                            endif;
+
+                            if (!empty($related_prods)): ?>
+                            <div class="sidebar__single sidebar__post" style="margin-top: 30px;">
+                                <h3 class="sidebar__title">Related Products</h3>
+                                <ul class="sidebar__post-list list-unstyled">
+                                    <?php foreach ($related_prods as $rp): ?>
+                                    <li>
+                                        <div class="sidebar__post-image">
+                                            <img src="<?= SITE_URL; ?>upload/<?php echo htmlspecialchars($rp['photo']); ?>" alt="<?php echo htmlspecialchars($rp['name']); ?>" style="height:80px;width:80px;object-fit:cover;">
+                                        </div>
+                                        <div class="sidebar__post-content">
+                                            <h3>
+                                                <span class="sidebar__post-content-meta">
+                                                    <i class="fas fa-building"></i> Property
+                                                </span>
+                                                <a href="<?= SITE_URL; ?>product/<?php echo makeurlnamebynameCategory($rp['name']); ?>.php">
+                                                    <?php custom_echo($rp['name'], 30); ?>
+                                                </a>
+                                            </h3>
+                                        </div>
+                                    </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            </div>
+                            <?php endif; ?>
+
                         </div>
                     </div>
                 </div>
