@@ -1291,7 +1291,7 @@ function handleKeyPress(e) {
 
 
 <script src="<?= SITE_URL; ?>assets/js/ambed.js"></script>
-<script src="<?= SITE_URL; ?>crm/app/console/analytics-tracker.js"></script>
+<script src="<?= SITE_URL; ?>assets/js/analytics-tracker.js"></script>
 
 <script src="<?= SITE_URL; ?>assets/vendors/toolbar/js/js.cookie.min.js"></script>
 <script src="<?= SITE_URL; ?>assets/vendors/toolbar/js/jQuery.style.switcher.min.js"></script>
