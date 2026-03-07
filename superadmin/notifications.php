@@ -319,7 +319,12 @@ require('include/header.php');
                                     <?php echo number_format($n['click_count']); ?>
                                 </span>
                             </td>
-                            <td><small><?php echo date('d M, Y h:i A', strtotime($n['created_at'])); ?></small></td>
+                            <td><small><?php
+                                // MySQL TIMESTAMP is UTC — convert to IST for display
+                                $dt = new DateTime($n['created_at'], new DateTimeZone('UTC'));
+                                $dt->setTimezone(new DateTimeZone('Asia/Kolkata'));
+                                echo $dt->format('d M, Y h:i A');
+                            ?></small></td>
                             <td>
                                 <div class="d-flex gap-2">
                                     <a href="notification_analytics.php?id=<?php echo $n['id']; ?>"
