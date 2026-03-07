@@ -10,7 +10,8 @@ require_once(__DIR__ . '/function/fcm_helper.php');
 
 $pdo = getPDOObject();
 
-// 1. Get current time
+// 1. Get current time (IST - Indian Standard Time)
+date_default_timezone_set('Asia/Kolkata');
 $now = date('Y-m-d H:i:s');
 
 // 2. Find pending scheduled notifications
