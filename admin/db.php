@@ -1,11 +1,12 @@
 <?php
 $host = 'localhost';
-if (isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'a2prealtech.com') !== false) {
-    $db = 'u615712904_a2p';
+$_db_host = $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? '';
+if (strpos($_db_host, 'a2prealtech.com') !== false) {
+    $db   = 'u615712904_a2p';
     $user = 'u615712904_a2p';
     $pass = 'JRZd4jg?Ia:0';
 } else {
-    $db = 'u435351083_cms';
+    $db   = 'u435351083_cms';
     $user = 'u435351083_jms';
     $pass = 'Maydivjms1@3';
 }
