@@ -24,6 +24,7 @@ if (count($sql_ser)) {
             <title><?php echo $subcategorydd['meta_title']; ?></title>
             <meta name="description" content="<?php echo $subcategorydd['meta_description']; ?>">
             <meta name="keywords" content="<?php echo $subcategorydd['meta_keyword']; ?>">
+            <?php include 'include/og_meta.php'; ?>
             <link rel="icon" href="<?= SITE_URL; ?>assets/images/favicons/favicon.ico">
             <link rel="manifest" href="<?= SITE_URL; ?>assets/images/favicons/site.webmanifest" />
             <link rel="preconnect" href="https://fonts.googleapis.com/">

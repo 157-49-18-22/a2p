@@ -15,20 +15,7 @@ if (count($sql_add))
     <title><?php echo $pr_add['test_date']; ?></title>
     <meta name="description" content="<?php echo $pr_add['class9']; ?>">
     <meta name="keywords" content="<?php echo $pr_add['class8']; ?>">
-    <!-- Open Graph / WhatsApp Preview Tags -->
-    <meta property="og:title" content="A2P Realtech - Latest Blogs & Real Estate News">
-    <meta property="og:description" content="Stay updated with the latest news and articles about real estate projects on Dwarka Expressway by A2P Realtech.">
-    <meta property="og:image" content="https://pink-sheep-796549.hostingersite.com/upload/290126125406LOGO.png">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="400">
-    <meta property="og:url" content="https://pink-sheep-796549.hostingersite.com/blog.php">
-    <meta property="og:type" content="website">
-    <meta property="og:site_name" content="A2P Realtech">
-    <!-- Twitter/X Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="A2P Realtech - Latest Blogs">
-    <meta name="twitter:description" content="Stay updated with the latest real estate news & articles on Dwarka Expressway.">
-    <meta name="twitter:image" content="https://pink-sheep-796549.hostingersite.com/upload/290126125406LOGO.png">
+    <?php include 'include/og_meta.php'; ?>
     <link rel="icon" href="<?= SITE_URL; ?>assets/images/favicons/favicon.ico">
     <link rel="manifest" href="<?= SITE_URL; ?>assets/images/favicons/site.webmanifest" />
     <link rel="preconnect" href="https://fonts.googleapis.com/">
