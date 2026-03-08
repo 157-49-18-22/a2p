@@ -375,7 +375,8 @@ echo $outputMessage; // Output the complete message
 
 try {
     // Database connection parameters
-    if (isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'a2prealtech.com') !== false) {
+    $host = $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? '';
+    if (strpos($host, 'a2prealtech.com') !== false) {
         $dsn = "mysql:host=localhost;dbname=u615712904_a2p;charset=utf8mb4";
         $username = "u615712904_a2p";
         $password = "JRZd4jg?Ia:0";

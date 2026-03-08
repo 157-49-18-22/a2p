@@ -4,21 +4,26 @@ $siteTitle = 'Ssts';
 if (session_status() == PHP_SESSION_NONE) { session_start(); }
 function getPDOObject()
 {
-    if (isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'a2prealtech.com') !== false) {
-        $dsn = 'mysql:host=localhost;dbname=u615712904_a2p;charset=utf8mb4';
+    $host = $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? '';
+    if (strpos($host, 'a2prealtech.com') !== false) {
+        $dsn  = 'mysql:host=localhost;dbname=u615712904_a2p;charset=utf8mb4';
         $user = 'u615712904_a2p';
         $pass = 'JRZd4jg?Ia:0';
     } else {
-        $dsn = 'mysql:host=localhost;dbname=u435351083_cms;charset=utf8mb4';
+        $dsn  = 'mysql:host=localhost;dbname=u435351083_cms;charset=utf8mb4';
         $user = 'u435351083_jms';
         $pass = 'Maydivjms1@3';
     }
-	$pdo = new PDO($dsn, $user, $pass);
-	$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-	$pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-	$pdo->setAttribute(PDO::ATTR_PERSISTENT, true);
-
-	return $pdo;
+    try {
+        $pdo = new PDO($dsn, $user, $pass);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+        $pdo->setAttribute(PDO::ATTR_PERSISTENT, true);
+        return $pdo;
+    } catch (PDOException $e) {
+        error_log('DB Connection Failed: ' . $e->getMessage());
+        die('Database connection error. Please try again later.');
+    }
 }	
 
 function sqlfetch($query)
