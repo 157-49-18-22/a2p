@@ -19,7 +19,7 @@ if (count($sql_add))
     <!-- Open Graph Meta Tags for WhatsApp and Social Media Preview -->
     <meta property="og:title" content="A2P Realtech Private Limited">
     <meta property="og:description" content="Real Estate Company for Dwarka Expressway Project">
-    <meta property="og:image" content="<?= SITE_URL; ?>upload/290126125406LOGO.png">
+    <meta property="og:image" content="<?= SITE_URL; ?>upload/080325100432logo.png">
     <meta property="og:url" content="<?= SITE_URL; ?>">
     <meta property="og:type" content="website">
     
