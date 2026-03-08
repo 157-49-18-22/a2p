@@ -17,11 +17,8 @@ if (count($sql_add))
     <meta name="keywords" content="<?php echo $pr_add['class8']; ?>">
     
     <!-- Open Graph Meta Tags for WhatsApp and Social Media Preview -->
-    <meta property="og:title" content="A2P Realtech Private Limited">
-    <meta property="og:description" content="Real Estate Company for Dwarka Expressway Project">
-    <meta property="og:image" content="<?= SITE_URL; ?>upload/080325100432logo.png">
-    <meta property="og:url" content="<?= SITE_URL; ?>">
-    <meta property="og:type" content="website">
+    
+
     
     <link rel="icon" href="<?= SITE_URL; ?>assets/images/favicons/favicon.ico">
     <link rel="manifest" href="<?= SITE_URL; ?>assets/images/favicons/site.webmanifest" />
