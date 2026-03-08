@@ -18,15 +18,17 @@ if (count($sql_add))
     <!-- Open Graph / WhatsApp Preview Tags -->
     <meta property="og:title" content="A2P Realtech Private Limited">
     <meta property="og:description" content="Real Estate Company for Dwarka Expressway Project">
-    <meta property="og:image" content="<?= SITE_URL; ?>upload/<?php echo $pr_add['photo']; ?>">
-    <meta property="og:url" content="https://a2prealtech.com/">
+    <meta property="og:image" content="https://pink-sheep-796549.hostingersite.com/assets/images/favicons/android-chrome-512x512.png">
+    <meta property="og:image:width" content="512">
+    <meta property="og:image:height" content="512">
+    <meta property="og:url" content="https://pink-sheep-796549.hostingersite.com/">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="A2P Realtech">
     <!-- Twitter/X Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="A2P Realtech Private Limited">
     <meta name="twitter:description" content="Real Estate Company for Dwarka Expressway Project">
-    <meta name="twitter:image" content="<?= SITE_URL; ?>upload/<?php echo $pr_add['photo']; ?>">
+    <meta name="twitter:image" content="https://pink-sheep-796549.hostingersite.com/assets/images/favicons/android-chrome-512x512.png">
     <link rel="icon" href="<?= SITE_URL; ?>assets/images/favicons/favicon.ico">
     <link rel="manifest" href="<?= SITE_URL; ?>assets/images/favicons/site.webmanifest" />
     <link rel="preconnect" href="https://fonts.googleapis.com/">
