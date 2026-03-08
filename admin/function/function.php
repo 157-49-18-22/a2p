@@ -8,7 +8,7 @@ function getPDOObject()
     if (strpos($host, 'a2prealtech.com') !== false) {
         $dsn  = 'mysql:host=localhost;dbname=u615712904_a2p;charset=utf8mb4';
         $user = 'u615712904_a2p';
-        $pass = 'JRZd4jg?Ia:0';
+        $pass = 'VermaA2p@#9717';
     } else {
         $dsn  = 'mysql:host=localhost;dbname=u435351083_cms;charset=utf8mb4';
         $user = 'u435351083_jms';
