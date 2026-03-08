@@ -35,7 +35,7 @@ $fcm = new FCMHelper($service_account_path);
 // Since this runs in CLI, we might need a hardcoded or stored base URL
 // We'll try to guess or use a fallback. 
 // Ideally, SITE_URL should be defined in function.php or config.php
-$site_base = defined('SITE_URL') ? SITE_URL . 'superadmin' : 'https://' . ($_SERVER['HTTP_HOST'] ?? 'pink-sheep-796549.hostingersite.com') . '/cms/superadmin';
+$site_base = defined('SITE_URL') ? SITE_URL . 'superadmin' : 'https://' . ($_SERVER['HTTP_HOST'] ?? 'a2prealtech.com') . '/cms/superadmin';
 
 foreach ($pending as $n) {
     echo "Processing Notification ID: " . $n['id'] . " - " . $n['title'] . "\n";

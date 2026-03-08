@@ -133,7 +133,7 @@ class FCMHelper {
             $accessToken = $this->getAccessToken();
             $projectId = $this->serviceAccount['project_id'];
 
-            $logoUrl = defined('SITE_URL') ? SITE_URL . 'assets/images/favicons/android-chrome-192x192.png' : 'https://pink-sheep-796549.hostingersite.com/assets/images/favicons/android-chrome-192x192.png';
+            $logoUrl = defined('SITE_URL') ? SITE_URL . 'assets/images/favicons/android-chrome-192x192.png' : 'https://a2prealtech.com/assets/images/favicons/android-chrome-192x192.png';
             $notificationIcon = !empty($image) ? $image : $logoUrl;
 
             $message = [

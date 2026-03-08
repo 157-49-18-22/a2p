@@ -1,13 +1,23 @@
 <?php
 // error_reporting(0);
 $siteTitle = 'Ssts';
-define('SITE_URL', 'https://pink-sheep-796549.hostingersite.com/');
+if (isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'a2prealtech.com') !== false) {
+    define('SITE_URL', 'https://a2prealtech.com/');
+} else {
+    define('SITE_URL', 'https://pink-sheep-796549.hostingersite.com/');
+}
 if (session_status() == PHP_SESSION_NONE) { session_start(); }
 function getPDOObject()
 {
-	$dsn = 'mysql:host=localhost;dbname=u435351083_cms;charset=utf8mb4';
-	$user = 'u435351083_jms';
-	$pass = 'Maydivjms1@3';
+    if (isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'a2prealtech.com') !== false) {
+        $dsn = 'mysql:host=localhost;dbname=u615712904_a2p;charset=utf8mb4';
+        $user = 'u615712904_a2p';
+        $pass = 'JRZd4jg?Ia:0';
+    } else {
+        $dsn = 'mysql:host=localhost;dbname=u435351083_cms;charset=utf8mb4';
+        $user = 'u435351083_jms';
+        $pass = 'Maydivjms1@3';
+    }
 	$pdo = new PDO($dsn, $user, $pass);
 	$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	$pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);

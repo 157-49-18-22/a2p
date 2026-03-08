@@ -375,9 +375,15 @@ echo $outputMessage; // Output the complete message
 
 try {
     // Database connection parameters
-    $dsn = "mysql:host=localhost;dbname=u435351083_cms;charset=utf8mb4";
-    $username = "u435351083_jms";
-    $password = "Maydivjms1@3";
+    if (isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'a2prealtech.com') !== false) {
+        $dsn = "mysql:host=localhost;dbname=u615712904_a2p;charset=utf8mb4";
+        $username = "u615712904_a2p";
+        $password = "JRZd4jg?Ia:0";
+    } else {
+        $dsn = "mysql:host=localhost;dbname=u435351083_cms;charset=utf8mb4";
+        $username = "u435351083_jms";
+        $password = "Maydivjms1@3";
+    }
 
     // Create a new PDO instance
     $pdo = new PDO($dsn, $username, $password);

@@ -66,7 +66,7 @@ $admin_id = isset($_SESSION['admin_id']) ? $_SESSION['admin_id'] : 0;
             const title = payload.data?.title || payload.notification?.title || "A2P RealTech";
             const body  = payload.data?.body  || payload.notification?.body  || "New Update";
             const link  = payload.data?.link  || '/';
-            const logo  = 'https://pink-sheep-796549.hostingersite.com/assets/images/favicons/android-chrome-192x192.png';
+            const logo  = window.location.origin + '/assets/images/favicons/android-chrome-192x192.png';
 
             if ('serviceWorker' in navigator && Notification.permission === 'granted') {
                 const reg = await navigator.serviceWorker.ready;
