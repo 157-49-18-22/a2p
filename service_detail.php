@@ -29,10 +29,14 @@ if (count($sql_ser)) {
             <meta property="og:description" content="<?php echo $subproductss['meta_description']; ?>">
             <meta property="og:image" content="<?= SITE_URL; ?>upload/<?php echo $subproductss['photo']; ?>">
             <meta property="og:url" content="<?php echo 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']; ?>">
+            <meta property="og:type" content="website">
+            <meta property="og:site_name" content="A2P Realtech">
+            <!-- Twitter/X Card -->
+            <meta name="twitter:card" content="summary_large_image">
+            <meta name="twitter:title" content="<?php echo $subproductss['meta_title']; ?>">
+            <meta name="twitter:description" content="<?php echo $subproductss['meta_description']; ?>">
+            <meta name="twitter:image" content="<?= SITE_URL; ?>upload/<?php echo $subproductss['photo']; ?>">
 
-            <meta property="og:type" content="<?php echo $subproductss['meta_keyword']; ?>">
-
-            
             
             
             

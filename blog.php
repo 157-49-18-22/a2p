@@ -15,11 +15,18 @@ if (count($sql_add))
     <title><?php echo $pr_add['test_date']; ?></title>
     <meta name="description" content="<?php echo $pr_add['class9']; ?>">
     <meta name="keywords" content="<?php echo $pr_add['class8']; ?>">
-    
-    <!-- Open Graph Meta Tags for WhatsApp and Social Media Preview -->
-    
-
-    
+    <!-- Open Graph / WhatsApp Preview Tags -->
+    <meta property="og:title" content="A2P Realtech - Latest Blogs & Real Estate News">
+    <meta property="og:description" content="Stay updated with the latest news and articles about real estate projects on Dwarka Expressway by A2P Realtech.">
+    <meta property="og:image" content="<?= SITE_URL; ?>upload/<?php echo $pr_add['photo']; ?>">
+    <meta property="og:url" content="https://a2prealtech.com/blog.php">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="A2P Realtech">
+    <!-- Twitter/X Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="A2P Realtech - Latest Blogs">
+    <meta name="twitter:description" content="Stay updated with the latest real estate news & articles on Dwarka Expressway.">
+    <meta name="twitter:image" content="<?= SITE_URL; ?>upload/<?php echo $pr_add['photo']; ?>">
     <link rel="icon" href="<?= SITE_URL; ?>assets/images/favicons/favicon.ico">
     <link rel="manifest" href="<?= SITE_URL; ?>assets/images/favicons/site.webmanifest" />
     <link rel="preconnect" href="https://fonts.googleapis.com/">

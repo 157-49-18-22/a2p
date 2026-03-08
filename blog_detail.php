@@ -24,26 +24,19 @@ if (count($sql_ser)) {
             <meta name="description" content="<?php echo $offer['meta_description']; ?>">
             <meta name="keywords" content="<?php echo $offer['meta_keyword']; ?>">
             <link rel="icon" href="<?= SITE_URL; ?>assets/images/favicons/favicon.ico" type="image/x-icon">
-            <link rel="manifest" href="<?= SITE_URL; ?>upload/<?php echo $offer['photo']; ?>" />
+            <link rel="manifest" href="<?= SITE_URL; ?>assets/images/favicons/site.webmanifest" />
             
             <meta property="og:title" content="<?php echo $offer['meta_title']; ?>">
             <meta property="og:description" content="<?php echo $offer['meta_description']; ?>">
             <meta property="og:image" content="<?= SITE_URL; ?>upload/<?php echo $offer['photo']; ?>">
             <meta property="og:url" content="<?php echo 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']; ?>">
-
-            <meta property="og:type" content="<?php echo $offer['meta_keyword']; ?>">
-            
-            
-            
-            
-            <!-- Favicon for browser tab -->
-    <link rel="icon" href="<?= SITE_URL; ?>upload/<?php echo $offer['photo']; ?>" type="image/x-icon">
-
-    <!-- Favicon for different devices -->
-    <link rel="apple-touch-icon" href="<?= SITE_URL; ?>upload/<?php echo $offer['photo']; ?>">
-    <link rel="icon" type="image/png" href="<?= SITE_URL; ?>upload/<?php echo $offer['photo']; ?>" sizes="512x512">
-
-    <meta property="og:image" content="<?= SITE_URL; ?>upload/<?php echo $offer['photo']; ?>">
+            <meta property="og:type" content="article">
+            <meta property="og:site_name" content="A2P Realtech">
+            <!-- Twitter/X Card -->
+            <meta name="twitter:card" content="summary_large_image">
+            <meta name="twitter:title" content="<?php echo $offer['meta_title']; ?>">
+            <meta name="twitter:description" content="<?php echo $offer['meta_description']; ?>">
+            <meta name="twitter:image" content="<?= SITE_URL; ?>upload/<?php echo $offer['photo']; ?>">
             
             <link rel="preconnect" href="https://fonts.googleapis.com/">
             <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
