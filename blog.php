@@ -115,45 +115,28 @@ if (count($sql_add))
                     foreach ($result as $offer) {
                 ?>
                         <div class="col-xl-4 col-lg-4 wow fadeInUp" data-wow-delay="100ms">
-                            <div class="blog-card-v2">
-                                <div class="blog-card-v2__img">
-                                    <?php 
-                                        $placeholders = [
-                                            "060225101609Luxury_Homes_on_Dwarka_Expressway_A2P_Realtech.webp",
-                                            "060225101329Dream_House_With_A2P_Realtech.webp",
-                                            "060225100954M3M_Mansion_113_A2P_Realtech.webp",
-                                            "060225100526Dwarka_Expressway_Luxury_Projects_with_A2P_Realtech.webp",
-                                            "060225100348Hero_Homes_Top_Choice_A2P_Realtech.webp",
-                                            "060225101913Dwarka_Expressway_Projects_A2P_Realtech_Gurgaon.webp"
-                                        ];
-                                        $imagePath = "upload/" . $offer['photo'];
-                                        if (file_exists($imagePath) && !empty($offer['photo'])) {
-                                            $displayImg = SITE_URL . $imagePath;
-                                        } else {
-                                            $placeholderIndex = $offer['id'] % count($placeholders);
-                                            $displayImg = SITE_URL . "upload/" . $placeholders[$placeholderIndex];
-                                        }
-                                    ?>
-                                    <img src="<?php echo $displayImg; ?>" alt="<?php echo $offer['name']; ?>">
-                                    <div class="blog-card-v2__category">
-                                        <span>News</span>
-                                    </div>
-                                    <a href="<?= SITE_URL; ?>blog_detail/<?php echo makeurlnamebynameCategory($offer['name']); ?>.php" class="blog-card-v2__overlay"></a>
+                            <!--Blog One Start-->
+                            <a href="<?= SITE_URL; ?>blog_detail/<?php echo makeurlnamebynameCategory($offer['name']); ?>.php">
+                            <div class="blog-one__single">
+                                <div class="blog-one__img">
+                                    <img src="upload/<?php echo $offer['photo']; ?>" alt="<?php echo $offer['name']; ?>">
+                                    
+                                    
+                                   
                                 </div>
-                                <div class="blog-card-v2__content">
-                                    <div class="blog-card-v2__meta">
-                                        <span><i class="far fa-user-circle"></i> <?php echo $offer['by_blog']; ?></span>
-                                        <span><i class="far fa-calendar-alt"></i> Latest</span>
+                                <div class="blog-one__content">
+                                    <div class="blog-one__date">
+                                        <p><?php echo $offer['des1']; ?></p>
                                     </div>
-                                    <h3 class="blog-card-v2__title">
-                                        <a href="<?= SITE_URL; ?>blog_detail/<?php echo makeurlnamebynameCategory($offer['name']); ?>.php"><?php custom_echo($offer['name'], 60); ?></a>
-                                    </h3>
-                                    <p class="blog-card-v2__text"><?php custom_echo($offer['des1'], 100); ?></p>
-                                    <a href="<?= SITE_URL; ?>blog_detail/<?php echo makeurlnamebynameCategory($offer['name']); ?>.php" class="blog-card-v2__btn">
-                                        Read More <i class="fa fa-arrow-right"></i>
-                                    </a>
+                                    <ul class="list-unstyled blog-one__meta">
+                                        <li><a href="<?= SITE_URL; ?>blog_detail/<?php echo makeurlnamebynameCategory($offer['name']); ?>.php"><i class="far fa-user-circle"></i> <?php echo $offer['by_blog']; ?></a></li>
+                                        <li><span>/</span></li>
+                                        <!--<li><a href="<?= SITE_URL; ?>blog_detail/<?php echo makeurlnamebynameCategory($offer['name']); ?>.php"><i class="far fa-comments"></i> Comments</a></li>-->
+                                    </ul>
+                                    <h3 class="blog-one__title"><a href="<?= SITE_URL; ?>blog_detail/<?php echo makeurlnamebynameCategory($offer['name']); ?>.php"><?php custom_echo($offer['name'], 40); ?></a></h3>
                                 </div>
                             </div>
+                             </a>
                         </div>
                 <?php }
                 } ?>
