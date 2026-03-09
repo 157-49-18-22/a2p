@@ -223,18 +223,26 @@ h3.ddd {
     display: flex !important;
     flex-direction: column !important;
     margin-bottom: 30px;
+    background-color: #fff;
+    transition: all 500ms ease;
 }
 
 .blog-one__img {
-    height: 280px !important; /* Fixed height for consistency */
+    height: 300px !important; /* Fixed height as requested for consistency */
     width: 100% !important;
     overflow: hidden;
+    position: relative;
 }
 
 .blog-one__img img {
     height: 100% !important;
     width: 100% !important;
     object-fit: cover !important;
+    transition: all 500ms ease;
+}
+
+.blog-one__single:hover .blog-one__img img {
+    transform: scale(1.1);
 }
 
 .blog-one__content {
@@ -242,8 +250,9 @@ h3.ddd {
     display: flex !important;
     flex-direction: column !important;
     background-color: var(--ambed-primary, #f2eeeb);
-    padding: 32px 40px 29px !important;
+    padding: 35px 30px 25px !important;
     transition: all 500ms ease !important;
+    position: relative;
 }
 
 .blog-one__single:hover .blog-one__content {
@@ -251,20 +260,51 @@ h3.ddd {
     box-shadow: 0px 10px 60px 0px rgba(0, 0, 0, 0.07) !important;
 }
 
+/* Location Bar Overlap Fix */
+.blog-one__date {
+    position: absolute !important;
+    top: -20px !important;
+    left: 20px !important; /* Align to left like in screenshot */
+    right: auto !important;
+    background-color: #102a83 !important;
+    padding: 10px 20px !important;
+    z-index: 10;
+}
+
+.blog-one__date p {
+    color: #fff !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    margin: 0 !important;
+}
+
 .blog-one__title {
-    margin-bottom: 15px !important;
-    flex-grow: 1; /* Allows title to fill space and push footer meta down if needed */
+    margin-top: 15px !important;
+    margin-bottom: 20px !important;
+    min-height: 64px; /* Fixes height for titles up to 2 lines */
+    display: flex;
+    align-items: center;
 }
 
 .blog-one__title a {
+    font-size: 20px !important;
+    line-height: 1.4 !important;
+    color: #c00415 !important;
     display: -webkit-box;
-    -webkit-line-clamp: 2; /* Limit title to 2 lines for better consistency */
+    -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    transition: all 500ms ease;
 }
 
-.blog-one__date, .blog-one__meta {
-    margin-top: auto; /* Push metadata to the bottom of the card */
+.blog-one__single:hover .blog-one__title a {
+    color: #102a83 !important;
+}
+
+.blog-one__meta {
+    margin-top: auto !important; /* Push metadata to bottom */
+    padding-top: 15px;
+    border-top: 1px solid rgba(0,0,0,0.05);
 }
 
 /* Fix for Owl Carousel items to be equal height */
@@ -274,7 +314,6 @@ h3.ddd {
 
 .owl-item {
     display: flex !important;
-    flex: 1 0 auto;
 }
 
 .owl-item > div {
@@ -288,7 +327,10 @@ h3.ddd {
         max-width: 50px; /* Mobile size */
     }
     .blog-one__img {
-        height: 200px !important; /* Slightly shorter on mobile */
+        height: 220px !important;
+    }
+    .blog-one__title {
+        min-height: auto;
     }
 }
 </style>
