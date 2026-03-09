@@ -13287,7 +13287,7 @@ body.boxed-wrapper {
 
 .blog-one__single {
   box-shadow: rgb(0 0 0) 0px 3px 8px;
-
+  border-radius: 0 !important;
 }
 
 p {

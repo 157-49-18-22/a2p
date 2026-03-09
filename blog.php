@@ -71,7 +71,7 @@ if (count($sql_add))
     background-color: #fff;
     transition: all 500ms ease;
     border: 1px solid #eee;
-    border-radius: 12px;
+    border-radius: 0 !important;
     overflow: hidden;
     box-shadow: 0px 5px 15px rgba(0,0,0,0.05);
 }
