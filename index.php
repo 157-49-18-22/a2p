@@ -81,9 +81,19 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 
 <style>
+/* Force all property cards to be rectangular with sharp corners */
+.blog-one__single, 
+.project-three__single, 
+.project-card-v2, 
+.blog-one__img, 
+.project-three__img, 
+.project-three__img-box,
+.blog-one__content {
+    border-radius: 0 !important;
+    -webkit-border-radius: 0 !important;
+    -moz-border-radius: 0 !important;
+}
 
-
-    /* Add these styles in your stylesheet */
 .modal-border-red {
     border: 3px solid red;
 }

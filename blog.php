@@ -61,17 +61,30 @@ if (count($sql_add))
   });
 </script>
 
+
 <style>
-/* Ensure all project/blog cards have the same height and image shape */
+/* Force all property cards to be rectangular with sharp corners */
+.blog-one__single, 
+.project-three__single, 
+.project-card-v2, 
+.blog-one__img, 
+.project-three__img, 
+.project-three__img-box,
+.blog-one__content {
+    border-radius: 0 !important;
+    -webkit-border-radius: 0 !important;
+    -moz-border-radius: 0 !important;
+}
+
+/* Restore the rest of the blog card layout */
 .blog-one__single {
     height: calc(100% - 30px) !important;
     display: flex !important;
     flex-direction: column !important;
-    margin: 15px !important; /* Spacing fix for gap */
+    margin: 15px !important; 
     background-color: #fff;
     transition: all 500ms ease;
     border: 1px solid #eee;
-    border-radius: 0 !important;
     overflow: hidden;
     box-shadow: 0px 5px 15px rgba(0,0,0,0.05);
 }
@@ -108,7 +121,6 @@ if (count($sql_add))
     box-shadow: 0px 10px 60px 0px rgba(0, 0, 0, 0.07) !important;
 }
 
-/* Location Bar Overlap Fix */
 .blog-one__date {
     position: absolute !important;
     top: -20px !important;

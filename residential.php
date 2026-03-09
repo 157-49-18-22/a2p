@@ -79,10 +79,23 @@ if (count($sql_add))
 
 
 <style>
+/* Force square corners */
+.blog-one__single, 
+.project-three__single, 
+.project-card-v2, 
+.blog-one__img, 
+.project-three__img, 
+.project-three__img-box,
+.blog-one__content {
+    border-radius: 0 !important;
+    -webkit-border-radius: 0 !important;
+    -moz-border-radius: 0 !important;
+}
+
 .project-three__single {
     margin: 15px !important;
     background-color: #fff;
-    border-radius: 12px;
+    border-radius: 0 !important;
     overflow: hidden;
     box-shadow: 0px 5px 15px rgba(0,0,0,0.05);
     transition: all 500ms ease;

@@ -13466,3 +13466,15 @@ p {
   z-index: 9;
   right: 4px;
 }
+
+/* ===== GLOBAL CARD CORNERS OVERRIDE - RECTANGLE SHAPE ===== */
+.blog-one__single,
+.project-three__single,
+.project-card-v2,
+.blog-one__img,
+.project-three__img,
+.project-three__img-box {
+  border-radius: 0 !important;
+  -webkit-border-radius: 0 !important;
+  -moz-border-radius: 0 !important;
+}
