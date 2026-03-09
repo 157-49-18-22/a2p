@@ -448,8 +448,14 @@ if (count($sql_ser)) {
                                 ?>
                                         <div class="blog-one__single">
                                             <a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php">
+                                            <?php 
+                                                $res_placeholders = ["060825060302Vatika Sovereign Park Image1.jpg", "100725050048Sobha-City-Sector-108-Dwarka-Expressway-Gurgaon.jpg", "160425091419Sobha Altus image A2P Realtech.jpg", "20260128161604_M3M-GIC-Manesar-Gurgaon.jpg"];
+                                                $imagePath = "upload/" . $subproductwww['photo'];
+                                                if (!empty($subproductwww['photo']) && file_exists($imagePath)) { $displayImg = SITE_URL . $imagePath; } 
+                                                else { $placeholderIndex = $subproductwww['id'] % count($res_placeholders); $displayImg = SITE_URL . "upload/" . $res_placeholders[$placeholderIndex]; }
+                                            ?>
                                             <div class="blog-one__img">
-                                                <img src="<?= SITE_URL; ?>upload/<?php echo $subproductwww['photo']; ?>" alt="" style="width: 100%; height: 250px; object-fit: fill !important;">
+                                                <img src="<?php echo $displayImg; ?>" alt="" style="width: 100%; height: 250px; object-fit: fill !important;">
                                             </div>
                                             </a>
                                             <div class="blog-one__content">
@@ -599,8 +605,14 @@ if (count($sql_ser)) {
                                 ?>
                                         <div class="blog-one__single">
                                             <a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php">
+                                            <?php 
+                                                $com_placeholders = ["030625094659Commercial-Construction-A2P-Realtech.jpg", "070225085304M3M_Capital_Walk113.jpg", "110225084138M3M CAPITAL WALK SECTOR 113 DWARKA EXPRESSWAY GURGAON (1).jpg", "140625094558build-your-commercial-building-A2P-Realtech.jpg"];
+                                                $imagePath = "upload/" . $subproductwww['photo'];
+                                                if (!empty($subproductwww['photo']) && file_exists($imagePath)) { $displayImg = SITE_URL . $imagePath; } 
+                                                else { $placeholderIndex = $subproductwww['id'] % count($com_placeholders); $displayImg = SITE_URL . "upload/" . $com_placeholders[$placeholderIndex]; }
+                                            ?>
                                             <div class="blog-one__img">
-                                                <img src="<?= SITE_URL; ?>upload/<?php echo $subproductwww['photo']; ?>" alt="" style="width: 100%; height: 250px; object-fit: fill !important;">
+                                                <img src="<?php echo $displayImg; ?>" alt="" style="width: 100%; height: 250px; object-fit: fill !important;">
                                             </div>
                                             </a>
                                             <div class="blog-one__content">
@@ -782,8 +794,14 @@ if (count($sql_ser)) {
                 ?>
                         <div class="col-xl-4 col-lg-4 wow fadeInUp" data-wow-delay="100ms">
                             <div class="blog-one__single">
+                                <?php 
+                                    $blog_placeholders = ["060225101913Dwarka_Expressway_Projects_A2P_Realtech_Gurgaon.webp", "060225101609Luxury_Homes_on_Dwarka_Expressway_A2P_Realtech.webp", "060225101329Dream_House_With_A2P_Realtech.webp", "060225100954M3M_Mansion_113_A2P_Realtech.webp", "060225100526Dwarka_Expressway_Luxury_Projects_with_A2P_Realtech.webp", "060225100348Hero_Homes_Top_Choice_A2P_Realtech.webp"];
+                                    $imagePath = "upload/" . trim($offer['photo']);
+                                    if (!empty($offer['photo']) && file_exists($imagePath)) { $displayImg = SITE_URL . $imagePath; } 
+                                    else { $placeholderIndex = $offer['id'] % count($blog_placeholders); $displayImg = SITE_URL . "upload/" . $blog_placeholders[$placeholderIndex]; }
+                                ?>
                                 <div class="blog-one__img">
-                                    <img src="upload/<?php echo $offer['photo']; ?>" alt="<?php echo $offer['name']; ?>" style="width: 100%; height: 250px; object-fit: fill !important;">
+                                    <img src="<?php echo $displayImg; ?>" alt="<?php echo $offer['name']; ?>" style="width: 100%; height: 250px; object-fit: fill !important;">
                                     <a href="<?= SITE_URL; ?>blog_detail/<?php echo makeurlnamebynameCategory($offer['name']); ?>.php"></a>
                                 </div>
                                 <div class="blog-one__content">
