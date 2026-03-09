@@ -89,20 +89,16 @@ if (count($sql_add))
     border: 1px solid #eee;
 }
 .project-three__img {
-    height: 350px !important;
+    height: 300px !important;
     width: 100% !important;
     display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    background-color: #fff !important;
+    background-color: #000;
     overflow: hidden !important;
 }
 .project-three__img img {
-    max-width: 100% !important;
-    max-height: 100% !important;
-    width: auto !important;
-    height: auto !important;
-    object-fit: contain !important; /* No cutting */
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
 }
 @media (max-width: 767px) {
     .project-three__img {

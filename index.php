@@ -232,20 +232,19 @@ h3.ddd {
 }
 
 .blog-one__img {
-    height: 250px !important;
+    height: 220px !important; /* Optimized height for banners */
     width: 100% !important;
     overflow: hidden;
     position: relative;
     display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    background-color: #fff !important; /* Pure white to match card */
+    background-color: #000; /* Dark background so no white gaps */
 }
 
 .blog-one__img img {
     width: 100% !important;
     height: 100% !important;
-    object-fit: contain !important; /* NO CUTTING AT ALL */
+    object-fit: cover !important; /* FILLS SPACE COMPLETELY */
+    object-position: center;
     transition: all 500ms ease;
 }
 
