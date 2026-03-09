@@ -61,16 +61,105 @@ if (count($sql_add))
   });
 </script>
 
-</head>
+<style>
+/* Ensure all project/blog cards have the same height and image shape */
+.blog-one__single {
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    margin-bottom: 30px;
+    background-color: #fff;
+    transition: all 500ms ease;
+    border: 1px solid #eee;
+}
 
+.blog-one__img {
+    height: 250px !important;
+    width: 100% !important;
+    overflow: hidden;
+    position: relative;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background-color: #fff !important; /* Pure white to match card */
+}
 
+.blog-one__img img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important; /* NO CUTTING AT ALL */
+    transition: all 500ms ease;
+}
 
+.blog-one__content {
+    flex-grow: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    background-color: var(--ambed-primary, #f2eeeb);
+    padding: 30px 25px 20px !important;
+    transition: all 500ms ease !important;
+    position: relative;
+}
+
+.blog-one__single:hover .blog-one__content {
+    background-color: white !important;
+    box-shadow: 0px 10px 60px 0px rgba(0, 0, 0, 0.07) !important;
+}
+
+/* Location Bar Overlap Fix */
+.blog-one__date {
+    position: absolute !important;
+    top: -20px !important;
+    left: 20px !important;
+    right: auto !important;
+    background-color: #102a83 !important;
+    padding: 10px 20px !important;
+    z-index: 10;
+}
+
+.blog-one__date p {
+    color: #fff !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    margin: 0 !important;
+}
+
+.blog-one__title {
+    margin-top: 15px !important;
+    margin-bottom: 20px !important;
+    min-height: 64px;
+    display: flex;
+    align-items: center;
+}
+
+.blog-one__title a {
+    font-size: 20px !important;
+    line-height: 1.4 !important;
+    color: #c00415 !important;
+}
+
+.blog-one__meta {
+    margin-top: auto !important;
+    margin-bottom: 0 !important;
+    padding-top: 15px !important;
+    border-top: 1px solid rgba(0,0,0,0.05) !important;
+}
+
+@media (max-width: 767px) {
+    .blog-one__img {
+        height: 200px !important;
+    }
+    .blog-one__title {
+        min-height: auto !important;
+    }
+}
+</style>
 
 <?php include 'include/header.php' ?>
 
 
 <section class="page-header">
-    <div class="page-header-bg" style="background-image: url(assets/images/backgrounds/page-header-bg.jpg)">
+    <div class="page-header-bg" style="background-image: url(<?= SITE_URL; ?>assets/images/backgrounds/page-header-bg.jpg)">
     </div>
     <div class="container">
         <div class="page-header__inner">
@@ -92,7 +181,7 @@ if (count($sql_add))
 
 <!--Blog Two Start-->
 <section class="blog-two">
-    <div class="blog-two-bg" style="background-image: url(assets/images/backgrounds/blog-two-bg.jpg);"></div>
+    <div class="blog-two-bg" style="background-image: url(<?= SITE_URL; ?>assets/images/backgrounds/blog-two-bg.jpg);"></div>
     <div class="container">
         <div class="blog-two__top">
             <div class="row">
@@ -117,24 +206,41 @@ if (count($sql_add))
                 ?>
                         <div class="col-xl-4 col-lg-4 wow fadeInUp" data-wow-delay="100ms">
                             <!--Blog One Start-->
+                            <?php 
+                                $placeholders = [
+                                    "060225101913Dwarka_Expressway_Projects_A2P_Realtech_Gurgaon.webp",
+                                    "060225101609Luxury_Homes_on_Dwarka_Expressway_A2P_Realtech.webp",
+                                    "060225101329Dream_House_With_A2P_Realtech.webp",
+                                    "060225100954M3M_Mansion_113_A2P_Realtech.webp",
+                                    "060225100526Dwarka_Expressway_Luxury_Projects_with_A2P_Realtech.webp",
+                                    "060225100348Hero_Homes_Top_Choice_A2P_Realtech.webp"
+                                ];
+                                $rawPhoto = trim($offer['photo']);
+                                $imagePath = "upload/" . $rawPhoto;
+                                
+                                if (!empty($rawPhoto) && file_exists($imagePath)) {
+                                    $displayImg = SITE_URL . str_replace(' ', '%20', $imagePath);
+                                } else {
+                                    $placeholderIndex = $offer['id'] % count($placeholders);
+                                    $displayImg = SITE_URL . "upload/" . $placeholders[$placeholderIndex];
+                                }
+                            ?>
                             <a href="<?= SITE_URL; ?>blog_detail/<?php echo makeurlnamebynameCategory($offer['name']); ?>.php">
                             <div class="blog-one__single">
                                 <div class="blog-one__img">
-                                    <img src="upload/<?php echo $offer['photo']; ?>" alt="<?php echo $offer['name']; ?>">
-                                    
-                                    
-                                   
+                                    <img src="<?php echo $displayImg; ?>" alt="<?php echo htmlspecialchars($offer['name']); ?>">
                                 </div>
                                 <div class="blog-one__content">
                                     <div class="blog-one__date">
-                                        <p><?php echo $offer['des1']; ?></p>
+                                        <p><?php echo htmlspecialchars($offer['by_blog'] ?: 'Latest'); ?></p>
                                     </div>
+                                    <h3 class="blog-one__title"><a href="<?= SITE_URL; ?>blog_detail/<?php echo makeurlnamebynameCategory($offer['name']); ?>.php"><?php custom_echo($offer['name'], 60); ?></a></h3>
+                                    
                                     <ul class="list-unstyled blog-one__meta">
-                                        <li><a href="<?= SITE_URL; ?>blog_detail/<?php echo makeurlnamebynameCategory($offer['name']); ?>.php"><i class="far fa-user-circle"></i> <?php echo $offer['by_blog']; ?></a></li>
+                                        <li><i class="far fa-user-circle"></i> A2P Realtech</li>
                                         <li><span>/</span></li>
-                                        <!--<li><a href="<?= SITE_URL; ?>blog_detail/<?php echo makeurlnamebynameCategory($offer['name']); ?>.php"><i class="far fa-comments"></i> Comments</a></li>-->
+                                        <li><i class="far fa-calendar-alt"></i> News</li>
                                     </ul>
-                                    <h3 class="blog-one__title"><a href="<?= SITE_URL; ?>blog_detail/<?php echo makeurlnamebynameCategory($offer['name']); ?>.php"><?php custom_echo($offer['name'], 40); ?></a></h3>
                                 </div>
                             </div>
                              </a>

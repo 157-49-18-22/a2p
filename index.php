@@ -819,9 +819,11 @@ if (count($sql_ser)) {
                                         "060225100526Dwarka_Expressway_Luxury_Projects_with_A2P_Realtech.webp",
                                         "060225100348Hero_Homes_Top_Choice_A2P_Realtech.webp"
                                     ];
-                                    $imagePath = "upload/" . $offer['photo'];
-                                    if (file_exists($imagePath) && !empty($offer['photo'])) {
-                                        $displayImg = SITE_URL . $imagePath;
+                                    $rawPhoto = trim($offer['photo']);
+                                    $imagePath = "upload/" . $rawPhoto;
+                                    
+                                    if (!empty($rawPhoto) && file_exists($imagePath)) {
+                                        $displayImg = SITE_URL . str_replace(' ', '%20', $imagePath);
                                     } else {
                                         $placeholderIndex = $offer['id'] % count($placeholders);
                                         $displayImg = SITE_URL . "upload/" . $placeholders[$placeholderIndex];
@@ -829,7 +831,7 @@ if (count($sql_ser)) {
                                 ?>
                                 <a href="<?= SITE_URL; ?>blog_detail/<?php echo makeurlnamebynameCategory($offer['name']); ?>.php">
                                 <div class="blog-one__img">
-                                    <img src="<?php echo $displayImg; ?>" alt="<?php echo $offer['name']; ?>">
+                                    <img src="<?php echo $displayImg; ?>" alt="<?php echo htmlspecialchars($offer['name']); ?>">
                                 </div>
                                 </a>
                                 <div class="blog-one__content">
