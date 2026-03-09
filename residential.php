@@ -78,14 +78,40 @@ if (count($sql_add))
 
 
 
+<style>
+.project-three__img {
+    height: 350px !important;
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background-color: #fff !important;
+    overflow: hidden !important;
+    border: 1px solid #eee !important;
+}
+.project-three__img img {
+    max-width: 100% !important;
+    max-height: 100% !important;
+    width: auto !important;
+    height: auto !important;
+    object-fit: contain !important; /* No cutting */
+}
+@media (max-width: 767px) {
+    .project-three__img {
+        height: 250px !important;
+    }
+}
+</style>
 
 <!--Projects Page Start-->
 <section class="projects-page">
     <div class="container">
         <div class="row">
-            <?php $result = sqlfetch("select * from client_logo  ");
+            <?php $result = sqlfetch("select * from client_logo ORDER BY id DESC");
             if (count($result)) {
                 foreach ($result as $client_logo) {
+                    $rawPhoto = trim($client_logo['photo']);
+                    $finalImg = SITE_URL . "upload/" . str_replace(' ', '%20', $rawPhoto);
             ?>
 
                     <div class="col-xl-4 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay="100ms">
@@ -93,7 +119,7 @@ if (count($sql_add))
                         <div class="project-three__single">
                             <div class="project-three__img-box">
                                 <div class="project-three__img">
-                                    <img src="upload/<?php echo $client_logo['photo']; ?>" alt="">
+                                    <img src="<?php echo $finalImg; ?>" alt="<?php echo htmlspecialchars($client_logo['name']); ?>">
                                     <div class="project-three__arrow">
                                         <a href="#"><i class="fa fa-angle-right"></i></a>
                                     </div>

@@ -432,7 +432,7 @@ function client_form($pid = '0', $name = '', $photo = '', $des = '', $des1 = '',
                         <tbody>
                                     <?php
                                   $count = 1;
-                                        $data = sqlfetch("SELECT * FROM `offer` ORDER BY fld_order ASC");
+                                        $data = sqlfetch("SELECT * FROM `offer` ORDER BY id DESC");
                                         
                                         foreach ($data as $menu) { ?>
                                             <tr>
