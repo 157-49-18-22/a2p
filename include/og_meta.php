@@ -1,10 +1,14 @@
 <?php
 /* ── A2P Realtech – Open Graph / WhatsApp Meta Tags ────────────────────
-   Desktop, Android & iOS Support (pink-sheep + a2prealtech.com)
+   Desktop, Android & iOS Support (Fixed for WhatsApp Web)
    ─────────────────────────────────────────────────────────────────────── */
-// Securely get the site URL
-$_full_logo_url = SITE_URL . 'upload/290126125406LOGO.png';
-$_current_page_url = "https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+// Get current host dynamically to avoid cross-domain issues
+$_protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http");
+$_host = $_SERVER['HTTP_HOST'];
+$_path = $_SERVER['REQUEST_URI'];
+// Add ?v=1.1 to force WhatsApp to refresh the image cache
+$_full_logo_url = $_protocol . "://" . $_host . "/upload/290126125406LOGO.png?v=1.1";
+$_current_page_url = $_protocol . "://" . $_host . $_path;
 ?>
 <!-- Open Graph / WhatsApp Preview Tags -->
 <meta property="og:site_name" content="A2P Realtech">
@@ -14,8 +18,8 @@ $_current_page_url = "https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'
 <meta property="og:image" content="<?php echo $_full_logo_url; ?>">
 <meta property="og:image:secure_url" content="<?php echo $_full_logo_url; ?>">
 <meta property="og:image:type" content="image/png">
-<meta property="og:image:width" content="500">
-<meta property="og:image:height" content="500">
+<meta property="og:image:width" content="600">
+<meta property="og:image:height" content="600">
 <meta property="og:type" content="website">
 
 <!-- Twitter Card -->
@@ -23,4 +27,5 @@ $_current_page_url = "https://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'
 <meta name="twitter:title" content="A2P Realtech Private Limited">
 <meta name="twitter:description" content="Real Estate Company for Dwarka Expressway Project">
 <meta name="twitter:image" content="<?php echo $_full_logo_url; ?>">
+
 
