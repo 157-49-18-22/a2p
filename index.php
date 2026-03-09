@@ -448,21 +448,14 @@ if (count($sql_ser)) {
                                 ?>
                                         <div class="blog-one__single">
                                             <a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php">
-                                            <?php 
-                                                $res_placeholders = ["060825060302Vatika Sovereign Park Image1.jpg", "100725050048Sobha-City-Sector-108-Dwarka-Expressway-Gurgaon.jpg", "160425091419Sobha Altus image A2P Realtech.jpg", "20260128161604_M3M-GIC-Manesar-Gurgaon.jpg"];
-                                                $imagePath = "upload/" . $subproductwww['photo'];
-                                                if (!empty($subproductwww['photo']) && file_exists($imagePath)) { $displayImg = SITE_URL . $imagePath; } 
-                                                else { $placeholderIndex = $subproductwww['id'] % count($res_placeholders); $displayImg = SITE_URL . "upload/" . $res_placeholders[$placeholderIndex]; }
-                                            ?>
-                                            <div class="blog-one__img" style="position: relative; overflow: hidden; background: #f8f8f8;">
-                                                <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: url('<?php echo $displayImg; ?>') center/cover no-repeat; filter: blur(15px); opacity: 0.6; transform: scale(1.1);"></div>
-                                                <img src="<?php echo $displayImg; ?>" alt="<?php echo $subproductwww['name']; ?>" style="position: relative; z-index: 1; width: 100%; height: 100%; object-fit: contain; transition: all 500ms ease;">
+                                            <div class="blog-one__img">
+                                                <img src="<?= SITE_URL; ?>upload/<?php echo $subproductwww['photo']; ?>" alt="" style="width: 100%; height: 250px; object-fit: fill !important;">
                                             </div>
                                             </a>
                                             <div class="blog-one__content">
                                                 <h3 class="blog-one__title"><a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php"><?php echo $subproductwww['name']; ?></a></h3>
                                                 <div class="blog-one__date">
-                                                    <p><i class="fa-solid fa-map-pin"></i> <?php echo $subproductwww['pro_lable']; ?></p>
+                                                    <p> <i class="fa-solid fa-map-pin"></i> <?php echo $subproductwww['pro_lable']; ?></p>
                                                 </div>
                                                 <ul class="list-unstyled blog-one__meta">
                                                     <li><a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php"><i class="far fa-user-circle"></i> <?php echo $subproductwww['pro_lable']; ?></a></li>
@@ -606,21 +599,14 @@ if (count($sql_ser)) {
                                 ?>
                                         <div class="blog-one__single">
                                             <a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php">
-                                            <?php 
-                                                $res_placeholders = ["060825060302Vatika Sovereign Park Image1.jpg", "100725050048Sobha-City-Sector-108-Dwarka-Expressway-Gurgaon.jpg", "160425091419Sobha Altus image A2P Realtech.jpg", "20260128161604_M3M-GIC-Manesar-Gurgaon.jpg"];
-                                                $imagePath = "upload/" . $subproductwww['photo'];
-                                                if (!empty($subproductwww['photo']) && file_exists($imagePath)) { $displayImg = SITE_URL . $imagePath; } 
-                                                else { $placeholderIndex = $subproductwww['id'] % count($res_placeholders); $displayImg = SITE_URL . "upload/" . $res_placeholders[$placeholderIndex]; }
-                                            ?>
-                                            <div class="blog-one__img" style="position: relative; overflow: hidden; background: #f8f8f8;">
-                                                <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: url('<?php echo $displayImg; ?>') center/cover no-repeat; filter: blur(15px); opacity: 0.6; transform: scale(1.1);"></div>
-                                                <img src="<?php echo $displayImg; ?>" alt="<?php echo $subproductwww['name']; ?>" style="position: relative; z-index: 1; width: 100%; height: 100%; object-fit: contain; transition: all 500ms ease;">
+                                            <div class="blog-one__img">
+                                                <img src="<?= SITE_URL; ?>upload/<?php echo $subproductwww['photo']; ?>" alt="" style="width: 100%; height: 250px; object-fit: fill !important;">
                                             </div>
                                             </a>
                                             <div class="blog-one__content">
                                                 <h3 class="blog-one__title"><a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php"><?php echo $subproductwww['name']; ?></a></h3>
                                                 <div class="blog-one__date">
-                                                    <p><i class="fa-solid fa-map-pin"></i> <?php echo $subproductwww['pro_lable']; ?></p>
+                                                    <p> <i class="fa-solid fa-map-pin"></i> <?php echo $subproductwww['pro_lable']; ?></p>
                                                 </div>
                                                 <ul class="list-unstyled blog-one__meta">
                                                     <li><a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php"><i class="far fa-user-circle"></i> <?php echo $subproductwww['pro_lable']; ?></a></li>
@@ -796,40 +782,20 @@ if (count($sql_ser)) {
                 ?>
                         <div class="col-xl-4 col-lg-4 wow fadeInUp" data-wow-delay="100ms">
                             <div class="blog-one__single">
-                                <?php 
-                                    $placeholders = [
-                                        "060225101913Dwarka_Expressway_Projects_A2P_Realtech_Gurgaon.webp",
-                                        "060225101609Luxury_Homes_on_Dwarka_Expressway_A2P_Realtech.webp",
-                                        "060225101329Dream_House_With_A2P_Realtech.webp",
-                                        "060225100954M3M_Mansion_113_A2P_Realtech.webp",
-                                        "060225100526Dwarka_Expressway_Luxury_Projects_with_A2P_Realtech.webp",
-                                        "060225100348Hero_Homes_Top_Choice_A2P_Realtech.webp"
-                                    ];
-                                    $rawPhoto = trim($offer['photo']);
-                                    $imagePath = "upload/" . $rawPhoto;
-                                    
-                                    if (!empty($rawPhoto) && file_exists($imagePath)) {
-                                        $displayImg = SITE_URL . str_replace(' ', '%20', $imagePath);
-                                    } else {
-                                        $placeholderIndex = $offer['id'] % count($placeholders);
-                                        $displayImg = SITE_URL . "upload/" . $placeholders[$placeholderIndex];
-                                    }
-                                ?>
-                                <a href="<?= SITE_URL; ?>blog_detail/<?php echo makeurlnamebynameCategory($offer['name']); ?>.php">
-                                <div class="blog-one__img" style="position: relative; overflow: hidden; background: #f8f8f8;">
-                                    <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: url('<?php echo $displayImg; ?>') center/cover no-repeat; filter: blur(15px); opacity: 0.6; transform: scale(1.1);"></div>
-                                    <img src="<?php echo $displayImg; ?>" alt="<?php echo htmlspecialchars($offer['name']); ?>" style="position: relative; z-index: 1; width: 100%; height: 100%; object-fit: contain; transition: all 500ms ease;">
+                                <div class="blog-one__img">
+                                    <img src="upload/<?php echo $offer['photo']; ?>" alt="<?php echo $offer['name']; ?>" style="width: 100%; height: 250px; object-fit: fill !important;">
+                                    <a href="<?= SITE_URL; ?>blog_detail/<?php echo makeurlnamebynameCategory($offer['name']); ?>.php"></a>
                                 </div>
-                                </a>
                                 <div class="blog-one__content">
                                     <div class="blog-one__date">
-                                        <p><i class="far fa-user-circle"></i> A2P Realtech &nbsp;|&nbsp; <i class="far fa-calendar-alt"></i> Latest</p>
+                                        <p><?php echo $offer['des1']; ?></p>
                                     </div>
-                                    <h3 class="blog-one__title"><a href="<?= SITE_URL; ?>blog_detail/<?php echo makeurlnamebynameCategory($offer['name']); ?>.php"><?php custom_echo($offer['name'], 60); ?></a></h3>
-                                    <p><?php custom_echo($offer['des1'], 100); ?></p>
-                                    <a href="<?= SITE_URL; ?>blog_detail/<?php echo makeurlnamebynameCategory($offer['name']); ?>.php" class="blog-card-v2__btn">
-                                        Read More <i class="fa fa-arrow-right"></i>
-                                    </a>
+                                    <ul class="list-unstyled blog-one__meta">
+                                        <li><a href="<?= SITE_URL; ?>blog_detail/<?php echo makeurlnamebynameCategory($offer['name']); ?>.php"><i class="far fa-user-circle"></i> by Admin</a></li>
+                                        <li><span>/</span></li>
+                                        <li><a href="<?= SITE_URL; ?>blog_detail/<?php echo makeurlnamebynameCategory($offer['name']); ?>.php"><i class="far fa-comments"></i> Comments</a></li>
+                                    </ul>
+                                    <h3 class="blog-one__title"><a href="<?= SITE_URL; ?>blog_detail/<?php echo makeurlnamebynameCategory($offer['name']); ?>.php"><?php custom_echo($offer['name'], 40); ?></a></h3>
                                 </div>
                             </div>
                         </div>

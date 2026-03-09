@@ -208,42 +208,20 @@ if (count($sql_add))
                 ?>
                         <div class="col-xl-4 col-lg-4 wow fadeInUp" data-wow-delay="100ms">
                             <!--Blog One Start-->
-                            <?php 
-                                $placeholders = [
-                                    "060225101913Dwarka_Expressway_Projects_A2P_Realtech_Gurgaon.webp",
-                                    "060225101609Luxury_Homes_on_Dwarka_Expressway_A2P_Realtech.webp",
-                                    "060225101329Dream_House_With_A2P_Realtech.webp",
-                                    "060225100954M3M_Mansion_113_A2P_Realtech.webp",
-                                    "060225100526Dwarka_Expressway_Luxury_Projects_with_A2P_Realtech.webp",
-                                    "060225100348Hero_Homes_Top_Choice_A2P_Realtech.webp"
-                                ];
-                                $rawPhoto = trim($offer['photo']);
-                                $imagePath = "upload/" . $rawPhoto;
-                                
-                                if (!empty($rawPhoto) && file_exists($imagePath)) {
-                                    $displayImg = SITE_URL . str_replace(' ', '%20', $imagePath);
-                                } else {
-                                    $placeholderIndex = $offer['id'] % count($placeholders);
-                                    $displayImg = SITE_URL . "upload/" . $placeholders[$placeholderIndex];
-                                }
-                            ?>
                             <a href="<?= SITE_URL; ?>blog_detail/<?php echo makeurlnamebynameCategory($offer['name']); ?>.php">
                             <div class="blog-one__single">
-                                <div class="blog-one__img" style="position: relative; overflow: hidden; background: #f8f8f8;">
-                                    <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: url('<?php echo $displayImg; ?>') center/cover no-repeat; filter: blur(15px); opacity: 0.6; transform: scale(1.1);"></div>
-                                    <img src="<?php echo $displayImg; ?>" alt="<?php echo htmlspecialchars($offer['name']); ?>" style="position: relative; z-index: 1; width: 100%; height: 100%; object-fit: contain; transition: all 500ms ease;">
+                                <div class="blog-one__img">
+                                    <img src="upload/<?php echo $offer['photo']; ?>" alt="<?php echo $offer['name']; ?>" style="width: 100%; height: 250px; object-fit: fill !important;">
                                 </div>
                                 <div class="blog-one__content">
                                     <div class="blog-one__date">
-                                        <p><?php echo htmlspecialchars($offer['by_blog'] ?: 'Latest'); ?></p>
+                                        <p><?php echo $offer['des1']; ?></p>
                                     </div>
-                                    <h3 class="blog-one__title"><a href="<?= SITE_URL; ?>blog_detail/<?php echo makeurlnamebynameCategory($offer['name']); ?>.php"><?php custom_echo($offer['name'], 60); ?></a></h3>
-                                    
                                     <ul class="list-unstyled blog-one__meta">
-                                        <li><i class="far fa-user-circle"></i> A2P Realtech</li>
+                                        <li><a href="<?= SITE_URL; ?>blog_detail/<?php echo makeurlnamebynameCategory($offer['name']); ?>.php"><i class="far fa-user-circle"></i> <?php echo $offer['by_blog']; ?></a></li>
                                         <li><span>/</span></li>
-                                        <li><i class="far fa-calendar-alt"></i> News</li>
                                     </ul>
+                                    <h3 class="blog-one__title"><a href="<?= SITE_URL; ?>blog_detail/<?php echo makeurlnamebynameCategory($offer['name']); ?>.php"><?php custom_echo($offer['name'], 40); ?></a></h3>
                                 </div>
                             </div>
                              </a>
