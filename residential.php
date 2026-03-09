@@ -79,6 +79,15 @@ if (count($sql_add))
 
 
 <style>
+.project-three__single {
+    margin: 15px !important;
+    background-color: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0px 5px 15px rgba(0,0,0,0.05);
+    transition: all 500ms ease;
+    border: 1px solid #eee;
+}
 .project-three__img {
     height: 350px !important;
     width: 100% !important;
@@ -87,7 +96,6 @@ if (count($sql_add))
     justify-content: center !important;
     background-color: #fff !important;
     overflow: hidden !important;
-    border: 1px solid #eee !important;
 }
 .project-three__img img {
     max-width: 100% !important;

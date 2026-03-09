@@ -219,13 +219,16 @@ h3.ddd {
 
 /* Ensure all project/blog cards have the same height and image shape */
 .blog-one__single {
-    height: 100% !important;
+    height: calc(100% - 30px) !important;
     display: flex !important;
     flex-direction: column !important;
-    margin-bottom: 30px;
+    margin: 15px !important; /* This adds the horizontal and vertical gap */
     background-color: #fff;
     transition: all 500ms ease;
     border: 1px solid #eee;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0px 5px 15px rgba(0,0,0,0.05);
 }
 
 .blog-one__img {
