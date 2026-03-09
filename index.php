@@ -217,9 +217,78 @@ h3.ddd {
     mix-blend-mode: multiply; /* Helps remove white background from images */
 }
 
+/* Ensure all project/blog cards have the same height and image shape */
+.blog-one__single {
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    margin-bottom: 30px;
+}
+
+.blog-one__img {
+    height: 280px !important; /* Fixed height for consistency */
+    width: 100% !important;
+    overflow: hidden;
+}
+
+.blog-one__img img {
+    height: 100% !important;
+    width: 100% !important;
+    object-fit: cover !important;
+}
+
+.blog-one__content {
+    flex-grow: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    background-color: var(--ambed-primary, #f2eeeb);
+    padding: 32px 40px 29px !important;
+    transition: all 500ms ease !important;
+}
+
+.blog-one__single:hover .blog-one__content {
+    background-color: white !important;
+    box-shadow: 0px 10px 60px 0px rgba(0, 0, 0, 0.07) !important;
+}
+
+.blog-one__title {
+    margin-bottom: 15px !important;
+    flex-grow: 1; /* Allows title to fill space and push footer meta down if needed */
+}
+
+.blog-one__title a {
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Limit title to 2 lines for better consistency */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.blog-one__date, .blog-one__meta {
+    margin-top: auto; /* Push metadata to the bottom of the card */
+}
+
+/* Fix for Owl Carousel items to be equal height */
+.owl-stage {
+    display: flex !important;
+}
+
+.owl-item {
+    display: flex !important;
+    flex: 1 0 auto;
+}
+
+.owl-item > div {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
 @media (max-width: 767px) {
     .working-process__icon img {
         max-width: 50px; /* Mobile size */
+    }
+    .blog-one__img {
+        height: 200px !important; /* Slightly shorter on mobile */
     }
 }
 </style>
