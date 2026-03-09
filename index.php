@@ -448,23 +448,8 @@ if (count($sql_ser)) {
                                 ?>
                                         <div class="blog-one__single">
                                             <a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php">
-                                            <div class="blog-one__img">
-                                                <?php 
-                                                    $res_placeholders = [
-                                                        "060825060302Vatika Sovereign Park Image1.jpg",
-                                                        "100725050048Sobha-City-Sector-108-Dwarka-Expressway-Gurgaon.jpg",
-                                                        "160425091419Sobha Altus image A2P Realtech.jpg",
-                                                        "20260128161604_M3M-GIC-Manesar-Gurgaon.jpg"
-                                                    ];
-                                                    $imagePath = "upload/" . $subproductwww['photo'];
-                                                    if (file_exists($imagePath) && !empty($subproductwww['photo'])) {
-                                                        $displayImg = SITE_URL . $imagePath;
-                                                    } else {
-                                                        $placeholderIndex = $subproductwww['id'] % count($res_placeholders);
-                                                        $displayImg = SITE_URL . "upload/" . $res_placeholders[$placeholderIndex];
-                                                    }
-                                                ?>
-                                                <img src="<?php echo $displayImg; ?>" alt="<?php echo $subproductwww['name']; ?>">
+                                            <div class="blog-one__img" style="background: url('<?php echo $displayImg; ?>') center/cover no-repeat;">
+                                                <img src="<?php echo $displayImg; ?>" alt="<?php echo $subproductwww['name']; ?>" style="object-fit: contain; backdrop-filter: blur(8px); background: rgba(0,0,0,0.2); width: 100%; height: 100%;">
                                             </div>
                                             </a>
                                             <div class="blog-one__content">
@@ -832,8 +817,8 @@ if (count($sql_ser)) {
                                     }
                                 ?>
                                 <a href="<?= SITE_URL; ?>blog_detail/<?php echo makeurlnamebynameCategory($offer['name']); ?>.php">
-                                <div class="blog-one__img">
-                                    <img src="<?php echo $displayImg; ?>" alt="<?php echo htmlspecialchars($offer['name']); ?>">
+                                <div class="blog-one__img" style="background: url('<?php echo $displayImg; ?>') center/cover no-repeat;">
+                                    <img src="<?php echo $displayImg; ?>" alt="<?php echo htmlspecialchars($offer['name']); ?>" style="object-fit: contain; backdrop-filter: blur(8px); background: rgba(0,0,0,0.2); width: 100%; height: 100%;">
                                 </div>
                                 </a>
                                 <div class="blog-one__content">

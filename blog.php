@@ -229,8 +229,8 @@ if (count($sql_add))
                             ?>
                             <a href="<?= SITE_URL; ?>blog_detail/<?php echo makeurlnamebynameCategory($offer['name']); ?>.php">
                             <div class="blog-one__single">
-                                <div class="blog-one__img">
-                                    <img src="<?php echo $displayImg; ?>" alt="<?php echo htmlspecialchars($offer['name']); ?>">
+                                <div class="blog-one__img" style="background: url('<?php echo $displayImg; ?>') center/cover no-repeat;">
+                                    <img src="<?php echo $displayImg; ?>" alt="<?php echo htmlspecialchars($offer['name']); ?>" style="object-fit: contain; backdrop-filter: blur(8px); background: rgba(0,0,0,0.2); width: 100%; height: 100%;">
                                 </div>
                                 <div class="blog-one__content">
                                     <div class="blog-one__date">
