@@ -225,24 +225,25 @@ h3.ddd {
     margin-bottom: 30px;
     background-color: #fff;
     transition: all 500ms ease;
+    border: 1px solid #eee;
 }
 
 .blog-one__img {
-    height: 300px !important; /* Fixed height as requested for consistency */
+    height: 250px !important;
     width: 100% !important;
     overflow: hidden;
     position: relative;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background-color: #fff !important; /* Pure white to match card */
 }
 
 .blog-one__img img {
-    height: 100% !important;
     width: 100% !important;
-    object-fit: cover !important;
+    height: 100% !important;
+    object-fit: contain !important; /* NO CUTTING AT ALL */
     transition: all 500ms ease;
-}
-
-.blog-one__single:hover .blog-one__img img {
-    transform: scale(1.1);
 }
 
 .blog-one__content {
@@ -250,7 +251,7 @@ h3.ddd {
     display: flex !important;
     flex-direction: column !important;
     background-color: var(--ambed-primary, #f2eeeb);
-    padding: 35px 30px 25px !important;
+    padding: 30px 25px 20px !important;
     transition: all 500ms ease !important;
     position: relative;
 }
