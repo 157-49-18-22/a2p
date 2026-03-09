@@ -122,8 +122,9 @@ if (count($sql_add))
                         <!--Project Three Single-->
                         <div class="project-three__single">
                             <div class="project-three__img-box">
-                                <div class="project-three__img" style="background: url('<?php echo $finalImg; ?>') center/cover no-repeat;">
-                                    <img src="<?php echo $finalImg; ?>" alt="<?php echo htmlspecialchars($certification['name']); ?>" style="object-fit: contain; backdrop-filter: blur(8px); background: rgba(0,0,0,0.2); width: 100%; height: 100%;">
+                                <div class="project-three__img" style="position: relative; overflow: hidden; background: #f8f8f8;">
+                                    <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: url('<?php echo $finalImg; ?>') center/cover no-repeat; filter: blur(15px); opacity: 0.6; transform: scale(1.1);"></div>
+                                    <img src="<?php echo $finalImg; ?>" alt="<?php echo htmlspecialchars($certification['name']); ?>" style="position: relative; z-index: 1; width: 100%; height: 100%; object-fit: contain; transition: all 500ms ease;">
                                     <div class="project-three__arrow">
                                         <a href="#"><i class="fa fa-angle-right"></i></a>
                                     </div>

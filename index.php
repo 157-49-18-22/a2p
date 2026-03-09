@@ -448,8 +448,15 @@ if (count($sql_ser)) {
                                 ?>
                                         <div class="blog-one__single">
                                             <a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php">
-                                            <div class="blog-one__img" style="background: url('<?php echo $displayImg; ?>') center/cover no-repeat;">
-                                                <img src="<?php echo $displayImg; ?>" alt="<?php echo $subproductwww['name']; ?>" style="object-fit: contain; backdrop-filter: blur(8px); background: rgba(0,0,0,0.2); width: 100%; height: 100%;">
+                                            <?php 
+                                                $res_placeholders = ["060825060302Vatika Sovereign Park Image1.jpg", "100725050048Sobha-City-Sector-108-Dwarka-Expressway-Gurgaon.jpg", "160425091419Sobha Altus image A2P Realtech.jpg", "20260128161604_M3M-GIC-Manesar-Gurgaon.jpg"];
+                                                $imagePath = "upload/" . $subproductwww['photo'];
+                                                if (!empty($subproductwww['photo']) && file_exists($imagePath)) { $displayImg = SITE_URL . $imagePath; } 
+                                                else { $placeholderIndex = $subproductwww['id'] % count($res_placeholders); $displayImg = SITE_URL . "upload/" . $res_placeholders[$placeholderIndex]; }
+                                            ?>
+                                            <div class="blog-one__img" style="position: relative; overflow: hidden; background: #f8f8f8;">
+                                                <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: url('<?php echo $displayImg; ?>') center/cover no-repeat; filter: blur(15px); opacity: 0.6; transform: scale(1.1);"></div>
+                                                <img src="<?php echo $displayImg; ?>" alt="<?php echo $subproductwww['name']; ?>" style="position: relative; z-index: 1; width: 100%; height: 100%; object-fit: contain; transition: all 500ms ease;">
                                             </div>
                                             </a>
                                             <div class="blog-one__content">
@@ -599,23 +606,15 @@ if (count($sql_ser)) {
                                 ?>
                                         <div class="blog-one__single">
                                             <a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php">
-                                            <div class="blog-one__img">
-                                                <?php 
-                                                    $com_placeholders = [
-                                                        "030625094659Commercial-Construction-A2P-Realtech.jpg",
-                                                        "070225085304M3M_Capital_Walk113.jpg",
-                                                        "110225084138M3M CAPITAL WALK SECTOR 113 DWARKA EXPRESSWAY GURGAON (1).jpg",
-                                                        "140625094558build-your-commercial-building-A2P-Realtech.jpg"
-                                                    ];
-                                                    $imagePath = "upload/" . $subproductwww['photo'];
-                                                    if (file_exists($imagePath) && !empty($subproductwww['photo'])) {
-                                                        $displayImg = SITE_URL . $imagePath;
-                                                    } else {
-                                                        $placeholderIndex = $subproductwww['id'] % count($com_placeholders);
-                                                        $displayImg = SITE_URL . "upload/" . $com_placeholders[$placeholderIndex];
-                                                    }
-                                                ?>
-                                                <img src="<?php echo $displayImg; ?>" alt="<?php echo $subproductwww['name']; ?>">
+                                            <?php 
+                                                $res_placeholders = ["060825060302Vatika Sovereign Park Image1.jpg", "100725050048Sobha-City-Sector-108-Dwarka-Expressway-Gurgaon.jpg", "160425091419Sobha Altus image A2P Realtech.jpg", "20260128161604_M3M-GIC-Manesar-Gurgaon.jpg"];
+                                                $imagePath = "upload/" . $subproductwww['photo'];
+                                                if (!empty($subproductwww['photo']) && file_exists($imagePath)) { $displayImg = SITE_URL . $imagePath; } 
+                                                else { $placeholderIndex = $subproductwww['id'] % count($res_placeholders); $displayImg = SITE_URL . "upload/" . $res_placeholders[$placeholderIndex]; }
+                                            ?>
+                                            <div class="blog-one__img" style="position: relative; overflow: hidden; background: #f8f8f8;">
+                                                <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: url('<?php echo $displayImg; ?>') center/cover no-repeat; filter: blur(15px); opacity: 0.6; transform: scale(1.1);"></div>
+                                                <img src="<?php echo $displayImg; ?>" alt="<?php echo $subproductwww['name']; ?>" style="position: relative; z-index: 1; width: 100%; height: 100%; object-fit: contain; transition: all 500ms ease;">
                                             </div>
                                             </a>
                                             <div class="blog-one__content">
@@ -817,8 +816,9 @@ if (count($sql_ser)) {
                                     }
                                 ?>
                                 <a href="<?= SITE_URL; ?>blog_detail/<?php echo makeurlnamebynameCategory($offer['name']); ?>.php">
-                                <div class="blog-one__img" style="background: url('<?php echo $displayImg; ?>') center/cover no-repeat;">
-                                    <img src="<?php echo $displayImg; ?>" alt="<?php echo htmlspecialchars($offer['name']); ?>" style="object-fit: contain; backdrop-filter: blur(8px); background: rgba(0,0,0,0.2); width: 100%; height: 100%;">
+                                <div class="blog-one__img" style="position: relative; overflow: hidden; background: #f8f8f8;">
+                                    <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: url('<?php echo $displayImg; ?>') center/cover no-repeat; filter: blur(15px); opacity: 0.6; transform: scale(1.1);"></div>
+                                    <img src="<?php echo $displayImg; ?>" alt="<?php echo htmlspecialchars($offer['name']); ?>" style="position: relative; z-index: 1; width: 100%; height: 100%; object-fit: contain; transition: all 500ms ease;">
                                 </div>
                                 </a>
                                 <div class="blog-one__content">
