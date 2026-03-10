@@ -653,8 +653,8 @@
         margin-left: 10px;
     }
     .main-menu-two__wrapper {
-        padding: 0 28px 0 12px !important; /* Shifted left: More padding on right (28px) than left (12px) */
-        height: 80px !important;
+        padding: 0 40px 0 10px !important; /* Shifted left: More padding on right for more safety */
+        height: 70px !important; /* Reduced height for better fit */
         display: flex !important;
         align-items: center !important;
         justify-content: space-between !important;
@@ -662,9 +662,11 @@
         background: #fff !important;
         box-sizing: border-box !important;
         width: 100% !important;
-        overflow-x: hidden !important; /* Extra safety against horizontal overflow */
+        overflow: hidden !important;
+        border: none !important; /* REMOVE LINE AT EDGE */
+        box-shadow: none !important;
     }
-    /* Logo - CENTER (order 2, flex 1) */
+    /* Logo - CENTER - Shrink to prevent pushing search icon out */
     .main-menu-two__left {
         order: 2 !important;
         flex: 1 !important;
@@ -674,9 +676,10 @@
         position: relative !important;
         z-index: 10 !important;
         margin: 0 !important;
+        max-width: 150px !important; /* Prevent logo from taking too much width */
     }
     .main-menu-two__logo img {
-        height: 65px !important;
+        height: 50px !important; /* Smaller logo Height */
         width: auto !important;
         display: block !important;
         filter: none !important;
@@ -685,11 +688,12 @@
     .main-menu-two__main-menu-two-box {
         order: 1 !important;
         flex: 0 0 auto !important;
-        min-width: 50px !important;
+        min-width: 45px !important;
         display: flex !important;
         justify-content: flex-start !important;
         align-items: center !important;
         z-index: 10 !important;
+        border: none !important;
     }
     /* Search - RIGHT (order 3) */
      .main-menu-two__right {
@@ -698,42 +702,45 @@
         justify-content: flex-end !important;
         order: 3 !important;
         z-index: 10 !important;
-        min-width: 50px !important;
-        padding-right: 8px !important; /* Move search bar thoda left as requested */
+        min-width: 45px !important;
+        padding-right: 0 !important; 
+        border: none !important;
     }
     .main-menu-two__call-search,
     .main-menu-two__call {
         display: flex !important;
         align-items: center !important;
         justify-content: flex-end !important;
+        border: none !important;
     }
     .mobile-nav__toggler {
         margin: 0 !important;
-        width: 42px !important;
-        height: 42px !important;
+        width: 38px !important;
+        height: 38px !important;
         background: #f8f9fa !important;
-        border: 1px solid #eee !important;
-        border-radius: 10px !important;
+        border: none !important; /* Remove line/border */
+        border-radius: 8px !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
         color: #c00415 !important;
-        font-size: 20px !important;
+        font-size: 18px !important;
     }
     .main-menu-two__call .thm-btn {
-        width: 42px !important;
-        height: 42px !important;
-        border-radius: 10px !important;
+        width: 38px !important;
+        height: 38px !important;
+        border-radius: 8px !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
         padding: 0 !important;
         background: linear-gradient(145deg, #c00415 0%, #a00311 100%) !important;
         color: #fff !important;
-        box-shadow: 0 4px 15px rgba(192,4,21,0.3) !important;
+        border: none !important; /* Remove line/border */
+        box-shadow: none !important; /* Remove shadow that might look like line when cut */
     }
     .main-menu-two__call .thm-btn i {
-        font-size: 18px !important;
+        font-size: 16px !important;
     }
 
     /* Fix image cutting on mobile - Enhanced Robustness */
