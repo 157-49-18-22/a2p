@@ -6,7 +6,7 @@ $_protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" :
 $_host = $_SERVER['HTTP_HOST'];
 $_path = $_SERVER['REQUEST_URI'];
 // Global Logo for Previews (A2P Logo)
-$_global_logo = SITE_URL . "upload/290126125406LOGO.png?v=1.5";
+$_global_logo = SITE_URL . "upload/290126125406LOGO.png?v=1.6";
 $_current_url = $_protocol . "://" . $_host . $_path;
 ?>
 <!-- Global Open Graph Tags (WhatsApp Fix) -->
@@ -16,9 +16,8 @@ $_current_url = $_protocol . "://" . $_host . $_path;
 <meta property="og:url" content="<?php echo $_current_url; ?>">
 <meta property="og:image" content="<?php echo $_global_logo; ?>">
 <meta property="og:image:secure_url" content="<?php echo $_global_logo; ?>">
-<meta property="og:image:type" content="image/png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
+<meta property="og:image:width" content="600">
+<meta property="og:image:height" content="315">
 <meta property="og:type" content="website">
 
 <!-- Twitter Card -->
