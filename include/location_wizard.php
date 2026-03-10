@@ -62,7 +62,7 @@
     height: 100%;
     background: rgba(0,0,0,0.85);
     display: none;
-    z-index: 9999;
+    z-index: 99999 !important;
     backdrop-filter: blur(8px);
     align-items: center;
     justify-content: center;
@@ -70,12 +70,16 @@
 
 .wizard-content {
     background: #fff;
-    width: 90%;
+    width: 95%;
     max-width: 800px;
+    height: auto;
+    max-height: 90vh;
     border-radius: 20px;
     overflow: hidden;
     animation: zoomIn 0.3s ease-out;
     box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+    display: flex;
+    flex-direction: column;
 }
 
 @keyframes zoomIn {
@@ -123,7 +127,27 @@
     background: #c00415;
 }
 
-.wizard-body { padding: 40px; min-height: 400px; }
+.wizard-body { 
+    padding: 30px !important; 
+    min-height: 300px !important; 
+    overflow-y: auto !important; 
+    flex: 1 !important;
+    scrollbar-width: thin !important;
+    scrollbar-color: #c00415 #f0f0f0 !important;
+}
+
+.wizard-body::-webkit-scrollbar {
+    width: 6px;
+}
+
+.wizard-body::-webkit-scrollbar-track {
+    background: #f0f0f0;
+}
+
+.wizard-body::-webkit-scrollbar-thumb {
+    background-color: #c00415 !important;
+    border-radius: 10px !important;
+}
 .wizard-step { display: none; }
 .wizard-step.active { display: block; animation: fadeIn 0.4s; }
 
@@ -165,21 +189,31 @@
 .wizard-card span { font-weight: 600; color: #444; }
 
 .wizard-back {
-    margin-top: 40px;
-    background: #eee;
-    border: none;
-    padding: 10px 25px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: 600;
+    margin-top: 30px !important;
+    background: #f0f0f0 !important;
+    border: 1px solid #ddd !important;
+    padding: 12px 30px !important;
+    border-radius: 8px !important;
+    cursor: pointer !important;
+    font-weight: 600 !important;
+    width: 100% !important;
+    color: #444 !important;
+    transition: all 0.3s ease !important;
+    display: block !important;
 }
 
 .wizard-back:hover { background: #ddd; }
 
 /* Responsive */
 @media (max-width: 600px) {
-    .wizard-grid { grid-template-columns: 1fr 1fr; }
-    .wizard-body { padding: 20px; }
+    .wizard-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .wizard-body { padding: 15px; }
+    .wizard-header { padding: 15px 20px; }
+    .wizard-header h3 { font-size: 18px; }
+    .wizard-progress { padding: 10px; }
+    .progress-step { font-size: 11px; }
+    .wizard-content { width: 98%; max-height: 95vh; }
+    .wizard-back { margin-top: 20px; padding: 10px; }
 }
 </style>
 
