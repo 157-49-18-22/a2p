@@ -5,37 +5,43 @@ if (isset($_GET['query'])) {
     $search_redir = trim($_GET['query']);
     $searchLower_redir = strtolower($search_redir);
     
-    // 1. Blog redirection
-    $blogKeywords = ['blog', 'news', 'article', 'update', 'blogs'];
-    foreach ($blogKeywords as $kw) {
-        if (strpos($searchLower_redir, $kw) !== false) {
-            header('Location: ' . SITE_URL . 'blog.php');
+    // Check if we are doing a specific filtered search from the wizard/filters
+    // If location, category, or subcategory is set, we skip the general redirections
+    $isFilteredSearch = isset($_GET['location']) || isset($_GET['category_id']) || isset($_GET['subcategory_id']);
+
+    if (!$isFilteredSearch) {
+        // 1. Blog redirection
+        $blogKeywords = ['blog', 'news', 'article', 'update', 'blogs'];
+        foreach ($blogKeywords as $kw) {
+            if (strpos($searchLower_redir, $kw) !== false) {
+                header('Location: ' . SITE_URL . 'blog.php');
+                exit();
+            }
+        }
+
+        // 2. Contact redirection
+        $contactKeywords_redir = [
+            'address', 'location', 'phone', 'mobile', 'call', 'email', 'contact',
+            'office', 'address?', 'pincode', 'corporate', 'connect', 'reach',
+            'enquiry', 'help', 'support', 'number', 'whatsapp'
+        ];
+        
+        $isKeywordMatch_redir = false;
+        foreach ($contactKeywords_redir as $kw) {
+            if (strpos($searchLower_redir, $kw) !== false) {
+                $isKeywordMatch_redir = true;
+                break;
+            }
+        }
+
+        $isPhone_redir = preg_match('/\d{7,}/', preg_replace('/[^\d]/', '', $search_redir));
+        $isEmail_redir = filter_var($search_redir, FILTER_VALIDATE_EMAIL) ||
+                    preg_match('/[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/', $search_redir);
+
+        if ($isKeywordMatch_redir || $isPhone_redir || $isEmail_redir) {
+            header('Location: ' . SITE_URL . 'contact.php');
             exit();
         }
-    }
-
-    // 2. Contact redirection
-    $contactKeywords_redir = [
-        'address', 'location', 'phone', 'mobile', 'call', 'email', 'contact',
-        'office', 'address?', 'pincode', 'corporate', 'connect', 'reach',
-        'enquiry', 'help', 'support', 'number', 'whatsapp'
-    ];
-    
-    $isKeywordMatch_redir = false;
-    foreach ($contactKeywords_redir as $kw) {
-        if (strpos($searchLower_redir, $kw) !== false) {
-            $isKeywordMatch_redir = true;
-            break;
-        }
-    }
-
-    $isPhone_redir = preg_match('/\d{7,}/', preg_replace('/[^\d]/', '', $search_redir));
-    $isEmail_redir = filter_var($search_redir, FILTER_VALIDATE_EMAIL) ||
-               preg_match('/[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/', $search_redir);
-
-    if ($isKeywordMatch_redir || $isPhone_redir || $isEmail_redir) {
-        header('Location: ' . SITE_URL . 'contact.php');
-        exit();
     }
 }
 ?>
@@ -110,6 +116,7 @@ function highlightTerms($text, $term) {
 }
 ?>
 
+<style>
     /* Force all property cards to be rectangular with sharp corners */
     .services-one__single, 
     .blog-one__single, 

@@ -61,6 +61,7 @@ if (count($sql_ser)) {
 
 
 
+<style>
     /* Force all property cards to be rectangular with sharp corners */
     .services-one__single, 
     .blog-one__single, 
