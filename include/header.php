@@ -653,7 +653,7 @@
         margin-left: 10px;
     }
     .main-menu-two__wrapper {
-        padding: 0 55px 0 15px !important; /* AGGRESSIVE SHIFT: 55px padding on right to push everything left */
+        padding: 0 15px !important; /* Normal balanced padding */
         height: 70px !important;
         display: flex !important;
         align-items: center !important;
@@ -664,81 +664,65 @@
         width: 100% !important;
         overflow: hidden !important;
         border: none !important;
-        box-shadow: none !important;
     }
     /* Logo - CENTER */
     .main-menu-two__left {
         order: 2 !important;
-        flex: 1 !important;
+        flex: 1 1 auto !important;
         display: flex !important;
         justify-content: center !important;
         align-items: center !important;
-        position: relative !important;
-        z-index: 10 !important;
-        margin: 0 !important;
-        max-width: 140px !important; /* Slightly smaller logo area */
+        max-width: 160px !important;
+        margin: 0 auto !important;
     }
     .main-menu-two__logo img {
-        height: 48px !important;
+        height: 45px !important;
         width: auto !important;
-        display: block !important;
     }
     /* Hamburger - LEFT */
     .main-menu-two__main-menu-two-box {
         order: 1 !important;
-        flex: 0 0 auto !important;
-        min-width: 45px !important;
+        flex: 0 0 45px !important;
         display: flex !important;
         justify-content: flex-start !important;
-        align-items: center !important;
-        z-index: 10 !important;
     }
-    /* Search - RIGHT - Physical Move Left */
+    /* Search - RIGHT */
      .main-menu-two__right {
-        flex: 0 0 auto !important;
-        display: flex !important;
-        justify-content: flex-end !important;
         order: 3 !important;
-        z-index: 10 !important;
-        min-width: 45px !important;
-        margin-right: 15px !important; /* PHYSICAL MARGIN TO PULL IT LEFT */
-        padding-right: 0 !important;
-    }
-    .main-menu-two__call-search,
-    .main-menu-two__call {
+        flex: 0 0 45px !important;
         display: flex !important;
-        align-items: center !important;
         justify-content: flex-end !important;
-        border: none !important;
     }
     .mobile-nav__toggler {
-        margin: 0 !important;
-        width: 38px !important;
-        height: 38px !important;
+        width: 40px !important;
+        height: 40px !important;
         background: #f8f9fa !important;
-        border: none !important; /* Remove line/border */
+        border: none !important;
         border-radius: 8px !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
         color: #c00415 !important;
         font-size: 18px !important;
     }
     .main-menu-two__call .thm-btn {
-        width: 38px !important;
-        height: 38px !important;
+        width: 40px !important;
+        height: 40px !important;
         border-radius: 8px !important;
+        background: #c00415 !important;
+        color: #fff !important;
+        border: none !important;
+        padding: 0 !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
-        padding: 0 !important;
-        background: linear-gradient(145deg, #c00415 0%, #a00311 100%) !important;
-        color: #fff !important;
-        border: none !important; /* Remove line/border */
-        box-shadow: none !important; /* Remove shadow that might look like line when cut */
+        box-shadow: none !important;
+    }
+    /* STRANGE LINE FIX: Remove the anim after effects on mobile buttons */
+    .main-menu-two__call .thm-btn:after, 
+    .main-menu-two__call .thm-btn:before {
+        display: none !important;
     }
     .main-menu-two__call .thm-btn i {
         font-size: 16px !important;
+        margin: 0 !important;
     }
 
     /* Fix image cutting on mobile - Enhanced Robustness */
