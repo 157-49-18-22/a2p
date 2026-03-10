@@ -228,7 +228,7 @@ if (count($sql_ser)) {
                                     <div class="services-one__content">
                                         <h3 class="services-one__title"><a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php"><?php echo $subproductwww['name']; ?></a></h3>
                                         <p class="services-one__text"><i class="fa-solid fa-map-pin"></i> <?php echo $subproductwww['pro_lable']; ?></p>
-                                        <p class="services-one__text price"><i class="fa-solid fa-map-pin"></i> <?php echo $subproductwww['pro_discountprice']; ?></p>
+                                        <p class="services-one__text price"><?php echo $subproductwww['pro_discountprice']; ?></p>
                                     </div>
                                 </div>
                             </div>

@@ -335,7 +335,7 @@ function highlightTerms($text, $term) {
                                     </a>
                                 </h3>
                                 <p class="services-one__text"><i class="fa-solid fa-map-pin"></i> <?php echo htmlspecialchars($subproductwww['pro_lable']); ?></p>
-                                <p class="services-one__text price"><i class="fa-solid fa-indian-rupee-sign"></i> <?php echo htmlspecialchars($subproductwww['pro_discountprice']); ?></p>
+                                <p class="services-one__text price"><?php echo htmlspecialchars($subproductwww['pro_discountprice']); ?></p>
                             </div>
                         </div>
                     </div>
