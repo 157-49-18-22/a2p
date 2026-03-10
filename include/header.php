@@ -653,69 +653,75 @@
         margin-left: 10px;
     }
     .main-menu-two__wrapper {
-        padding: 0 15px !important; /* Normal balanced padding */
+        padding: 0 20px !important; /* Unified padding for safe-area margin */
         height: 70px !important;
         display: flex !important;
         align-items: center !important;
         justify-content: space-between !important;
-        position: relative !important;
         background: #fff !important;
         box-sizing: border-box !important;
         width: 100% !important;
-        overflow: hidden !important;
         border: none !important;
+        overflow: hidden !important;
     }
-    /* Logo - CENTER */
+    /* Logo - CENTER - Balanced for perfect alignment */
     .main-menu-two__left {
         order: 2 !important;
         flex: 1 1 auto !important;
         display: flex !important;
         justify-content: center !important;
         align-items: center !important;
-        max-width: 160px !important;
-        margin: 0 auto !important;
+        max-width: 150px !important;
+        margin: 0 auto !important; /* Perfect centering */
     }
     .main-menu-two__logo img {
-        height: 45px !important;
+        height: 42px !important; /* Optimized height to fit well */
         width: auto !important;
     }
-    /* Hamburger - LEFT */
+    /* Hamburger - LEFT (Width balanced with Right side) */
     .main-menu-two__main-menu-two-box {
         order: 1 !important;
-        flex: 0 0 45px !important;
+        flex: 0 0 60px !important; /* Symmetrical container */
         display: flex !important;
         justify-content: flex-start !important;
+        border: none !important;
     }
-    /* Search - RIGHT */
+    /* Search - RIGHT (Width balanced with Left side) */
      .main-menu-two__right {
         order: 3 !important;
-        flex: 0 0 45px !important;
+        flex: 0 0 60px !important; /* Symmetrical container */
         display: flex !important;
         justify-content: flex-end !important;
+        border: none !important;
     }
     .mobile-nav__toggler {
-        width: 40px !important;
-        height: 40px !important;
+        width: 42px !important;
+        height: 42px !important;
         background: #f8f9fa !important;
         border: none !important;
-        border-radius: 8px !important;
+        border-radius: 10px !important;
         color: #c00415 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
         font-size: 18px !important;
     }
+    /* Search Button Override to fix Android clipping */
     .main-menu-two__call .thm-btn {
-        width: 40px !important;
-        height: 40px !important;
-        border-radius: 8px !important;
+        width: 42px !important;
+        height: 42px !important;
+        padding: 0 !important; /* MUST BE 0 to prevent internal clipping */
+        border-radius: 10px !important;
         background: #c00415 !important;
         color: #fff !important;
         border: none !important;
-        padding: 0 !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
         box-shadow: none !important;
+        position: relative !important;
     }
-    /* STRANGE LINE FIX: Remove the anim after effects on mobile buttons */
+    /* Disable all animated artifacts that cause strange lines */
     .main-menu-two__call .thm-btn:after, 
     .main-menu-two__call .thm-btn:before {
         display: none !important;
@@ -723,6 +729,7 @@
     .main-menu-two__call .thm-btn i {
         font-size: 16px !important;
         margin: 0 !important;
+        color: #fff !important;
     }
 
     /* Fix image cutting on mobile - Enhanced Robustness */
