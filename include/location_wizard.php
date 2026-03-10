@@ -213,12 +213,31 @@
 @media (max-width: 600px) {
     .wizard-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
     .wizard-body { padding: 15px; }
-    .wizard-header { padding: 15px 20px; }
-    .wizard-header h3 { font-size: 18px; }
-    .wizard-progress { padding: 10px; }
-    .progress-step { font-size: 11px; }
-    .wizard-content { width: 98%; max-height: 95vh; }
+    .wizard-header { padding: 12px 15px; flex-wrap: nowrap; gap: 8px; }
+    .wizard-header h3 { 
+        font-size: 15px; 
+        line-height: 1.3;
+        flex: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .close-wizard { 
+        font-size: 24px; 
+        flex-shrink: 0;
+        line-height: 1;
+    }
+    .wizard-progress { padding: 10px 8px; }
+    .progress-step { font-size: 10px; }
+    .progress-step span { font-size: 10px; }
+    .wizard-content { width: 98%; max-height: 92vh; border-radius: 14px; }
     .wizard-back { margin-top: 20px; padding: 10px; }
+}
+
+@media (max-width: 380px) {
+    .wizard-header h3 { font-size: 13px; }
+    .wizard-header { padding: 10px 12px; }
+    .close-wizard { font-size: 22px; }
 }
 </style>
 

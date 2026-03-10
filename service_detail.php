@@ -25,17 +25,29 @@ if (count($sql_ser)) {
             <meta name="keywords" content="<?php echo $subproductss['meta_keyword']; ?>">
             <link rel="icon" href="<?= SITE_URL; ?>assets/images/favicons/favicon.ico" type="image/x-icon">
             
-            <meta property="og:title" content="<?php echo $subproductss['meta_title']; ?>">
-            <meta property="og:description" content="<?php echo $subproductss['meta_description']; ?>">
-            <meta property="og:image" content="<?= SITE_URL; ?>upload/<?php echo $subproductss['photo']; ?>">
-            <meta property="og:url" content="<?php echo 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']; ?>">
-            <meta property="og:type" content="website">
-            <meta property="og:site_name" content="A2P Realtech">
-            <!-- Twitter/X Card -->
-            <meta name="twitter:card" content="summary_large_image">
-            <meta name="twitter:title" content="<?php echo $subproductss['meta_title']; ?>">
-            <meta name="twitter:description" content="<?php echo $subproductss['meta_description']; ?>">
-            <meta name="twitter:image" content="<?= SITE_URL; ?>upload/<?php echo $subproductss['photo']; ?>">
+            <?php
+            $_og_protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? "https" : "https";
+            $_og_host     = $_SERVER['HTTP_HOST'];
+            $_og_logo_url = $_og_protocol . "://" . $_og_host . "/upload/290126125406LOGO.png";
+            $_og_page_url = $_og_protocol . "://" . $_og_host . $_SERVER['REQUEST_URI'];
+            ?>
+            <!-- Open Graph / WhatsApp Preview – works on iOS, Android & Desktop -->
+            <meta property="og:site_name"        content="A2P Realtech">
+            <meta property="og:type"             content="website">
+            <meta property="og:url"              content="<?php echo $_og_page_url; ?>">
+            <meta property="og:title"            content="<?php echo htmlspecialchars($subproductss['meta_title']); ?>">
+            <meta property="og:description"      content="<?php echo htmlspecialchars($subproductss['meta_description']); ?>">
+            <meta property="og:image"            content="<?php echo $_og_logo_url; ?>">
+            <meta property="og:image:secure_url" content="<?php echo $_og_logo_url; ?>">
+            <meta property="og:image:type"       content="image/png">
+            <meta property="og:image:width"      content="600">
+            <meta property="og:image:height"     content="600">
+            <!-- Twitter / X Card -->
+            <meta name="twitter:card"        content="summary_large_image">
+            <meta name="twitter:title"       content="<?php echo htmlspecialchars($subproductss['meta_title']); ?>">
+            <meta name="twitter:description" content="<?php echo htmlspecialchars($subproductss['meta_description']); ?>">
+            <meta name="twitter:image"       content="<?php echo $_og_logo_url; ?>">
+
 
             
             
@@ -74,68 +86,67 @@ if (count($sql_ser)) {
         </head>
 
         <style>
-        
-        table {
-                margin-top: 40px !important;
-                width: 100% !important;
-                margin-bottom: 40px !important;
-               
-            }
 
-        /* Table Container for Responsive Scroll */
-            .table-container {
+            /* ===== Tab Content Tables Only ===== */
+            /* Scrollable wrapper for wide tables from DB content */
+            .table-responsive-wrapper {
                 width: 100%;
                 overflow-x: auto;
-                max-width: 100%;
+                -webkit-overflow-scrolling: touch;
+                margin-top: 20px;
+                margin-bottom: 20px;
             }
-            
-            /* Core Table Styling */
-            table {
+
+            /* Scope all table styles to .tab-content to avoid breaking Bootstrap */
+            .tab-content table {
                 width: 100%;
                 border-collapse: collapse;
                 border-spacing: 0;
                 font-family: Arial, sans-serif;
                 font-size: 16px;
                 background-color: #fff;
+                margin-top: 20px;
+                margin-bottom: 20px;
             }
-            
-            /* Table Header */
-            th {
-                background-color: #007bff; /* Blue Header */
+
+            .tab-content th {
+                background-color: #1a5fa8;
                 color: #fff;
                 text-align: left;
                 padding: 12px;
                 font-weight: bold;
+                white-space: nowrap;
             }
-            
-            /* Table Rows */
-            td {
+
+            .tab-content td {
                 padding: 10px;
-                border-bottom: 1px solid #ddd; /* Light Grey Border */
+                border-bottom: 1px solid #ddd;
+                vertical-align: top;
             }
-            
-            /* Striped Rows */
-            tr:nth-child(even) {
-                background-color: #f8f9fa; /* Light Grey */
+
+            .tab-content tr:nth-child(even) {
+                background-color: #f0f6ff;
             }
-            
-            /* Hover Effect */
-            tr:hover {
-                background-color: #e2e6ea; /* Light Blue-Grey */
+
+            .tab-content tr:hover {
+                background-color: #dce9f9;
             }
-            
-            /* Border for Table */
-            table, th, td {
-                border: 1px solid #ddd;
+
+            .tab-content table,
+            .tab-content th,
+            .tab-content td {
+                border: 1px solid #ccd;
             }
-            
-            /* Responsive Table */
+
+            /* On mobile: let the wrapper scroll, keep table at natural width */
             @media screen and (max-width: 768px) {
-                table {
-                    font-size: 14px;
+                .tab-content table {
+                    font-size: 13px;
+                    min-width: 480px;
                 }
-                th, td {
-                    padding: 8px;
+                .tab-content th,
+                .tab-content td {
+                    padding: 8px 10px;
                 }
             }
 
@@ -1259,6 +1270,16 @@ $currentPageUrl = urlencode("http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_UR
         var myModal = new bootstrap.Modal(document.getElementById('enquiryModal'));
         myModal.show();
     });
+  });
+
+  // Auto-wrap all tables inside tab-content with a horizontal scrollable container
+  document.querySelectorAll('.tab-content table').forEach(function(table) {
+    if (!table.parentElement.classList.contains('table-responsive-wrapper')) {
+      var wrapper = document.createElement('div');
+      wrapper.classList.add('table-responsive-wrapper');
+      table.parentNode.insertBefore(wrapper, table);
+      wrapper.appendChild(table);
+    }
   });
 </script>
 
