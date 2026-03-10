@@ -25,13 +25,16 @@ if (count($sql_ser)) {
             <meta name="keywords" content="<?php echo $subproductss['meta_keyword']; ?>">
             <link rel="icon" href="<?= SITE_URL; ?>assets/images/favicons/favicon.ico" type="image/x-icon">
             
+            <?php 
+            $_clean_photo = str_replace(' ', '%20', trim($subproductss['photo']));
+            $_clean_og_url = SITE_URL . "upload/" . $_clean_photo;
+            ?>
             <meta property="og:title" content="<?php echo htmlspecialchars($subproductss['meta_title']); ?>">
             <meta property="og:description" content="<?php echo htmlspecialchars($subproductss['meta_description']); ?>">
-            <meta property="og:image" content="<?= SITE_URL; ?>upload/<?php echo trim($subproductss['photo']); ?>?v=1.2">
-            <meta property="og:image:secure_url" content="<?= SITE_URL; ?>upload/<?php echo trim($subproductss['photo']); ?>?v=1.2">
-            <meta property="og:image:type" content="image/jpeg">
-            <meta property="og:image:width" content="1200">
-            <meta property="og:image:height" content="630">
+            <meta property="og:image" content="<?php echo $_clean_og_url; ?>?v=1.3">
+            <meta property="og:image:secure_url" content="<?php echo $_clean_og_url; ?>?v=1.3">
+            <meta property="og:image:width" content="600">
+            <meta property="og:image:height" content="315">
             <meta property="og:url" content="<?php echo SITE_URL . ltrim($_SERVER['REQUEST_URI'], '/'); ?>">
             <meta property="og:type" content="website">
             <meta property="og:site_name" content="A2P Realtech">
@@ -39,7 +42,7 @@ if (count($sql_ser)) {
             <meta name="twitter:card" content="summary_large_image">
             <meta name="twitter:title" content="<?php echo htmlspecialchars($subproductss['meta_title']); ?>">
             <meta name="twitter:description" content="<?php echo htmlspecialchars($subproductss['meta_description']); ?>">
-            <meta name="twitter:image" content="<?= SITE_URL; ?>upload/<?php echo trim($subproductss['photo']); ?>?v=1.2">
+            <meta name="twitter:image" content="<?php echo $_clean_og_url; ?>?v=1.3">
 
             
             
