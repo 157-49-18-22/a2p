@@ -26,11 +26,21 @@ if (count($sql_ser)) {
     <meta name="keywords" content="<?php echo $fixed_delivery_time['meta_keyword']; ?>">
     <link rel="icon" href="<?= SITE_URL; ?>assets/images/favicons/favicon.ico" type="image/x-icon">
 
-    <meta property="og:title" content="<?php echo $fixed_delivery_time['meta_title']; ?>">
-    <meta property="og:description" content="<?php echo $fixed_delivery_time['meta_description']; ?>">
-    <meta property="og:image" content="<?= SITE_URL; ?>upload/<?php echo $fixed_delivery_time['photo']; ?>">
-    <meta property="og:url" content="<?php echo $currentPageUrl; ?>">
+    <meta property="og:title" content="<?php echo htmlspecialchars($fixed_delivery_time['meta_title']); ?>">
+    <meta property="og:description" content="<?php echo htmlspecialchars($fixed_delivery_time['meta_description']); ?>">
+    <meta property="og:image" content="<?= SITE_URL; ?>upload/<?php echo trim($fixed_delivery_time['photo']); ?>?v=1.2">
+    <meta property="og:image:secure_url" content="<?= SITE_URL; ?>upload/<?php echo trim($fixed_delivery_time['photo']); ?>?v=1.2">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:url" content="<?php echo SITE_URL . ltrim($_SERVER['REQUEST_URI'], '/'); ?>">
     <meta property="og:type" content="article">
+    <meta property="og:site_name" content="A2P Realtech">
+    <!-- Twitter/X Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="<?php echo htmlspecialchars($fixed_delivery_time['meta_title']); ?>">
+    <meta name="twitter:description" content="<?php echo htmlspecialchars($fixed_delivery_time['meta_description']); ?>">
+    <meta name="twitter:image" content="<?= SITE_URL; ?>upload/<?php echo trim($fixed_delivery_time['photo']); ?>?v=1.2">
    
    
     <link rel="manifest" href="<?= SITE_URL; ?>assets/images/favicons/site.webmanifest" />

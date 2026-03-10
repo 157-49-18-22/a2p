@@ -25,6 +25,26 @@ if (count($sql_ser)) {
             <meta name="description" content="<?php echo $pr_add['class9']; ?>">
             <meta name="keywords" content="<?php echo $pr_add['class8']; ?>">
             <link rel="icon" href="<?= SITE_URL; ?>assets/images/favicons/favicon.ico">
+            
+            <meta property="og:title" content="<?php echo htmlspecialchars($blog['name']); ?>">
+            <meta property="og:description" content="<?php echo htmlspecialchars(strip_tags($blog['des'])); ?>">
+            <?php 
+            $_og_img = !empty($blog['photo']) ? SITE_URL . "upload/" . trim($blog['photo']) : SITE_URL . "upload/290126125406LOGO.png";
+            ?>
+            <meta property="og:image" content="<?php echo $_og_img; ?>?v=1.2">
+            <meta property="og:image:secure_url" content="<?php echo $_og_img; ?>?v=1.2">
+            <meta property="og:image:type" content="image/jpeg">
+            <meta property="og:image:width" content="1200">
+            <meta property="og:image:height" content="630">
+            <meta property="og:url" content="<?php echo SITE_URL . ltrim($_SERVER['REQUEST_URI'], '/'); ?>">
+            <meta property="og:type" content="article">
+            <meta property="og:site_name" content="A2P Realtech">
+            <!-- Twitter/X Card -->
+            <meta name="twitter:card" content="summary_large_image">
+            <meta name="twitter:title" content="<?php echo htmlspecialchars($blog['name']); ?>">
+            <meta name="twitter:description" content="<?php echo htmlspecialchars(strip_tags($blog['des'])); ?>">
+            <meta name="twitter:image" content="<?php echo $_og_img; ?>?v=1.2">
+
             <link rel="manifest" href="<?= SITE_URL; ?>assets/images/favicons/site.webmanifest" />
             <link rel="preconnect" href="https://fonts.googleapis.com/">
             <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>

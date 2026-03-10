@@ -25,29 +25,21 @@ if (count($sql_ser)) {
             <meta name="keywords" content="<?php echo $subproductss['meta_keyword']; ?>">
             <link rel="icon" href="<?= SITE_URL; ?>assets/images/favicons/favicon.ico" type="image/x-icon">
             
-            <?php
-            $_og_protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? "https" : "https";
-            $_og_host     = $_SERVER['HTTP_HOST'];
-            $_og_logo_url = $_og_protocol . "://" . $_og_host . "/upload/290126125406LOGO.png";
-            $_og_page_url = $_og_protocol . "://" . $_og_host . $_SERVER['REQUEST_URI'];
-            ?>
-            <!-- Open Graph / WhatsApp Preview – works on iOS, Android & Desktop -->
-            <meta property="og:site_name"        content="A2P Realtech">
-            <meta property="og:type"             content="website">
-            <meta property="og:url"              content="<?php echo $_og_page_url; ?>">
-            <meta property="og:title"            content="<?php echo htmlspecialchars($subproductss['meta_title']); ?>">
-            <meta property="og:description"      content="<?php echo htmlspecialchars($subproductss['meta_description']); ?>">
-            <meta property="og:image"            content="<?php echo $_og_logo_url; ?>">
-            <meta property="og:image:secure_url" content="<?php echo $_og_logo_url; ?>">
-            <meta property="og:image:type"       content="image/png">
-            <meta property="og:image:width"      content="600">
-            <meta property="og:image:height"     content="600">
-            <!-- Twitter / X Card -->
-            <meta name="twitter:card"        content="summary_large_image">
-            <meta name="twitter:title"       content="<?php echo htmlspecialchars($subproductss['meta_title']); ?>">
+            <meta property="og:title" content="<?php echo htmlspecialchars($subproductss['meta_title']); ?>">
+            <meta property="og:description" content="<?php echo htmlspecialchars($subproductss['meta_description']); ?>">
+            <meta property="og:image" content="<?= SITE_URL; ?>upload/<?php echo trim($subproductss['photo']); ?>?v=1.2">
+            <meta property="og:image:secure_url" content="<?= SITE_URL; ?>upload/<?php echo trim($subproductss['photo']); ?>?v=1.2">
+            <meta property="og:image:type" content="image/jpeg">
+            <meta property="og:image:width" content="1200">
+            <meta property="og:image:height" content="630">
+            <meta property="og:url" content="<?php echo SITE_URL . ltrim($_SERVER['REQUEST_URI'], '/'); ?>">
+            <meta property="og:type" content="website">
+            <meta property="og:site_name" content="A2P Realtech">
+            <!-- Twitter/X Card -->
+            <meta name="twitter:card" content="summary_large_image">
+            <meta name="twitter:title" content="<?php echo htmlspecialchars($subproductss['meta_title']); ?>">
             <meta name="twitter:description" content="<?php echo htmlspecialchars($subproductss['meta_description']); ?>">
-            <meta name="twitter:image"       content="<?php echo $_og_logo_url; ?>">
-
+            <meta name="twitter:image" content="<?= SITE_URL; ?>upload/<?php echo trim($subproductss['photo']); ?>?v=1.2">
 
             
             

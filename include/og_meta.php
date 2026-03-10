@@ -7,7 +7,8 @@ $_protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" :
 $_host = $_SERVER['HTTP_HOST'];
 $_path = $_SERVER['REQUEST_URI'];
 // Add ?v=1.1 to force WhatsApp to refresh the image cache
-$_full_logo_url = $_protocol . "://" . $_host . "/upload/290126125406LOGO.png";
+// Add ?v=1.2 to force WhatsApp to refresh the image cache
+$_full_logo_url = $_protocol . "://" . $_host . "/upload/290126125406LOGO.png?v=1.2";
 $_current_page_url = $_protocol . "://" . $_host . $_path;
 ?>
 <!-- Open Graph / WhatsApp Preview Tags -->
