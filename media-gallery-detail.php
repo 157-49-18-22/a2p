@@ -28,12 +28,9 @@ if (count($sql_ser)) {
 
     <meta property="og:title" content="<?php echo htmlspecialchars($fixed_delivery_time['meta_title']); ?>">
     <meta property="og:description" content="<?php echo htmlspecialchars($fixed_delivery_time['meta_description']); ?>">
-    <meta property="og:image" content="<?= SITE_URL; ?>upload/290126125406LOGO.png?v=1.6">
-    <meta property="og:image:secure_url" content="<?= SITE_URL; ?>upload/290126125406LOGO.png?v=1.6">
-    <meta property="og:image:width" content="600">
-    <meta property="og:image:height" content="315">
-    <meta property="og:url" content="<?php echo SITE_URL . ltrim($_SERVER['REQUEST_URI'], '/'); ?>">
-    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://pink-sheep-796549.hostingersite.com/upload/290126125406LOGO.png?v=3.1">
+    <meta property="og:url" content="https://<?php echo $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']; ?>">
+    <meta property="og:type" content="website">
     <meta property="og:site_name" content="A2P Realtech">
     <!-- Twitter/X Card -->
     <meta name="twitter:card" content="summary_large_image">
