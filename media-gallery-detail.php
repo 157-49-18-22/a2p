@@ -28,11 +28,10 @@ if (count($sql_ser)) {
 
     <meta property="og:title" content="<?php echo htmlspecialchars($fixed_delivery_time['meta_title']); ?>">
     <meta property="og:description" content="<?php echo htmlspecialchars($fixed_delivery_time['meta_description']); ?>">
-    <meta property="og:image" content="<?= SITE_URL; ?>upload/<?php echo trim($fixed_delivery_time['photo']); ?>?v=1.2">
-    <meta property="og:image:secure_url" content="<?= SITE_URL; ?>upload/<?php echo trim($fixed_delivery_time['photo']); ?>?v=1.2">
-    <meta property="og:image:type" content="image/jpeg">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
+    <meta property="og:image" content="<?= SITE_URL; ?>upload/290126125406LOGO.png?v=1.4">
+    <meta property="og:image:secure_url" content="<?= SITE_URL; ?>upload/290126125406LOGO.png?v=1.4">
+    <meta property="og:image:width" content="600">
+    <meta property="og:image:height" content="315">
     <meta property="og:url" content="<?php echo SITE_URL . ltrim($_SERVER['REQUEST_URI'], '/'); ?>">
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="A2P Realtech">
@@ -40,7 +39,7 @@ if (count($sql_ser)) {
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="<?php echo htmlspecialchars($fixed_delivery_time['meta_title']); ?>">
     <meta name="twitter:description" content="<?php echo htmlspecialchars($fixed_delivery_time['meta_description']); ?>">
-    <meta name="twitter:image" content="<?= SITE_URL; ?>upload/<?php echo trim($fixed_delivery_time['photo']); ?>?v=1.2">
+    <meta name="twitter:image" content="<?= SITE_URL; ?>upload/290126125406LOGO.png?v=1.4">
    
    
     <link rel="manifest" href="<?= SITE_URL; ?>assets/images/favicons/site.webmanifest" />
@@ -165,9 +164,11 @@ if (count($sql_ser)) {
 
 
 <?php
-$blogName = $fixed_delivery_time['name'];  // Name of the blog post
-$encodedBlogName = urlencode($blogName);  // URL encode the blog name for use in URLs
-$currentPageUrl = urlencode("http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']); // Get current page URL
+$rawBlogName = $fixed_delivery_time['name'];
+$encodedBlogName = urlencode($rawBlogName);
+$_protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http");
+$rawPageUrl = $_protocol . "://" . $_host . $_path;
+$encodedPageUrl = urlencode($rawPageUrl);
 ?>
 
 
@@ -192,22 +193,22 @@ $currentPageUrl = urlencode("http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_UR
                                      
                                    
                                     <!-- Facebook Share -->
-                                    <a href="https://www.facebook.com/sharer/sharer.php?u=<?php echo $currentPageUrl; ?>&amp;t=<?php echo $encodedBlogName; ?>" target="_blank" class="facebook" title="Share on Facebook">
+                                    <a href="https://www.facebook.com/sharer/sharer.php?u=<?php echo $encodedPageUrl; ?>&amp;t=<?php echo $encodedBlogName; ?>" target="_blank" class="facebook" title="Share on Facebook">
                                         <i class="fab fa-facebook-f"></i>
                                     </a>
                                     
                                     <!-- Twitter Share -->
-                                    <a href="https://twitter.com/intent/tweet?text=<?php echo $encodedBlogName; ?>&amp;url=<?php echo $currentPageUrl; ?>" target="_blank" class="twitter" title="Share on Twitter">
+                                    <a href="https://twitter.com/intent/tweet?text=<?php echo $encodedBlogName; ?>&amp;url=<?php echo $encodedPageUrl; ?>" target="_blank" class="twitter" title="Share on Twitter">
                                         <i class="fab fa-x-twitter"></i>
                                     </a>
                                     
                                     <!-- LinkedIn Share -->
-                                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=<?php echo $currentPageUrl; ?>" target="_blank" class="linkedin" title="Share on LinkedIn">
+                                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=<?php echo $encodedPageUrl; ?>" target="_blank" class="linkedin" title="Share on LinkedIn">
                                         <i class="fab fa-linkedin-in"></i>
                                     </a>
                                 
                                     <!-- WhatsApp Enquiry -->
-                                    <a href="https://api.whatsapp.com/send?phone=918130525001&text=Hello! I am interested in: <?php echo $encodedBlogName; ?> (<?php echo $currentPageUrl; ?>)" target="_blank" class="whatsapp" title="Enquire on WhatsApp">
+                                    <a href="https://api.whatsapp.com/send?phone=918130525001&text=Hello! I am interested in: <?php echo $encodedBlogName; ?> (<?php echo $encodedPageUrl; ?>)" target="_blank" class="whatsapp" title="Enquire on WhatsApp">
                                         <i class="fab fa-whatsapp"></i>
                                     </a>
                                     
@@ -226,8 +227,8 @@ $currentPageUrl = urlencode("http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_UR
                             function shareContent(event) {
                                 event.preventDefault();
                                 
-                                const pageTitle = <?php echo json_encode($encodedBlogName); ?>;
-                                const pageUrl = <?php echo json_encode($currentPageUrl); ?>;
+                                const pageTitle = <?php echo json_encode($rawBlogName); ?>;
+                                const pageUrl = <?php echo json_encode($rawPageUrl); ?>;
                         
                                 if (navigator.share) {
                                     navigator.share({
@@ -276,22 +277,22 @@ $currentPageUrl = urlencode("http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_UR
                                      
                                    
                                     <!-- Facebook Share -->
-                                    <a href="https://www.facebook.com/sharer/sharer.php?u=<?php echo $currentPageUrl; ?>&amp;t=<?php echo $encodedBlogName; ?>" target="_blank" class="facebook" title="Share on Facebook">
+                                    <a href="https://www.facebook.com/sharer/sharer.php?u=<?php echo $encodedPageUrl; ?>&amp;t=<?php echo $encodedBlogName; ?>" target="_blank" class="facebook" title="Share on Facebook">
                                         <i class="fab fa-facebook-f"></i>
                                     </a>
                                     
                                     <!-- Twitter Share -->
-                                    <a href="https://twitter.com/intent/tweet?text=<?php echo $encodedBlogName; ?>&amp;url=<?php echo $currentPageUrl; ?>" target="_blank" class="twitter" title="Share on Twitter">
+                                    <a href="https://twitter.com/intent/tweet?text=<?php echo $encodedBlogName; ?>&amp;url=<?php echo $encodedPageUrl; ?>" target="_blank" class="twitter" title="Share on Twitter">
                                         <i class="fab fa-x-twitter"></i>
                                     </a>
                                     
                                     <!-- LinkedIn Share -->
-                                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=<?php echo $currentPageUrl; ?>" target="_blank" class="linkedin" title="Share on LinkedIn">
+                                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=<?php echo $encodedPageUrl; ?>" target="_blank" class="linkedin" title="Share on LinkedIn">
                                         <i class="fab fa-linkedin-in"></i>
                                     </a>
                                 
                                     <!-- WhatsApp Enquiry -->
-                                    <a href="https://api.whatsapp.com/send?phone=918130525001&text=Hello! I am interested in: <?php echo $encodedBlogName; ?> (<?php echo $currentPageUrl; ?>)" target="_blank" class="whatsapp" title="Enquire on WhatsApp">
+                                    <a href="https://api.whatsapp.com/send?phone=918130525001&text=Hello! I am interested in: <?php echo $encodedBlogName; ?> (<?php echo $encodedPageUrl; ?>)" target="_blank" class="whatsapp" title="Enquire on WhatsApp">
                                         <i class="fab fa-whatsapp"></i>
                                     </a>
                                     
