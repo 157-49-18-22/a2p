@@ -88,10 +88,27 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 .blog-one__img, 
 .project-three__img, 
 .project-three__img-box,
-.blog-one__content {
+.blog-one__content,
+.services-one__single,
+.services-one__img,
+.services-one__content {
     border-radius: 0 !important;
     -webkit-border-radius: 0 !important;
     -moz-border-radius: 0 !important;
+}
+
+/* Ensure images fill container without cutting */
+.blog-one__img img,
+.project-three__img img,
+.services-one__img img {
+    object-fit: fill !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.blog-one__img, .services-one__img {
+    height: 250px !important;
+    overflow: hidden;
 }
 
 .modal-border-red {
@@ -103,9 +120,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 }
 
 .modal-border-auto {
-    border: 3px solid #333; /* Example auto color */
+    border: 3px solid #333; 
 }
 
+@media (max-width: 767px) {
+    .blog-one__img, .services-one__img {
+        height: 200px !important;
+    }
+}
 </style>
   
   

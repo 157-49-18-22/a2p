@@ -110,7 +110,22 @@ function highlightTerms($text, $term) {
 }
 ?>
 
-<style>
+    /* Force all property cards to be rectangular with sharp corners */
+    .services-one__single, 
+    .blog-one__single, 
+    .project-three__single, 
+    .project-card-v2, 
+    .services-one__img, 
+    .blog-one__img, 
+    .project-three__img, 
+    .project-three__img-box,
+    .blog-one__content,
+    .services-one__content {
+        border-radius: 0 !important;
+        -webkit-border-radius: 0 !important;
+        -moz-border-radius: 0 !important;
+    }
+
     /* Highlight - Match Image 2 (just bold and red) */
     strong {
         background-color: transparent;
@@ -119,38 +134,41 @@ function highlightTerms($text, $term) {
         text-decoration: none;
     }
 
-    .services-one__single.wow.fadeInUp.animated {
-        box-shadow: rgb(90 0 8) 0px 3px 12px !important;
-    }
-
     .services-one__single {
         margin-bottom: 30px;
         background: #fff;
-        border-radius: 0px !important; /* Square as per Image 2 */
+        border-radius: 0px !important; 
         overflow: hidden;
         transition: all 0.3s ease;
         border: 1px solid #ddd;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
     }
 
     .services-one__img {
         position: relative;
-        height: 250px;
+        height: 250px !important;
         overflow: hidden;
+        width: 100%;
     }
 
     .services-one__img img {
-        height: 100%;
-        width: 100%;
-        object-fit: fill; /* Ensure whole image is displayed correctly */
+        height: 100% !important;
+        width: 100% !important;
+        object-fit: fill !important; 
         display: block;
     }
 
     .services-one__content {
-        padding: 25px;
+        padding: 20px;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
     }
 
     .services-one__title {
-        font-size: 22px !important;
+        font-size: 20px !important;
         font-weight: 800 !important;
         margin-bottom: 15px;
         line-height: 1.2;
@@ -162,15 +180,11 @@ function highlightTerms($text, $term) {
         display: block;
     }
 
-    .services-one__title a strong {
-        color: #c00415 !important;
-    }
-
     .price {
-        font-size: 20px;
+        font-size: 19px;
         font-weight: 800;
         color: #c00415;
-        margin-top: 15px;
+        margin-top: auto;
         display: block;
     }
 
@@ -179,6 +193,15 @@ function highlightTerms($text, $term) {
         font-weight: 800;
         font-size: 24px;
         color: #007bff;
+    }
+
+    @media (max-width: 767px) {
+        .services-one__img {
+            height: 200px !important;
+        }
+        .services-one__title {
+            font-size: 18px !important;
+        }
     }
 </style>
 
@@ -296,7 +319,13 @@ function highlightTerms($text, $term) {
                         <div class="services-one__single wow fadeInUp" data-wow-delay="100ms">
                             <div class="services-one__img">
                                 <a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php">
-                                    <img src="<?= SITE_URL; ?>upload/<?php echo $subproductwww['photo']; ?>" alt="">
+                                    <?php 
+                                        $res_placeholders = ["060825060302Vatika Sovereign Park Image1.jpg", "100725050048Sobha-City-Sector-108-Dwarka-Expressway-Gurgaon.jpg", "160425091419Sobha Altus image A2P Realtech.jpg", "20260128161604_M3M-GIC-Manesar-Gurgaon.jpg"];
+                                        $imagePath = "upload/" . $subproductwww['photo'];
+                                        if (!empty($subproductwww['photo']) && file_exists($imagePath)) { $displayImg = SITE_URL . $imagePath; } 
+                                        else { $placeholderIndex = $subproductwww['id'] % count($res_placeholders); $displayImg = SITE_URL . "upload/" . $res_placeholders[$placeholderIndex]; }
+                                    ?>
+                                    <img src="<?php echo $displayImg; ?>" alt="" style="width: 100%; height: 250px; object-fit: fill !important;">
                                 </a>
                             </div>
                             <div class="services-one__content">
@@ -326,7 +355,13 @@ function highlightTerms($text, $term) {
                         <div class="services-one__single wow fadeInUp" data-wow-delay="100ms">
                             <div class="services-one__img">
                                 <a href="<?= SITE_URL; ?>media-gallery-detail/<?php echo makeurlnamebynameCategory($media['name']); ?>.php">
-                                    <img src="<?= SITE_URL; ?>upload/<?php echo $media['photo']; ?>" alt="" style="height:250px; width:100%; object-fit:fill;">
+                                    <?php 
+                                        $media_placeholders = ["060825060302Vatika Sovereign Park Image1.jpg", "100725050048Sobha-City-Sector-108-Dwarka-Expressway-Gurgaon.jpg", "160425091419Sobha Altus image A2P Realtech.jpg"];
+                                        $imagePath = "upload/" . $media['photo'];
+                                        if (!empty($media['photo']) && file_exists($imagePath)) { $displayImg = SITE_URL . $imagePath; } 
+                                        else { $placeholderIndex = $media['id'] % count($media_placeholders); $displayImg = SITE_URL . "upload/" . $media_placeholders[$placeholderIndex]; }
+                                    ?>
+                                    <img src="<?php echo $displayImg; ?>" alt="" style="height:250px; width:100%; object-fit:fill !important;">
                                 </a>
                             </div>
                             <div class="services-one__content">
@@ -357,7 +392,13 @@ function highlightTerms($text, $term) {
                         <a href="<?= SITE_URL; ?>blog_detail/<?php echo makeurlnamebynameCategory($offer['name']); ?>.php">
                             <div class="blog-one__single">
                                 <div class="blog-one__img">
-                                    <img src="upload/<?php echo $offer['photo']; ?>" alt="<?php echo htmlspecialchars($offer['name']); ?>" style="height: 220px; width: 100%; object-fit: cover;">
+                                    <?php 
+                                        $blog_placeholders = ["060225101913Dwarka_Expressway_Projects_A2P_Realtech_Gurgaon.webp", "060225101609Luxury_Homes_on_Dwarka_Expressway_A2P_Realtech.webp", "060225101329Dream_House_With_A2P_Realtech.webp", "060225100954M3M_Mansion_113_A2P_Realtech.webp"];
+                                        $imagePath = "upload/" . trim($offer['photo']);
+                                        if (!empty($offer['photo']) && file_exists($imagePath)) { $displayImg = SITE_URL . $imagePath; } 
+                                        else { $placeholderIndex = $offer['id'] % count($blog_placeholders); $displayImg = SITE_URL . "upload/" . $blog_placeholders[$placeholderIndex]; }
+                                    ?>
+                                    <img src="<?php echo $displayImg; ?>" alt="<?php echo htmlspecialchars($offer['name']); ?>" style="height: 250px; width: 100%; object-fit: fill !important;">
                                 </div>
                                 <div class="blog-one__content">
                                     <div class="blog-one__date">

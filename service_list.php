@@ -61,124 +61,83 @@ if (count($sql_ser)) {
 
 
 
-<style>
-    .services-one__single.wow.fadeInUp.animated {
-    box-shadow: rgb(90 0 8) 0px 3px 8px;
-}
-/* Container for the block filter */
-.block-filter {
-    border: 1px solid #ccc;
-    padding: 20px;
-    border-radius: 5px;
-    background-color: #f9f9f9;
-    max-width: 753px;
-    margin: 20px auto;
-        box-shadow: 0px 5px 15px rgb(0 0 0 / 49%);
-    transition: all 0.3s ease-in-out;
-    position: relative;
-}
-}
+    /* Force all property cards to be rectangular with sharp corners */
+    .services-one__single, 
+    .blog-one__single, 
+    .project-three__single, 
+    .project-card-v2, 
+    .services-one__img, 
+    .blog-one__img, 
+    .project-three__img, 
+    .project-three__img-box,
+    .blog-one__content,
+    .services-one__content {
+        border-radius: 0 !important;
+        -webkit-border-radius: 0 !important;
+        -moz-border-radius: 0 !important;
+    }
 
-/* Title of the filter */
-.block-filter h6 {
-    font-size: 18px;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 15px;
-}
+    .services-one__single {
+        margin-bottom: 30px;
+        background: #fff;
+        border-radius: 0px !important; 
+        overflow: hidden;
+        transition: all 0.3s ease;
+        border: 1px solid #ddd;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
 
-/* Scrollable filter box with flexbox */
-.box-collapse {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-}
+    .services-one__img {
+        position: relative;
+        height: 250px !important;
+        overflow: hidden;
+    }
 
-/* Label and input wrapper to keep them in the same column */
-.filter-group {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-}
+    .services-one__img img {
+        height: 100% !important;
+        width: 100% !important;
+        object-fit: fill !important; 
+        display: block;
+    }
 
-/* Labels for input fields */
-.box-collapse label {
-    font-size: 14px;
-    color: #000;
-    margin-bottom: 5px;
-    font-weight:700;
-}
+    .services-one__content {
+        padding: 20px;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+    }
 
-/* Styling for number inputs */
-.box-collapse input[type="number"] {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 3px;
-    font-size: 14px;
-    color: #333;
-    box-sizing: border-box;
-}
+    .services-one__title {
+        font-size: 20px !important;
+        font-weight: 800 !important;
+        margin-bottom: 15px;
+        line-height: 1.2;
+    }
 
-/* Change the input field on focus */
-.box-collapse input[type="number"]:focus {
-    border-color: #007bff;
-    outline: none;
-}
+    .services-one__title a {
+        color: #c00415 !important;
+        text-decoration: none !important;
+        display: block;
+    }
 
+    .price {
+        font-size: 19px;
+        font-weight: 800;
+        color: #c00415;
+        margin-top: auto;
+        display: block;
+    }
 
-
-
-.bud {
-  padding: 10px 20px;
-  font-size: 16px;
-  font-weight: bold;
-  color: white;
-  background-color: #c00415;
-  border: none;
-  border-radius: 25px;
-  cursor: pointer;
-  outline: none;
-  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
-  transition: all 0.3s ease-in-out;
-  position: relative;
-}
-
-.bud:hover {
-  background-color: #218838;
-  transform: translateY(-5px);
-  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.3);
-}
-
-.bud:active {
-  animation: bounce 0.3s;
-}
-
-@keyframes bounce {
-  0% { transform: scale(1); }
-  30% { transform: scale(1.1); }
-  50% { transform: scale(0.9); }
-  70% { transform: scale(1.05); }
-  100% { transform: scale(1); }
-}
-
-
-.services-one__img:after {
-    position: relative !important;
-  }
-  
-  .services-one__img:after {
-     position: relative !important;
-      
-      
-      
-  }
-  .services-one__img:before {
-    position: relative!important;}
-     
-     
-
+    @media (max-width: 767px) {
+        .services-one__img {
+            height: 200px !important;
+        }
+        .services-one__title {
+            font-size: 18px !important;
+        }
+    }
 </style>
 
         <?php include 'include/header.php' ?>
@@ -254,7 +213,13 @@ if (count($sql_ser)) {
                                 <div class="services-one__single wow fadeInUp" data-wow-delay="100ms">
                                     <div class="services-one__img">
                                           <a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php">
-                                        <img src="<?= SITE_URL; ?>upload/<?php echo $subproductwww['photo']; ?>" alt="" style="height:250px;">
+                                        <?php 
+                                            $res_placeholders = ["060825060302Vatika Sovereign Park Image1.jpg", "100725050048Sobha-City-Sector-108-Dwarka-Expressway-Gurgaon.jpg", "160425091419Sobha Altus image A2P Realtech.jpg", "20260128161604_M3M-GIC-Manesar-Gurgaon.jpg"];
+                                            $imagePath = "upload/" . $subproductwww['photo'];
+                                            if (!empty($subproductwww['photo']) && file_exists($imagePath)) { $displayImg = SITE_URL . $imagePath; } 
+                                            else { $placeholderIndex = $subproductwww['id'] % count($res_placeholders); $displayImg = SITE_URL . "upload/" . $res_placeholders[$placeholderIndex]; }
+                                        ?>
+                                        <img src="<?php echo $displayImg; ?>" alt="<?php echo $subproductwww['name']; ?>" style="width: 100%; height: 250px; object-fit: fill !important;">
                                        
                                        
                                     </a>
