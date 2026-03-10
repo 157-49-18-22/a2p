@@ -190,19 +190,24 @@
 
 .wizard-back {
     margin-top: 30px !important;
-    background: #f0f0f0 !important;
-    border: 1px solid #ddd !important;
+    background: #c00415 !important;
+    border: none !important;
     padding: 12px 30px !important;
     border-radius: 8px !important;
     cursor: pointer !important;
     font-weight: 600 !important;
     width: 100% !important;
-    color: #444 !important;
+    color: #ffffff !important;
     transition: all 0.3s ease !important;
     display: block !important;
+    box-shadow: 0 4px 15px rgba(192, 4, 21, 0.2) !important;
 }
 
-.wizard-back:hover { background: #ddd; }
+.wizard-back:hover { 
+    background: #a00311 !important; 
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(192, 4, 21, 0.3) !important;
+}
 
 /* Responsive */
 @media (max-width: 600px) {
