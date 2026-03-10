@@ -268,6 +268,20 @@ if (count($sql_add))
     .search-tagline p {
         font-size: 13px !important;
     }
+    /* Fix for the actual search bar */
+    .search-bar-wrapper {
+        margin: 0 10px !important; /* Force some side margin */
+        border-radius: 30px !important;
+    }
+    .search-bar-wrapper input {
+        padding: 15px 20px !important;
+        font-size: 16px !important;
+    }
+    .search-bar-wrapper button {
+        width: 60px !important; /* Smaller button on mobile */
+        height: 55px !important;
+        font-size: 18px !important;
+    }
 }
 </style>
 

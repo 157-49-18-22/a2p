@@ -653,7 +653,7 @@
         margin-left: 10px;
     }
     .main-menu-two__wrapper {
-        padding: 0 15px !important;
+        padding: 0 28px 0 12px !important; /* Shifted left: More padding on right (28px) than left (12px) */
         height: 80px !important;
         display: flex !important;
         align-items: center !important;
@@ -662,6 +662,7 @@
         background: #fff !important;
         box-sizing: border-box !important;
         width: 100% !important;
+        overflow-x: hidden !important; /* Extra safety against horizontal overflow */
     }
     /* Logo - CENTER (order 2, flex 1) */
     .main-menu-two__left {
@@ -698,6 +699,7 @@
         order: 3 !important;
         z-index: 10 !important;
         min-width: 50px !important;
+        padding-right: 8px !important; /* Move search bar thoda left as requested */
     }
     .main-menu-two__call-search,
     .main-menu-two__call {
