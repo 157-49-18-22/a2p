@@ -476,7 +476,7 @@ if (count($sql_ser)) {
 $rawBlogName = $subproductss['name'];
 $encodedBlogName = urlencode($rawBlogName);
 $_protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http");
-$rawPageUrl = $_protocol . "://" . $_host . $_path;
+$rawPageUrl = $_protocol . "://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 $encodedPageUrl = urlencode($rawPageUrl);
 ?>
 
