@@ -652,32 +652,65 @@
 
 <script>
 /* ══════════════════════════════════════════════════════════════
-   GLOBAL TABLE RESPONSIVE FIX
-   Poori website par sabhi tables ko mobile scroll-wrapper mein
-   wrap karta hai — koi bhi table kabhi cut nahi hogi
+   GLOBAL TABLE RESPONSIVE FIX (v2)
+   1. Sabhi tables ko .table-scroll-wrapper div mein wrap karo
+   2. Mobile par inline width styles remove karo (CMS tables)
+   3. table-layout: fixed + equal columns = bina scroll fit
    ══════════════════════════════════════════════════════════════ */
 (function() {
-    function wrapTables() {
-        // Page pe sabhi tables dhundho
+    var isMobile = window.innerWidth <= 767;
+
+    function fixTables() {
         var tables = document.querySelectorAll('table');
         tables.forEach(function(table) {
-            // Sirf wahi tables wrap karo jo already wrapper mein nahi hain
+
+            // ── Step 1: Wrapper div mein wrap karo ──
             if (table.parentNode && !table.parentNode.classList.contains('table-scroll-wrapper')) {
                 var wrapper = document.createElement('div');
                 wrapper.className = 'table-scroll-wrapper';
-                // Table ke baad wrapper insert karo
                 table.parentNode.insertBefore(wrapper, table);
                 wrapper.appendChild(table);
+            }
+
+            // ── Step 2: Mobile par inline widths remove karo ──
+            if (isMobile) {
+                // Table ka inline width hata do
+                table.style.removeProperty('width');
+                table.style.removeProperty('min-width');
+
+                // Har TD aur TH ka inline width reset karo
+                var cells = table.querySelectorAll('td, th');
+                cells.forEach(function(cell) {
+                    cell.style.removeProperty('width');
+                    cell.style.removeProperty('min-width');
+                    cell.style.removeProperty('max-width');
+                    cell.style.removeProperty('white-space');
+                    // Font chhota karo taaki content fit ho
+                    cell.style.fontSize = '11px';
+                    cell.style.padding = '4px 3px';
+                    cell.style.wordBreak = 'break-word';
+                    cell.style.overflowWrap = 'break-word';
+                });
+
+                // Table ko force fixed layout
+                table.style.tableLayout = 'fixed';
+                table.style.width = '100%';
             }
         });
     }
 
-    // DOM ready hone par chalao
+    // DOM ready par chalao
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', wrapTables);
+        document.addEventListener('DOMContentLoaded', fixTables);
     } else {
-        wrapTables();
+        fixTables();
     }
+
+    // Screen resize par bhi chalao
+    window.addEventListener('resize', function() {
+        isMobile = window.innerWidth <= 767;
+        fixTables();
+    });
 })();
 </script>
 <script>
