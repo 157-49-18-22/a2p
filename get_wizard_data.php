@@ -11,14 +11,11 @@ $response = [];
 
 try {
     if ($action == 'get_locations') {
-        $check = sqlfetch("SHOW COLUMNS FROM subproduct LIKE 'city'");
-        if (count($check) > 0) {
-            $stmt = $pdo->prepare("SELECT DISTINCT city FROM subproduct WHERE actstat=1 AND city != '' ORDER BY city ASC");
-            $stmt->execute();
-            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            foreach($data as $row) {
-                $response[] = ['location' => $row['city']];
-            }
+        $stmt = $pdo->prepare("SELECT DISTINCT city FROM subproduct WHERE actstat=1 AND city != '' ORDER BY city ASC");
+        $stmt->execute();
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        foreach($data as $row) {
+            $response[] = ['location' => $row['city']];
         }
     } 
     

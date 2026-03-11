@@ -760,6 +760,21 @@
         box-shadow: none !important; /* Optional: remove shadow if it adds extra width */
     }
 
+    /* FIX: HIDE CLONED STICKY HEADER ON MOBILE - Prevents "2 Headers" Issue */
+    .stricky-header, 
+    .stricked-menu,
+    .sticky-header__content {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+    }
+
+    /* Fixed logo size and alignment issues on some Androids */
+    .main-menu-two__logo img {
+        max-width: 160px !important;
+    }
+
     .blog-details {
         padding: 30px 10px !important;
         overflow-x: hidden !important; /* Prevent horizontal scroll */
@@ -1312,6 +1327,19 @@
     .main-menu__list li.dropdown ul li a:hover {
         background: #f9f9f9 !important;
         color: #c00415 !important;
+    }
+
+    /* Restore Sticky Header functionality only for Desktop */
+    .stricky-header.stricky-fixed {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        transform: translateY(0) !important;
+    }
+
+    .stricky-header {
+        display: block !important;
     }
 }
 

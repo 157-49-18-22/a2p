@@ -249,6 +249,20 @@ let selection = {
     developer: ''
 };
 
+// Global Cache to store fetched data
+const wizardCache = {
+    locations: null,
+    categories: {}
+};
+
+// Pre-fetch locations on page load for instant opening
+document.addEventListener('DOMContentLoaded', () => {
+    fetch(WIZARD_API + '?action=get_locations')
+        .then(res => res.json())
+        .then(data => { wizardCache.locations = data; })
+        .catch(e => console.log('Prefetch failed', e));
+});
+
 function openWizard() {
     document.getElementById('locationWizard').style.display = 'flex';
     goToStep(1);
@@ -260,12 +274,9 @@ function closeWizard() {
 }
 
 function goToStep(step) {
-    // Hide all steps
     document.querySelectorAll('.wizard-step').forEach(s => s.classList.remove('active'));
-    // Show current step
     document.getElementById('step' + step).classList.add('active');
     
-    // Update progress bar
     document.querySelectorAll('.progress-step').forEach(ps => {
         if(ps.dataset.step <= step) ps.classList.add('active');
         else ps.classList.remove('active');
@@ -274,27 +285,38 @@ function goToStep(step) {
 
 const WIZARD_API = '<?= SITE_URL; ?>get_wizard_data.php';
 
+function renderCities(data) {
+    const grid = document.getElementById('cityGrid');
+    grid.innerHTML = '';
+    if(!data || data.length === 0) {
+        grid.innerHTML = '<p class="text-center">No cities found.</p>';
+        return;
+    }
+    data.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'wizard-card';
+        card.innerHTML = `<i class="fa fa-map-marker-alt"></i><span>${item.location}</span>`;
+        card.onclick = () => selectCity(item.location);
+        grid.appendChild(card);
+    });
+}
+
 function loadCities() {
+    // If we have cached data, use it immediately
+    if (wizardCache.locations) {
+        renderCities(wizardCache.locations);
+        return;
+    }
+
     const grid = document.getElementById('cityGrid');
     grid.innerHTML = '<p class="text-center">Loading locations...</p>';
     fetch(WIZARD_API + '?action=get_locations')
         .then(res => res.json())
         .then(data => {
-            grid.innerHTML = '';
-            if(!data || data.length === 0) {
-                grid.innerHTML = '<p class="text-center">No cities with active products found.</p>';
-                return;
-            }
-            data.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'wizard-card';
-                card.innerHTML = `<i class="fa fa-map-marker-alt"></i><span>${item.location}</span>`;
-                card.onclick = () => selectCity(item.location);
-                grid.appendChild(card);
-            });
+            wizardCache.locations = data;
+            renderCities(data);
         }).catch(err => { 
-            grid.innerHTML = '<p class="text-center text-danger">Error loading cities. Please refresh or check connection.</p>';
-            console.error('Wizard Fetch Error:', err);
+            grid.innerHTML = '<p class="text-center text-danger">Error loading cities.</p>';
         });
 }
 
@@ -304,25 +326,37 @@ function selectCity(city) {
     goToStep(2);
 }
 
+function renderCategories(data) {
+    const grid = document.getElementById('categoryGrid');
+    grid.innerHTML = '';
+    if(!data || data.length === 0) {
+        grid.innerHTML = '<p class="text-center">No categories found.</p>';
+        return;
+    }
+    data.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'wizard-card';
+        const icon = item.name.toLowerCase().includes('comm') ? 'fa-building' : 'fa-home';
+        card.innerHTML = `<i class="fa ${icon}"></i><span>${item.name}</span>`;
+        card.onclick = () => selectCategory(item.id);
+        grid.appendChild(card);
+    });
+}
+
 function loadCategories() {
+    // Check Cache first
+    if (wizardCache.categories[selection.city]) {
+        renderCategories(wizardCache.categories[selection.city]);
+        return;
+    }
+
     const grid = document.getElementById('categoryGrid');
     grid.innerHTML = '<p class="text-center">Loading categories...</p>';
     fetch(`${WIZARD_API}?action=get_categories&city=${encodeURIComponent(selection.city)}`)
         .then(res => res.json())
         .then(data => {
-            grid.innerHTML = '';
-            if(!data || data.length === 0) {
-                grid.innerHTML = '<p class="text-center">No categories found for this city.</p>';
-                return;
-            }
-            data.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'wizard-card';
-                const icon = item.name.toLowerCase().includes('comm') ? 'fa-building' : 'fa-home';
-                card.innerHTML = `<i class="fa ${icon}"></i><span>${item.name}</span>`;
-                card.onclick = () => selectCategory(item.id);
-                grid.appendChild(card);
-            });
+            wizardCache.categories[selection.city] = data;
+            renderCategories(data);
         }).catch(err => { grid.innerHTML = '<p class="text-center text-danger">Error loading categories.</p>'; });
 }
 
@@ -340,7 +374,7 @@ function loadTypes() {
         .then(data => {
             grid.innerHTML = '';
             if(!data || data.length === 0) {
-                grid.innerHTML = '<p class="text-center">No types found for this selection.</p>';
+                grid.innerHTML = '<p class="text-center">No types found.</p>';
                 return;
             }
             data.forEach(item => {
@@ -367,7 +401,7 @@ function loadDevelopers() {
         .then(data => {
             grid.innerHTML = '';
             if(!data || data.length === 0) {
-                grid.innerHTML = '<p class="text-center">No developers found for this criteria.</p>';
+                grid.innerHTML = '<p class="text-center">No developers found.</p>';
                 return;
             }
             data.forEach(item => {

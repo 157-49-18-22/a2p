@@ -460,15 +460,15 @@
         .mobile-phone-card__icon {
             width: 44px;
             height: 44px;
-            background: linear-gradient(135deg, #c00415, #ff2d3d);
+            background: #fff !important;
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #fff;
+            color: #c00415 !important;
             font-size: 18px;
             flex-shrink: 0;
-            box-shadow: 0 4px 15px rgba(192,4,21,0.4);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2) !important;
             animation: phoneRing 2.5s ease-in-out infinite;
         }
         @keyframes phoneRing {
