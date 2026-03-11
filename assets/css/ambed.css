@@ -13478,3 +13478,42 @@ p {
   -webkit-border-radius: 0 !important;
   -moz-border-radius: 0 !important;
 }
+
+/* ===== RESPONSIVE TABLES FIX FOR MOBILE ===== */
+.blog-details__left, 
+.service-details__left, 
+.tab-pane, 
+.career-details__left {
+    overflow-x: hidden; /* Prevent horizontal scroll on the whole container */
+}
+
+/* Ensure tables inside content are scrollable on small screens */
+@media (max-width: 991px) {
+    table {
+        display: block !important;
+        width: 100% !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        margin-bottom: 20px !important;
+        border-collapse: collapse !important;
+    }
+    
+    /* Make sure table headers and cells don't shrink too much */
+    table th, table td {
+        min-width: 120px !important;
+        word-wrap: break-word !important;
+    }
+}
+
+/* Support for manual wrapper if used */
+.table-responsive-wrapper {
+    width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    margin-bottom: 25px !important;
+    border: 1px solid #eee;
+}
+
+.table-responsive-wrapper table {
+    margin-bottom: 0 !important;
+}
