@@ -13480,40 +13480,51 @@ p {
 }
 
 /* ===== RESPONSIVE TABLES FIX FOR MOBILE ===== */
-.blog-details__left, 
-.service-details__left, 
-.tab-pane, 
+.blog-details__left,
+.service-details__left,
+.tab-pane,
 .career-details__left {
-    overflow-x: hidden; /* Prevent horizontal scroll on the whole container */
+  overflow-x: hidden;
+  /* Prevent horizontal scroll on the whole container */
 }
 
-/* Ensure tables inside content are scrollable on small screens */
+/* Ensure tables inside content fit screen without scrolling on small screens */
 @media (max-width: 991px) {
-    table {
-        display: block !important;
-        width: 100% !important;
-        overflow-x: auto !important;
-        -webkit-overflow-scrolling: touch !important;
-        margin-bottom: 20px !important;
-        border-collapse: collapse !important;
-    }
-    
-    /* Make sure table headers and cells don't shrink too much */
-    table th, table td {
-        min-width: 120px !important;
-        word-wrap: break-word !important;
-    }
+  table {
+    display: table !important;
+    /* Keep as table but force width */
+    width: 100% !important;
+    table-layout: fixed !important;
+    /* Force columns to stay within 100% */
+    overflow-x: hidden !important;
+    margin-bottom: 20px !important;
+    border-collapse: collapse !important;
+  }
+
+  table th,
+  table td {
+    min-width: 0 !important;
+    /* Remove min-width to allow shrinking */
+    width: auto !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    white-space: normal !important;
+    /* Force text to wrap instead of pushing width */
+    padding: 8px 5px !important;
+    font-size: 13px !important;
+    /* Slightly smaller text to help fit */
+  }
 }
 
 /* Support for manual wrapper if used */
 .table-responsive-wrapper {
-    width: 100% !important;
-    overflow-x: auto !important;
-    -webkit-overflow-scrolling: touch !important;
-    margin-bottom: 25px !important;
-    border: 1px solid #eee;
+  width: 100% !important;
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  margin-bottom: 25px !important;
+  border: 1px solid #eee;
 }
 
 .table-responsive-wrapper table {
-    margin-bottom: 0 !important;
+  margin-bottom: 0 !important;
 }
