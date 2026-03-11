@@ -25,6 +25,8 @@ function getPDOObject()
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
         $pdo->setAttribute(PDO::ATTR_PERSISTENT, true);
+        // Force utf8mb4 to support emojis and symbols
+        $pdo->exec("SET NAMES utf8mb4");
         return $pdo;
     } catch (PDOException $e) {
         error_log('DB Connection Failed: ' . $e->getMessage());
@@ -119,7 +121,6 @@ function insert($table, $data)
 	if (!empty($data) && is_array($data)) {
 		$columns = '';
 		$values  = '';
-		$i = 0;
 		if (!array_key_exists('created', $data)) {
 			$data['created'] = date("Y-m-d H:i:s");
 		}
@@ -128,20 +129,17 @@ function insert($table, $data)
 		}
 
 		$actual_data = array();
-
 		foreach ($data as $key => $val) {
 			if (in_array($key, $column_name)) {
-				// echo $key;
 				$actual_data[$key] = $val;
 			}
 		}
-		// print_r($actual_data);
+
 		$columnString = implode(',', array_keys($actual_data));
 		$valueString = ":" . implode(',:', array_keys($actual_data));
 		$sql = "INSERT INTO " . $table . " (" . $columnString . ") VALUES (" . $valueString . ")";
 		$query = $pdo->prepare($sql);
 		foreach ($actual_data as $key => $val) {
-			// Removed strip_tags and htmlspecialchars to allow HTML/Icons from TinyMCE
 			$query->bindValue(":" . $key, $val);
 		}
 		$insert = $query->execute();
@@ -164,53 +162,43 @@ function insert($table, $data)
  */
 function update($table, $data, $conditions)
 {
-
 	$sql = "SHOW COLUMNS FROM `" . $table . "`";
 	$columns_query = sqlfetch($sql);
 
 	foreach ($columns_query as $coloumn_data)
 		$column_name[] = $coloumn_data['Field'];
-	$actual_data = array();
 
+	$actual_data = array();
 	foreach ($data as $key => $val) {
-		if ((in_array($key, $column_name))) {
-			// echo $key;
-			$actual_data[$key] = addslashes($val);
+		if (in_array($key, $column_name)) {
+			$actual_data[$key] = $val;
 		}
 	}
 	$pdo = getPDOObject();
-
 
 	if (!empty($actual_data) && is_array($actual_data)) {
 		$colvalSet = '';
 		$whereSql = '';
 		$i = 0;
-		
 		foreach ($actual_data as $key => $val) {
 			$pre = ($i > 0) ? ', ' : '';
 			$colvalSet .= $pre . $key . "=:" . $key;
 			$i++;
 		}
-		
 		if (!empty($conditions) && is_array($conditions)) {
 			$whereSql .= ' WHERE ';
-			$i = 0;
+			$j = 0;
 			foreach ($conditions as $key => $value) {
-				$pre = ($i > 0) ? ' AND ' : '';
-				// We still use direct concat for WHERE since it's usually just IDs
-				$whereSql .= $pre . $key . " = '" . $value . "'";
-				$i++;
+				$preCondition = ($j > 0) ? ' AND ' : '';
+				$whereSql .= $preCondition . $key . " = '" . $value . "'";
+				$j++;
 			}
 		}
-		
 		$sql = "UPDATE " . $table . " SET " . $colvalSet . $whereSql;
 		$query = $pdo->prepare($sql);
-		
 		foreach ($actual_data as $key => $val) {
-			// Removed addslashes/strip_tags to maintain HTML integrity
 			$query->bindValue(":" . $key, $val);
 		}
-		
 		$update = $query->execute();
 		return $update ? $query->rowCount() : false;
 	} else {

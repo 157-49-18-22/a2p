@@ -233,6 +233,7 @@ if ($current_page !== 'application_seating.php') {
                 {title: 'Table Striped', value: 'table table-striped'},
                 {title: 'Table Hover', value: 'table table-hover'}
             ],
+            entity_encoding: 'raw',
             image_title: true,
             automatic_uploads: true,
             images_upload_url: 'tiny_upload.php',

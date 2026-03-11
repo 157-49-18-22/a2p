@@ -4,6 +4,13 @@ include('./function/function.php');
 include('./function/push_helper.php');
 check_session();
 
+// Self-heal: Ensure table supports emojis
+try {
+    $pdo_fix = getPDOObject();
+    $pdo_fix->exec("ALTER TABLE `subproduct` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+    $pdo_fix->exec("ALTER TABLE `offer` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+} catch (Exception $e) { /* silent */ }
+
 // Ensure developer column exists in subproduct
 try {
     $pdo = getPDOObject();
