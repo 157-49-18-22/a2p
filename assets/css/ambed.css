@@ -88,49 +88,51 @@ ul {
 }
 
 /* ══════════════════════════════════════════════
-   GLOBAL TABLE FIX — Poori website par tables
-   mobile pe cut nahi hongi, scroll hongi
+   GLOBAL TABLE FIX — JS se wrap hogi div mein
+   .table-scroll-wrapper class footer.php JS se lagti hai
    ══════════════════════════════════════════════ */
-table {
-  border-collapse: collapse;
+.table-scroll-wrapper {
+  display: block;
   width: 100%;
   max-width: 100%;
-}
-
-/* Har table automatically scroll hogi mobile pe */
-table {
-  display: block;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+  margin-bottom: 15px;
 }
 
-table td,
-table th {
+.table-scroll-wrapper table {
+  border-collapse: collapse;
+  min-width: 500px;
+  /* table zyada chhoti na ho */
+  width: 100%;
+}
+
+.table-scroll-wrapper table td,
+.table-scroll-wrapper table th {
   white-space: normal;
+  word-break: break-word;
   vertical-align: top;
   padding: 8px 10px;
-  min-width: 80px;
+  min-width: 70px;
 }
 
 @media (max-width: 767px) {
 
-  table td,
-  table th {
+  .table-scroll-wrapper table td,
+  .table-scroll-wrapper table th {
     font-size: 13px;
     padding: 6px 8px;
-    min-width: 70px;
   }
 
-  /* Thin scrollbar — user ko dikhaye ki table scroll ho sakti hai */
-  table::-webkit-scrollbar {
+  .table-scroll-wrapper::-webkit-scrollbar {
     height: 4px;
   }
 
-  table::-webkit-scrollbar-track {
+  .table-scroll-wrapper::-webkit-scrollbar-track {
     background: #f1f1f1;
   }
 
-  table::-webkit-scrollbar-thumb {
+  .table-scroll-wrapper::-webkit-scrollbar-thumb {
     background: #102a83;
     border-radius: 4px;
   }
@@ -163,7 +165,9 @@ table th {
   margin: 0 auto;
   width: 100%;
   min-width: 300px;
-  overflow: hidden;
+  /* overflow: hidden was blocking table horizontal scroll on mobile */
+  overflow-x: clip;
+  overflow-y: visible;
 }
 
 .container {

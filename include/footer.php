@@ -651,6 +651,36 @@
 </div>
 
 <script>
+/* ══════════════════════════════════════════════════════════════
+   GLOBAL TABLE RESPONSIVE FIX
+   Poori website par sabhi tables ko mobile scroll-wrapper mein
+   wrap karta hai — koi bhi table kabhi cut nahi hogi
+   ══════════════════════════════════════════════════════════════ */
+(function() {
+    function wrapTables() {
+        // Page pe sabhi tables dhundho
+        var tables = document.querySelectorAll('table');
+        tables.forEach(function(table) {
+            // Sirf wahi tables wrap karo jo already wrapper mein nahi hain
+            if (table.parentNode && !table.parentNode.classList.contains('table-scroll-wrapper')) {
+                var wrapper = document.createElement('div');
+                wrapper.className = 'table-scroll-wrapper';
+                // Table ke baad wrapper insert karo
+                table.parentNode.insertBefore(wrapper, table);
+                wrapper.appendChild(table);
+            }
+        });
+    }
+
+    // DOM ready hone par chalao
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', wrapTables);
+    } else {
+        wrapTables();
+    }
+})();
+</script>
+<script>
 function checkSearchRedirect(form) {
     var queryField = form.querySelector('[name="query"]');
     var query = queryField ? queryField.value.trim() : '';
