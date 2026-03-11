@@ -141,7 +141,7 @@ function insert($table, $data)
 		$sql = "INSERT INTO " . $table . " (" . $columnString . ") VALUES (" . $valueString . ")";
 		$query = $pdo->prepare($sql);
 		foreach ($actual_data as $key => $val) {
-			$val = htmlspecialchars(strip_tags($val));
+			// Removed strip_tags and htmlspecialchars to allow HTML/Icons from TinyMCE
 			$query->bindValue(":" . $key, $val);
 		}
 		$insert = $query->execute();
@@ -185,26 +185,32 @@ function update($table, $data, $conditions)
 		$colvalSet = '';
 		$whereSql = '';
 		$i = 0;
-		// if(!array_key_exists('modified',$data)){
-		// $actual_data['modified'] = date("Y-m-d H:i:s");
-		// }
+		
 		foreach ($actual_data as $key => $val) {
 			$pre = ($i > 0) ? ', ' : '';
-			$val = ($val);
-			$colvalSet .= $pre . $key . "='" . $val . "'";
+			$colvalSet .= $pre . $key . "=:" . $key;
 			$i++;
 		}
+		
 		if (!empty($conditions) && is_array($conditions)) {
 			$whereSql .= ' WHERE ';
 			$i = 0;
 			foreach ($conditions as $key => $value) {
 				$pre = ($i > 0) ? ' AND ' : '';
+				// We still use direct concat for WHERE since it's usually just IDs
 				$whereSql .= $pre . $key . " = '" . $value . "'";
 				$i++;
 			}
 		}
+		
 		$sql = "UPDATE " . $table . " SET " . $colvalSet . $whereSql;
 		$query = $pdo->prepare($sql);
+		
+		foreach ($actual_data as $key => $val) {
+			// Removed addslashes/strip_tags to maintain HTML integrity
+			$query->bindValue(":" . $key, $val);
+		}
+		
 		$update = $query->execute();
 		return $update ? $query->rowCount() : false;
 	} else {
