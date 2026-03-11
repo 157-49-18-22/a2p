@@ -87,6 +87,57 @@ ul {
   margin-bottom: 0;
 }
 
+/* ══════════════════════════════════════════════
+   GLOBAL TABLE FIX — Poori website par tables
+   mobile pe cut nahi hongi, scroll hongi
+   ══════════════════════════════════════════════ */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Har table automatically scroll hogi mobile pe */
+table {
+  display: block;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+table td,
+table th {
+  white-space: normal;
+  vertical-align: top;
+  padding: 8px 10px;
+  min-width: 80px;
+}
+
+@media (max-width: 767px) {
+
+  table td,
+  table th {
+    font-size: 13px;
+    padding: 6px 8px;
+    min-width: 70px;
+  }
+
+  /* Thin scrollbar — user ko dikhaye ki table scroll ho sakti hai */
+  table::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  table::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  table::-webkit-scrollbar-thumb {
+    background: #102a83;
+    border-radius: 4px;
+  }
+}
+
+/* ══ Global Table Fix End ══ */
+
 ::-webkit-input-placeholder {
   color: inherit;
   opacity: 1;
