@@ -92,26 +92,27 @@ if (count($sql_ser)) {
 
         <style>
 
-            /* ===== Tab Content Tables Only ===== */
-            /* Scrollable wrapper for wide tables from DB content */
+            /* FORCE TABLES TO FIT IN MOBILE VIEW (NO SCROLL) */
             .table-responsive-wrapper {
-                width: 100%;
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
+                width: 100% !important;
+                overflow-x: hidden !important;
                 margin-top: 20px;
                 margin-bottom: 20px;
             }
 
-            /* Scope all table styles to .tab-content to avoid breaking Bootstrap */
             .tab-content table {
-                width: 100%;
+                width: 100% !important;
+                table-layout: fixed !important; /* Force columns to stay within 100% */
                 border-collapse: collapse;
                 border-spacing: 0;
                 font-family: Arial, sans-serif;
-                font-size: 16px;
-                background-color: #fff;
-                margin-top: 20px;
-                margin-bottom: 20px;
+                font-size: 13px; /* Slightly smaller to fit better */
+            }
+
+            .tab-content table th, .tab-content table td {
+                word-break: break-all !important; /* Force break long text */
+                overflow-wrap: anywhere !important;
+                padding: 5px !important;
             }
 
             .tab-content th {
