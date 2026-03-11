@@ -144,15 +144,18 @@ if (count($sql_ser)) {
                 border: 1px solid #ccd;
             }
 
-            /* On mobile: let the wrapper scroll, keep table at natural width */
-            @media screen and (max-width: 768px) {
+            /* On mobile: Force table to fit screen width exactly */
+            @media screen and (max-width: 991px) {
                 .tab-content table {
-                    font-size: 13px;
-                    min-width: 480px;
+                    font-size: 11px;
+                    width: 100% !important;
+                    min-width: 0 !important;
+                    table-layout: fixed !important;
                 }
                 .tab-content th,
                 .tab-content td {
-                    padding: 8px 10px;
+                    padding: 5px 2px !important;
+                    word-break: break-all !important;
                 }
             }
 
