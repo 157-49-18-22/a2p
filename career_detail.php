@@ -6,9 +6,17 @@ if (count($sql_add))
     }
 ?>
 <?php
-$pid = makeurlnormal($_GET['id']);
-$sql_ser = sqlfetch("select * from blog where slug='$pid' and actstat=1  ");
+$pid = $_GET['id'];
+$normalized_name = makeurlnormal($pid);
 
+// Try exact match with normalized name or raw slug
+$sql_ser = sqlfetch("SELECT * FROM blog WHERE (slug = '$pid' OR slug = '$normalized_name') AND actstat=1");
+
+// Redirect if no job found to avoid blank page
+if (count($sql_ser) == 0) {
+    echo "<script>window.location.href='".SITE_URL."career.php';</script>";
+    exit;
+}
 
 if (count($sql_ser)) {
     foreach ($sql_ser as $blog) {

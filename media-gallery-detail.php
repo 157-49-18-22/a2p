@@ -6,9 +6,23 @@ if (count($sql_add))
     }
 ?>
 <?php
-$pid = makeurlnormal($_GET['id']);
-$sql_ser = sqlfetch("select * from fixed_delivery_time where name='$pid' and actstat=1  ");
+$pid = $_GET['id'];
+$normalized_name = makeurlnormal($pid);
 
+// Try exact match with normalized name or raw slug
+$sql_ser = sqlfetch("SELECT * FROM fixed_delivery_time WHERE (name = '$normalized_name' OR name = '$pid') AND actstat=1");
+
+// Fallback: Try matching with hyphens (in case DB name has hyphens instead of spaces)
+if (count($sql_ser) == 0) {
+    $hyphenated_pid = str_replace(' ', '-', $normalized_name);
+    $sql_ser = sqlfetch("SELECT * FROM fixed_delivery_time WHERE name = '$hyphenated_pid' AND actstat=1");
+}
+
+// Redirect if no gallery found to avoid blank page
+if (count($sql_ser) == 0) {
+    echo "<script>window.location.href='".SITE_URL."media-gallery.php';</script>";
+    exit;
+}
 
 if (count($sql_ser)) {
     foreach ($sql_ser as $fixed_delivery_time) {

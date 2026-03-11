@@ -6,9 +6,23 @@ if (count($sql_add))
     }
 ?>
 <?php
-$pid = makeurlnormal($_GET['id']);
-$sql_ser = sqlfetch("select * from subproduct where name='$pid' and actstat=1  ");
+$pid = $_GET['id'];
+$normalized_name = makeurlnormal($pid);
 
+// Try exact match with normalized name or raw slug
+$sql_ser = sqlfetch("SELECT * FROM subproduct WHERE (name = '$normalized_name' OR name = '$pid') AND actstat=1");
+
+// Fallback: Try matching with hyphens (in case DB name has hyphens instead of spaces)
+if (count($sql_ser) == 0) {
+    $hyphenated_pid = str_replace(' ', '-', $normalized_name);
+    $sql_ser = sqlfetch("SELECT * FROM subproduct WHERE name = '$hyphenated_pid' AND actstat=1");
+}
+
+// Redirect if no property found to avoid blank page
+if (count($sql_ser) == 0) {
+    echo "<script>window.location.href='".SITE_URL."index.php';</script>";
+    exit;
+}
 
 if (count($sql_ser)) {
     foreach ($sql_ser as $subproductss) {

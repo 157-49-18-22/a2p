@@ -6,9 +6,23 @@ if (count($sql_add))
     }
 ?>
 <?php
-$pid = makeurlnormal($_GET['id']);
-$sql_ser = sqlfetch("select * from offer where name='$pid' and actstat=1  ");
+$pid = $_GET['id'];
+$normalized_name = makeurlnormal($pid);
 
+// Try exact match with normalized name
+$sql_ser = sqlfetch("SELECT * FROM offer WHERE (name = '$normalized_name' OR name = '$pid') AND actstat=1");
+
+// If not found, try a more flexible match replacing spaces with hyphens (in case DB has hyphens)
+if (count($sql_ser) == 0) {
+    $hyphenated_pid = str_replace(' ', '-', $normalized_name);
+    $sql_ser = sqlfetch("SELECT * FROM offer WHERE name = '$hyphenated_pid' AND actstat=1");
+}
+
+// Redirect if no blog found to avoid blank page
+if (count($sql_ser) == 0) {
+    echo "<script>window.location.href='".SITE_URL."blog.php';</script>";
+    exit;
+}
 
 if (count($sql_ser)) {
     foreach ($sql_ser as $offer) {
