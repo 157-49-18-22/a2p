@@ -273,7 +273,23 @@ $encodedPageUrl = urlencode($rawPageUrl);
                                 
                                 
 
-                                <p class="blog-details__text-2"><?php echo $offer['des']; ?></p>
+                                <?php 
+                                // Table mobile scroll fix — PHP level (most reliable)
+                                $blog_content = $offer['des'];
+                                // Har <table ke aage wrapper div lagao
+                                $blog_content = preg_replace(
+                                    '/<table([^>]*)>/i',
+                                    '<div class="table-scroll-wrapper" style="display:block;width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;margin:10px 0;"><table$1>',
+                                    $blog_content
+                                );
+                                // Har </table> ke baad wrapper div band karo
+                                $blog_content = preg_replace(
+                                    '/<\/table>/i',
+                                    '</table></div>',
+                                    $blog_content
+                                );
+                                ?>
+                                <div class="blog-details__text-2"><?php echo $blog_content; ?></div>
                             </div>
 
                         </div>
