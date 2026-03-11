@@ -88,57 +88,64 @@ ul {
 }
 
 /* ══════════════════════════════════════════════
-   GLOBAL TABLE FIX — JS se wrap hogi div mein
-   .table-scroll-wrapper class footer.php JS se lagti hai
+   GLOBAL TABLE FIX — Bina scroll ke screen mein fit
    ══════════════════════════════════════════════ */
 .table-scroll-wrapper {
   display: block;
   width: 100%;
   max-width: 100%;
   overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
   margin-bottom: 15px;
 }
 
 .table-scroll-wrapper table {
   border-collapse: collapse;
-  min-width: 500px;
-  /* table zyada chhoti na ho */
-  width: 100%;
+  width: 100% !important;
+  table-layout: fixed;
+  /* Columns ko equally divide karo */
 }
 
 .table-scroll-wrapper table td,
 .table-scroll-wrapper table th {
   white-space: normal;
   word-break: break-word;
+  overflow-wrap: break-word;
   vertical-align: top;
-  padding: 8px 10px;
-  min-width: 70px;
+  padding: 6px 8px;
+  /* Inline percentage widths override karo */
+  width: auto !important;
 }
 
+/* ── Mobile: Bina scroll ke fit karo ── */
 @media (max-width: 767px) {
+  .table-scroll-wrapper {
+    overflow-x: visible;
+    /* Scroll band — sab fit hoga */
+  }
+
+  .table-scroll-wrapper table {
+    width: 100% !important;
+    min-width: unset !important;
+    font-size: 11px;
+    line-height: 1.4;
+    table-layout: fixed;
+  }
 
   .table-scroll-wrapper table td,
   .table-scroll-wrapper table th {
-    font-size: 13px;
-    padding: 6px 8px;
-  }
-
-  .table-scroll-wrapper::-webkit-scrollbar {
-    height: 4px;
-  }
-
-  .table-scroll-wrapper::-webkit-scrollbar-track {
-    background: #f1f1f1;
-  }
-
-  .table-scroll-wrapper::-webkit-scrollbar-thumb {
-    background: #102a83;
-    border-radius: 4px;
+    font-size: 11px;
+    padding: 4px 3px !important;
+    min-width: unset !important;
+    width: auto !important;
+    word-break: break-all;
+    overflow-wrap: anywhere;
+    white-space: normal !important;
+    hyphens: auto;
   }
 }
 
 /* ══ Global Table Fix End ══ */
+
 
 ::-webkit-input-placeholder {
   color: inherit;
