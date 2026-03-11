@@ -1,6 +1,7 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// Production pe errors display band karo (performance + security)
+error_reporting(0);
+ini_set('display_errors', 0);
 
 $siteTitle = 'Full_ecom';
 session_start();
@@ -11,8 +12,14 @@ if (strpos($_detected_host, 'a2prealtech.com') !== false) {
     define('SITE_URL', 'https://pink-sheep-796549.hostingersite.com/');
 }
 define('SITE_TITLE', 'Ssts');
+
+// SINGLETON PATTERN: Ek hi DB connection reuse karo
 function getPDOObject()
 {
+    static $pdo = null; // Pehli baar ke baad same connection reuse hoga
+    if ($pdo !== null) {
+        return $pdo;
+    }
     $host = $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? '';
     if (strpos($host, 'a2prealtech.com') !== false) {
         $dsn  = 'mysql:host=localhost;dbname=u615712904_a2p;charset=utf8mb4';
@@ -27,7 +34,6 @@ function getPDOObject()
         $pdo = new PDO($dsn, $user, $pass);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-        $pdo->setAttribute(PDO::ATTR_PERSISTENT, true);
         return $pdo;
     } catch (PDOException $e) {
         error_log('DB Connection Failed: ' . $e->getMessage());

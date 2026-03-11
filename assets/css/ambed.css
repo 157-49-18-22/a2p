@@ -9150,6 +9150,61 @@ ul {
   padding-top: 31px;
 }
 
+/* ── Mobile Table Fix: CMS se aane wali tables cut na ho ── */
+.blog-details__content table,
+.blog-details__text-2 table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* Table wrapper: mobile pe horizontally scroll ho sake */
+.blog-details__content table,
+.blog-details__text-2 table {
+  display: block;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  /* iOS smooth scroll */
+  white-space: nowrap;
+  /* Cells ko force-wrap mat karo */
+  max-width: 100%;
+}
+
+/* Table cells ke andar text wrap ho sake (sirf thoda) */
+.blog-details__content table td,
+.blog-details__content table th,
+.blog-details__text-2 table td,
+.blog-details__text-2 table th {
+  white-space: normal;
+  min-width: 80px;
+  padding: 8px 10px;
+  vertical-align: top;
+}
+
+@media (max-width: 767px) {
+
+  /* Mobile pe table ka font thoda chhota karo taaki zyada content aaye */
+  .blog-details__content table td,
+  .blog-details__content table th,
+  .blog-details__text-2 table td,
+  .blog-details__text-2 table th {
+    font-size: 13px;
+    padding: 6px 8px;
+    min-width: 70px;
+  }
+
+  /* Scroll indicator hint */
+  .blog-details__content table::-webkit-scrollbar,
+  .blog-details__text-2 table::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  .blog-details__content table::-webkit-scrollbar-thumb,
+  .blog-details__text-2 table::-webkit-scrollbar-thumb {
+    background: #102a83;
+    border-radius: 4px;
+  }
+}
+
 .blog-details__bottom {
   display: -webkit-box;
   display: -ms-flexbox;
