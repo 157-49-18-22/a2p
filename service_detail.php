@@ -563,10 +563,6 @@ $encodedPageUrl = urlencode($rawPageUrl);
                             </a>
                             
                             <!-- General Share Button -->
-                            <?php 
-                            $currentPageUrlReal = "https://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-                            $encodedBlogNameReal = htmlspecialchars("A2P Realtech", ENT_QUOTES, 'UTF-8'); 
-                            ?>
                             <a href="#" class="share" title="Share" onclick="shareContent(event)">
                                 <i class="fas fa-share-alt"></i>
                             </a>
@@ -844,24 +840,28 @@ $encodedPageUrl = urlencode($rawPageUrl);
                              
                            
                             <!-- Facebook Share -->
-                            <!-- Facebook Share -->
-                            <a href="https://www.facebook.com/sharer/sharer.php?u=<?php echo $currentPageUrl; ?>&amp;t=<?php echo $encodedBlogName; ?>" target="_blank" class="facebook" title="Share on Facebook">
+                            <a href="https://www.facebook.com/sharer/sharer.php?u=<?php echo $encodedPageUrl; ?>&amp;t=<?php echo $encodedBlogName; ?>" target="_blank" class="facebook" title="Share on Facebook">
                                 <i class="fab fa-facebook-f"></i>
                             </a>
                             
                             <!-- Twitter Share -->
-                            <a href="https://twitter.com/intent/tweet?text=<?php echo $encodedBlogName; ?>&amp;url=<?php echo $currentPageUrl; ?>" target="_blank" class="twitter" title="Share on Twitter">
+                            <a href="https://twitter.com/intent/tweet?text=<?php echo $encodedBlogName; ?>&amp;url=<?php echo $encodedPageUrl; ?>" target="_blank" class="twitter" title="Share on Twitter">
                                 <i class="fab fa-x-twitter"></i>
                             </a>
                             
                             <!-- LinkedIn Share -->
-                            <a href="https://www.linkedin.com/sharing/share-offsite/?url=<?php echo $currentPageUrl; ?>" target="_blank" class="linkedin" title="Share on LinkedIn">
+                            <a href="https://www.linkedin.com/sharing/share-offsite/?url=<?php echo $encodedPageUrl; ?>" target="_blank" class="linkedin" title="Share on LinkedIn">
                                 <i class="fab fa-linkedin-in"></i>
                             </a>
                         
                             <!-- WhatsApp Share -->
-                            <a href="https://api.whatsapp.com/send?text=<?php echo $encodedBlogName; ?>%20<?php echo $currentPageUrl; ?>" target="_blank" class="whatsapp" title="Share on WhatsApp">
+                            <a href="https://api.whatsapp.com/send?phone=918130525001&text=Hello! I am interested in: <?php echo $encodedBlogName; ?> (<?php echo $encodedPageUrl; ?>)" target="_blank" class="whatsapp" title="Enquire on WhatsApp">
                                 <i class="fab fa-whatsapp"></i>
+                            </a>
+
+                            <!-- General Share Button -->
+                            <a href="#" class="share" title="Share" onclick="shareContent(event)">
+                                <i class="fas fa-share-alt"></i>
                             </a>
                         </div>
                          <br><br>

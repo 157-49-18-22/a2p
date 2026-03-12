@@ -671,11 +671,11 @@
         display: flex !important;
         justify-content: center !important;
         align-items: center !important;
-        max-width: 140px !important;
+        max-width: 180px !important;
         margin-left: -15px !important; /* Shift logo left */
     }
     .main-menu-two__logo img {
-        height: 40px !important;
+        height: 55px !important;
         width: auto !important;
     }
     /* Hamburger - LEFT (Shifted further left) */
@@ -772,7 +772,7 @@
 
     /* Fixed logo size and alignment issues on some Androids */
     .main-menu-two__logo img {
-        max-width: 160px !important;
+        max-width: 200px !important;
     }
 
     .blog-details {
