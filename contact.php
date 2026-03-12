@@ -201,7 +201,7 @@ if (count($sql_add))
   
   button {
     
-    background: black;
+    background: #c00415;
     color: white;
     border: none;
     padding: 12px;
@@ -213,7 +213,7 @@ if (count($sql_add))
   }
 
   button:hover {
-    background: red;
+    background: #c00415;
   }
 
   /* POPUP */

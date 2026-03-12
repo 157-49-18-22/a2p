@@ -299,7 +299,7 @@ if (count($sql_ser)) {
 
                                             <div class="form-result mt-3"></div>
                                             <div class="comment-form__btn-box mt-4">
-                                                <button type="button" id="job-send-otp-btn" class="thm-btn comment-form__btn w-100" style="background: #000; color: white; border: none; padding: 15px; border-radius: 8px; font-weight: 600; text-transform: uppercase; transition: all 0.3s ease;">
+                                                <button type="button" id="job-send-otp-btn" class="thm-btn comment-form__btn w-100" style="background: #c00415; color: white; border: none; padding: 15px; border-radius: 8px; font-weight: 600; text-transform: uppercase; transition: all 0.3s ease;">
                                                     Send Verification Code
                                                 </button>
                                                 <button type="submit" id="job-main-submit-btn" class="thm-btn comment-form__btn w-100" style="display: none; background: #ed1c24; color: white; border: none; padding: 15px; border-radius: 8px; font-weight: 600; text-transform: uppercase; transition: all 0.3s ease;">

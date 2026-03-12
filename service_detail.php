@@ -1041,7 +1041,7 @@ $encodedPageUrl = urlencode($rawPageUrl);
     outline: none;
   }
   .btn-submit-custom {
-    background: #000;
+    background: #c00415;
     color: #fff;
     width: 100%;
     padding: 12px;
