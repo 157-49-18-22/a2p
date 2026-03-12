@@ -295,7 +295,8 @@ if (count($sql_add))
     <strong> <h2>Contact A2P Realtech</h2></strong>
    <strong> <p class="subtitle">Get personalized assistance for your property needs.</p></strong>
 
-   <form id="leadForm" action="https://formspree.io/f/xdkpqpdq" method="POST">
+   <form id="leadForm" action="mail2.php" method="POST">
+      <input type="hidden" name="page" value="Contact Form (mail.php)">
 
 
       <label for="name">Full Name *</label>
@@ -349,34 +350,8 @@ if (count($sql_add))
 </div>
 
 <script>
-  const form = document.getElementById('leadForm');
-const popup = document.getElementById('popup');
-
-form.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const formData = new FormData(form);
-  const response = await fetch(form.action, {
-    method: 'POST',
-    body: formData,
-    headers: { 'Accept': 'application/json' }
-  });
-
-    // Optional: send form data to backend
-    /*
-    fetch('lead-submit.php', {
-      method: 'POST',
-      body: new FormData(form)
-    })
-    .then(res => res.text())
-    .then(data => console.log(data));
-    */
-
-    popup.style.display = 'flex';
-    form.reset();
-  });
-
   function closePopup() {
-    popup.style.display = 'none';
+    document.getElementById('popup').style.display = 'none';
   }
 </script>
 
@@ -441,36 +416,7 @@ form.addEventListener('submit', async (e) => {
   });
   
 
-
-  const form = document.getElementById('leadForm');
-const popup = document.getElementById('popup');
-
-form.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const formData = new FormData(form);
-  const response = await fetch(form.action, {
-    method: 'POST',
-    body: formData,
-    headers: { 'Accept': 'application/json' }
-  });
-
-    // Optional: send form data to backend
-    /*
-    fetch('lead-submit.php', {
-      method: 'POST',
-      body: new FormData(form)
-    })
-    .then(res => res.text())
-    .then(data => console.log(data));
-    */
-
-    popup.style.display = 'flex';
-    form.reset();
-  });
-
-  function closePopup() {
-    popup.style.display = 'none';
-  }
+  // Handled above
 
 
 </script>

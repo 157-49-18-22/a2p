@@ -295,7 +295,7 @@ if (count($sql_add))
     <strong> <h2>Contact A2P Realtech</h2></strong>
    <strong> <p class="subtitle">Get personalized assistance for your property needs.</p></strong>
 
-   <form id="leadForm" action="https://formspree.io/f/xdkpqpdq" method="POST">
+   <form id="leadForm" action="lead-submit.php" method="POST">
 
 
       <label for="name">Full Name *</label>
@@ -482,13 +482,6 @@ if (count($sql_add))
     formData.append('lat_long', locData.lat_long || '');
 
     try {
-      // Send to Formspree
-      await fetch(leadForm.action, {
-        method: 'POST',
-        body: formData,
-        headers: { 'Accept': 'application/json' }
-      });
-
       // Send to local DB
       await fetch('lead-submit.php', {
         method: 'POST',

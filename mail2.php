@@ -9,6 +9,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $message     = nl2br(htmlspecialchars($_POST["message"] ?? ''));
     $page        = isset($_POST["page"])        ? htmlspecialchars($_POST["page"])        : "Brochure Download";
     $destination = isset($_POST["destination"]) ? htmlspecialchars($_POST["destination"]) : "";
+    $interest    = htmlspecialchars($_POST["interest"] ?? '');
+    $budget      = htmlspecialchars($_POST["budget"] ?? '');
+    
+    if (!empty($interest)) $message .= "<br><b>Interested In:</b> $interest";
+    if (!empty($budget)) $message .= "<br><b>Budget:</b> $budget";
 
     // Store in database
     $data = [
