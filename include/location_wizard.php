@@ -149,12 +149,7 @@
     border-radius: 10px !important;
 }
 .wizard-step { display: none; }
-.wizard-step.active { display: block; animation: fadeIn 0.4s; }
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
+.wizard-step.active { display: block; }
 
 .wizard-step h4 { margin-top: 0; margin-bottom: 30px; text-align: center; color: #333; font-weight: 700; }
 
@@ -211,7 +206,10 @@
 
 /* Responsive */
 @media (max-width: 600px) {
-    .wizard-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .wizard-grid { grid-template-columns: repeat(auto-fit, minmax(75px, 1fr)); gap: 8px; }
+    .wizard-card { padding: 10px 4px; border-radius: 8px; gap: 5px; }
+    .wizard-card i { font-size: 20px; }
+    .wizard-card span { font-size: 10px; line-height: 1.2; }
     .wizard-body { padding: 15px; }
     .wizard-header { padding: 12px 15px; flex-wrap: nowrap; gap: 8px; }
     .wizard-header h3 { 
@@ -252,7 +250,9 @@ let selection = {
 // Global Cache to store fetched data
 const wizardCache = {
     locations: null,
-    categories: {}
+    categories: {},
+    types: {},
+    devs: {}
 };
 
 // Pre-fetch locations on page load for instant opening
@@ -293,6 +293,15 @@ function renderCities(data) {
         return;
     }
     data.forEach(item => {
+        // Background Pre-fetch Categories
+        if(!wizardCache.categories[item.location]) {
+            setTimeout(() => {
+                fetch(`${WIZARD_API}?action=get_categories&city=${encodeURIComponent(item.location)}`)
+                .then(res => res.json())
+                .then(catData => { wizardCache.categories[item.location] = catData; }).catch(e=>e);
+            }, 50); // slight offset to not block main thread
+        }
+
         const card = document.createElement('div');
         card.className = 'wizard-card';
         card.innerHTML = `<i class="fa fa-map-marker-alt"></i><span>${item.location}</span>`;
@@ -309,7 +318,6 @@ function loadCities() {
     }
 
     const grid = document.getElementById('cityGrid');
-    grid.innerHTML = '<p class="text-center">Loading locations...</p>';
     fetch(WIZARD_API + '?action=get_locations')
         .then(res => res.json())
         .then(data => {
@@ -334,6 +342,16 @@ function renderCategories(data) {
         return;
     }
     data.forEach(item => {
+        // Background Pre-fetch Types
+        const cacheKey = selection.city + '_' + item.id;
+        if(!wizardCache.types[cacheKey]) {
+            setTimeout(() => {
+                fetch(`${WIZARD_API}?action=get_property_types&city=${encodeURIComponent(selection.city)}&category_id=${item.id}`)
+                .then(res => res.json())
+                .then(typeData => { wizardCache.types[cacheKey] = typeData; }).catch(e=>e);
+            }, 50);
+        }
+
         const card = document.createElement('div');
         card.className = 'wizard-card';
         const icon = item.name.toLowerCase().includes('comm') ? 'fa-building' : 'fa-home';
@@ -351,7 +369,6 @@ function loadCategories() {
     }
 
     const grid = document.getElementById('categoryGrid');
-    grid.innerHTML = '<p class="text-center">Loading categories...</p>';
     fetch(`${WIZARD_API}?action=get_categories&city=${encodeURIComponent(selection.city)}`)
         .then(res => res.json())
         .then(data => {
@@ -368,23 +385,46 @@ function selectCategory(catId) {
 
 function loadTypes() {
     const grid = document.getElementById('typeGrid');
-    grid.innerHTML = '<p class="text-center">Loading property types...</p>';
+    const cacheKey = selection.city + '_' + selection.category_id;
+    
+    // Check Cache first
+    if (wizardCache.types[cacheKey]) {
+        renderTypes(wizardCache.types[cacheKey]);
+        return;
+    }
+    
     fetch(`${WIZARD_API}?action=get_property_types&city=${encodeURIComponent(selection.city)}&category_id=${selection.category_id}`)
         .then(res => res.json())
         .then(data => {
-            grid.innerHTML = '';
-            if(!data || data.length === 0) {
-                grid.innerHTML = '<p class="text-center">No types found.</p>';
-                return;
-            }
-            data.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'wizard-card';
-                card.innerHTML = `<i class="fa fa-layer-group"></i><span>${item.property_type}</span>`;
-                card.onclick = () => selectType(item.id);
-                grid.appendChild(card);
-            });
+            wizardCache.types[cacheKey] = data;
+            renderTypes(data);
         }).catch(err => { grid.innerHTML = '<p class="text-center text-danger">Error loading types.</p>'; });
+}
+
+function renderTypes(data) {
+    const grid = document.getElementById('typeGrid');
+    grid.innerHTML = '';
+    if(!data || data.length === 0) {
+        grid.innerHTML = '<p class="text-center">No types found.</p>';
+        return;
+    }
+    data.forEach(item => {
+        // Background Pre-fetch Developers
+        const devCacheKey = selection.city + '_' + selection.category_id + '_' + item.id;
+        if(!wizardCache.devs[devCacheKey]) {
+            setTimeout(() => {
+                fetch(`${WIZARD_API}?action=get_developers&city=${encodeURIComponent(selection.city)}&category_id=${selection.category_id}&subcategory_id=${item.id}`)
+                .then(res => res.json())
+                .then(devData => { wizardCache.devs[devCacheKey] = devData; }).catch(e=>e);
+            }, 50);
+        }
+
+        const card = document.createElement('div');
+        card.className = 'wizard-card';
+        card.innerHTML = `<i class="fa fa-layer-group"></i><span>${item.property_type}</span>`;
+        card.onclick = () => selectType(item.id);
+        grid.appendChild(card);
+    });
 }
 
 function selectType(subcatId) {
@@ -395,23 +435,36 @@ function selectType(subcatId) {
 
 function loadDevelopers() {
     const grid = document.getElementById('devGrid');
-    grid.innerHTML = '<p class="text-center">Loading developers...</p>';
+    const devCacheKey = selection.city + '_' + selection.category_id + '_' + selection.subcategory_id;
+    
+    // Check Cache first
+    if (wizardCache.devs[devCacheKey]) {
+        renderDevelopers(wizardCache.devs[devCacheKey]);
+        return;
+    }
+    
     fetch(`${WIZARD_API}?action=get_developers&city=${encodeURIComponent(selection.city)}&category_id=${selection.category_id}&subcategory_id=${selection.subcategory_id}`)
         .then(res => res.json())
         .then(data => {
-            grid.innerHTML = '';
-            if(!data || data.length === 0) {
-                grid.innerHTML = '<p class="text-center">No developers found.</p>';
-                return;
-            }
-            data.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'wizard-card';
-                card.innerHTML = `<i class="fa fa-user-tie"></i><span>${item.developer}</span>`;
-                card.onclick = () => finishWizard(item.developer);
-                grid.appendChild(card);
-            });
+            wizardCache.devs[devCacheKey] = data;
+            renderDevelopers(data);
         }).catch(err => { grid.innerHTML = '<p class="text-center text-danger">Error loading developers.</p>'; });
+}
+
+function renderDevelopers(data) {
+    const grid = document.getElementById('devGrid');
+    grid.innerHTML = '';
+    if(!data || data.length === 0) {
+        grid.innerHTML = '<p class="text-center">No developers found.</p>';
+        return;
+    }
+    data.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'wizard-card';
+        card.innerHTML = `<i class="fa fa-user-tie"></i><span>${item.developer}</span>`;
+        card.onclick = () => finishWizard(item.developer);
+        grid.appendChild(card);
+    });
 }
 
 function finishWizard(dev) {
