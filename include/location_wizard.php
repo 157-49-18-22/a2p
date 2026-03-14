@@ -133,6 +133,7 @@
     overflow: hidden !important;
     display: flex;
     flex-direction: column;
+    min-height: 0; /* Critical for flex overflow */
 }
 
 .wizard-grid::-webkit-scrollbar {
@@ -153,6 +154,7 @@
     height: 100%;
     padding: 30px;
     box-sizing: border-box;
+    min-height: 0; /* Critical for flex overflow */
 }
 .wizard-step.active { display: flex; }
 
@@ -227,7 +229,6 @@
     .wizard-grid { 
         grid-template-columns: repeat(2, 1fr); 
         gap: 15px; 
-        max-height: 320px; /* Fits exactly 2 rows of 2 columns */
         padding: 5px;
     }
     .wizard-card { 
@@ -238,7 +239,8 @@
     .wizard-card i { font-size: 28px; }
     .wizard-card span { font-size: 13px; line-height: 1.2; }
 
-    .wizard-step { padding: 15px; height: auto; max-height: 100%; }
+    .wizard-step { padding: 15px; flex: 1; display: none; flex-direction: column; min-height: 0; }
+    .wizard-step.active { display: flex; }
     .wizard-header { padding: 12px 15px; flex-wrap: nowrap; gap: 8px; }
     .wizard-header h3 { 
         font-size: 15px; 
@@ -256,8 +258,15 @@
     .wizard-progress { padding: 10px 8px; }
     .progress-step { font-size: 10px; }
     .progress-step span { font-size: 10px; }
-    .wizard-content { width: 95%; max-height: 85vh; border-radius: 14px; }
-    .wizard-back { margin-top: 15px; padding: 10px; font-size: 14px; }
+    .wizard-content { 
+        width: 95%; 
+        height: auto; 
+        max-height: 90vh; 
+        max-height: 90dvh; 
+        border-radius: 14px; 
+        padding-bottom: env(safe-area-inset-bottom, 10px);
+    }
+    .wizard-back { margin-top: 10px; padding: 12px; font-size: 14px; margin-bottom: 5px; }
 }
 
 @media (max-width: 380px) {
