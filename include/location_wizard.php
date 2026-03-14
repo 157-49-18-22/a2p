@@ -197,8 +197,8 @@
     box-shadow: 0 10px 15px -3px rgba(192, 4, 21, 0.1);
 }
 
-.wizard-card i { font-size: 35px; color: #c00415; }
-.wizard-card span { font-weight: 600; color: #444; }
+.wizard-card i { font-size: 35px; color: #c00415; transition: font-size 0.3s; }
+.wizard-card span { font-weight: 600; color: #444; font-size: 14px; }
 
 .wizard-back {
     flex-shrink: 0;
@@ -224,8 +224,21 @@
 
 /* Responsive */
 @media (max-width: 600px) {
-    .wizard-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
-    .wizard-step { padding: 15px; }
+    .wizard-grid { 
+        grid-template-columns: repeat(2, 1fr); 
+        gap: 15px; 
+        max-height: 320px; /* Fits exactly 2 rows of 2 columns */
+        padding: 5px;
+    }
+    .wizard-card { 
+        padding: 20px 10px; 
+        border-radius: 12px;
+        gap: 8px;
+    }
+    .wizard-card i { font-size: 28px; }
+    .wizard-card span { font-size: 13px; line-height: 1.2; }
+
+    .wizard-step { padding: 15px; height: auto; max-height: 100%; }
     .wizard-header { padding: 12px 15px; flex-wrap: nowrap; gap: 8px; }
     .wizard-header h3 { 
         font-size: 15px; 
@@ -243,8 +256,8 @@
     .wizard-progress { padding: 10px 8px; }
     .progress-step { font-size: 10px; }
     .progress-step span { font-size: 10px; }
-    .wizard-content { width: 98%; max-height: 92vh; border-radius: 14px; }
-    .wizard-back { margin-top: 20px; padding: 10px; }
+    .wizard-content { width: 95%; max-height: 85vh; border-radius: 14px; }
+    .wizard-back { margin-top: 15px; padding: 10px; font-size: 14px; }
 }
 
 @media (max-width: 380px) {
