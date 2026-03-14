@@ -206,10 +206,10 @@
 
 /* Responsive */
 @media (max-width: 600px) {
-    .wizard-grid { grid-template-columns: repeat(auto-fit, minmax(75px, 1fr)); gap: 8px; }
-    .wizard-card { padding: 10px 4px; border-radius: 8px; gap: 5px; }
+    .wizard-grid { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+    .wizard-card { padding: 8px 4px; border-radius: 6px; gap: 4px; min-height: 60px; justify-content: center; }
     .wizard-card i { font-size: 20px; }
-    .wizard-card span { font-size: 10px; line-height: 1.2; }
+    .wizard-card span { font-size: 10px; line-height: 1.2; word-break: break-word; }
     .wizard-body { padding: 15px; }
     .wizard-header { padding: 12px 15px; flex-wrap: nowrap; gap: 8px; }
     .wizard-header h3 { 
