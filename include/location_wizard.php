@@ -128,35 +128,52 @@
 }
 
 .wizard-body { 
-    padding: 30px !important; 
-    min-height: 300px !important; 
-    overflow-y: auto !important; 
+    padding: 0 !important; 
     flex: 1 !important;
-    scrollbar-width: thin !important;
-    scrollbar-color: #c00415 #f0f0f0 !important;
+    overflow: hidden !important;
+    display: flex;
+    flex-direction: column;
 }
 
-.wizard-body::-webkit-scrollbar {
+.wizard-grid::-webkit-scrollbar {
     width: 6px;
 }
 
-.wizard-body::-webkit-scrollbar-track {
+.wizard-grid::-webkit-scrollbar-track {
     background: #f0f0f0;
 }
 
-.wizard-body::-webkit-scrollbar-thumb {
+.wizard-grid::-webkit-scrollbar-thumb {
     background-color: #c00415 !important;
     border-radius: 10px !important;
 }
-.wizard-step { display: none; }
-.wizard-step.active { display: block; }
+.wizard-step { 
+    display: none; 
+    flex-direction: column;
+    height: 100%;
+    padding: 30px;
+    box-sizing: border-box;
+}
+.wizard-step.active { display: flex; }
 
-.wizard-step h4 { margin-top: 0; margin-bottom: 30px; text-align: center; color: #333; font-weight: 700; }
+.wizard-step h4 { 
+    flex-shrink: 0;
+    margin-top: 0; 
+    margin-bottom: 25px; 
+    text-align: center; 
+    color: #333; 
+    font-weight: 700; 
+}
 
 .wizard-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     gap: 20px;
+    flex: 1;
+    overflow-y: auto;
+    padding: 5px;
+    scrollbar-width: thin !important;
+    scrollbar-color: #c00415 #f0f0f0 !important;
 }
 
 .wizard-card {
@@ -184,7 +201,8 @@
 .wizard-card span { font-weight: 600; color: #444; }
 
 .wizard-back {
-    margin-top: 30px !important;
+    flex-shrink: 0;
+    margin-top: 20px !important;
     background: #c00415 !important;
     border: none !important;
     padding: 12px 30px !important;
@@ -206,11 +224,8 @@
 
 /* Responsive */
 @media (max-width: 600px) {
-    .wizard-grid { grid-template-columns: repeat(3, 1fr); gap: 6px; }
-    .wizard-card { padding: 8px 4px; border-radius: 6px; gap: 4px; min-height: 60px; justify-content: center; }
-    .wizard-card i { font-size: 20px; }
-    .wizard-card span { font-size: 10px; line-height: 1.2; word-break: break-word; }
-    .wizard-body { padding: 15px; }
+    .wizard-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .wizard-step { padding: 15px; }
     .wizard-header { padding: 12px 15px; flex-wrap: nowrap; gap: 8px; }
     .wizard-header h3 { 
         font-size: 15px; 
