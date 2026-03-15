@@ -7,7 +7,7 @@ if (count($sql_add))
 ?>
 
 <!DOCTYPE html>
-<html lang="en" prefix="og: http://ogp.me/ns#" itemscope itemtype="http://schema.org/WebSite">
+<html lang="en" prefix="og: http://ogp.me/ns#">
 
 <head>
     <meta charset="UTF-8" />
@@ -17,7 +17,6 @@ if (count($sql_add))
     <meta name="keywords" content="<?php echo $pr_add['class8']; ?>">
     <?php include 'include/og_meta.php'; ?>
     <link rel="icon" href="<?= SITE_URL; ?>assets/images/favicons/favicon.ico">
-    <link rel="apple-touch-icon" href="<?= SITE_URL; ?>assets/images/favicons/apple-touch-icon.png">
     <link rel="manifest" href="<?= SITE_URL; ?>assets/images/favicons/site.webmanifest" />
     <link rel="preconnect" href="https://fonts.googleapis.com/">
     <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>

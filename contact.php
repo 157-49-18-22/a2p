@@ -7,7 +7,7 @@ if (count($sql_add))
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" prefix="og: http://ogp.me/ns#">
 
 <head>
     <meta charset="UTF-8" />
