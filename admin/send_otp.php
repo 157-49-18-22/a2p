@@ -17,13 +17,13 @@ function sendOTP($email, $otp) {
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
-        $mail->Username = 'team@a2prealtech.com';
+        $mail->Username = 'a2prealtechpvtltd@gmail.com';
         $mail->Password = 'gzZG2r:98@2-';
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
 
         // Recipients
-        $mail->setFrom('team@a2prealtech.com', 'A2P OTP System');
+        $mail->setFrom('a2prealtechpvtltd@gmail.com', 'A2P OTP System');
         $mail->addAddress($email);
 
         // Content
