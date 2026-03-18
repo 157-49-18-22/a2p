@@ -414,10 +414,10 @@
 /* Notification Bell */
 .notification-bell {
     position: fixed;
-    bottom: 20px;
-    left: 20px;
-    width: 50px;
-    height: 50px;
+    bottom: 10px; /* Moved lower from 20px */
+    left: 10px;   /* Moved closer to edge from 20px */
+    width: 45px;  /* Reduced size slightly for better fit */
+    height: 45px;
     background: #c00415;
     color: white;
     border-radius: 50%;
@@ -466,14 +466,14 @@
     }
     .mobile-nav__container .main-menu__list > li > a {
         color: #fff !important;
-        font-size: 14px !important; /* Slightly smaller for better fit */
-        font-weight: 600 !important;
+        font-size: 15px !important; /* Slightly larger for visibility */
+        font-weight: 700 !important;
         padding: 0 15px !important; 
         display: flex !important;
         align-items: center !important;
         justify-content: space-between !important;
         text-decoration: none !important;
-        height: 60px !important;
+        height: 70px !important; /* Increased from 60px as requested */
         position: relative !important;
         overflow: hidden !important;
     }
@@ -588,8 +588,8 @@
     .mobile-nav__social {
         display: flex !important;
         flex-wrap: nowrap !important;
-        gap: 4px !important;
-        padding: 20px 15px !important; 
+        gap: 8px !important; /* Increased gap */
+        padding: 10px 15px 40px !important; /* Added more bottom padding to push icons away from bell */
         justify-content: center !important;
         align-items: center !important;
         width: 100% !important;
@@ -801,8 +801,8 @@
 /* Notification Panel Styling */
 .notif-panel {
     position: fixed;
-    bottom: 80px;
-    left: 20px;
+    bottom: 70px; /* Reduced slightly to be closer to the bell */
+    left: 10px;   /* Aligned with new bell left position */
     width: 280px;
     background: #fff;
     border-radius: 12px;
