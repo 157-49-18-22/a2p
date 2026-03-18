@@ -15,15 +15,15 @@ function sendOTP($email, $otp) {
     try {
         // Server settings
         $mail->isSMTP();
-        $mail->Host = getenv('SMTP_HOST') ?: 'smtp.hostinger.com';
+        $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
-        $mail->Username = getenv('SMTP_USERNAME') ?: 'mail@famepixel.in';
-        $mail->Password = getenv('SMTP_PASSWORD') ?: 'Ravisingh$@#123';
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
-        $mail->Port = 465;
+        $mail->Username = 'team@a2prealtech.com';
+        $mail->Password = 'gzZG2r:98@2-';
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port = 587;
 
         // Recipients
-        $mail->setFrom('mail@famepixel.in', 'OTP System');
+        $mail->setFrom('team@a2prealtech.com', 'A2P OTP System');
         $mail->addAddress($email);
 
         // Content
