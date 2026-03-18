@@ -16,7 +16,7 @@ require_once $phpmailerBase . 'SMTP.php';
 define('SMTP_HOST',     'smtp.gmail.com');
 define('SMTP_PORT',     587); 
 define('SMTP_USER',     'team@a2prealtech.com');
-define('SMTP_PASS',     'birmzzsseuxxhatl');
+define('SMTP_PASS',     'gzZG2r:98@2-');
 define('SMTP_FROM',     'team@a2prealtech.com');
 define('SMTP_FROM_NAME','A2P Realtech');
 define('ADMIN_EMAIL',   'team@a2prealtech.com');
