@@ -8,22 +8,23 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 require 'vendor/autoload.php';
-include('db.php');  // Ensure PDO is properly initialized here
+include('db.php'); // Ensure PDO is properly initialized here
 
-function sendOTP($email, $otp) {
+function sendOTP($email, $otp)
+{
     $mail = new PHPMailer(true);
     try {
         // Server settings
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
-        $mail->Username = 'a2prealtechpvtltd@gmail.com';
-        $mail->Password = 'gzZG2r:98@2-';
+        $mail->Username = 'team@a2prealtech.com';
+        $mail->Password = 'yvfnyvmpxvhfjpau';
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
 
         // Recipients
-        $mail->setFrom('a2prealtechpvtltd@gmail.com', 'A2P OTP System');
+        $mail->setFrom('team@a2prealtech.com', 'A2P OTP System');
         $mail->addAddress($email);
 
         // Content
@@ -33,13 +34,15 @@ function sendOTP($email, $otp) {
 
         $mail->send();
         return true;
-    } catch (Exception $e) {
+    }
+    catch (Exception $e) {
         error_log("Mailer Error: " . $mail->ErrorInfo);
         return false;
     }
 }
 
-function generateOTP() {
+function generateOTP()
+{
     return rand(100000, 999999);
 }
 
@@ -70,20 +73,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         // Redirect to OTP verification page with email as query parameter
                         header("Location: verify_otp.php?email=" . urlencode($email));
                         exit();
-                    } else {
+                    }
+                    else {
                         $message = 'Failed to send OTP. Please try again later.';
                     }
-                } else {
+                }
+                else {
                     $message = 'Email and password do not match.';
                 }
-            } else {
+            }
+            else {
                 $message = 'Your email is not registered with us.';
             }
-        } catch (Exception $e) {
+        }
+        catch (Exception $e) {
             error_log("Database Error: " . $e->getMessage());
             $message = 'Database error. Please try again later.';
         }
-    } else {
+    }
+    else {
         $message = 'Invalid email format.';
     }
 }
@@ -145,6 +153,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <?php if (!empty($message)): ?>
         <p><?php echo $message; ?></p>
-    <?php endif; ?>
+    <?php
+endif; ?>
 </body>
 </html>

@@ -13,68 +13,73 @@ require_once $phpmailerBase . 'Exception.php';
 require_once $phpmailerBase . 'PHPMailer.php';
 require_once $phpmailerBase . 'SMTP.php';
 
-define('SMTP_HOST',     'smtp.gmail.com');
-define('SMTP_PORT',     587); 
-define('SMTP_USER',     'a2prealtechpvtltd@gmail.com');
-define('SMTP_PASS',     'gzZG2r:98@2-');
-define('SMTP_FROM',     'a2prealtechpvtltd@gmail.com');
-define('SMTP_FROM_NAME','A2P Realtech');
-define('ADMIN_EMAIL',   'team@a2prealtech.com');
+define('SMTP_HOST', 'smtp.gmail.com');
+define('SMTP_PORT', 587);
 
-function writeMailLog($msg) {
-    $logFile = __DIR__ . '/../mail_debug.log';
-    $timestamp = date('Y-m-d H:i:s');
-    file_put_contents($logFile, "[$timestamp] $msg\n", FILE_APPEND);
+define('SMTP_USER', 'team@a2prealtech.com');
+define('SMTP_PASS', 'yvfnyvmpxvhfjpau');
+define('SMTP_FROM', 'team@a2prealtech.com');
+define('SMTP_FROM_NAME', 'A2P Realtech');
+define('ADMIN_EMAIL', 'team@a2prealtech.com');
+
+function writeMailLog($msg)
+{
+  $logFile = __DIR__ . '/../mail_debug.log';
+  $timestamp = date('Y-m-d H:i:s');
+  file_put_contents($logFile, "[$timestamp] $msg\n", FILE_APPEND);
 }
 
 /**
  * Common function to send both Admin Notification and User Auto-Reply
  */
-function sendAllMails($userEmail, $userName, $adminSubject, $adminBody) {
-    $mail = new PHPMailer(true);
-    try {
-        // Server settings
-        $mail->isSMTP();
-        $mail->Host       = SMTP_HOST;
-        $mail->SMTPAuth   = true;
-        $mail->Username   = SMTP_USER;
-        $mail->Password   = SMTP_PASS;
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-        $mail->Port       = SMTP_PORT;
-        $mail->CharSet    = 'UTF-8';
+function sendAllMails($userEmail, $userName, $adminSubject, $adminBody)
+{
+  $mail = new PHPMailer(true);
+  try {
+    // Server settings
+    $mail->isSMTP();
+    $mail->Host = SMTP_HOST;
+    $mail->SMTPAuth = true;
+    $mail->Username = SMTP_USER;
+    $mail->Password = SMTP_PASS;
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+    $mail->Port = SMTP_PORT;
+    $mail->CharSet = 'UTF-8';
 
-        // 1. Send to Admin
-        $mail->setFrom(SMTP_FROM, SMTP_FROM_NAME);
-        $mail->addAddress(ADMIN_EMAIL, 'A2P Admin');
-        $mail->isHTML(true);
-        $mail->Subject = $adminSubject;
-        $mail->Body    = $adminBody;
-        $mail->send();
-        writeMailLog("Admin Notification Sent to " . ADMIN_EMAIL);
+    // 1. Send to Admin
+    $mail->setFrom(SMTP_FROM, SMTP_FROM_NAME);
+    $mail->addAddress(ADMIN_EMAIL, 'A2P Admin');
+    $mail->isHTML(true);
+    $mail->Subject = $adminSubject;
+    $mail->Body = $adminBody;
+    $mail->send();
+    writeMailLog("Admin Notification Sent to " . ADMIN_EMAIL);
 
-        // Clear recipients for the next mail
-        $mail->clearAddresses();
+    // Clear recipients for the next mail
+    $mail->clearAddresses();
 
-        // 2. Send Auto-Reply to User (If email is valid)
-        if (!empty($userEmail) && filter_var($userEmail, FILTER_VALIDATE_EMAIL)) {
-            $mail->addAddress($userEmail, $userName);
-            $mail->Subject = 'Thank You for Your Luxury Property Inquiry — A2P Realtech';
-            
-            // Re-using the same branded template
-            $mail->Body = getAutoReplyTemplate($userName);
-            $mail->send();
-            writeMailLog("Auto-Reply Sent to " . $userEmail);
-        }
+    // 2. Send Auto-Reply to User (If email is valid)
+    if (!empty($userEmail) && filter_var($userEmail, FILTER_VALIDATE_EMAIL)) {
+      $mail->addAddress($userEmail, $userName);
+      $mail->Subject = 'Thank You for Your Luxury Property Inquiry — A2P Realtech';
 
-        return true;
-    } catch (Exception $e) {
-        writeMailLog("MAIL ERROR: " . $mail->ErrorInfo);
-        return false;
+      // Re-using the same branded template
+      $mail->Body = getAutoReplyTemplate($userName);
+      $mail->send();
+      writeMailLog("Auto-Reply Sent to " . $userEmail);
     }
+
+    return true;
+  }
+  catch (Exception $e) {
+    writeMailLog("MAIL ERROR: " . $mail->ErrorInfo);
+    return false;
+  }
 }
 
-function getAutoReplyTemplate($toName) {
-    return '
+function getAutoReplyTemplate($toName)
+{
+  return '
     <!DOCTYPE html>
     <html>
     <body style="margin:0;padding:0;background:#f4f7f6;font-family:\'Segoe UI\', Tahoma, Geneva, Verdana, sans-serif;">
