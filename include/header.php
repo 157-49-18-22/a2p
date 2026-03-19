@@ -1643,35 +1643,16 @@ document.addEventListener('DOMContentLoaded', function() {
                                         <a href="javascript:void(0)" onclick="openWizard()"><span style="display:inline-flex;align-items:center;gap:6px;"><i class="fa fa-map-marker-alt"></i> by City location</span></a>
                                     </li>
 
-                                    <?php 
+<?php 
                                         $result = sqlfetch("SELECT * FROM category WHERE actstat=1 ORDER BY fld_order");
                                         if (count($result)) {
                                             foreach ($result as $category) {
-                                                if ($category['id'] == 23) { // Developer Gallery Special Case
-                                                    $dev_list = sqlfetch("SELECT DISTINCT developer FROM subproduct WHERE developer != '' AND actstat = 1 ORDER BY developer ASC");
-                                        ?>
-                                                <li class="dropdown">
-                                                    <a href="<?= SITE_URL; ?>developer_gallery.php"><?php echo $category['name']; ?></a>
-                                                    <?php if (count($dev_list)) { ?>
-                                                        <ul class="hffffff">
-                                                            <?php foreach ($dev_list as $dev) { ?>
-                                                                <li>
-                                                                    <a href="<?= SITE_URL; ?>developer_projects.php?dev=<?php echo urlencode($dev['developer']); ?>">
-                                                                        <?php echo $dev['developer']; ?>
-                                                                    </a>
-                                                                </li>
-                                                            <?php } ?>
-                                                        </ul>
-                                                    <?php } ?>
-                                                </li>
-                                        <?php 
-                                                } else { // Normal Categories
                                         ?>
                                                 <li class="dropdown">
                                                     <a href="#"><?php echo $category['name']; ?></a>
                                                     <?php 
                                                         $sub_cat = sqlfetch("SELECT * FROM subcategory WHERE subcat='" . $category['id'] . "'");
-                                                        if (count($sub_cat)) { 
+                                                        if (count($sub_cat)) { // Check if subcategories exist
                                                     ?>
                                                         <ul class="hffffff">
                                                             <?php foreach ($sub_cat as $subproduct) { ?>
@@ -1685,7 +1666,6 @@ document.addEventListener('DOMContentLoaded', function() {
                                                     <?php } ?>
                                                 </li>
                                         <?php 
-                                                }
                                             }
                                         } 
                                         ?>
