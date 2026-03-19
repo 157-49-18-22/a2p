@@ -304,14 +304,20 @@ function highlightTerms($text, $term) {
             }
 
             // --- Fetch Offers (Blogs) ---
-            $stmt4 = $pdo->prepare("SELECT * FROM offer WHERE name LIKE ? OR des1 LIKE ?");
-            $stmt4->execute([$searchSafe, $searchSafe]);
-            $offers = $stmt4->fetchAll(PDO::FETCH_ASSOC);
+            $offers = [];
+            if (!$isFilteredSearch) {
+                $stmt4 = $pdo->prepare("SELECT * FROM offer WHERE name LIKE ? OR des1 LIKE ?");
+                $stmt4->execute([$searchSafe, $searchSafe]);
+                $offers = $stmt4->fetchAll(PDO::FETCH_ASSOC);
+            }
 
             // --- Fetch Media Gallery (fixed_delivery_time) ---
-            $stmt5 = $pdo->prepare("SELECT * FROM fixed_delivery_time WHERE name LIKE ? OR meta_title LIKE ?");
-            $stmt5->execute([$searchSafe, $searchSafe]);
-            $mediaItems = $stmt5->fetchAll(PDO::FETCH_ASSOC);
+            $mediaItems = [];
+            if (!$isFilteredSearch) {
+                $stmt5 = $pdo->prepare("SELECT * FROM fixed_delivery_time WHERE name LIKE ? OR meta_title LIKE ?");
+                $stmt5->execute([$searchSafe, $searchSafe]);
+                $mediaItems = $stmt5->fetchAll(PDO::FETCH_ASSOC);
+            }
 
             echo '<div class="row"><div class="col-md-12">';
             echo '<h3 class="cool"><span style="color: #007bff;">Search Results for:</span> "' . htmlspecialchars($search) . '"</h3>';
