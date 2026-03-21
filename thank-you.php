@@ -178,8 +178,15 @@ if (count($sql_add))
         </div>
 
     <?php elseif (isset($_GET['brochure'])): ?>
+        <?php
+            // Sanitize: only allow simple filenames, no path traversal
+            $brochure_name = basename($_GET['brochure']);
+            $brochure_path = __DIR__ . '/upload/' . $brochure_name;
+            $brochure_exists = file_exists($brochure_path);
+            $download_url = SITE_URL . 'download.php?file=' . urlencode($brochure_name);
+        ?>
         <div class="mt-4">
-            <a href="<?= SITE_URL; ?>upload/<?php echo htmlspecialchars($_GET['brochure']); ?>" class="btn btn-danger btn-lg" style="background-color: #c00415; border: none; padding: 15px 30px; border-radius: 10px;" download>
+            <a href="<?php echo $download_url; ?>" class="btn btn-danger btn-lg" style="background-color: #c00415; border: none; padding: 15px 30px; border-radius: 10px;">
                 <i class="fas fa-file-download"></i> Download Brochure Again
             </a>
             <p class="mt-2 text-muted">Your brochure should have opened in a new tab. If not, click the button above.</p>
@@ -187,8 +194,8 @@ if (count($sql_add))
 
         <script>
             window.addEventListener('load', function() {
-                var brochureUrl = '<?= SITE_URL; ?>upload/<?php echo htmlspecialchars($_GET['brochure']); ?>';
-                window.open(brochureUrl, '_blank');
+                // Force download via dedicated script
+                window.location.href = '<?php echo $download_url; ?>';
             });
         </script>
     <?php else: ?>

@@ -32,6 +32,10 @@ $_global_logo = str_replace('https:/', 'https://', $_global_logo);
 <meta property="og:url" content="<?php echo $_canonical_url; ?>">
 <meta property="og:type" content="<?php echo isset($og_type) ? $og_type : 'website'; ?>">
 
+<!-- Facebook Page Verification - Links domain to Facebook Page -->
+<meta property="og:see_also" content="https://www.facebook.com/a2prealtechpvtltd/">
+<meta property="article:publisher" content="https://www.facebook.com/a2prealtechpvtltd/">
+
 <!-- Schema.org for WhatsApp Android -->
 <meta itemprop="name" content="<?php echo isset($og_title) ? $og_title : 'A2P Realtech Private Limited'; ?>">
 <meta itemprop="description" content="<?php echo isset($og_description) ? $og_description : 'Real Estate Company for Dwarka Expressway Project. Find your dream home with us.'; ?>">
