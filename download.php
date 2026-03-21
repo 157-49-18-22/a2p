@@ -14,16 +14,30 @@ if (empty($filename) || !preg_match('/\.pdf$/i', $filename)) {
     exit('Invalid file request.');
 }
 
-$file_path = __DIR__ . '/upload/' . $filename;
+// Try multiple possible paths (handles different hosting structures)
+$possible_paths = [
+    __DIR__ . '/upload/' . $filename,                                      // Same directory
+    dirname(__FILE__) . '/upload/' . $filename,                            // Explicit dirname
+    $_SERVER['DOCUMENT_ROOT'] . '/upload/' . $filename,                    // Document root /upload/
+    rtrim($_SERVER['DOCUMENT_ROOT'], '/') . '/upload/' . $filename,        // No trailing slash
+];
 
-if (!file_exists($file_path)) {
+$file_path = null;
+foreach ($possible_paths as $path) {
+    if (file_exists($path) && is_readable($path)) {
+        $file_path = $path;
+        break;
+    }
+}
+
+if (!$file_path) {
     http_response_code(404);
-    exit('Brochure file not found. Please contact us.');
+    exit('Brochure file not found. Please contact us at team@a2prealtech.com');
 }
 
 // Force download headers
 header('Content-Description: File Transfer');
-header('Content-Type: application/octet-stream');
+header('Content-Type: application/pdf');
 header('Content-Disposition: attachment; filename="' . $filename . '"');
 header('Expires: 0');
 header('Cache-Control: must-revalidate');
@@ -31,8 +45,9 @@ header('Pragma: public');
 header('Content-Length: ' . filesize($file_path));
 
 // Clear output buffers to avoid corruption
-ob_clean();
-flush();
+if (ob_get_level()) {
+    ob_end_clean();
+}
 
 readfile($file_path);
 exit;
