@@ -13,16 +13,17 @@ if (strpos($_canonical_url, 'index.php') !== false) {
 if (!isset($_global_logo)) {
     $_global_logo = SITE_URL . "upload/290126125406LOGO.png";
 }
-// Fix potential double slash
+// Encoding and double-slash fix
 $_global_logo = str_replace(['///', '//'], '/', $_global_logo);
 $_global_logo = str_replace('https:/', 'https://', $_global_logo);
+$_global_logo = str_replace(' ', '%20', $_global_logo);
 ?>
 <!-- WhatsApp/Social Previews - Aggressive Android Fix -->
 <meta property="og:image" content="<?php echo $_global_logo; ?>?v=1.3">
 <meta property="og:image:secure_url" content="<?php echo $_global_logo; ?>?v=1.3">
 <meta property="og:image:type" content="image/png">
-<meta property="og:image:width" content="400">
-<meta property="og:image:height" content="400">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="A2P Realtech Logo">
 <link rel="image_src" href="<?php echo $_global_logo; ?>?v=1.3">
 
@@ -33,8 +34,6 @@ $_global_logo = str_replace('https:/', 'https://', $_global_logo);
 <meta property="og:type" content="<?php echo isset($og_type) ? $og_type : 'website'; ?>">
 
 <!-- Facebook Page Verification - Links domain to Facebook Page -->
-<meta property="og:see_also" content="https://www.facebook.com/a2prealtechpvtltd/">
-<meta property="article:publisher" content="https://www.facebook.com/a2prealtechpvtltd/">
 
 <!-- Schema.org for WhatsApp Android -->
 <meta itemprop="name" content="<?php echo isset($og_title) ? $og_title : 'A2P Realtech Private Limited'; ?>">
