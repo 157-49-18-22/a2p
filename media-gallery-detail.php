@@ -250,7 +250,7 @@ $encodedPageUrl = urlencode($rawPageUrl);
                                 if (navigator.share) {
                                     navigator.share({
                                         title: pageTitle,
-                                        text: pageTitle,
+                                        text: pageTitle + " \n\n" + pageUrl,
                                         url: pageUrl
                                     })
                                     .then(() => console.log('Shared successfully'))
