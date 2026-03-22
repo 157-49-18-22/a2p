@@ -273,24 +273,19 @@ function highlightTerms($text, $term) {
             $compactSearch = str_replace([' ', '-'], '', $search);
             $compactRegex = '[[:<:]]' . preg_quote($compactSearch) . '[[:>:]]';
 
+            $searchSafe = "%$search%";
             $locSafe = "%$location%";
 
             $query = "SELECT DISTINCT * FROM subproduct 
-                      WHERE (
-                         (name REGEXP ? OR REPLACE(name, ' ', '') REGEXP ?) 
-                         OR (meta_title REGEXP ? OR REPLACE(meta_title, ' ', '') REGEXP ?) 
-                         OR (meta_keyword REGEXP ? OR REPLACE(meta_keyword, ' ', '') REGEXP ?) 
-                         OR (pro_lable REGEXP ? OR REPLACE(pro_lable, ' ', '') REGEXP ?)
-                         OR (city REGEXP ? OR REPLACE(city, ' ', '') REGEXP ?)
-                         OR (developer REGEXP ? OR REPLACE(developer, ' ', '') REGEXP ?)
-                      )";
+                      WHERE (name LIKE ? 
+                      OR meta_title LIKE ? 
+                      OR meta_keyword LIKE ? 
+                      OR pro_lable LIKE ?
+                      OR city LIKE ?
+                      OR (developer REGEXP ? OR REPLACE(developer, ' ', '') REGEXP ?))";
             
             $params = [
-                $searchRegex, $compactRegex,
-                $searchRegex, $compactRegex,
-                $searchRegex, $compactRegex,
-                $searchRegex, $compactRegex,
-                $searchRegex, $compactRegex,
+                $searchSafe, $searchSafe, $searchSafe, $searchSafe, $searchSafe,
                 $searchRegex, $compactRegex
             ];
             
@@ -333,16 +328,16 @@ function highlightTerms($text, $term) {
             // --- Fetch Offers (Blogs) ---
             $offers = [];
             if (!$isFilteredSearch) {
-                $stmt4 = $pdo->prepare("SELECT * FROM offer WHERE (name REGEXP ? OR REPLACE(name, ' ', '') REGEXP ?) OR (des1 REGEXP ? OR REPLACE(des1, ' ', '') REGEXP ?)");
-                $stmt4->execute([$searchRegex, $compactRegex, $searchRegex, $compactRegex]);
+                $stmt4 = $pdo->prepare("SELECT * FROM offer WHERE name LIKE ? OR des1 LIKE ?");
+                $stmt4->execute([$searchSafe, $searchSafe]);
                 $offers = $stmt4->fetchAll(PDO::FETCH_ASSOC);
             }
 
             // --- Fetch Media Gallery (fixed_delivery_time) ---
             $mediaItems = [];
             if (!$isFilteredSearch) {
-                $stmt5 = $pdo->prepare("SELECT * FROM fixed_delivery_time WHERE (name REGEXP ? OR REPLACE(name, ' ', '') REGEXP ?) OR (meta_title REGEXP ? OR REPLACE(meta_title, ' ', '') REGEXP ?)");
-                $stmt5->execute([$searchRegex, $compactRegex, $searchRegex, $compactRegex]);
+                $stmt5 = $pdo->prepare("SELECT * FROM fixed_delivery_time WHERE name LIKE ? OR meta_title LIKE ?");
+                $stmt5->execute([$searchSafe, $searchSafe]);
                 $mediaItems = $stmt5->fetchAll(PDO::FETCH_ASSOC);
             }
 
