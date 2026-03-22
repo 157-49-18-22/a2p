@@ -211,7 +211,7 @@ $encodedPageUrl = urlencode($rawPageUrl);
                                      
                                    
                                     <!-- Facebook Share -->
-                                    <a href="https://www.facebook.com/sharer/sharer.php?u=<?php echo $encodedPageUrl; ?>&amp;t=<?php echo $encodedBlogName; ?>" target="_blank" class="facebook" title="Share on Facebook">
+                                    <a href="#" onclick="shareFacebook(event)" class="facebook" title="Share on Facebook">
                                         <i class="fab fa-facebook-f"></i>
                                     </a>
                                     
@@ -230,24 +230,30 @@ $encodedPageUrl = urlencode($rawPageUrl);
                                         <i class="fab fa-whatsapp"></i>
                                     </a>
                                     
-                                    
-                                         <!-- General Share Button -->
-                                                    <?php 
-                        $currentPageUrlReal = "https://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-                        $encodedBlogNameReal = htmlspecialchars("A2P Realtech", ENT_QUOTES, 'UTF-8'); 
-                        ?>
-                        
-                        <a href="#" class="share" title="Share" onclick="shareContent(event)">
-                            <i class="fas fa-share-alt"></i>
-                        </a>
+                                    <!-- General Share Button -->
+                                    <a href="#" class="share" title="Share" onclick="shareContent(event)">
+                                        <i class="fas fa-share-alt"></i>
+                                    </a>
                         
                         <script>
+                            var _fbShareUrl = <?php echo json_encode($rawPageUrl); ?>;
+                            var _fbShareTitle = <?php echo json_encode($rawBlogName); ?>;
+
+                            function shareFacebook(e) {
+                                e.preventDefault();
+                                var url = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(_fbShareUrl);
+                                var isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+                                if (isMobile) {
+                                    window.location.href = url;
+                                } else {
+                                    window.open(url, '_blank', 'width=600,height=400');
+                                }
+                            }
+
                             function shareContent(event) {
                                 event.preventDefault();
-                                
-                                const pageTitle = <?php echo json_encode($rawBlogName); ?>;
-                                const pageUrl = <?php echo json_encode($rawPageUrl); ?>;
-                        
+                                const pageTitle = _fbShareTitle;
+                                const pageUrl = _fbShareUrl;
                                 if (navigator.share) {
                                     navigator.share({
                                         title: pageTitle,
@@ -257,7 +263,7 @@ $encodedPageUrl = urlencode($rawPageUrl);
                                     .then(() => console.log('Shared successfully'))
                                     .catch((error) => console.log('Error sharing:', error));
                                 } else {
-                                    alert('Your browser does not support the native sharing feature.');
+                                    window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(pageUrl), '_blank');
                                 }
                             }
                         </script>
