@@ -509,7 +509,7 @@ $encodedPageUrl = urlencode($rawPageUrl);
         <section class="blog-details">
             <div class="container">
                 <div class="row">
-                    <div class="col-xl-8 col-lg-7 col-md-12">
+                    <div class="col-xl-8 col-lg-8 col-md-12">
                         <div class="blog-details__left">
                             <div class="blog-details__img">
                                 <img src="<?= SITE_URL; ?>upload/<?php echo trim($subproductss['photo']); ?>" alt=" <?php echo $subproductss['name']; ?>">
@@ -758,17 +758,10 @@ $encodedPageUrl = urlencode($rawPageUrl);
 
 
                         </div>
-                    </div>
-                    <div class="col-xl-4 col-lg-5">
+                    <div class="col-xl-4 col-lg-4 col-md-12">
                         <div class="sidebar">
-                            <!--<div class="sidebar__single sidebar__search">-->
-                            <!--    <form action="#" class="sidebar__search-form">-->
-                            <!--        <input type="search" placeholder="Search here">-->
-                            <!--        <button type="submit"><i class="fa fa-search"></i></button>-->
-                            <!--    </form>-->
-                            <!--</div>-->
                             <div class="sidebar__single sharing-sidebar">
-                                     <h3 class="sidebar__title">Social Media Share</h3>
+                                <h3 class="sidebar__title">Social Media Share</h3>
                                      <div class="social-share-buttons">
                                          <!-- Facebook Share -->
                                          <a href="#" onclick="shareFacebook(event)" class="facebook" title="Share on Facebook">
