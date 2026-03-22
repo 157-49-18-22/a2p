@@ -567,45 +567,25 @@ $encodedPageUrl = urlencode($rawPageUrl);
                             </a>
                         </div>
 
-                        <!-- Mobile Facebook Share Guide -->
-                        <div id="fb-guide-box" style="display:none; margin-top:15px; padding:14px 16px; background:#e7f0fd; border-left:4px solid #1877F2; border-radius:10px; font-size:13px; color:#222; line-height:1.6;">
-                            <strong style="color:#1877F2;"><i class="fab fa-facebook-f"></i> Facebook pe picture ke saath share karo:</strong><br>
-                            <span id="fb-copy-status" style="display:inline-block; margin:8px 0; background:#1877F2; color:#fff; padding:5px 14px; border-radius:20px; font-size:12px; font-weight:700;">✅ Link Copy Ho Gaya!</span><br>
-                            1. <strong>Facebook App</strong> kholo<br>
-                            2. "<strong>What's on your mind?</strong>" tap karo<br>
-                            3. Link <strong>paste</strong> karo (hold & paste)<br>
-                            4. <strong>2-3 second</strong> ruko — picture preview aayegi 🖼️<br>
-                            5. Text likho aur <strong>POST</strong> karo ✅
-                        </div>
-
                         <script>
                             var _fbShareUrl = <?php echo json_encode($rawPageUrl); ?>;
                             var _fbShareTitle = <?php echo json_encode($rawBlogName); ?>;
 
                             function shareFacebook(e) {
                                 e.preventDefault();
-                                var isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
                                 var sharerUrl = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(_fbShareUrl);
+                                var isAndroid = /Android/i.test(navigator.userAgent);
+                                var isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-                                if (isMobile) {
-                                    // Copy link to clipboard
-                                    if (navigator.clipboard && navigator.clipboard.writeText) {
-                                        navigator.clipboard.writeText(_fbShareUrl).then(function() {
-                                            document.getElementById('fb-guide-box').style.display = 'block';
-                                        }).catch(function() {
-                                            // Fallback: still show guide
-                                            document.getElementById('fb-guide-box').style.display = 'block';
-                                        });
-                                    } else {
-                                        // Legacy copy
-                                        var ta = document.createElement('textarea');
-                                        ta.value = _fbShareUrl;
-                                        document.body.appendChild(ta);
-                                        ta.select();
-                                        document.execCommand('copy');
-                                        document.body.removeChild(ta);
-                                        document.getElementById('fb-guide-box').style.display = 'block';
-                                    }
+                                if (isAndroid) {
+                                    // Force open in Facebook App on Android via Intent URL
+                                    var intentUrl = 'intent://www.facebook.com/sharer/sharer.php?u='
+                                        + encodeURIComponent(_fbShareUrl)
+                                        + '#Intent;scheme=https;package=com.facebook.katana;'
+                                        + 'S.browser_fallback_url=' + encodeURIComponent(sharerUrl) + ';end';
+                                    window.location.href = intentUrl;
+                                } else if (isIOS) {
+                                    window.location.href = sharerUrl;
                                 } else {
                                     window.open(sharerUrl, '_blank', 'width=600,height=400');
                                 }
