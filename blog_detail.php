@@ -44,11 +44,10 @@ if (count($sql_ser)) {
             <meta property="og:description" content="<?php echo htmlspecialchars($offer['meta_description']); ?>">
             <?php 
             $_og_photo = !empty($offer['photo']) ? trim($offer['photo']) : '080325100432logo.png';
-            $_og_img_resized = SITE_URL . 'og_image.php?photo=' . urlencode($_og_photo) . '&v=' . date('Ymd');
-            $_og_img = !empty($offer['photo']) ? SITE_URL . 'upload/' . str_replace(' ', '%20', $_og_photo) : SITE_URL . 'upload/080325100432logo.png';
+            $_og_img = SITE_URL . 'upload/' . str_replace(' ', '%20', $_og_photo);
             ?>
-            <meta property="og:image" content="<?php echo $_og_img_resized; ?>">
-            <meta property="og:image:secure_url" content="<?php echo $_og_img_resized; ?>">
+            <meta property="og:image" content="<?php echo $_og_img; ?>?v=<?php echo date('Ymd'); ?>">
+            <meta property="og:image:secure_url" content="<?php echo $_og_img; ?>?v=<?php echo date('Ymd'); ?>">
             <meta property="og:image:width" content="1200">
             <meta property="og:image:height" content="630">
             <meta property="og:url" content="<?php echo SITE_URL . ltrim($_SERVER['REQUEST_URI'], '/'); ?>">
