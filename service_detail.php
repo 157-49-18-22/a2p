@@ -471,22 +471,7 @@ if (count($sql_ser)) {
 
 
 
-.mob{
-    display: none !important;
-}
 
-
-@media (max-width: 580px) {
- .mob{
-    display: block !important;
-}
-
-.desk{
-    display: none !important;
-}
-
-
-}
 
 
         </style>
@@ -537,76 +522,7 @@ $encodedPageUrl = urlencode($rawPageUrl);
                             </div>
 
 
-                                 <div class="mob">
-                                    <h3>Social Media Share</h3> <br>
-                                     <div class="social-share-buttons">
-                             
-                            <!-- Facebook Share (Mobile: copy + guide) -->
-                             <a href="#" onclick="shareFacebook(event)" class="facebook" title="Share on Facebook">
-                                <i class="fab fa-facebook-f"></i>
-                            </a>
-                            
-                            <!-- Twitter Share -->
-                            <a href="https://twitter.com/intent/tweet?text=<?php echo $encodedBlogName; ?>&amp;url=<?php echo $encodedPageUrl; ?>" target="_blank" class="twitter" title="Share on Twitter">
-                                <i class="fab fa-x-twitter"></i>
-                            </a>
-                            
-                            <!-- LinkedIn Share -->
-                            <a href="https://www.linkedin.com/sharing/share-offsite/?url=<?php echo $encodedPageUrl; ?>" target="_blank" class="linkedin" title="Share on LinkedIn">
-                                <i class="fab fa-linkedin-in"></i>
-                            </a>
-                        
-                            <!-- WhatsApp Share -->
-                            <a href="https://api.whatsapp.com/send?phone=918130525001&text=Hello! I am interested in: <?php echo $encodedBlogName; ?> (<?php echo $encodedPageUrl; ?>)" target="_blank" class="whatsapp" title="Enquire on WhatsApp">
-                                <i class="fab fa-whatsapp"></i>
-                            </a>
-                            
-                            <!-- General Share Button -->
-                            <a href="#" class="share" title="Share" onclick="shareContent(event)">
-                                <i class="fas fa-share-alt"></i>
-                            </a>
-                        </div>
 
-                        <script>
-                            var _fbShareUrl = <?php echo json_encode($rawPageUrl); ?>;
-                            var _fbShareTitle = <?php echo json_encode($rawBlogName); ?>;
-
-                            function shareFacebook(e) {
-                                e.preventDefault();
-                                var sharerUrl = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(_fbShareUrl);
-                                var isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-
-                                if (isMobile && navigator.share) {
-                                    // Use native OS share sheet — sends ONLY URL to Facebook App
-                                    // Facebook App then auto-fetches OG image and creates link post
-                                    navigator.share({
-                                        title: _fbShareTitle,
-                                        url: _fbShareUrl
-                                    }).catch(function(err) {
-                                        if (err.name !== 'AbortError') {
-                                            window.location.href = sharerUrl;
-                                        }
-                                    });
-                                } else {
-                                    window.open(sharerUrl, '_blank', 'width=600,height=400');
-                                }
-                            }
-
-                            function shareContent(event) {
-                                event.preventDefault();
-                                if (navigator.share) {
-                                    navigator.share({
-                                        title: _fbShareTitle,
-                                        url: _fbShareUrl
-                                    }).catch(function(err) { console.log(err); });
-                                } else {
-                                    window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(_fbShareUrl), '_blank');
-                                }
-                            }
-                        </script>
-
-
-                        </div>
                          <br><br>
                            </div>
                         
@@ -851,37 +767,69 @@ $encodedPageUrl = urlencode($rawPageUrl);
                             <!--        <button type="submit"><i class="fa fa-search"></i></button>-->
                             <!--    </form>-->
                             <!--</div>-->
-                            <div class="desk">
-                                    <h3>Social Media Share</h3> <br>
+                            <div class="sidebar__single sharing-sidebar">
+                                     <h3 class="sidebar__title">Social Media Share</h3>
                                      <div class="social-share-buttons">
-                             
-                           
-                            <!-- Facebook Share -->
-                            <a href="https://www.facebook.com/sharer/sharer.php?u=<?php echo $encodedPageUrl; ?>&amp;t=<?php echo $encodedBlogName; ?>" target="_blank" class="facebook" title="Share on Facebook">
-                                <i class="fab fa-facebook-f"></i>
-                            </a>
-                            
-                            <!-- Twitter Share -->
-                            <a href="https://twitter.com/intent/tweet?text=<?php echo $encodedBlogName; ?>&amp;url=<?php echo $encodedPageUrl; ?>" target="_blank" class="twitter" title="Share on Twitter">
-                                <i class="fab fa-x-twitter"></i>
-                            </a>
-                            
-                            <!-- LinkedIn Share -->
-                            <a href="https://www.linkedin.com/sharing/share-offsite/?url=<?php echo $encodedPageUrl; ?>" target="_blank" class="linkedin" title="Share on LinkedIn">
-                                <i class="fab fa-linkedin-in"></i>
-                            </a>
-                        
-                            <!-- WhatsApp Share -->
-                            <a href="https://api.whatsapp.com/send?phone=918130525001&text=Hello! I am interested in: <?php echo $encodedBlogName; ?> (<?php echo $encodedPageUrl; ?>)" target="_blank" class="whatsapp" title="Enquire on WhatsApp">
-                                <i class="fab fa-whatsapp"></i>
-                            </a>
+                                         <!-- Facebook Share -->
+                                         <a href="#" onclick="shareFacebook(event)" class="facebook" title="Share on Facebook">
+                                            <i class="fab fa-facebook-f"></i>
+                                         </a>
+                                         
+                                         <!-- Twitter Share -->
+                                         <a href="https://twitter.com/intent/tweet?text=<?php echo $encodedBlogName; ?>&amp;url=<?php echo $encodedPageUrl; ?>" target="_blank" class="twitter" title="Share on Twitter">
+                                             <i class="fab fa-x-twitter"></i>
+                                         </a>
+                                         
+                                         <!-- LinkedIn Share -->
+                                         <a href="https://www.linkedin.com/sharing/share-offsite/?url=<?php echo $encodedPageUrl; ?>" target="_blank" class="linkedin" title="Share on LinkedIn">
+                                             <i class="fab fa-linkedin-in"></i>
+                                         </a>
+                                     
+                                         <!-- WhatsApp Share -->
+                                         <a href="https://api.whatsapp.com/send?phone=918130525001&text=Hello! I am interested in: <?php echo $encodedBlogName; ?> (<?php echo $encodedPageUrl; ?>)" target="_blank" class="whatsapp" title="Enquire on WhatsApp">
+                                             <i class="fab fa-whatsapp"></i>
+                                         </a>
+            
+                                         <!-- General Share Button -->
+                                         <a href="#" class="share" title="Share" onclick="shareContent(event)">
+                                             <i class="fas fa-share-alt"></i>
+                                         </a>
+                                     </div>
 
-                            <!-- General Share Button -->
-                            <a href="#" class="share" title="Share" onclick="shareContent(event)">
-                                <i class="fas fa-share-alt"></i>
-                            </a>
-                        </div>
-                         <br><br>
+                                     <script>
+                                        function shareFacebook(e) {
+                                            e.preventDefault();
+                                            var shareUrl = <?php echo json_encode($rawPageUrl); ?>;
+                                            var shareTitle = <?php echo json_encode($rawBlogName); ?>;
+                                            var sharerUrl = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(shareUrl);
+                                            var isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+                                            if (isMobile && navigator.share) {
+                                                navigator.share({
+                                                    title: shareTitle,
+                                                    url: shareUrl
+                                                }).catch(function(err) {
+                                                    if (err.name !== 'AbortError') { window.location.href = sharerUrl; }
+                                                });
+                                            } else {
+                                                window.open(sharerUrl, '_blank', 'width=600,height=400');
+                                            }
+                                        }
+
+                                        function shareContent(event) {
+                                            event.preventDefault();
+                                            var shareUrl = <?php echo json_encode($rawPageUrl); ?>;
+                                            var shareTitle = <?php echo json_encode($rawBlogName); ?>;
+                                            if (navigator.share) {
+                                                navigator.share({
+                                                    title: shareTitle,
+                                                    url: shareUrl
+                                                }).catch(function(err) { console.log(err); });
+                                            } else {
+                                                window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(shareUrl), '_blank');
+                                            }
+                                        }
+                                     </script>
                            </div>
                         
 
