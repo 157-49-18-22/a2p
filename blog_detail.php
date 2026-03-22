@@ -51,13 +51,13 @@ if (count($sql_ser)) {
             <meta property="og:image:width" content="1200">
             <meta property="og:image:height" content="630">
             <meta property="og:url" content="<?php echo SITE_URL . ltrim($_SERVER['REQUEST_URI'], '/'); ?>">
-            <meta property="og:type" content="article">
+            <meta property="og:type" content="website">
             <meta property="og:site_name" content="A2P Realtech">
             <!-- Twitter/X Card -->
             <meta name="twitter:card" content="summary_large_image">
             <meta name="twitter:title" content="<?php echo htmlspecialchars($offer['meta_title']); ?>">
             <meta name="twitter:description" content="<?php echo htmlspecialchars($offer['meta_description']); ?>">
-            <meta name="twitter:image" content="<?php echo $_og_img_resized; ?>">
+            <meta name="twitter:image" content="<?php echo $_og_img; ?>?v=<?php echo date('Ymd'); ?>">
             
             <link rel="preconnect" href="https://fonts.googleapis.com/">
             <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
