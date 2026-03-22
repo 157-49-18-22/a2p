@@ -567,25 +567,52 @@ $encodedPageUrl = urlencode($rawPageUrl);
                             </a>
                         </div>
 
+                        <!-- Small toast for mobile -->
+                        <div id="fb-toast" style="display:none;position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#1877F2;color:#fff;padding:10px 22px;border-radius:30px;font-size:13px;font-weight:600;z-index:99999;box-shadow:0 4px 15px rgba(24,119,242,0.4);white-space:nowrap;">
+                            <i class="fab fa-facebook-f"></i> &nbsp;Link Copy Hua! Facebook App mein Paste karo 📋
+                        </div>
+
                         <script>
                             var _fbShareUrl = <?php echo json_encode($rawPageUrl); ?>;
                             var _fbShareTitle = <?php echo json_encode($rawBlogName); ?>;
 
+                            function showFbToast() {
+                                var t = document.getElementById('fb-toast');
+                                t.style.display = 'block';
+                                setTimeout(function(){ t.style.display = 'none'; }, 4000);
+                            }
+
+                            function copyToClipboard(text) {
+                                if (navigator.clipboard && navigator.clipboard.writeText) {
+                                    return navigator.clipboard.writeText(text);
+                                } else {
+                                    var ta = document.createElement('textarea');
+                                    ta.value = text; ta.style.position='fixed'; ta.style.opacity='0';
+                                    document.body.appendChild(ta); ta.focus(); ta.select();
+                                    document.execCommand('copy');
+                                    document.body.removeChild(ta);
+                                    return Promise.resolve();
+                                }
+                            }
+
                             function shareFacebook(e) {
                                 e.preventDefault();
                                 var sharerUrl = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(_fbShareUrl);
-                                var isAndroid = /Android/i.test(navigator.userAgent);
-                                var isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+                                var isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-                                if (isAndroid) {
-                                    // Force open in Facebook App on Android via Intent URL
-                                    var intentUrl = 'intent://www.facebook.com/sharer/sharer.php?u='
-                                        + encodeURIComponent(_fbShareUrl)
-                                        + '#Intent;scheme=https;package=com.facebook.katana;'
-                                        + 'S.browser_fallback_url=' + encodeURIComponent(sharerUrl) + ';end';
-                                    window.location.href = intentUrl;
-                                } else if (isIOS) {
-                                    window.location.href = sharerUrl;
+                                if (isMobile) {
+                                    // Step 1: Copy URL silently
+                                    copyToClipboard(_fbShareUrl).then(function() {
+                                        // Step 2: Show brief toast
+                                        showFbToast();
+                                        // Step 3: Redirect to sharer (link also in clipboard as backup)
+                                        setTimeout(function() {
+                                            window.location.href = sharerUrl;
+                                        }, 600);
+                                    }).catch(function() {
+                                        showFbToast();
+                                        setTimeout(function() { window.location.href = sharerUrl; }, 600);
+                                    });
                                 } else {
                                     window.open(sharerUrl, '_blank', 'width=600,height=400');
                                 }
