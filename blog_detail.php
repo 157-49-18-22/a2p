@@ -180,8 +180,7 @@ if (count($sql_ser)) {
 $rawBlogName = $offer['name'];
 $encodedBlogName = urlencode($rawBlogName);
 // Build absolute raw URL for navigator.share and encoded version for <a> tags
-$_protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http");
-$rawPageUrl = $_protocol . "://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+$rawPageUrl = SITE_URL . ltrim($_SERVER['REQUEST_URI'], '/');
 $encodedPageUrl = urlencode($rawPageUrl);
 ?>
 
@@ -252,7 +251,7 @@ $encodedPageUrl = urlencode($rawPageUrl);
                                 if (navigator.share) {
                                     navigator.share({
                                         title: pageTitle,
-                                        text: pageTitle,
+                                        text: pageTitle + " \n\n" + pageUrl,
                                         url: pageUrl
                                     })
                                     .then(() => console.log('Shared successfully'))
