@@ -112,7 +112,12 @@ include 'include/header.php';
 // Function to highlight search terms
 function highlightTerms($text, $term) {
     if (!$term || $text === null) return (string)$text;
-    return preg_replace('/(' . preg_quote((string)$term, '/') . ')/i', '<strong>$1</strong>', (string)$text);
+    
+    // Create a regex pattern that matches the term with optional spaces/hyphens
+    $words = preg_split('/\s+/', trim($term), -1, PREG_SPLIT_NO_EMPTY);
+    $pattern = implode('[[:space:]-]*', array_map('preg_quote', $words));
+    
+    return preg_replace('/(' . $pattern . ')/i', '<strong>$1</strong>', (string)$text);
 }
 ?>
 
@@ -254,18 +259,40 @@ function highlightTerms($text, $term) {
             $category_id = isset($_GET['category_id']) ? trim($_GET['category_id']) : '';
             $subcategory_id = isset($_GET['subcategory_id']) ? trim($_GET['subcategory_id']) : '';
 
-            $searchSafe = "%$search%";
+            // 1. IMPROVED SEARCH LOGIC
+            // To exclude 'whitelanland' when searching for 'elan', we use word boundaries [[:<:]] and [[:>:]]
+            // To handle 'smart world' vs 'smartworld', we create a regex that matches optional spaces/hyphens
+            
+            $words = preg_split('/\s+/', $search, -1, PREG_SPLIT_NO_EMPTY);
+            $cleanTerm = implode('[[:space:]-]*', array_map('preg_quote', $words));
+            
+            // Regex for exact word/phrase match with flexible spaces
+            $searchRegex = '[[:<:]]' . $cleanTerm . '[[:>:]]';
+            
+            // Also handle cases where spaces are completely removed in DB (like 'smartworld')
+            $compactSearch = str_replace([' ', '-'], '', $search);
+            $compactRegex = '[[:<:]]' . preg_quote($compactSearch) . '[[:>:]]';
+
             $locSafe = "%$location%";
 
             $query = "SELECT DISTINCT * FROM subproduct 
-                      WHERE (name LIKE ? 
-                      OR meta_title LIKE ? 
-                      OR meta_keyword LIKE ? 
-                      OR pro_lable LIKE ?
-                      OR city LIKE ?
-                      OR developer LIKE ?)";
+                      WHERE (
+                         (name REGEXP ? OR REPLACE(name, ' ', '') REGEXP ?) 
+                         OR (meta_title REGEXP ? OR REPLACE(meta_title, ' ', '') REGEXP ?) 
+                         OR (meta_keyword REGEXP ? OR REPLACE(meta_keyword, ' ', '') REGEXP ?) 
+                         OR (pro_lable REGEXP ? OR REPLACE(pro_lable, ' ', '') REGEXP ?)
+                         OR (city REGEXP ? OR REPLACE(city, ' ', '') REGEXP ?)
+                         OR (developer REGEXP ? OR REPLACE(developer, ' ', '') REGEXP ?)
+                      )";
             
-            $params = [$searchSafe, $searchSafe, $searchSafe, $searchSafe, $searchSafe, $searchSafe];
+            $params = [
+                $searchRegex, $compactRegex,
+                $searchRegex, $compactRegex,
+                $searchRegex, $compactRegex,
+                $searchRegex, $compactRegex,
+                $searchRegex, $compactRegex,
+                $searchRegex, $compactRegex
+            ];
             
             if(!empty($location)) {
                 $query .= " AND (pro_lable LIKE ? OR city LIKE ?)";
@@ -289,10 +316,10 @@ function highlightTerms($text, $term) {
             $stmt->execute($params);
             $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            // If no products found, try searching in subcategory names
+            // If no products found, try searching in subcategory names with same improved logic
             if (empty($products)) {
-                $stmt2 = $pdo->prepare("SELECT id FROM subcategory WHERE name LIKE ? AND actstat = 1");
-                $stmt2->execute([$searchSafe]);
+                $stmt2 = $pdo->prepare("SELECT id FROM subcategory WHERE (name REGEXP ? OR REPLACE(name, ' ', '') REGEXP ?) AND actstat = 1");
+                $stmt2->execute([$searchRegex, $compactRegex]);
                 $subcat = $stmt2->fetch(PDO::FETCH_ASSOC);
 
                 if ($subcat) {
@@ -306,16 +333,16 @@ function highlightTerms($text, $term) {
             // --- Fetch Offers (Blogs) ---
             $offers = [];
             if (!$isFilteredSearch) {
-                $stmt4 = $pdo->prepare("SELECT * FROM offer WHERE name LIKE ? OR des1 LIKE ?");
-                $stmt4->execute([$searchSafe, $searchSafe]);
+                $stmt4 = $pdo->prepare("SELECT * FROM offer WHERE (name REGEXP ? OR REPLACE(name, ' ', '') REGEXP ?) OR (des1 REGEXP ? OR REPLACE(des1, ' ', '') REGEXP ?)");
+                $stmt4->execute([$searchRegex, $compactRegex, $searchRegex, $compactRegex]);
                 $offers = $stmt4->fetchAll(PDO::FETCH_ASSOC);
             }
 
             // --- Fetch Media Gallery (fixed_delivery_time) ---
             $mediaItems = [];
             if (!$isFilteredSearch) {
-                $stmt5 = $pdo->prepare("SELECT * FROM fixed_delivery_time WHERE name LIKE ? OR meta_title LIKE ?");
-                $stmt5->execute([$searchSafe, $searchSafe]);
+                $stmt5 = $pdo->prepare("SELECT * FROM fixed_delivery_time WHERE (name REGEXP ? OR REPLACE(name, ' ', '') REGEXP ?) OR (meta_title REGEXP ? OR REPLACE(meta_title, ' ', '') REGEXP ?)");
+                $stmt5->execute([$searchRegex, $compactRegex, $searchRegex, $compactRegex]);
                 $mediaItems = $stmt5->fetchAll(PDO::FETCH_ASSOC);
             }
 
