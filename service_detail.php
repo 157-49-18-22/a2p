@@ -56,7 +56,7 @@ if (count($sql_ser)) {
             <meta name="twitter:card" content="summary_large_image">
             <meta name="twitter:title" content="<?php echo htmlspecialchars($subproductss['meta_title']); ?>">
             <meta name="twitter:description" content="<?php echo htmlspecialchars($subproductss['meta_description']); ?>">
-            <meta name="twitter:image" content="<?php echo $_og_img; ?>?v=<?php echo date('Ymd'); ?>">
+            <meta name="twitter:image" content="<?php echo $_og_img_resized; ?>">
 
             
             
