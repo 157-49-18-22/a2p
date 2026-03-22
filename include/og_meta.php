@@ -11,7 +11,7 @@ if (strpos($_canonical_url, 'index.php') !== false) {
 
 // Global Logo for Previews (A2P Logo) - Only set if not already defined for a specific page
 if (!isset($_global_logo)) {
-    $_global_logo = SITE_URL . "upload/290126125406LOGO.png";
+    $_global_logo = SITE_URL . "upload/080325100432logo.png";
 }
 // Encoding and double-slash fix
 $_global_logo = str_replace(['///', '//'], '/', $_global_logo);

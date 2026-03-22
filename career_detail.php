@@ -37,10 +37,10 @@ if (count($sql_ser)) {
             <meta property="og:title" content="<?php echo htmlspecialchars($blog['name']); ?>">
             <meta property="og:description" content="<?php echo htmlspecialchars(strip_tags($blog['des'])); ?>">
             <?php 
-            $_og_img = !empty($blog['photo']) ? SITE_URL . "upload/" . trim($blog['photo']) : SITE_URL . "upload/290126125406LOGO.png";
+            $_og_img = !empty($blog['photo']) ? SITE_URL . "upload/" . str_replace(' ', '%20', trim($blog['photo'])) : SITE_URL . "upload/080325100432logo.png";
             ?>
-            <meta property="og:image" content="<?php echo $_og_img; ?>?v=1.2">
-            <meta property="og:image:secure_url" content="<?php echo $_og_img; ?>?v=1.2">
+            <meta property="og:image" content="<?php echo $_og_img; ?>?v=1.3">
+            <meta property="og:image:secure_url" content="<?php echo $_og_img; ?>?v=1.3">
             <meta property="og:image:type" content="image/jpeg">
             <meta property="og:image:width" content="1200">
             <meta property="og:image:height" content="630">
@@ -201,8 +201,7 @@ if (count($sql_ser)) {
                                 <?php
                                 $rawBlogName = $blog['name'];
                                 $encodedBlogName = urlencode($rawBlogName);
-                                $_protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http");
-                                $rawPageUrl = $_protocol . "://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+                                $rawPageUrl = SITE_URL . ltrim($_SERVER['REQUEST_URI'], '/');
                                 $encodedPageUrl = urlencode($rawPageUrl);
                                 ?>
 
@@ -234,7 +233,11 @@ if (count($sql_ser)) {
                                         const pageTitle = <?php echo json_encode($rawBlogName); ?>;
                                         const pageUrl = <?php echo json_encode($rawPageUrl); ?>;
                                         if (navigator.share) {
-                                            navigator.share({ title: pageTitle, text: pageTitle, url: pageUrl })
+                                            navigator.share({ 
+                                                title: pageTitle, 
+                                                text: pageTitle + " \n\n" + pageUrl, 
+                                                url: pageUrl 
+                                            })
                                             .then(() => console.log('Shared successfully'))
                                             .catch((error) => console.log('Error sharing:', error));
                                         } else {
