@@ -541,8 +541,7 @@ $encodedPageUrl = urlencode($rawPageUrl);
                                     <h3>Social Media Share</h3> <br>
                                      <div class="social-share-buttons">
                              
-                           
-                            <!-- Facebook Share -->
+                            <!-- Facebook Share (Mobile: copy + guide) -->
                              <a href="#" onclick="shareFacebook(event)" class="facebook" title="Share on Facebook">
                                 <i class="fab fa-facebook-f"></i>
                             </a>
@@ -557,7 +556,7 @@ $encodedPageUrl = urlencode($rawPageUrl);
                                 <i class="fab fa-linkedin-in"></i>
                             </a>
                         
-                            <!-- WhatsApp Enquiry -->
+                            <!-- WhatsApp Share -->
                             <a href="https://api.whatsapp.com/send?phone=918130525001&text=Hello! I am interested in: <?php echo $encodedBlogName; ?> (<?php echo $encodedPageUrl; ?>)" target="_blank" class="whatsapp" title="Enquire on WhatsApp">
                                 <i class="fab fa-whatsapp"></i>
                             </a>
@@ -566,20 +565,49 @@ $encodedPageUrl = urlencode($rawPageUrl);
                             <a href="#" class="share" title="Share" onclick="shareContent(event)">
                                 <i class="fas fa-share-alt"></i>
                             </a>
-                        
+                        </div>
+
+                        <!-- Mobile Facebook Share Guide -->
+                        <div id="fb-guide-box" style="display:none; margin-top:15px; padding:14px 16px; background:#e7f0fd; border-left:4px solid #1877F2; border-radius:10px; font-size:13px; color:#222; line-height:1.6;">
+                            <strong style="color:#1877F2;"><i class="fab fa-facebook-f"></i> Facebook pe picture ke saath share karo:</strong><br>
+                            <span id="fb-copy-status" style="display:inline-block; margin:8px 0; background:#1877F2; color:#fff; padding:5px 14px; border-radius:20px; font-size:12px; font-weight:700;">✅ Link Copy Ho Gaya!</span><br>
+                            1. <strong>Facebook App</strong> kholo<br>
+                            2. "<strong>What's on your mind?</strong>" tap karo<br>
+                            3. Link <strong>paste</strong> karo (hold & paste)<br>
+                            4. <strong>2-3 second</strong> ruko — picture preview aayegi 🖼️<br>
+                            5. Text likho aur <strong>POST</strong> karo ✅
+                        </div>
+
                         <script>
                             var _fbShareUrl = <?php echo json_encode($rawPageUrl); ?>;
                             var _fbShareTitle = <?php echo json_encode($rawBlogName); ?>;
 
                             function shareFacebook(e) {
                                 e.preventDefault();
-                                var url = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(_fbShareUrl);
-                                // On mobile, open in same window so FB app can intercept
                                 var isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+                                var sharerUrl = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(_fbShareUrl);
+
                                 if (isMobile) {
-                                    window.location.href = url;
+                                    // Copy link to clipboard
+                                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                                        navigator.clipboard.writeText(_fbShareUrl).then(function() {
+                                            document.getElementById('fb-guide-box').style.display = 'block';
+                                        }).catch(function() {
+                                            // Fallback: still show guide
+                                            document.getElementById('fb-guide-box').style.display = 'block';
+                                        });
+                                    } else {
+                                        // Legacy copy
+                                        var ta = document.createElement('textarea');
+                                        ta.value = _fbShareUrl;
+                                        document.body.appendChild(ta);
+                                        ta.select();
+                                        document.execCommand('copy');
+                                        document.body.removeChild(ta);
+                                        document.getElementById('fb-guide-box').style.display = 'block';
+                                    }
                                 } else {
-                                    window.open(url, '_blank', 'width=600,height=400');
+                                    window.open(sharerUrl, '_blank', 'width=600,height=400');
                                 }
                             }
 
@@ -588,13 +616,9 @@ $encodedPageUrl = urlencode($rawPageUrl);
                                 const pageTitle = _fbShareTitle;
                                 const pageUrl = _fbShareUrl;
                                 if (navigator.share) {
-                                    navigator.share({
-                                        title: pageTitle,
-                                        text: pageTitle + " \n\n" + pageUrl,
-                                        url: pageUrl
-                                    })
-                                    .then(() => console.log('Shared successfully'))
-                                    .catch((error) => console.log('Error sharing:', error));
+                                    navigator.share({ title: pageTitle, text: pageTitle + ' \n\n' + pageUrl, url: pageUrl })
+                                    .then(() => console.log('Shared'))
+                                    .catch((err) => console.log(err));
                                 } else {
                                     window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(pageUrl), '_blank');
                                 }
