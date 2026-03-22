@@ -154,49 +154,7 @@ if (count($sql_ser)) {
                             </div> -->
                             <div class="blog-details__content">
                                 
-                                <style>
-                                    .social-share-buttons {
-                                        display: flex;
-                                        gap: 15px;
-                                        justify-content: center;
-                                    }
-                                    .social-share-buttons a {
-                                        display: inline-block;
-                                        width: 45px;
-                                        height: 45px;
-                                        background-color: #f1f1f1;
-                                        border-radius: 50%;
-                                        text-align: center;
-                                        line-height: 45px;
-                                        transition: all 0.4s ease;
-                                        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-                                        cursor: pointer;
-                                        position: relative;
-                                        overflow: hidden;
-                                    }
-                                    .social-share-buttons a i {
-                                        font-size: 18px;
-                                        color: #fff;
-                                        transition: all 0.3s ease;
-                                    }
-                                    .social-share-buttons a.facebook { background: #1877F2; }
-                                    .social-share-buttons a.twitter { background: #000000; }
-                                    .social-share-buttons a.linkedin { background: #0077B5; }
-                                    .social-share-buttons a.whatsapp { background: #25D366; }
-                                    .social-share-buttons a.share { background: #6c757d; }
-                                    .social-share-buttons a:hover {
-                                        transform: translateY(-5px);
-                                        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-                                    }
-                                    .social-share-buttons a:hover i {
-                                        transform: scale(1.1);
-                                    }
-                                    .mob_share { display: none !important; }
-                                    @media (max-width: 580px) {
-                                        .mob_share { display: block !important; }
-                                        .desk_share { display: none !important; }
-                                    }
-                                </style>
+
 
                                 <?php
                                 $rawBlogName = $blog['name'];
@@ -205,46 +163,7 @@ if (count($sql_ser)) {
                                 $encodedPageUrl = urlencode($rawPageUrl);
                                 ?>
 
-                                <div class="mob_share mt-4">
-                                     <h3>Social Media Share</h3> <br>
-                                     <div class="social-share-buttons">
-                                        <a href="https://www.facebook.com/sharer/sharer.php?u=<?php echo $encodedPageUrl; ?>&amp;t=<?php echo $encodedBlogName; ?>" target="_blank" class="facebook" title="Share on Facebook">
-                                            <i class="fab fa-facebook-f"></i>
-                                        </a>
-                                        <a href="https://twitter.com/intent/tweet?text=<?php echo $encodedBlogName; ?>&amp;url=<?php echo $encodedPageUrl; ?>" target="_blank" class="twitter" title="Share on Twitter">
-                                            <i class="fab fa-x-twitter"></i>
-                                        </a>
-                                        <a href="https://www.linkedin.com/sharing/share-offsite/?url=<?php echo $encodedPageUrl; ?>" target="_blank" class="linkedin" title="Share on LinkedIn">
-                                            <i class="fab fa-linkedin-in"></i>
-                                        </a>
-                                        <a href="https://api.whatsapp.com/send?phone=918130525001&text=Hello! I am interested in: <?php echo $encodedBlogName; ?> (<?php echo $encodedPageUrl; ?>)" target="_blank" class="whatsapp" title="Enquire on WhatsApp">
-                                            <i class="fab fa-whatsapp"></i>
-                                        </a>
-                                        <a href="#" class="share" title="Share" onclick="shareContent(event)">
-                                            <i class="fas fa-share-alt"></i>
-                                        </a>
-                                    </div>
-                                    <br><br>
-                                </div>
-
-                                <script>
-                                    function shareContent(event) {
-                                        event.preventDefault();
-                                        const pageTitle = <?php echo json_encode($rawBlogName); ?>;
-                                        const pageUrl = <?php echo json_encode($rawPageUrl); ?>;
-                                        if (navigator.share) {
-                                            navigator.share({ 
-                                                title: pageTitle, 
-                                                text: pageTitle + " \n\n" + pageUrl, 
-                                                url: pageUrl 
-                                            })
-                                            .then(() => console.log('Shared successfully'))
-                                            .catch((error) => console.log('Error sharing:', error));
-                                        } else {
-                                            alert('Your browser does not support the native sharing feature.');
-                                        }
-                                    }
-                                </script>
+         
 
                                 <h3 class="blog-details__title"><?php echo $blog['name']; ?></h3>
                                 <p class="blog-details__text-2"><?php echo $blog['des']; ?></p>
@@ -497,10 +416,10 @@ if (count($sql_ser)) {
                                 </form>
                             </div>
 
-                            <div class="desk_share">
-                                <h3>Social Media Share</h3> <br>
+                            <div class="sidebar__single sharing-sidebar">
+                                <h3 class="sidebar__title">Social Media Share</h3>
                                 <div class="social-share-buttons">
-                                    <a href="https://www.facebook.com/sharer/sharer.php?u=<?php echo $encodedPageUrl; ?>&amp;t=<?php echo $encodedBlogName; ?>" target="_blank" class="facebook" title="Share on Facebook">
+                                    <a href="#" onclick="shareFacebook(event)" class="facebook" title="Share on Facebook">
                                         <i class="fab fa-facebook-f"></i>
                                     </a>
                                     <a href="https://twitter.com/intent/tweet?text=<?php echo $encodedBlogName; ?>&amp;url=<?php echo $encodedPageUrl; ?>" target="_blank" class="twitter" title="Share on Twitter">
@@ -516,7 +435,40 @@ if (count($sql_ser)) {
                                         <i class="fas fa-share-alt"></i>
                                     </a>
                                 </div>
-                                <br><br>
+                                <script>
+                                    function shareFacebook(e) {
+                                        e.preventDefault();
+                                        var shareUrl = <?php echo json_encode($rawPageUrl); ?>;
+                                        var shareTitle = <?php echo json_encode($rawBlogName); ?>;
+                                        var sharerUrl = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(shareUrl);
+                                        var isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+                                        if (isMobile && navigator.share) {
+                                            navigator.share({
+                                                title: shareTitle,
+                                                url: shareUrl
+                                            }).catch(function(err) {
+                                                if (err.name !== 'AbortError') { window.location.href = sharerUrl; }
+                                            });
+                                        } else {
+                                            window.open(sharerUrl, '_blank', 'width=600,height=400');
+                                        }
+                                    }
+
+                                    function shareContent(event) {
+                                        event.preventDefault();
+                                        var shareUrl = <?php echo json_encode($rawPageUrl); ?>;
+                                        var shareTitle = <?php echo json_encode($rawBlogName); ?>;
+                                        if (navigator.share) {
+                                            navigator.share({
+                                                title: shareTitle,
+                                                url: shareUrl
+                                            }).catch(function(err) { console.log(err); });
+                                        } else {
+                                            window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(shareUrl), '_blank');
+                                        }
+                                    }
+                                </script>
                             </div>
 
                             
