@@ -193,6 +193,26 @@ $encodedPageUrl = urlencode($rawPageUrl);
                           
                           
                                 <h3 class="blog-details__title"><?php echo $fixed_delivery_time['name']; ?></h3>
+                                <div class="mob_share d-block d-lg-none mt-4 mb-4">
+                                    <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 10px; color: #333;">Social Media Share</h3>
+                                    <div class="social-share-buttons">
+                                        <a href="#" onclick="shareFacebook(event)" class="facebook" title="Share on Facebook">
+                                            <i class="fab fa-facebook-f"></i>
+                                        </a>
+                                        <a href="https://twitter.com/intent/tweet?text=<?php echo $encodedBlogName; ?>&amp;url=<?php echo $encodedPageUrl; ?>" target="_blank" class="twitter" title="Share on Twitter">
+                                            <i class="fab fa-x-twitter"></i>
+                                        </a>
+                                        <a href="https://www.linkedin.com/sharing/share-offsite/?url=<?php echo $encodedPageUrl; ?>" target="_blank" class="linkedin" title="Share on LinkedIn">
+                                            <i class="fab fa-linkedin-in"></i>
+                                        </a>
+                                        <a href="https://api.whatsapp.com/send?phone=918130525001&text=Hello! I am interested in: <?php echo $encodedBlogName; ?> (<?php echo $encodedPageUrl; ?>)" target="_blank" class="whatsapp" title="Enquire on WhatsApp">
+                                            <i class="fab fa-whatsapp"></i>
+                                        </a>
+                                        <a href="#" class="share" title="Share" onclick="shareContent(event)">
+                                            <i class="fas fa-share-alt"></i>
+                                        </a>
+                                    </div>
+                                </div>
                                 
                                 
 
@@ -213,7 +233,7 @@ $encodedPageUrl = urlencode($rawPageUrl);
                             <!-- Social Media Share Buttons -->
                             
                             
-                            <div class="sidebar__single sharing-sidebar">
+                            <div class="sidebar__single sharing-sidebar d-none d-lg-block">
                                 <h3 class="sidebar__title">Social Media Share</h3>
                                 <div class="social-share-buttons">
                                     <a href="#" onclick="shareFacebook(event)" class="facebook" title="Share on Facebook">

@@ -115,6 +115,50 @@ if (count($sql_ser)) {
                 overflow-y: auto;
                 /* Allow scrolling if content overflows */
             }
+
+            .social-share-buttons {
+                display: flex;
+                gap: 15px;
+                justify-content: center;
+            }
+
+            .social-share-buttons a {
+                display: inline-block;
+                width: 45px;
+                height: 45px;
+                background-color: #f1f1f1;
+                border-radius: 50%;
+                text-align: center;
+                line-height: 45px;
+                transition: all 0.4s ease;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+                cursor: pointer;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .social-share-buttons a i {
+                font-size: 18px;
+                color: #fff;
+                transition: all 0.3s ease;
+            }
+
+            /* Branded Backgrounds */
+            .social-share-buttons a.facebook { background: #1877F2; }
+            .social-share-buttons a.twitter { background: #000000; }
+            .social-share-buttons a.linkedin { background: #0077B5; }
+            .social-share-buttons a.whatsapp { background: #25D366; }
+            .social-share-buttons a.share { background: #6c757d; }
+
+            /* Hover effects */
+            .social-share-buttons a:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            }
+
+            .social-share-buttons a:hover i {
+                transform: scale(1.1);
+            }
         </style>
 
         <?php include 'include/header.php' ?>
@@ -166,6 +210,26 @@ if (count($sql_ser)) {
          
 
                                 <h3 class="blog-details__title"><?php echo $blog['name']; ?></h3>
+                                <div class="mob_share d-block d-lg-none mt-4 mb-4">
+                                    <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 10px; color: #333;">Social Media Share</h3>
+                                    <div class="social-share-buttons">
+                                        <a href="#" onclick="shareFacebook(event)" class="facebook" title="Share on Facebook">
+                                            <i class="fab fa-facebook-f"></i>
+                                        </a>
+                                        <a href="https://twitter.com/intent/tweet?text=<?php echo $encodedBlogName; ?>&amp;url=<?php echo $encodedPageUrl; ?>" target="_blank" class="twitter" title="Share on Twitter">
+                                            <i class="fab fa-x-twitter"></i>
+                                        </a>
+                                        <a href="https://www.linkedin.com/sharing/share-offsite/?url=<?php echo $encodedPageUrl; ?>" target="_blank" class="linkedin" title="Share on LinkedIn">
+                                            <i class="fab fa-linkedin-in"></i>
+                                        </a>
+                                        <a href="https://api.whatsapp.com/send?phone=918130525001&text=Hello! I am interested in: <?php echo $encodedBlogName; ?> (<?php echo $encodedPageUrl; ?>)" target="_blank" class="whatsapp" title="Enquire on WhatsApp">
+                                            <i class="fab fa-whatsapp"></i>
+                                        </a>
+                                        <a href="#" class="share" title="Share" onclick="shareContent(event)">
+                                            <i class="fas fa-share-alt"></i>
+                                        </a>
+                                    </div>
+                                </div>
                                 <p class="blog-details__text-2"><?php echo $blog['des']; ?></p>
                             </div>
 
@@ -416,7 +480,7 @@ if (count($sql_ser)) {
                                 </form>
                             </div>
 
-                            <div class="sidebar__single sharing-sidebar">
+                            <div class="sidebar__single sharing-sidebar d-none d-lg-block">
                                 <h3 class="sidebar__title">Social Media Share</h3>
                                 <div class="social-share-buttons">
                                     <a href="#" onclick="shareFacebook(event)" class="facebook" title="Share on Facebook">
