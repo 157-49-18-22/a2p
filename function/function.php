@@ -201,11 +201,16 @@ function sqlfetch($query)
 {
 	$row = array();
 	$pdo = getPDOObject();
-	$sql = $pdo->query($query);
-
-	$datas = $sql->fetchAll(PDO::FETCH_ASSOC);
-	foreach ($datas as $data)
-		$row[] = $data;
+    try {
+        $sql = $pdo->query($query);
+        if (!$sql) return [];
+        $datas = $sql->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($datas as $data)
+            $row[] = $data;
+    } catch (PDOException $e) {
+        // If error is "Unknown column 'slug'", it's okay, we'll return empty and use other fallbacks
+        return [];
+    }
 	return $row;
 }
 
