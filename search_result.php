@@ -442,14 +442,12 @@ if (isset($_GET['query'])) {
                             <div class="blog-one__single">
                                 <div class="blog-one__img">
                                     <?php
-            $blog_placeholders = ["060225101913Dwarka_Expressway_Projects_A2P_Realtech_Gurgaon.webp", "060225101609Luxury_Homes_on_Dwarka_Expressway_A2P_Realtech.webp", "060225101329Dream_House_With_A2P_Realtech.webp", "060225100954M3M_Mansion_113_A2P_Realtech.webp"];
             $imagePath = "upload/" . trim($offer['photo']);
             if (!empty($offer['photo']) && file_exists($imagePath)) {
                 $displayImg = SITE_URL . $imagePath;
             }
             else {
-                $placeholderIndex = $offer['id'] % count($blog_placeholders);
-                $displayImg = SITE_URL . "upload/" . $blog_placeholders[$placeholderIndex];
+                $displayImg = SITE_URL . "upload/" . ($pr_add['photo'] ?? '080325100432logo.png');
             }
 ?>
                                     <img src="<?php echo $displayImg; ?>" alt="<?php echo htmlspecialchars($offer['name']); ?>" style="height: 250px; width: 100%; object-fit: fill !important;">

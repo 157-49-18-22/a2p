@@ -35,7 +35,7 @@ if (count($sql_ser)) {
             <meta property="og:title" content="<?php echo htmlspecialchars($offer['meta_title']); ?>">
             <meta property="og:description" content="<?php echo htmlspecialchars($offer['meta_description']); ?>">
             <?php 
-            $_og_photo = !empty($offer['photo']) ? trim($offer['photo']) : '080325100432logo.png';
+            $_og_photo = !empty($offer['photo']) ? trim($offer['photo']) : ($pr_add['photo'] ?? '080325100432logo.png');
             $_og_img = SITE_URL . 'upload/' . str_replace(' ', '%20', $_og_photo);
             ?>
             <meta property="og:image" content="<?php echo $_og_img; ?>?v=<?php echo date('Ymd'); ?>">
@@ -173,7 +173,15 @@ $encodedPageUrl = urlencode($rawPageUrl);
                     <div class="col-xl-8 col-lg-7">
                         <div class="blog-details__left">
                             <div class="blog-details__img">
-                                <img src="<?= SITE_URL; ?>upload/<?php echo $offer['photo']; ?>" alt="">
+                                <?php 
+                                    $imagePath = "upload/" . trim($offer['photo']);
+                                    if (!empty($offer['photo']) && file_exists($imagePath)) { 
+                                        $displayImg = SITE_URL . $imagePath; 
+                                    } else { 
+                                        $displayImg = SITE_URL . "upload/" . ($pr_add['photo'] ?? '080325100432logo.png'); 
+                                    }
+                                ?>
+                                <img src="<?php echo $displayImg; ?>" alt="<?php echo $offer['name']; ?>">
                             </div>
                             <div class="blog-details__content">
                                 <ul class="list-unstyled blog-details__meta">
@@ -327,7 +335,15 @@ $encodedPageUrl = urlencode($rawPageUrl);
                                     <?php foreach ($related_blog_list as $rb): ?>
                                     <li>
                                         <div class="sidebar__post-image">
-                                            <img src="<?= SITE_URL; ?>upload/<?php echo htmlspecialchars($rb['photo']); ?>" alt="<?php echo htmlspecialchars($rb['name']); ?>" style="height:80px;width:80px;object-fit:cover;">
+                                            <?php 
+                                                $rb_imagePath = "upload/" . trim($rb['photo']);
+                                                if (!empty($rb['photo']) && file_exists($rb_imagePath)) { 
+                                                    $rb_displayImg = SITE_URL . $rb_imagePath; 
+                                                } else { 
+                                                    $rb_displayImg = SITE_URL . "upload/" . ($pr_add['photo'] ?? '080325100432logo.png'); 
+                                                }
+                                            ?>
+                                            <img src="<?php echo $rb_displayImg; ?>" alt="<?php echo htmlspecialchars($rb['name']); ?>" style="height:80px;width:80px;object-fit:cover;">
                                         </div>
                                         <div class="sidebar__post-content">
                                             <h3>

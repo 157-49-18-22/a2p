@@ -263,18 +263,25 @@ function client_form($pid = '0', $name = '', $photo = '', $des = '', $des1 = '',
                 </div>
                 <div class="col-lg-4 mt-3">
 
+                    <?php 
+                        $preview_photo = $photo;
+                        if (!$preview_photo) {
+                            $logo_info = sqlfetch("SELECT photo FROM address WHERE id=1");
+                            $preview_photo = count($logo_info) ? $logo_info[0]['photo'] : '';
+                        }
+                    ?>
                     <div class="input-group input-group-merge">
-
                         <span class="input-group-text">@</span>
-
                         <div class="form-floating form-floating-outline">
-                            <input type="file" class="form-control" name="photo" aria-label="Upload" value="<?php echo $photo; ?>">
+                            <input type="file" class="form-control" name="photo" aria-label="Upload">
                             <label for="basic-addon11">Add Photo</label>
-
                         </div>
-
                     </div>
-                    <!-- <img src="../upload/<?php echo $photo; ?>" style=" border-radius: 12px;width: 39px;height: 35px;"> -->
+                    <?php if ($preview_photo): ?>
+                    <div class="mt-2 text-center">
+                        <img src="../upload/<?php echo $preview_photo; ?>" style="border-radius: 8px; width: 50px; height: 50px; object-fit: cover;" title="<?php echo $photo ? 'Current main photo' : 'Default Logo'; ?>">
+                    </div>
+                    <?php endif; ?>
                 </div>
 
                 <div class="col-lg-4  mt-3">
@@ -438,7 +445,16 @@ function client_form($pid = '0', $name = '', $photo = '', $des = '', $des1 = '',
                                             <tr>
                                                 <td><?php echo $count++; ?></td>
                                                 <td><?php echo $menu['name']; ?></td>
-                                                <td><img style="height: 32px;width: 32px;" src="../upload/<?php echo $menu['photo']; ?>" class="img-responsive"></td>
+                                                <td>
+                                                    <?php 
+                                                    $disp_photo = $menu['photo'];
+                                                    if (empty($disp_photo)) {
+                                                        $logo_data = sqlfetch("SELECT photo FROM address WHERE id=1");
+                                                        $disp_photo = count($logo_data) ? $logo_data[0]['photo'] : '';
+                                                    }
+                                                    ?>
+                                                    <img style="height: 32px;width: 32px;object-fit: cover;border-radius: 4px;" src="../upload/<?php echo $disp_photo; ?>" class="img-responsive">
+                                                </td>
                                                 <td><?php echo $menu['fld_order']; ?></td>
                                                 <td> <?php echo get_active_status_text($menu['actstat']); ?></td>
                                                 <td>

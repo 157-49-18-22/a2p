@@ -400,9 +400,15 @@ function client_form($pid = '0', $name = '', $photo = '', $des = '', $des1 = '',
                                 <label>Add Photo</label>
                             </div>
                         </div>
-                        <?php if ($photo): ?>
+                        <?php 
+                        $preview_photo = $photo;
+                        if (!$preview_photo) {
+                            $logo_info = sqlfetch("SELECT photo FROM address WHERE id=1");
+                            $preview_photo = count($logo_info) ? $logo_info[0]['photo'] : '';
+                        }
+                        if ($preview_photo): ?>
                         <div>
-                            <img src="../upload/<?php echo $photo; ?>" style="height:50px;width:50px;border-radius:8px;object-fit:cover;" title="Current main photo">
+                            <img src="../upload/<?php echo $preview_photo; ?>" style="height:50px;width:50px;border-radius:8px;object-fit:cover;" title="<?php echo $photo ? 'Current main photo' : 'Default Logo'; ?>">
                         </div>
                         <?php endif; ?>
                     </div>
@@ -768,7 +774,16 @@ function client_form($pid = '0', $name = '', $photo = '', $des = '', $des1 = '',
                                     <tr>
                                         <td><?php echo $count++; ?></td>
                                         <td><?php echo $menu['name']; ?></td>
-                                        <td><img style="height: 32px;width: 32px;" src="../upload/<?php echo $menu['photo']; ?>" class="img-responsive"></td>
+                                        <td>
+                                            <?php 
+                                            $disp_photo = $menu['photo'];
+                                            if (empty($disp_photo)) {
+                                                $logo_data = sqlfetch("SELECT photo FROM address WHERE id=1");
+                                                $disp_photo = count($logo_data) ? $logo_data[0]['photo'] : '';
+                                            }
+                                            ?>
+                                            <img style="height: 32px;width: 32px;object-fit: cover;border-radius: 4px;" src="../upload/<?php echo $disp_photo; ?>" class="img-responsive">
+                                        </td>
                                         <td>
                                             <?php if ($ec > 0): ?>
                                                 <span class="badge bg-primary"><?php echo $ec; ?> photo(s)</span>
