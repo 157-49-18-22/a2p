@@ -15,6 +15,7 @@ if (count($sql_add))
     <title><?php echo $pr_add['test_date']; ?></title>
     <meta name="description" content="<?php echo $pr_add['class9']; ?>">
     <meta name="keywords" content="<?php echo $pr_add['class8']; ?>">
+    <meta name="facebook-domain-verification" content="m7nn0fxbw83tklfswjvxxzpz42u09w" />
     <?php include 'include/og_meta.php'; ?>
     <link rel="icon" href="<?= SITE_URL; ?>assets/images/favicons/favicon.ico">
     <link rel="manifest" href="<?= SITE_URL; ?>assets/images/favicons/site.webmanifest" />

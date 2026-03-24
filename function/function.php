@@ -43,47 +43,60 @@ function getPDOObject()
 
 function makeurlnamebynameCategory($str)
 {
-    //$lowertext = preg_replace('/[^A-Za-z0-9\-]/', '', $lowertext);
     $inputstring = trim(strip_tags($str));
     $lowertext = strtolower($inputstring);
-    $lowertext = str_replace("  ", "-", $lowertext);
-    $lowertext = str_replace(" ", "-", $lowertext);
+    
+    // Replace ampersand with 'and' first to avoid confusion with later hyphen replacements
     $lowertext = str_replace("&", "and", $lowertext);
-    $lowertext = str_replace("/", "-", $lowertext);
-    $lowertext = str_replace("`", "-", $lowertext);
-    $lowertext = str_replace("~", "-", $lowertext);
-    $lowertext = str_replace("!", "-", $lowertext);
-    $lowertext = str_replace("@", "-", $lowertext);
-    $lowertext = str_replace("#", "-", $lowertext);
-    $lowertext = str_replace("$", "-", $lowertext);
-    $lowertext = str_replace("^", "-", $lowertext);
-    $lowertext = str_replace("&", "-", $lowertext);
-    $lowertext = str_replace("*", "-", $lowertext);
-    $lowertext = str_replace("(", "-", $lowertext);
-    $lowertext = str_replace(")", "-", $lowertext);
-    $lowertext = str_replace("_", "-", $lowertext);
-    $lowertext = str_replace("-", "-", $lowertext);
-    $lowertext = str_replace("|", "-", $lowertext);
-    $lowertext = str_replace("{", "-", $lowertext);
-    $lowertext = str_replace("}", "-", $lowertext);
-    $lowertext = str_replace("[", "-", $lowertext);
-    $lowertext = str_replace("]", "-", $lowertext);
-    $lowertext = str_replace(":", "-", $lowertext);
-    $lowertext = str_replace(";", "-", $lowertext);
-    $lowertext = str_replace("<", "-", $lowertext);
-    $lowertext = str_replace(">", "-", $lowertext);
-    // Remove replacing dot with hyphen
-    // $lowertext = str_replace(".", "-", $lowertext);
-    $lowertext = str_replace("?", "-", $lowertext);
-    $lowertext = str_replace("%", "percent", $lowertext);
-    $lowertext = str_replace("--", "-", $lowertext);
-    $lowertext = str_replace("---", "-", $lowertext);
-    $lowertext = str_replace(" ", "-", $lowertext);
-    $lowertext = str_replace("'", "-", $lowertext);
-    $lowertext = str_replace(",", "-", $lowertext);
-    // Remove extra dot replacing
-    // $lowertext = str_replace(".", "-", $lowertext);
+    
+    // Replace all non-alphanumeric characters (except hyphen AND DOT) with hyphen
+    // Original code preserved dots, so we keep them.
+    $lowertext = preg_replace('/[^a-z0-9\-\.]/', '-', $lowertext);
+    
+    // Clean up multiple hyphens
+    $lowertext = preg_replace('/-+/', '-', $lowertext);
+    
+    // Trim hyphens from ends
+    $lowertext = trim($lowertext, '-');
+    
     return $lowertext;
+}
+
+/**
+ * Robustly find a record by its slug when no explicit slug column is reliable or exists.
+ * This handles special characters like '&' by trying multiple variations.
+ */
+function findRecordBySlug($table, $slug, $nameColumn = 'name') {
+    // Determine if slug column exists conceptually for the query
+    // 1. Try exact match on 'slug' column OR 'name' column (fast)
+    $results = sqlfetch("SELECT * FROM `$table` WHERE ($nameColumn = '$slug' OR slug = '$slug') AND actstat=1");
+    if (count($results)) return $results;
+
+    // 2. Try match after replacing spaces with hyphens in SQL
+    $results = sqlfetch("SELECT * FROM `$table` WHERE LOWER(REPLACE($nameColumn, ' ', '-')) = LOWER('$slug') AND actstat=1");
+    if (count($results)) return $results;
+
+    // 3. Try match with '&' handled (if slug has 'and')
+    if (strpos($slug, 'and') !== false) {
+        $alt_slug = str_replace('and', '&', $slug); // try replacing 'and' back to '&'
+        $results = sqlfetch("SELECT * FROM `$table` WHERE (LOWER(REPLACE($nameColumn, ' ', '-')) = LOWER('$alt_slug') OR $nameColumn LIKE '%&%') AND actstat=1");
+        if (count($results)) {
+             foreach($results as $row) {
+                 if (makeurlnamebynameCategory($row[$nameColumn]) === $slug) return [$row];
+             }
+        }
+    }
+
+    // 4. Final Fallback: Fetch all active and match using PHP's slugify function
+    // This is the most reliable but slowest. For these tables (blogs/products), count is usually < 1000.
+    $all = sqlfetch("SELECT * FROM `$table` WHERE actstat=1");
+    foreach ($all as $row) {
+        if (makeurlnamebynameCategory($row[$nameColumn]) === $slug) {
+            return [$row];
+        }
+    }
+
+    return [];
 }
 
 

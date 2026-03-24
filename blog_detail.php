@@ -7,16 +7,7 @@ if (count($sql_add))
 ?>
 <?php
 $pid = $_GET['id'];
-$normalized_name = makeurlnormal($pid);
-
-// Try exact match with normalized name
-$sql_ser = sqlfetch("SELECT * FROM offer WHERE (name = '$normalized_name' OR name = '$pid') AND actstat=1");
-
-// If not found, try a more flexible match replacing spaces with hyphens (in case DB has hyphens)
-if (count($sql_ser) == 0) {
-    $hyphenated_pid = str_replace(' ', '-', $normalized_name);
-    $sql_ser = sqlfetch("SELECT * FROM offer WHERE name = '$hyphenated_pid' AND actstat=1");
-}
+$sql_ser = findRecordBySlug('offer', $pid);
 
 // Redirect if no blog found to avoid blank page
 if (count($sql_ser) == 0) {
@@ -37,6 +28,7 @@ if (count($sql_ser)) {
             <title><?php echo $offer['meta_title']; ?></title>
             <meta name="description" content="<?php echo $offer['meta_description']; ?>">
             <meta name="keywords" content="<?php echo $offer['meta_keyword']; ?>">
+            <meta name="facebook-domain-verification" content="m7nn0fxbw83tklfswjvxxzpz42u09w" />
             <link rel="icon" href="<?= SITE_URL; ?>assets/images/favicons/favicon.ico" type="image/x-icon">
             <link rel="manifest" href="<?= SITE_URL; ?>assets/images/favicons/site.webmanifest" />
             

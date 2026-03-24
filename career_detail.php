@@ -7,10 +7,7 @@ if (count($sql_add))
 ?>
 <?php
 $pid = $_GET['id'];
-$normalized_name = makeurlnormal($pid);
-
-// Try exact match with normalized name or raw slug
-$sql_ser = sqlfetch("SELECT * FROM blog WHERE (slug = '$pid' OR slug = '$normalized_name') AND actstat=1");
+$sql_ser = findRecordBySlug('blog', $pid);
 
 // Redirect if no job found to avoid blank page
 if (count($sql_ser) == 0) {
@@ -32,6 +29,7 @@ if (count($sql_ser)) {
             <title><?php echo $pr_add['test_date']; ?></title>
             <meta name="description" content="<?php echo $pr_add['class9']; ?>">
             <meta name="keywords" content="<?php echo $pr_add['class8']; ?>">
+            <meta name="facebook-domain-verification" content="m7nn0fxbw83tklfswjvxxzpz42u09w" />
             <link rel="icon" href="<?= SITE_URL; ?>assets/images/favicons/favicon.ico">
             
             <meta property="og:title" content="<?php echo htmlspecialchars($blog['name']); ?>">
