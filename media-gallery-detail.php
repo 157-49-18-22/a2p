@@ -35,7 +35,13 @@ if (count($sql_ser)) {
     <meta property="og:title" content="<?php echo htmlspecialchars($fixed_delivery_time['meta_title']); ?>">
     <meta property="og:description" content="<?php echo htmlspecialchars($fixed_delivery_time['meta_description']); ?>">
     <?php 
-    $_og_img = !empty($fixed_delivery_time['photo']) ? SITE_URL . "upload/" . str_replace(' ', '%20', trim($fixed_delivery_time['photo'])) : SITE_URL . "upload/080325100432logo.png";
+    $rawPhoto = trim($fixed_delivery_time['photo'] ?? '');
+    $imagePath = "upload/" . $rawPhoto;
+    if (!empty($rawPhoto) && file_exists($imagePath)) { 
+        $_og_img = SITE_URL . "upload/" . str_replace(' ', '%20', $rawPhoto); 
+    } else { 
+        $_og_img = SITE_URL . "upload/" . ($pr_add['photo'] ?? '080325100432logo.png'); 
+    }
     ?>
     <meta property="og:image" content="<?php echo $_og_img; ?>?v=1.3">
     <meta property="og:image:secure_url" content="<?php echo $_og_img; ?>?v=1.3">
@@ -176,7 +182,16 @@ $encodedPageUrl = urlencode($rawPageUrl);
                     <div class="col-xl-8 col-lg-7">
                         <div class="blog-details__left">
                             <div class="blog-details__img">
-                                <img src="<?= SITE_URL; ?>upload/<?php echo $fixed_delivery_time['photo']; ?>" alt="">
+                                <?php 
+                                    $rawPhoto = trim($fixed_delivery_time['photo'] ?? '');
+                                    $imagePath = "upload/" . $rawPhoto;
+                                    if (!empty($rawPhoto) && file_exists($imagePath)) { 
+                                        $displayImg = SITE_URL . "upload/" . $rawPhoto; 
+                                    } else { 
+                                        $displayImg = SITE_URL . "upload/" . ($pr_add['photo'] ?? '080325100432logo.png'); 
+                                    }
+                                ?>
+                                <img src="<?php echo $displayImg; ?>" alt="<?php echo $fixed_delivery_time['name']; ?>" style="width: 100%; height: auto;">
                             </div>
                             <div class="blog-details__content">
                                 
@@ -285,18 +300,24 @@ $encodedPageUrl = urlencode($rawPageUrl);
                                 
                                 
                                 <ul class="sidebar__post-list list-unstyled">
-                                    <?php $result = sqlfetch("select * from fixed_delivery_time order by des ");
-                                    if (count($result)) {
-                                        foreach ($result as $fixed_delivery_time) {
+                                    <?php $result_side = sqlfetch("select * from fixed_delivery_time order by id DESC");
+                                    if (count($result_side)) {
+                                        foreach ($result_side as $side_item) {
+                                            $sidePhoto = trim($side_item['photo'] ?? '');
+                                            $sidePath = "upload/" . $sidePhoto;
+                                            if (!empty($sidePhoto) && file_exists($sidePath)) { 
+                                                $displaySideImg = SITE_URL . "upload/" . $sidePhoto; 
+                                            } else { 
+                                                $displaySideImg = SITE_URL . "upload/" . ($pr_add['photo'] ?? '080325100432logo.png'); 
+                                            }
                                     ?>
                                             <li>
                                                 <div class="sidebar__post-image">
-                                                    <img src="<?= SITE_URL; ?>upload/<?php echo $fixed_delivery_time['photo']; ?>" alt="" style="height: 80px;">
+                                                    <img src="<?php echo $displaySideImg; ?>" alt="<?php echo $side_item['name']; ?>" style="height: 80px; width: 80px; object-fit: cover;">
                                                 </div>
                                                 <div class="sidebar__post-content">
                                                     <h3>
-                                                        
-                                                        <a href="<?= SITE_URL; ?>media-gallery-detail/<?php echo makeurlnamebynameCategory($fixed_delivery_time['name']); ?>.php"><?php custom_echo($fixed_delivery_time['name'], 30); ?></a>
+                                                        <a href="<?= SITE_URL; ?>media-gallery-detail/<?php echo makeurlnamebynameCategory($side_item['name']); ?>.php"><?php custom_echo($side_item['name'], 30); ?></a>
                                                     </h3>
                                                 </div>
                                             </li>

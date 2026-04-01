@@ -110,10 +110,16 @@ if (count($sql_add))
                             <a href="<?= SITE_URL; ?>media-gallery-detail/<?php echo makeurlnamebynameCategory($fixed_delivery_time['name']); ?>.php">
                             <div class="blog-one__single">
                                 <div class="blog-one__img">
-                                    <img src="upload/<?php echo $fixed_delivery_time['photo']; ?>" alt="<?php echo $fixed_delivery_time['name']; ?>">
-                                    
-                                    
-                                   
+                                    <?php 
+                                        $imagePath = "upload/" . trim($fixed_delivery_time['photo']);
+                                        if (!empty($fixed_delivery_time['photo']) && file_exists($imagePath)) { 
+                                            $displayImg = SITE_URL . $imagePath; 
+                                        } else { 
+                                            // Fallback to address photo or default logo
+                                            $displayImg = SITE_URL . "upload/" . ($pr_add['photo'] ?? '080325100432logo.png'); 
+                                        }
+                                    ?>
+                                    <img src="<?php echo $displayImg; ?>" alt="<?php echo $fixed_delivery_time['name']; ?>" style="width: 100%; height: 250px; object-fit: fill !important;">
                                 </div>
                                 <div class="blog-one__content">
                                     

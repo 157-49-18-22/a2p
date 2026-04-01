@@ -127,8 +127,15 @@ if (count($sql_add))
             <?php $result = sqlfetch("select * from certification ORDER BY id DESC");
             if (count($result)) {
                 foreach ($result as $certification) {
-                    $rawPhoto = trim($certification['photo']);
-                    $finalImg = SITE_URL . "upload/" . str_replace(' ', '%20', $rawPhoto);
+                    $rawPhoto = trim($certification['photo'] ?? '');
+                    $imagePath = "upload/" . $rawPhoto;
+                    
+                    if (!empty($rawPhoto) && file_exists($imagePath)) { 
+                        $finalImg = SITE_URL . "upload/" . str_replace(' ', '%20', $rawPhoto);
+                    } else { 
+                        // Fallback to address photo or default logo
+                        $finalImg = SITE_URL . "upload/" . ($pr_add['photo'] ?? '080325100432logo.png'); 
+                    }
             ?>
 
                     <div class="col-xl-4 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay="100ms">

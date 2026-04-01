@@ -930,7 +930,17 @@ function subproduct_form(
                                 <tr>
                                     <td><?php echo $count++; ?></td>
                                     <td><?php echo $menu['name']; ?></td>
-                                    <td><img style="height: 32px;width: 32px;" src="../upload/<?php echo $menu['photo']; ?>" class="img-responsive"></td>
+                                    <td>
+                                        <?php 
+                                            $imagePath = "../upload/" . $menu['photo'];
+                                            if (!empty($menu['photo']) && file_exists($imagePath)) { 
+                                                $displayImg = $imagePath; 
+                                            } else { 
+                                                $displayImg = "../upload/" . ($pr_add['photo'] ?? '080325100432logo.png'); 
+                                            }
+                                        ?>
+                                        <img style="height: 32px;width: 32px;" src="<?php echo $displayImg; ?>" class="img-responsive">
+                                    </td>
                                     <td>
                                         <?php 
                                         $ex_photos = sqlfetch("SELECT COUNT(*) as count FROM product_images WHERE product_id='".$menu['id']."'");

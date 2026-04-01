@@ -482,10 +482,12 @@ if (count($sql_ser)) {
                                         <div class="blog-one__single">
                                             <a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php">
                                             <?php 
-                                                $res_placeholders = ["060825060302Vatika Sovereign Park Image1.jpg", "100725050048Sobha-City-Sector-108-Dwarka-Expressway-Gurgaon.jpg", "160425091419Sobha Altus image A2P Realtech.jpg", "20260128161604_M3M-GIC-Manesar-Gurgaon.jpg"];
                                                 $imagePath = "upload/" . $subproductwww['photo'];
-                                                if (!empty($subproductwww['photo']) && file_exists($imagePath)) { $displayImg = SITE_URL . $imagePath; } 
-                                                else { $placeholderIndex = $subproductwww['id'] % count($res_placeholders); $displayImg = SITE_URL . "upload/" . $res_placeholders[$placeholderIndex]; }
+                                                if (!empty($subproductwww['photo']) && file_exists($imagePath)) { 
+                                                    $displayImg = SITE_URL . $imagePath; 
+                                                } else { 
+                                                    $displayImg = SITE_URL . "upload/" . ($pr_add['photo'] ?? '080325100432logo.png'); 
+                                                }
                                             ?>
                                             <div class="blog-one__img">
                                                 <img src="<?php echo $displayImg; ?>" alt="" style="width: 100%; height: 250px; object-fit: fill !important;">
@@ -639,10 +641,12 @@ if (count($sql_ser)) {
                                         <div class="blog-one__single">
                                             <a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($subproductwww['name']); ?>.php">
                                             <?php 
-                                                $com_placeholders = ["030625094659Commercial-Construction-A2P-Realtech.jpg", "070225085304M3M_Capital_Walk113.jpg", "110225084138M3M CAPITAL WALK SECTOR 113 DWARKA EXPRESSWAY GURGAON (1).jpg", "140625094558build-your-commercial-building-A2P-Realtech.jpg"];
                                                 $imagePath = "upload/" . $subproductwww['photo'];
-                                                if (!empty($subproductwww['photo']) && file_exists($imagePath)) { $displayImg = SITE_URL . $imagePath; } 
-                                                else { $placeholderIndex = $subproductwww['id'] % count($com_placeholders); $displayImg = SITE_URL . "upload/" . $com_placeholders[$placeholderIndex]; }
+                                                if (!empty($subproductwww['photo']) && file_exists($imagePath)) { 
+                                                    $displayImg = SITE_URL . $imagePath; 
+                                                } else { 
+                                                    $displayImg = SITE_URL . "upload/" . ($pr_add['photo'] ?? '080325100432logo.png'); 
+                                                }
                                             ?>
                                             <div class="blog-one__img">
                                                 <img src="<?php echo $displayImg; ?>" alt="" style="width: 100%; height: 250px; object-fit: fill !important;">

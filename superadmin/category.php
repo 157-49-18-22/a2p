@@ -351,7 +351,17 @@ function client_form($pid = '0', $name = '', $photo = '', $des = '', $des1 = '',
                                     <td><?php echo $count++; ?></td>
 
                                     <td><?php echo $menu['name']; ?></td>
-                                    <td><img style="height: 32px;width: 32px;" src="../upload/<?php echo $menu['photo']; ?>" class="img-responsive"></td>
+                                    <td>
+                                        <?php 
+                                            $imagePath = "../upload/" . $menu['photo'];
+                                            if (!empty($menu['photo']) && file_exists($imagePath)) { 
+                                                $displayImg = $imagePath; 
+                                            } else { 
+                                                $displayImg = "../upload/" . ($pr_add['photo'] ?? '080325100432logo.png'); 
+                                            }
+                                        ?>
+                                        <img style="height: 32px;width: 32px;" src="<?php echo $displayImg; ?>" class="img-responsive">
+                                    </td>
                                     <td><?php echo $menu['fld_order']; ?></td>
 
                                     <td> <?php echo get_active_status_text($menu['actstat']); ?></td>
