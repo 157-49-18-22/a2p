@@ -35,6 +35,26 @@ function getPDOObject()
 }
 
 
+function makeurlnamebynameCategory($str)
+{
+    $inputstring = trim(strip_tags($str));
+    $lowertext = strtolower($inputstring);
+    
+    // Replace ampersand with 'and' first to avoid confusion with later hyphen replacements
+    $lowertext = str_replace("&", "and", $lowertext);
+    
+    // Replace all non-alphanumeric characters (except hyphen AND DOT) with hyphen
+    $lowertext = preg_replace('/[^a-z0-9\-\.]/', '-', $lowertext);
+    
+    // Clean up multiple hyphens
+    $lowertext = preg_replace('/-+/', '-', $lowertext);
+    
+    // Trim hyphens from ends
+    $lowertext = trim($lowertext, '-');
+    
+    return $lowertext;
+}
+
 function sqlfetch($query)	
 {
 	$row = array();

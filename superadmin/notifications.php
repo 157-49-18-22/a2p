@@ -104,8 +104,7 @@ try {
         // Build tracking link
         $tracking_link = $due['link'];
         if ($due['link'] && $due['id']) {
-            $site_base = defined('SITE_URL') ? rtrim(SITE_URL, '/') . '/cms/superadmin' : 'https://' . $_SERVER['HTTP_HOST'] . '/cms/superadmin';
-            $tracking_link = $site_base . '/track_click.php?notif_id=' . $due['id'] . '&redirect=' . urlencode($due['link']);
+            $tracking_link = SITE_URL . 'superadmin/track_click.php?notif_id=' . $due['id'] . '&redirect=' . urlencode($due['link']);
         }
 
         // Send via push_helper

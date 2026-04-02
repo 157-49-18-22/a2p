@@ -166,7 +166,7 @@ if (isset($_POST['addsubproduct'])) {
         if (isset($_POST['send_notif']) && $_POST['send_notif'] == '1') {
             $notif_title = !empty($_POST['notif_title']) ? $_POST['notif_title'] : "New Property: " . $posted_data['name'];
             $notif_msg = !empty($_POST['notif_msg']) ? $_POST['notif_msg'] : "Check out our newest property listing!";
-            $notif_custom_link = !empty($_POST['notif_link']) ? $_POST['notif_link'] : SITE_URL . "service_detail.php?id=" . urlencode($posted_data['name']);
+            $notif_custom_link = !empty($_POST['notif_link']) ? $_POST['notif_link'] : SITE_URL . "service_detail/" . makeurlnamebynameCategory($posted_data['name']) . ".php";
             
             $notif_img = $posted_data['photo'] ? SITE_URL . "upload/" . $posted_data['photo'] : '';
             sendGlobalPushNotification($notif_title, $notif_msg, $notif_custom_link, $notif_img);
@@ -296,7 +296,7 @@ if (isset($_POST['editdone'])) {
         if (isset($_POST['send_notif']) && $_POST['send_notif'] == '1') {
             $notif_title = !empty($_POST['notif_title']) ? $_POST['notif_title'] : "Updated Property: " . $posted_data['name'];
             $notif_msg = !empty($_POST['notif_msg']) ? $_POST['notif_msg'] : "We've updated details for " . $posted_data['name'] . ". View now!";
-            $notif_custom_link = !empty($_POST['notif_link']) ? $_POST['notif_link'] : SITE_URL . "service_detail.php?id=" . urlencode($posted_data['name']);
+            $notif_custom_link = !empty($_POST['notif_link']) ? $_POST['notif_link'] : SITE_URL . "service_detail/" . makeurlnamebynameCategory($posted_data['name']) . ".php";
 
             $notif_img = $posted_data['photo'] ? SITE_URL . "upload/" . $posted_data['photo'] : ($prevphoto ? SITE_URL . "upload/" . $prevphoto : '');
             sendGlobalPushNotification($notif_title, $notif_msg, $notif_custom_link, $notif_img);

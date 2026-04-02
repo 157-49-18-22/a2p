@@ -33,7 +33,8 @@ if ($notif_id > 0) {
 // Sanitize redirect
 $redirect = filter_var($redirect, FILTER_SANITIZE_URL);
 if (!preg_match('/^https?:\/\//i', $redirect)) {
-    $redirect = '/';
+    // If it's a relative path, prepend SITE_URL (ensure no double-slash)
+    $redirect = rtrim(SITE_URL, '/') . '/' . ltrim($redirect, '/');
 }
 header("Location: $redirect");
 exit;

@@ -189,7 +189,7 @@ if (isset($_POST['addclient'])) {
             if (isset($_POST['send_notif']) && $_POST['send_notif'] == '1') {
                 $notif_title = !empty($_POST['notif_title']) ? $_POST['notif_title'] : "New Blog: " . $name;
                 $notif_msg = !empty($_POST['notif_msg']) ? $_POST['notif_msg'] : "Check out our latest blog post!";
-                $notif_custom_link = !empty($_POST['notif_link']) ? $_POST['notif_link'] : SITE_URL . "blog_detail.php?id=" . urlencode($name);
+                $notif_custom_link = !empty($_POST['notif_link']) ? $_POST['notif_link'] : SITE_URL . "blog_detail/" . makeurlnamebynameCategory($name) . ".php";
 
                 $notif_img = $Filename ? SITE_URL . "upload/" . $Filename : '';
                 sendGlobalPushNotification($notif_title, $notif_msg, $notif_custom_link, $notif_img);
@@ -335,7 +335,7 @@ if (isset($_POST['editdone'])) {
         if (isset($_POST['send_notif']) && $_POST['send_notif'] == '1') {
             $notif_title = !empty($_POST['notif_title']) ? $_POST['notif_title'] : "Updated Blog: " . $name;
             $notif_msg = !empty($_POST['notif_msg']) ? $_POST['notif_msg'] : "We've updated one of our blog posts. Read it now!";
-            $notif_custom_link = !empty($_POST['notif_link']) ? $_POST['notif_link'] : SITE_URL . "blog_detail.php?id=" . urlencode($name);
+            $notif_custom_link = !empty($_POST['notif_link']) ? $_POST['notif_link'] : SITE_URL . "blog_detail/" . makeurlnamebynameCategory($name) . ".php";
 
             $notif_img = $Filename ? SITE_URL . "upload/" . $Filename : '';
             sendGlobalPushNotification($notif_title, $notif_msg, $notif_custom_link, $notif_img);
