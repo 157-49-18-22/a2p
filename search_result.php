@@ -282,14 +282,12 @@ if (isset($_GET['query'])) {
 
     $query = "SELECT DISTINCT * FROM subproduct 
                       WHERE (name LIKE ? 
-                      OR meta_title LIKE ? 
-                      OR meta_keyword LIKE ? 
                       OR pro_lable LIKE ?
                       OR city LIKE ?
                       OR (developer REGEXP ? OR REPLACE(developer, ' ', '') REGEXP ?))";
 
     $params = [
-        $searchSafe, $searchSafe, $searchSafe, $searchSafe, $searchSafe,
+        $searchSafe, $searchSafe, $searchSafe,
         $searchRegex, $compactRegex
     ];
 

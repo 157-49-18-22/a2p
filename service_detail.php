@@ -916,7 +916,7 @@ $encodedPageUrl = urlencode($rawPageUrl);
                                                 <span class="sidebar__post-content-meta">
                                                     <i class="fas fa-building"></i> Property
                                                 </span>
-                                                <a href="<?= SITE_URL; ?>product/<?php echo makeurlnamebynameCategory($rp['name']); ?>.php">
+                                                <a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($rp['name']); ?>.php">
                                                     <?php custom_echo($rp['name'], 30); ?>
                                                 </a>
                                             </h3>

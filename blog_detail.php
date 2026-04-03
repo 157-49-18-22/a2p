@@ -36,10 +36,11 @@ if (count($sql_ser)) {
             <meta property="og:description" content="<?php echo htmlspecialchars($offer['meta_description']); ?>">
             <?php 
             $_og_photo = !empty($offer['photo']) ? trim($offer['photo']) : ($pr_add['photo'] ?? '080325100432logo.png');
-            $_og_img = SITE_URL . 'upload/' . str_replace(' ', '%20', $_og_photo);
+            // Encode spaces properly, but do NOT append ?v= – Facebook rejects images with query strings
+            $_og_img = SITE_URL . 'upload/' . rawurlencode($_og_photo);
             ?>
-            <meta property="og:image" content="<?php echo $_og_img; ?>?v=<?php echo date('Ymd'); ?>">
-            <meta property="og:image:secure_url" content="<?php echo $_og_img; ?>?v=<?php echo date('Ymd'); ?>">
+            <meta property="og:image" content="<?php echo $_og_img; ?>">
+            <meta property="og:image:secure_url" content="<?php echo $_og_img; ?>">
             <meta property="og:image:width" content="1200">
             <meta property="og:image:height" content="630">
             <meta property="og:url" content="<?php echo SITE_URL . ltrim($_SERVER['REQUEST_URI'], '/'); ?>">
@@ -49,7 +50,7 @@ if (count($sql_ser)) {
             <meta name="twitter:card" content="summary_large_image">
             <meta name="twitter:title" content="<?php echo htmlspecialchars($offer['meta_title']); ?>">
             <meta name="twitter:description" content="<?php echo htmlspecialchars($offer['meta_description']); ?>">
-            <meta name="twitter:image" content="<?php echo $_og_img_resized; ?>">
+            <meta name="twitter:image" content="<?php echo $_og_img; ?>">
             
             <link rel="preconnect" href="https://fonts.googleapis.com/">
             <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
@@ -387,7 +388,7 @@ $encodedPageUrl = urlencode($rawPageUrl);
                                                 <span class="sidebar__post-content-meta">
                                                     <i class="fas fa-building"></i> Property
                                                 </span>
-                                                <a href="<?= SITE_URL; ?>product/<?php echo makeurlnamebynameCategory($rp['name']); ?>.php">
+                                                <a href="<?= SITE_URL; ?>service_detail/<?php echo makeurlnamebynameCategory($rp['name']); ?>.php">
                                                     <?php custom_echo($rp['name'], 30); ?>
                                                 </a>
                                             </h3>

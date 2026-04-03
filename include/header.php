@@ -1427,10 +1427,65 @@ $notif_count = count($notif_data);
     </div>
     <div class="notif-list">
         <?php if($notif_count > 0) { 
-            foreach($notif_data as $nt) { 
-                $original_link = $nt['link'] ?: SITE_URL; // Fallback to home if empty
-                // Always wrap in tracking URL now
+            foreach($notif_data as $nt) {
+                // ── Smart Link Resolution ──────────────────────────────────
+                $original_link = $nt['link'];
+                $site_base     = rtrim(SITE_URL, '/');
+
+                // Detect OLD-format or generic/wrong links
+                $is_old_blog    = strpos($original_link, 'blog_detail.php?id=') !== false;
+                $is_old_service = strpos($original_link, 'service_detail.php?id=') !== false;
+                $is_generic_link = (
+                    empty($original_link) ||
+                    rtrim($original_link, '/') === $site_base ||
+                    $original_link === SITE_URL ||
+                    strpos($original_link, 'blog.php') !== false ||
+                    $is_old_blog ||
+                    $is_old_service
+                );
+
+                if ($is_generic_link) {
+                    $pdo_hdr = getPDOObject();
+
+                    if ($is_old_blog) {
+                        // Extract name from old URL: blog_detail.php?id=Delhi+to+Gurgaon...
+                        $raw_name = urldecode(parse_url($original_link, PHP_URL_QUERY));
+                        $raw_name = ltrim(str_replace('id=', '', $raw_name), '&');
+                        $raw_name = trim($raw_name);
+                    } elseif ($is_old_service) {
+                        // Extract name from old URL: service_detail.php?id=Godrej+Arden...
+                        $raw_name = urldecode(parse_url($original_link, PHP_URL_QUERY));
+                        $raw_name = ltrim(str_replace('id=', '', $raw_name), '&');
+                        $raw_name = trim($raw_name);
+                    } else {
+                        // Use notification title as search term
+                        $raw_name = trim($nt['title']);
+                        $raw_name = preg_replace('/^(New Blog\s*:?\s*|Updated Blog\s*:?\s*)/i', '', $raw_name);
+                        $raw_name = trim(preg_replace('/(\.\s*Read more now!.*|Check out.*)/is', '', $raw_name));
+                    }
+
+                    if ($is_old_service) {
+                        // Search subproduct table for properties
+                        $stmt_s = $pdo_hdr->prepare("SELECT name FROM `subproduct` WHERE name LIKE :n AND actstat=1 LIMIT 1");
+                        $stmt_s->execute([':n' => '%' . $raw_name . '%']);
+                        $found_s = $stmt_s->fetch(PDO::FETCH_ASSOC);
+                        $original_link = $found_s
+                            ? SITE_URL . "service_detail/" . makeurlnamebynameCategory($found_s['name']) . ".php"
+                            : SITE_URL . "index.php";
+                    } else {
+                        // Search offer table for blogs
+                        $stmt_b = $pdo_hdr->prepare("SELECT name FROM `offer` WHERE name LIKE :n AND actstat=1 LIMIT 1");
+                        $stmt_b->execute([':n' => '%' . $raw_name . '%']);
+                        $found_b = $stmt_b->fetch(PDO::FETCH_ASSOC);
+                        $original_link = $found_b
+                            ? SITE_URL . "blog_detail/" . makeurlnamebynameCategory($found_b['name']) . ".php"
+                            : SITE_URL . "blog.php";
+                    }
+                }
+
+                // Always wrap in tracking URL
                 $tracking_link = SITE_URL . 'superadmin/track_click.php?notif_id=' . $nt['id'] . '&redirect=' . urlencode($original_link);
+
             ?>
             <div class="notif-item" onclick="window.location.href='<?php echo $tracking_link; ?>'">
                 <p><strong><?php echo $nt['title']; ?></strong> <?php echo $nt['message']; ?></p>
