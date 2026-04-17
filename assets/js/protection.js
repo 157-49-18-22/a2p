@@ -24,26 +24,33 @@
     `;
     document.body.appendChild(overlay);
 
-    // 2. Detect Window Focus/Blur
-    // Most screenshot tools cause the window to lose focus
-    window.addEventListener('blur', function() {
-        overlay.style.display = 'flex';
-    });
-
-    window.addEventListener('focus', function() {
-        // Slight delay to ensure the screenshot tool is closed
+    // 2. Detect Window Focus/Blur & Visibility Change
+    // Aggressive Blackout
+    const enableProtection = () => overlay.style.display = 'flex';
+    const disableProtection = () => {
         setTimeout(() => {
             overlay.style.display = 'none';
-        }, 500);
+        }, 300);
+    };
+
+    window.addEventListener('blur', enableProtection);
+    window.addEventListener('focus', disableProtection);
+    
+    // Detect when tab is switched or minimized (often happens with SS tools)
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            enableProtection();
+        } else {
+            disableProtection();
+        }
     });
 
-    // 3. Block Keyboard Shortcuts (PrintScreen, F12, Ctrl+Shift+I, etc.)
+    // 3. Block Keyboard Shortcuts
     document.addEventListener('keydown', function(e) {
-        // Block PrintScreen
-        if (e.key === 'PrintScreen' || e.keyCode === 44) {
-             overlay.style.display = 'flex';
-             navigator.clipboard.writeText(""); // Clear clipboard
-             alert("Screenshots are disabled for security reasons.");
+        // Block PrintScreen (for some browsers)
+        if (e.key === 'PrintScreen' || e.keyCode === 44 || e.key === 'Snapshot') {
+             enableProtection();
+             alert("Screenshots are strictly prohibited on this platform.");
              e.preventDefault();
         }
 
