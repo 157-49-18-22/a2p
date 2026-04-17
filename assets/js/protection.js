@@ -24,34 +24,42 @@
     `;
     document.body.appendChild(overlay);
 
-    // 2. Detect Window Focus/Blur & Visibility Change
-    // Aggressive Blackout
-    const enableProtection = () => overlay.style.display = 'flex';
-    const disableProtection = () => {
-        setTimeout(() => {
-            overlay.style.display = 'none';
-        }, 300);
+    // 2. Detect Window Focus/Blur & Visibility Change (INSTANT)
+    const enableProtection = () => {
+        overlay.style.display = 'flex';
+        document.body.style.filter = 'blur(20px)'; // Extra layer of protection
     };
 
-    window.addEventListener('blur', enableProtection);
-    window.addEventListener('focus', disableProtection);
-    
-    // Detect when tab is switched or minimized (often happens with SS tools)
-    document.addEventListener('visibilitychange', function() {
-        if (document.hidden) {
-            enableProtection();
-        } else {
-            disableProtection();
-        }
-    });
+    const disableProtection = () => {
+        overlay.style.display = 'none';
+        document.body.style.filter = 'none';
+    };
 
-    // 3. Block Keyboard Shortcuts
+    // Use capturing phase for faster event handling
+    window.addEventListener('blur', enableProtection, true);
+    window.addEventListener('focus', disableProtection, true);
+    
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) enableProtection();
+        else disableProtection();
+    }, true);
+
+    // Trigger on mouse leaving the window (often happens before SS tool is used)
+    document.addEventListener('mouseleave', enableProtection);
+    document.addEventListener('mouseenter', disableProtection);
+
+    // 3. Block Keyboard Shortcuts (Instant Keydown detection)
     document.addEventListener('keydown', function(e) {
-        // Block PrintScreen (for some browsers)
-        if (e.key === 'PrintScreen' || e.keyCode === 44 || e.key === 'Snapshot') {
+        // Broad PrintScreen detection
+        if (e.key === 'PrintScreen' || e.keyCode === 44 || e.code === 'PrintScreen') {
              enableProtection();
-             alert("Screenshots are strictly prohibited on this platform.");
+             alert("Security: Screenshots are blocked.");
              e.preventDefault();
+        }
+
+        // Detect Snip shortcut (Win + Shift + S) - Hard to block but we can try to overlay
+        if (e.metaKey && e.shiftKey && (e.key === 'S' || e.key === 's')) {
+             enableProtection();
         }
 
         // Block Ctrl+Shift+I (DevTools)
