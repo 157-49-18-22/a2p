@@ -78,4 +78,29 @@
         e.preventDefault();
     });
 
+    // 5. Disable Image Dragging
+    document.addEventListener('dragstart', function(e) {
+        if (e.target.nodeName === 'IMG') {
+            e.preventDefault();
+        }
+    });
+
+    // 6. Additional CSS to protect images
+    const style = document.createElement('style');
+    style.innerHTML = `
+        img {
+            -webkit-user-drag: none;
+            -khtml-user-drag: none;
+            -moz-user-drag: none;
+            -o-user-drag: none;
+            user-drag: none;
+            pointer-events: none; /* Recommended for pure display images */
+        }
+        /* Restore pointer-events for clickable images (links) if needed */
+        a img, .allow-click img {
+            pointer-events: auto;
+        }
+    `;
+    document.head.appendChild(style);
+
 })();
