@@ -19,35 +19,44 @@
         }
     });
 
-    // 3. Dynamic Watermark Overlay (Centered)
+    // 4. Dynamic Watermark Overlay (Hidden by Default)
     const watermark = document.createElement('div');
     watermark.id = 'site-watermark';
     watermark.style.position = 'fixed';
     watermark.style.top = '50%';
     watermark.style.left = '50%';
     watermark.style.transform = 'translate(-50%, -50%) rotate(-30deg)';
-    watermark.style.opacity = '0.07'; // Very faint, adjust if needed
+    watermark.style.opacity = '0.3'; // Visible during screenshot attempt
     watermark.style.fontSize = '8vw';
     watermark.style.fontWeight = 'bold';
     watermark.style.color = 'black';
-    watermark.style.pointerEvents = 'none'; // So users can't click it
+    watermark.style.pointerEvents = 'none';
     watermark.style.zIndex = '999999';
     watermark.style.whiteSpace = 'nowrap';
-    watermark.style.userSelect = 'none';
+    watermark.style.display = 'none'; // Initially hidden
     watermark.innerText = 'A2P REALTECH PRIVATE LIMITED';
     document.body.appendChild(watermark);
 
-    // 4. CSS to disable user-selection and image-dragging
+    // 5. Smart Protection Logic (Show on Blur/Mouseout)
+    const showWatermark = () => watermark.style.display = 'block';
+    const hideWatermark = () => watermark.style.display = 'none';
+
+    window.addEventListener('blur', showWatermark);
+    window.addEventListener('focus', hideWatermark);
+    document.addEventListener('mouseleave', showWatermark);
+    document.addEventListener('mouseenter', hideWatermark);
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) showWatermark();
+        else hideWatermark();
+    });
+
+    // 6. CSS to disable dragging
     const style = document.createElement('style');
     style.innerHTML = `
         img {
             -webkit-user-drag: none;
             user-drag: none;
             -webkit-touch-callout: none;
-        }
-        body {
-            -webkit-user-select: none;
-            user-select: none;
         }
     `;
     document.head.appendChild(style);
