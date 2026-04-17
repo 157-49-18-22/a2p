@@ -24,44 +24,41 @@
     `;
     document.body.appendChild(overlay);
 
-    // 2. Detect Window Focus/Blur & Visibility Change (INSTANT)
-    const enableProtection = () => {
-        overlay.style.display = 'flex';
-        document.body.style.filter = 'blur(20px)'; // Extra layer of protection
+    // 2. Detect Window Focus/Blur & Visibility (EXTREME AGGRESSIVE)
+    const checkState = () => {
+        if (document.hidden || !document.hasFocus()) {
+            overlay.style.display = 'flex';
+            document.body.style.filter = 'blur(30px)';
+        } else {
+            overlay.style.display = 'none';
+            document.body.style.filter = 'none';
+        }
     };
 
-    const disableProtection = () => {
-        overlay.style.display = 'none';
-        document.body.style.filter = 'none';
-    };
+    // Run check every 100ms to catch fast screenshots
+    setInterval(checkState, 100);
 
-    // Use capturing phase for faster event handling
-    window.addEventListener('blur', enableProtection, true);
-    window.addEventListener('focus', disableProtection, true);
-    
-    document.addEventListener('visibilitychange', function() {
-        if (document.hidden) enableProtection();
-        else disableProtection();
-    }, true);
+    window.addEventListener('blur', checkState, true);
+    window.addEventListener('focus', checkState, true);
+    document.addEventListener('visibilitychange', checkState, true);
+    document.addEventListener('mouseleave', checkState);
+    document.addEventListener('mouseenter', checkState);
 
-    // Trigger on mouse leaving the window (often happens before SS tool is used)
-    document.addEventListener('mouseleave', enableProtection);
-    document.addEventListener('mouseenter', disableProtection);
-
-    // 3. Block Keyboard Shortcuts (Instant Keydown detection)
+    // 3. Block Keyboard Shortcuts
     document.addEventListener('keydown', function(e) {
         // Broad PrintScreen detection
         if (e.key === 'PrintScreen' || e.keyCode === 44 || e.code === 'PrintScreen') {
-             enableProtection();
+             overlay.style.display = 'flex';
              alert("Security: Screenshots are blocked.");
              e.preventDefault();
         }
 
-        // Detect Snip shortcut (Win + Shift + S) - Hard to block but we can try to overlay
-        if (e.metaKey && e.shiftKey && (e.key === 'S' || e.key === 's')) {
-             enableProtection();
+        // Catch Windows Snipping Shortcut (Win + Shift + S)
+        if ((e.metaKey || e.ctrlKey) && e.shiftKey && (e.key === 'S' || e.key === 's')) {
+             overlay.style.display = 'flex';
+             // We can't stop the tool from opening, but we can blank the screen INSTANTLY
+             checkState();
         }
-
         // Block Ctrl+Shift+I (DevTools)
         if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i')) {
             e.preventDefault();
@@ -86,7 +83,7 @@
         if (e.key === 'F12') {
             e.preventDefault();
         }
-    });
+    }, true);
 
     // 4. Disable Right Click
     document.addEventListener('contextmenu', function(e) {
