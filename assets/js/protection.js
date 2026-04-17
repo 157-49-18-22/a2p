@@ -19,25 +19,41 @@
         }
     });
 
-    // 4. Dynamic Watermark Overlay (Permanent but Faint)
+    // 4. Dynamic Watermark Overlay (Hidden by Default)
     const watermark = document.createElement('div');
     watermark.id = 'site-watermark';
     watermark.style.position = 'fixed';
     watermark.style.top = '50%';
     watermark.style.left = '50%';
     watermark.style.transform = 'translate(-50%, -50%) rotate(-30deg)';
-    watermark.style.opacity = '0.04'; // Extremely faint, almost invisible but present in pixels
+    watermark.style.opacity = '0.3'; // Visible during screenshot
     watermark.style.fontSize = '8vw';
     watermark.style.fontWeight = 'bold';
     watermark.style.color = '#000';
     watermark.style.pointerEvents = 'none';
     watermark.style.zIndex = '999999';
     watermark.style.whiteSpace = 'nowrap';
-    watermark.style.display = 'block';
+    watermark.style.display = 'none';
     watermark.innerText = 'A2P REALTECH PRIVATE LIMITED';
     document.body.appendChild(watermark);
 
-    // 5. CSS to disable dragging
+    // 5. High-Speed Detection (60 FPS)
+    function checkProtection() {
+        // If focus is lost or visibility hidden, SHOW watermark instantly
+        if (!document.hasFocus() || document.hidden) {
+            watermark.style.display = 'block';
+        } else {
+            watermark.style.display = 'none';
+        }
+        requestAnimationFrame(checkProtection);
+    }
+    
+    // Start the ultra-fast loop
+    requestAnimationFrame(checkProtection);
+
+    // Extra listeners for redundancy
+    window.addEventListener('blur', () => watermark.style.display = 'block');
+    window.addEventListener('focus', () => watermark.style.display = 'none');
     const style = document.createElement('style');
     style.innerHTML = `
         img {
