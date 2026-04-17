@@ -19,37 +19,25 @@
         }
     });
 
-    // 4. Dynamic Watermark Overlay (Hidden by Default)
+    // 4. Dynamic Watermark Overlay (Permanent but Faint)
     const watermark = document.createElement('div');
     watermark.id = 'site-watermark';
     watermark.style.position = 'fixed';
     watermark.style.top = '50%';
     watermark.style.left = '50%';
     watermark.style.transform = 'translate(-50%, -50%) rotate(-30deg)';
-    watermark.style.opacity = '0.3'; // Visible during screenshot attempt
+    watermark.style.opacity = '0.04'; // Extremely faint, almost invisible but present in pixels
     watermark.style.fontSize = '8vw';
     watermark.style.fontWeight = 'bold';
-    watermark.style.color = 'black';
+    watermark.style.color = '#000';
     watermark.style.pointerEvents = 'none';
     watermark.style.zIndex = '999999';
     watermark.style.whiteSpace = 'nowrap';
-    watermark.style.display = 'none'; // Initially hidden
+    watermark.style.display = 'block';
     watermark.innerText = 'A2P REALTECH PRIVATE LIMITED';
     document.body.appendChild(watermark);
 
-    // 5. Smart Protection Logic (Show ONLY on Blur/Visibility Change)
-    const showWatermark = () => watermark.style.display = 'block';
-    const hideWatermark = () => watermark.style.display = 'none';
-
-    window.addEventListener('blur', showWatermark);
-    window.addEventListener('focus', hideWatermark);
-    
-    document.addEventListener('visibilitychange', function() {
-        if (document.hidden) showWatermark();
-        else hideWatermark();
-    });
-
-    // 6. CSS to disable dragging
+    // 5. CSS to disable dragging
     const style = document.createElement('style');
     style.innerHTML = `
         img {
