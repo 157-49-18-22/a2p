@@ -37,10 +37,16 @@
     watermark.innerText = 'A2P REALTECH PRIVATE LIMITED';
     document.body.appendChild(watermark);
 
-    // 5. High-Speed Detection (60 FPS)
+    // 5. High-Speed Detection with Mouse Safety
+    let isMouseInside = true;
+
+    document.addEventListener('mouseenter', () => isMouseInside = true);
+    document.addEventListener('mouseleave', () => isMouseInside = false);
+
     function checkProtection() {
-        // If focus is lost or visibility hidden, SHOW watermark instantly
-        if (!document.hasFocus() || document.hidden) {
+        // Show watermark ONLY if focus is lost AND mouse is not inside
+        // Or if the tab is hidden (visibilitychange)
+        if ((!document.hasFocus() && !isMouseInside) || document.hidden) {
             watermark.style.display = 'block';
         } else {
             watermark.style.display = 'none';
@@ -48,12 +54,11 @@
         requestAnimationFrame(checkProtection);
     }
     
-    // Start the ultra-fast loop
     requestAnimationFrame(checkProtection);
 
-    // Extra listeners for redundancy
-    window.addEventListener('blur', () => watermark.style.display = 'block');
-    window.addEventListener('focus', () => watermark.style.display = 'none');
+    // Instant Response for common SS triggers
+    window.onblur = () => { if(!isMouseInside) watermark.style.display = 'block'; };
+    window.onfocus = () => watermark.style.display = 'none';
     const style = document.createElement('style');
     style.innerHTML = `
         img {
