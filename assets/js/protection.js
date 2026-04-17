@@ -5,7 +5,14 @@
         e.preventDefault();
     });
 
-    // 2. Disable Image Dragging
+    // 2. Override Clipboard (Copies URL instead of content)
+    document.addEventListener('copy', function(e) {
+        e.clipboardData.setData('text/plain', window.location.href);
+        e.preventDefault();
+        alert("Content protection active. Only website URL copied.");
+    });
+
+    // 3. Disable Image Dragging
     document.addEventListener('dragstart', function(e) {
         if (e.target.nodeName === 'IMG') {
             e.preventDefault();
