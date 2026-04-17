@@ -210,6 +210,18 @@
         box-shadow: 0 8px 20px rgba(192,4,21,0.3);
     }
     .loc-btn-primary:hover { background: #000; transform: translateY(-3px); }
+
+    /* Screenshot Protection Styles */
+    body {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    @media print {
+        body { display: none !important; }
+    }
 </style>
 
 
@@ -1517,6 +1529,7 @@ function handleKeyPress(e) {
 
     <!-- ===== END NOTIFICATION BANNER ===== -->
 
+    <script src="<?= SITE_URL; ?>assets/js/protection.js"></script>
 </body>
 
 
