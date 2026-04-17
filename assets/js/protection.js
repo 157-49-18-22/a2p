@@ -37,14 +37,13 @@
     watermark.innerText = 'A2P REALTECH PRIVATE LIMITED';
     document.body.appendChild(watermark);
 
-    // 5. Smart Protection Logic (Show on Blur/Mouseout)
+    // 5. Smart Protection Logic (Show ONLY on Blur/Visibility Change)
     const showWatermark = () => watermark.style.display = 'block';
     const hideWatermark = () => watermark.style.display = 'none';
 
     window.addEventListener('blur', showWatermark);
     window.addEventListener('focus', hideWatermark);
-    document.addEventListener('mouseleave', showWatermark);
-    document.addEventListener('mouseenter', hideWatermark);
+    
     document.addEventListener('visibilitychange', function() {
         if (document.hidden) showWatermark();
         else hideWatermark();
